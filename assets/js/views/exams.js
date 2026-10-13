@@ -121,6 +121,7 @@ function startUnitExam(host, unitId) {
   const u = getUnit(unitId);
   if (!u) return;
   const examHost = qs('#examHost', host);
+  if (!examHost) { toast('تعذّر تجهيز الاختبار — أعد فتح الصفحة', 'bad'); return; }
   const questions = buildQuestions({ source: `unit:${u.id}`, types: ['mcq', 'fill', 'order', 'translate'], count: 12, adaptive: false, mode: 'exam' });
   runTimedExam(examHost, {
     questions, examId: u.id,
@@ -129,6 +130,7 @@ function startUnitExam(host, unitId) {
 }
 
 function runTimedExam(examHost, { questions, def, examId }) {
+  if (!examHost) { toast('تعذّر تجهيز الاختبار — أعد فتح الصفحة', 'bad'); return; }
   if (!questions.length) { toast('لا توجد بيانات كافية لهذا الاختبار', 'warn'); return; }
   examHost.innerHTML = `
     <div class="card card--brand">
@@ -238,12 +240,30 @@ function renderExamResult(container, res, def, examId) {
 }
 
 function renderUnitExamIntro(host, unit) {
-  host.innerHTML = pageHead({ icon: unit.icon, title: `اختبار: ${unit.title}`, subtitle: 'اختبار مؤقت على مفردات وجمل هذه الوحدة.' });
-  const examHost = document.createElement('div');
-  host.appendChild(examHost);
-  const btn = document.createElement('button');
-  btn.className = 'btn btn--primary btn--lg';
-  btn.textContent = '▶ ' + t('exam.start');
-  host.appendChild(btn);
-  btn.addEventListener('click', () => startUnitExam(host, unit.id));
+  const st = progress.units?.[unit.id]?.quiz;
+  host.innerHTML = `
+    ${pageHead({
+      icon: unit.icon,
+      title: `اختبار: ${unit.title}`,
+      subtitle: `${unit.levelLabel} · اختبار مؤقت على مفردات وجمل هذه الوحدة.`,
+      actionsHtml: `<a class="btn btn--sm" href="#/exams">← ${t('nav.exams')}</a>
+        <a class="btn btn--sm" href="#/unit/${unit.id}">مراجعة الوحدة</a>`,
+    })}
+    <div class="grid grid--4">
+      <div class="stat"><div class="stat__label">${t('common.questionsShort')}</div><div class="stat__value">12</div><div class="stat__foot">من مفردات وجمل الوحدة</div></div>
+      <div class="stat"><div class="stat__label">${t('exam.timeLimit')}</div><div class="stat__value">10</div><div class="stat__foot">${t('common.minutes')}</div></div>
+      <div class="stat"><div class="stat__label">مفردات الوحدة</div><div class="stat__value">${unit.vocab.length}</div><div class="stat__foot">${unit.sentences.length} جملة</div></div>
+      <div class="stat ${st ? 'stat--brand' : ''}"><div class="stat__label">محاولاتك السابقة</div><div class="stat__value">${st ? Math.round((st.c / Math.max(1, st.q)) * 100) + '%' : '—'}</div><div class="stat__foot">${st ? `${st.c} / ${st.q}` : 'لم تختبر هذه الوحدة بعد'}</div></div>
+    </div>
+    <div class="card card--brand" style="margin-top:16px">
+      <div class="card__title"><span class="ico">🧪</span><h2>جاهز للاختبار؟</h2></div>
+      <p class="small muted">سيبدأ المؤقت فور الضغط على الزر. النتيجة تُسجّل في سجل الاختبارات وتمنحك شهادة قابلة للطباعة.</p>
+      <div class="row row--wrap" style="gap:8px">
+        <button class="btn btn--primary btn--lg" type="button" id="unitExamGo">▶ ${esc(t('exam.start'))}</button>
+        <a class="btn" href="#/unit/${unit.id}">📘 مراجعة الوحدة أولاً</a>
+      </div>
+    </div>
+    <div id="examHost" style="margin-top:16px"></div>`;
+
+  qs('#unitExamGo', host)?.addEventListener('click', () => startUnitExam(host, unit.id));
 }

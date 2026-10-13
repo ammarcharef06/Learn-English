@@ -50,6 +50,7 @@ function celebrateBadges(badges) {
 
 /* ---------- الواجهة ---------- */
 export function runQuiz(host, opts = {}) {
+  if (!host) { console.warn('runQuiz: لم يتم العثور على حاوية الأسئلة'); return null; }
   const questions = opts.questions || [];
   if (!questions.length) {
     host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>${esc(t('drills.noSource'))}</p></div>`;
