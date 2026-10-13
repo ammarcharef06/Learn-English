@@ -84,6 +84,7 @@ self.addEventListener('message', (event) => {
 
 const isSameOrigin = (url) => url.origin === self.location.origin;
 const isCacheableAsset = (url) => /\.(?:css|js|mjs|json|webmanifest|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname);
+const isCodeAsset = (url) => /\.(?:js|mjs|css|json|webmanifest)$/i.test(url.pathname);
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
@@ -112,7 +113,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // الأصول: من الذاكرة فوراً مع تحديث في الخلفية
+  // ملفات الكود: الشبكة أولاً حتى تظهر التحديثات فوراً، مع الرجوع للذاكرة عند انقطاع الإنترنت
+  if (isCodeAsset(url)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.status === 200 && fresh.type === 'basic') cache.put(req, fresh.clone()).catch(() => {});
+        return fresh;
+      } catch {
+        const cached = await cache.match(req, { ignoreSearch: true });
+        return cached || new Response('', { status: 504, statusText: 'Offline' });
+      }
+    })());
+    return;
+  }
+
+  // بقية الأصول (صور/خطوط): من الذاكرة فوراً مع تحديث في الخلفية
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     const cached = await cache.match(req, { ignoreSearch: true });

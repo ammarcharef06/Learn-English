@@ -15,7 +15,9 @@ const bad = (msg) => problems.push(`  ❌ ${msg}`);
 /* ---------- 1. جرد الملفات ---------- */
 function walk(dir, acc = []) {
   for (const name of readdirSync(dir)) {
-    if (['.git', 'node_modules', '.github'].includes(name)) continue;
+    // نتجاهل المجلدات المخفية (مثل .git و .github) والمجلدات المؤقتة
+    if (name.startsWith('.') && name !== '.github') continue;
+    if (name === 'node_modules') continue;
     const full = join(dir, name);
     const st = statSync(full);
     if (st.isDirectory()) walk(full, acc);

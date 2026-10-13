@@ -2,9 +2,17 @@
 .chrome-test/
 .chrome-test-fresh/
 .chrome-login/
+.chrome-file/
+.chrome-mob/
+.chrome-desk/
+.chrome-final/
 .chrome-*.html
+.dump-*.html
+.serve/
 _selftest.*
 _logintest.*
+_mobile.*
+_final.*
 .tmp-check/
 
 # نظام

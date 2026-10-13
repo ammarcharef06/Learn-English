@@ -1,7 +1,7 @@
 /* ============================================================
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
-import { initRouter, route, setNotFound, resolve, currentRoute, navigate } from './core/router.js';
+import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange } from './core/router.js';
 import { settings, saveSettings, subscribe, progress, flush } from './core/store.js';
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
@@ -176,6 +176,7 @@ function renderAll() {
 function boot() {
   const boot = qs('#boot');
   const app = qs('#app');
+  window.__leaBooted = true;
   if (boot) boot.classList.add('is-hidden');
   if (app) app.classList.remove('is-hidden');
   applyI18n(document);
@@ -194,11 +195,20 @@ async function main() {
   window.__leaRenderAll = renderAll;
   window.__leaLockNow = () => lockSite();
 
+  // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + العودة لأعلى الصفحة
+  onRouteChange((route) => {
+    setActiveNav(route.path);
+    closeDrawer();
+    renderSidebarStats();
+    try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
+  });
+
   const media = window.matchMedia('(prefers-color-scheme: dark)');
   media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applyTheme(); });
 
   if (!isAuthed()) {
     qs('#boot')?.classList.add('is-hidden');
+    window.__leaBooted = true;
     renderLock(() => {
       boot();
       toast('أهلاً بك في أكاديميتك 👋', 'ok');
@@ -208,6 +218,7 @@ async function main() {
 
   boot();
   await initRouter();
+  window.__leaBooted = true;
   startReminderLoop();
 
   if (oneSignalConfigured()) {

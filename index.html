@@ -25,6 +25,45 @@
   <link rel="stylesheet" href="./assets/css/main.css" />
 
   <script>
+    /* حارس الإقلاع: يشرح سبب عدم عمل الموقع بدلاً من صفحة صامتة */
+    (function () {
+      function fail(html) {
+        var boot = document.getElementById('boot');
+        if (!boot) return;
+        boot.style.display = 'grid';
+        boot.style.padding = '24px';
+        boot.innerHTML = html;
+      }
+      window.__leaBootFail = fail;
+
+      if (location.protocol === 'file:') {
+        document.addEventListener('DOMContentLoaded', function () {
+          fail('<div class="boot__logo">!</div>' +
+            '<h1 style="margin:14px 0 8px">الموقع يحتاج فتحه عبر رابط، لا بالنقر المزدوج على الملف</h1>' +
+            '<p style="max-width:640px;text-align:center;line-height:2">' +
+            'متصفحات الويب تمنع تشغيل ملفات JavaScript عند فتح الملف مباشرة من القرص (بروتوكول file://)، ولهذا لا يستجيب الموقع.<br>' +
+            '<b>الحل الأول (محلياً):</b> افتح PowerShell في مجلد المشروع ونفّذ:<br>' +
+            '<code dir="ltr" style="display:inline-block;margin:8px 0;padding:8px 14px;background:#111827;color:#e5e7eb;border-radius:8px;font-size:.95rem">python -m http.server 5173</code><br>' +
+            'ثم افتح <a dir="ltr" href="http://127.0.0.1:5173">http://127.0.0.1:5173</a><br>' +
+            '<b>الحل الثاني (للأبد ومن أي جهاز):</b> انشر الموقع على GitHub Pages — الخطوات في ملف <span class="en">README.md</span>.' +
+            '</p>');
+        });
+        return;
+      }
+
+      window.setTimeout(function () {
+        if (window.__leaBooted) return;
+        fail('<div class="boot__logo">!</div>' +
+          '<h1 style="margin:14px 0 8px">تعذّر تشغيل الموقع</h1>' +
+          '<p style="max-width:640px;text-align:center;line-height:2">' +
+          'تأكد من أن JavaScript مفعّل في المتصفح، ثم أعد تحميل الصفحة.<br>' +
+          'وإن كنت زرت الموقع سابقاً فقد تكون نسخة قديمة محفوظة في المتصفح: افتح إعدادات المتصفح ← بيانات الموقع ← احذف بيانات هذا الموقع ثم أعد المحاولة.' +
+          '</p>' +
+          '<button type="button" onclick="location.reload()" style="margin-top:14px;padding:11px 22px;border:0;border-radius:10px;background:#2563eb;color:#fff;font:inherit;font-weight:700;cursor:pointer">↻ إعادة تحميل الصفحة</button>');
+      }, 8000);
+    })();
+  </script>
+  <script>
     /* منع وميض الوضع الداكن: نطبّق الثيم قبل رسم الصفحة */
     (function () {
       try {
