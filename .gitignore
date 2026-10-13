@@ -1,0 +1,14 @@
+# ملفات مؤقتة واختبارات محلية
+.chrome-test/
+.chrome-test-fresh/
+.chrome-login/
+.chrome-*.html
+_selftest.*
+_logintest.*
+.tmp-check/
+
+# نظام
+Thumbs.db
+desktop.ini
+.DS_Store
+*.log

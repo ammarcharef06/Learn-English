@@ -1,0 +1,26 @@
+{
+  "name": "أكاديمية الإنجليزية — Learn English",
+  "short_name": "English Academy",
+  "id": "learn-english-academy",
+  "description": "موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1→B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html#/",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "background_color": "#0b1220",
+  "theme_color": "#2563eb",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "./assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "تدريب سريع", "short_name": "تدريب", "url": "./index.html#/drills" },
+    { "name": "بطاقات الحفظ", "short_name": "بطاقات", "url": "./index.html#/flashcards" },
+    { "name": "المطالعات", "short_name": "مطالعة", "url": "./index.html#/reading" }
+  ]
+}

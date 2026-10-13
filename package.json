@@ -1,0 +1,11 @@
+{
+  "name": "learn-english",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "أكاديمية تعلّم الإنجليزية - موقع تعليمي تفاعلي (عربي/إنجليزي) يعمل على GitHub Pages",
+  "scripts": {
+    "serve": "python -m http.server 5173",
+    "check": "node tools/check.mjs"
+  }
+}
