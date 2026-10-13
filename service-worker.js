@@ -22,6 +22,7 @@ const CORE = [
   './assets/img/icon-maskable-512.png',
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
+  './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
   './assets/js/core/i18n.js',

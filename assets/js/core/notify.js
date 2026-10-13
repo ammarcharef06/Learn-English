@@ -120,13 +120,21 @@ export function nextReminderText() {
 }
 
 /* ---------- OneSignal Push ---------- */
+export function appIdSource() {
+  const fromSettings = (settings?.push?.appId || '').trim();
+  if (fromSettings) return 'settings';
+  if ((window.LEA_ONESIGNAL_APP_ID || '').trim()) return 'config';
+  return 'none';
+}
+
 export function oneSignalConfigured() {
-  const id = (settings?.push?.appId || '').trim() || window.LEA_ONESIGNAL_APP_ID || '';
-  return !!id;
+  return appIdSource() !== 'none';
 }
 
 export function appId() {
-  return ((settings?.push?.appId || '').trim() || window.LEA_ONESIGNAL_APP_ID || '').trim();
+  const fromSettings = (settings?.push?.appId || '').trim();
+  if (fromSettings) return fromSettings;
+  return (window.LEA_ONESIGNAL_APP_ID || '').trim();
 }
 
 function basePath() {
@@ -196,10 +204,12 @@ export function subscriptionId() {
 export async function pushStatus() {
   const state = {
     configured: oneSignalConfigured(),
+    source: appIdSource(),
     appId: appId(),
     enabled: !!settings?.push?.enabled,
     id: subscriptionId(),
     permission: permissionState(),
+    optedIn: (() => { try { return !!window.OneSignal?.User?.PushSubscription?.optedIn; } catch { return false; } })(),
   };
   return state;
 }

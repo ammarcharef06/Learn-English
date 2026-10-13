@@ -1,6 +1,6 @@
 /* الإعدادات: المظهر، الصوت، الإشعارات، Push، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
-import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr } from '../core/utils.js';
+import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr, copyText } from '../core/utils.js';
 import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
 import { changePassword, lockNow, usingDefaultPassword, resetToDefaultPassword } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
@@ -142,7 +142,13 @@ export function renderSettings(host) {
         <button class="btn btn--primary" type="button" id="pushOn">🔔 ${t('set.pushEnable')}</button>
         <button class="btn" type="button" id="pushOff">🔕 إيقاف</button>
         <button class="btn" type="button" id="pushTest">${t('set.pushTest')}</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="copySubId">📋 نسخ معرّف اشتراكي</button>
       </div>
+      <p class="hint" style="margin-top:8px">
+        المعرّف المحفوظ في هذه الشاشة يعمل على <b>هذا الجهاز فقط</b>. لتشغيل الإشعارات تلقائياً على كل أجهزتك،
+        ضع نفس المعرّف في الملف <span class="en">assets/js/config.js</span> في السطر
+        <span class="en" dir="ltr">window.LEA_ONESIGNAL_APP_ID = '…';</span>
+      </p>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -268,9 +274,12 @@ export function renderSettings(host) {
     const st = await pushStatus();
     const el = qs('#pushState', host);
     if (!el) return;
+    const sourceText = st.source === 'config' ? 'مضبوط في ملف الإعدادات (كل الأجهزة)'
+      : st.source === 'settings' ? 'مضبوط على هذا الجهاز'
+        : t('set.pushNotConfigured');
     el.textContent = !st.configured
-      ? t('set.pushNotConfigured')
-      : `${st.enabled ? 'مُفعّل ✅' : 'غير مُفعّل'} · ${st.id ? `ID: ${st.id.slice(0, 12)}…` : 'لا مشترك'} · ${st.permission}`;
+      ? sourceText
+      : `${sourceText} · ${st.enabled || st.optedIn ? 'مُفعّل ✅' : 'غير مُفعّل'} · ${st.id ? `ID: ${st.id.slice(0, 14)}…` : 'لا مشترك'} · الإذن: ${st.permission}`;
   };
   refreshPushState();
   qs('#saveAppId', host)?.addEventListener('click', async () => {
@@ -298,6 +307,12 @@ export function renderSettings(host) {
     if (!st.id) { toast('لم يتم الاشتراك بعد — اضغط «تفعيل إشعارات Push»', 'warn'); return; }
     toast(`معرّف اشتراكك: ${st.id}`, 'info', 'انسخه وأرسل منه إشعاراً تجريبياً من لوحة OneSignal');
     await fireReminder({ test: true });
+  });
+  qs('#copySubId', host)?.addEventListener('click', async () => {
+    const st = await pushStatus();
+    if (!st.id) { toast('لا يوجد اشتراك بعد — فعّل الإشعارات أولاً', 'warn'); return; }
+    const ok = await copyText(st.id);
+    toast(ok ? `نُسخ المعرّف: ${st.id}` : `معرّفك: ${st.id}`, ok ? 'ok' : 'info');
   });
 
   /* ---------- الأمان ---------- */

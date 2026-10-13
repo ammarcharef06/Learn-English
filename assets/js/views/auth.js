@@ -1,12 +1,11 @@
 /* شاشة القفل (تسجيل الدخول بكلمة المرور) */
 import { qs, esc, toast } from '../core/utils.js';
 import { t } from '../core/i18n.js';
-import { login, usingDefaultPassword, lockRemainingMs } from '../core/auth.js';
+import { login, lockRemainingMs } from '../core/auth.js';
 
 export function renderLock(onSuccess) {
   const host = qs('#lockScreen');
   if (!host) return;
-  const showHint = usingDefaultPassword();
   host.hidden = false;
   host.innerHTML = `
     <div class="lock-card">
@@ -30,7 +29,6 @@ export function renderLock(onSuccess) {
         <button class="btn btn--primary btn--block btn--lg" type="submit" id="lockSubmit">🔓 ${esc(t('auth.enter'))}</button>
         <p class="lock-error" id="lockError" role="alert" aria-live="assertive"></p>
       </form>
-      ${showHint ? `<div class="tip-box"><b>ملاحظة أول دخول</b>${esc(t('auth.defaultWarn'))}</div>` : ''}
       <p class="tiny muted" style="margin-top:14px">بياناتك محفوظة على جهازك فقط 🔒</p>
     </div>`;
 
