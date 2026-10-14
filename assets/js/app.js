@@ -143,9 +143,12 @@ function setupInstall() {
 }
 
 /* ---------------- Service Worker ---------------- */
+/* وعد بجاهزية Service Worker — تستخدمه تهيئة الإشعارات */
+let swReadyPromise = null;
+
 function registerSW() {
-  if (!('serviceWorker' in navigator)) return;
-  window.addEventListener('load', async () => {
+  if (!('serviceWorker' in navigator)) { swReadyPromise = Promise.resolve(null); return swReadyPromise; }
+  const register = async () => {
     try {
       const swUrl = new URL('./service-worker.js', location.href);
       const scope = new URL('./', location.href).pathname;
@@ -158,9 +161,33 @@ function registerSW() {
           }
         });
       });
+      // ننتظر وصول العامل إلى حالة التنشيط (مهم قبل تهيئة OneSignal)
+      const active = reg.active || (await waitForActive(reg));
+      return active ? reg : null;
     } catch (err) {
       console.warn('SW registration failed', err);
+      return null;
     }
+  };
+  const p = (document.readyState === 'complete' ? register() : new Promise((res) => {
+    window.addEventListener('load', () => { register().then(res); }, { once: true });
+  }));
+  swReadyPromise = p;
+  window.__leaSwReady = p;
+  return p;
+}
+
+function waitForActive(reg, timeout = 8000) {
+  return new Promise((resolve) => {
+    if (reg.active) return resolve(reg.active);
+    const t = setTimeout(() => resolve(null), timeout);
+    const check = () => {
+      if (reg.active) { clearTimeout(t); resolve(reg.active); return; }
+      const w = reg.installing || reg.waiting;
+      if (w) w.addEventListener('statechange', () => check(), { once: true });
+      else setTimeout(check, 200);
+    };
+    check();
   });
 }
 
@@ -222,7 +249,8 @@ async function main() {
   startReminderLoop();
 
   if (oneSignalConfigured()) {
-    initOneSignal().then((res) => {
+    // ننتظر جاهزية Service Worker أولاً — شرط أساسي لاكتمال الاشتراك في OneSignal
+    Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {
       if (res.ok) console.info('OneSignal ready', res.id || '');
     });
   }

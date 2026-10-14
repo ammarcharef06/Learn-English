@@ -4,7 +4,7 @@ import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, pre
 import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
 import { changePassword, lockNow, usingDefaultPassword, resetToDefaultPassword } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
-import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId, autoResubscribe } from '../core/notify.js';
+import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId, autoResubscribe, diagnostics } from '../core/notify.js';
 import { pageHead } from './shell.js';
 
 const DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
@@ -144,6 +144,7 @@ export function renderSettings(host) {
         <button class="btn" type="button" id="pushOff">🔕 إيقاف</button>
         <button class="btn" type="button" id="pushTest">${t('set.pushTest')}</button>
         <button class="btn btn--ghost btn--sm" type="button" id="refreshPush">🔄 تحديث الحالة</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="diagPush">🔍 تشخيص الإشعارات</button>
         <button class="btn btn--ghost btn--sm" type="button" id="copySubId">📋 نسخ معرّف اشتراكي</button>
       </div>
       <p class="hint" id="pushConfigNote" style="margin-top:8px"></p>
@@ -308,6 +309,21 @@ export function renderSettings(host) {
   qs('#refreshPush', host)?.addEventListener('click', async () => {
     await refreshPushState();
     toast('حُدّثت حالة الاشتراك', 'info');
+  });
+
+  qs('#diagPush', host)?.addEventListener('click', async () => {
+    const d = await diagnostics();
+    const pretty = JSON.stringify(d, null, 2);
+    openModal({
+      title: '🔍 تشخيص الإشعارات',
+      wide: true,
+      body: `<p class="small muted">هذه معلومات تقنية عن حالة الإشعارات وجهازك. انسخها إن طلبت المساعدة.</p>
+        <pre dir="ltr" style="max-height:46vh;overflow:auto;background:var(--surface-3);padding:12px;border-radius:12px;font-size:.8rem;white-space:pre-wrap">${esc(pretty)}</pre>`,
+      actions: [
+        { label: '📋 نسخ', variant: 'primary', onClick: async () => { await copyText(pretty); toast('نُسخت نتيجة التشخيص ✅', 'ok'); return false; } },
+        { label: t('common.close'), variant: 'ghost' },
+      ],
+    });
   });
 
   qs('#saveAppId', host)?.addEventListener('click', async () => {

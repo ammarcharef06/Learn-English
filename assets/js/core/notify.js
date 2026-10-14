@@ -148,6 +148,16 @@ function oneSignalReady() {
   catch { return false; }
 }
 
+/* ننتظر تنشيط Service Worker قبل تهيئة OneSignal (شرط لاكتمال الاشتراك) */
+async function waitForServiceWorker(timeout = 10000) {
+  try {
+    if (!('serviceWorker' in navigator)) return null;
+    const ready = window.__leaSwReady || navigator.serviceWorker.register(new URL('./service-worker.js', location.href), { scope: new URL('./', location.href).pathname });
+    const reg = await Promise.race([Promise.resolve(ready).then(() => navigator.serviceWorker.ready), wait(timeout).then(() => null)]);
+    return reg || null;
+  } catch { return null; }
+}
+
 export async function initOneSignal() {
   const id = appId();
   // تهيئة واحدة فقط: إن كان SDK مهيّأً مسبقاً نعيد حالته بدل إحداث خطأ
@@ -162,11 +172,15 @@ export async function initOneSignal() {
   }
   if (!id) return { ok: false, error: 'no-app-id' };
   if (!('serviceWorker' in navigator)) return { ok: false, error: 'no-sw' };
+
+  // ① نضمن وجود عامل خدمة نشط قبل التهيئة
+  await waitForServiceWorker();
+
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   return new Promise((resolve) => {
     let settled = false;
     const done = (v) => { if (!settled) { settled = true; resolve(v); } };
-    setTimeout(() => done({ ok: false, error: 'timeout' }), 12000);
+    setTimeout(() => done({ ok: false, error: 'timeout' }), 15000);
     window.OneSignalDeferred.push(async (OneSignal) => {
       try {
         const options = {
@@ -174,18 +188,35 @@ export async function initOneSignal() {
           allowLocalhostAsSecureOrigin: true,
           serviceWorkerParam: { scope: basePath() },
           serviceWorkerPath: basePath() + 'service-worker.js',
-          notifyButton: { enable: false },
-          welcomeNotification: { disable: true },
+          notifyButton: { enable: false },          // لا زر جرس
+          welcomeNotification: { disable: true },   // لا إشعار ترحيبي تلقائي
+          autoResubscribe: true,                    // يعيد الاشتراك تلقائياً إن كان الإذن ممنوحاً
         };
         const safariId = (window.LEA_ONESIGNAL_SAFARI_WEB_ID || '').trim();
         if (safariId) options.safari_web_id = safariId;
         await OneSignal.init(options);
-        const sub = OneSignal.User?.PushSubscription;
+
+        // إغلاق أي نوافذ/تنبيهات إضافية يظهرها OneSignal من لوحة التحكم
+        try { OneSignal.Slidedown?.setIsEnabled?.(false); } catch {}
+        try { OneSignal.Notifications?.setDefaultTitle?.('أكاديمية الإنجليزية'); } catch {}
+
+        // ② إن كان الإذن ممنوحاً والاشتراك ناقصاً نُكمله تلقائياً
+        let sub = OneSignal.User?.PushSubscription;
+        if (!sub?.optedIn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+          try { await sub?.optIn?.(); } catch {}
+          for (let i = 0; i < 15; i++) {
+            sub = OneSignal.User?.PushSubscription;
+            if (sub?.id) break;
+            await wait(400);
+          }
+        }
         const opted = !!(sub && sub.optedIn);
-        saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: opted } });
+        saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: opted, lastError: '' } });
         done({ ok: true, optedIn: opted, id: sub?.id || '' });
       } catch (e) {
-        done({ ok: false, error: String(e && e.message ? e.message : e) });
+        const msg = String(e && e.message ? e.message : e);
+        saveSettings({ push: { lastError: msg, lastSync: new Date().toISOString() } });
+        done({ ok: false, error: msg });
       }
     });
   });
@@ -273,6 +304,45 @@ export async function disablePush() {
 export function subscriptionId() {
   try { return window.OneSignal?.User?.PushSubscription?.id || settings?.push?.subscriptionId || ''; }
   catch { return settings?.push?.subscriptionId || ''; }
+}
+
+/* تشخيص شامل لحالة الإشعارات — يُستخدم في زر «تشخيص» داخل الإعدادات */
+export async function diagnostics() {
+  let sws = [];
+  try {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    sws = regs.map((r) => ({
+      scope: r.scope,
+      active: !!r.active,
+      state: (r.active || r.installing || r.waiting)?.state || 'none',
+    }));
+  } catch (e) { sws = [{ error: String(e) }]; }
+  let os = {};
+  try {
+    os = {
+      loaded: !!window.OneSignal,
+      initialized: window.OneSignal?.initialized === true,
+      sdkPermission: window.OneSignal?.Notifications?.permission ?? null,
+      optedIn: !!window.OneSignal?.User?.PushSubscription?.optedIn,
+      id: window.OneSignal?.User?.PushSubscription?.id || '',
+      hasToken: !!window.OneSignal?.User?.PushSubscription?.token,
+    };
+  } catch (e) { os = { error: String(e) }; }
+  return {
+    origin: location.origin,
+    path: basePath(),
+    protocol: location.protocol,
+    appId: appId(),
+    source: appIdSource(),
+    browserPermission: permissionState(),
+    controller: !!navigator.serviceWorker?.controller,
+    serviceWorkers: sws,
+    oneSignal: os,
+    lastError: settings?.push?.lastError || '',
+    lastSync: settings?.push?.lastSync || '',
+    savedSubscriptionId: settings?.push?.subscriptionId || '',
+    userAgent: navigator.userAgent,
+  };
 }
 
 export async function pushStatus() {
