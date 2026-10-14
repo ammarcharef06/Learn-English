@@ -19,7 +19,13 @@ export function renderSettings(host) {
     <div class="card">
       <div class="card__title"><span class="ico">🎨</span><h2>${t('set.appearance')}</h2></div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.theme')}</b><span>فاتح، داكن، أو تلقائي حسب نظام جهازك.</span></div>
+        <div class="setting-row__text"><b>ستايل الواجهة</b><span>شكل الموقع العام: كالي GNOME (الافتراضي)، GNOME (فاتح/داكن)، أو الكلاسيكي.</span></div>
+        <div class="setting-row__control seg" id="skinSeg">
+          ${SKINS.map((s) => `<button type="button" data-skin="${s.id}" class="${settings.skin === s.id ? 'is-active' : ''}" title="${esc(s.desc)}">${esc(s.ar)}</button>`).join('')}
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.theme')}</b><span id="themeHint">فاتح، داكن، أو تلقائي حسب نظام جهازك.</span></div>
         <div class="setting-row__control seg" id="themeSeg">
           <button type="button" data-theme="auto" class="${s.theme === 'auto' ? 'is-active' : ''}">${t('set.themeAuto')}</button>
           <button type="button" data-theme="light" class="${s.theme === 'light' ? 'is-active' : ''}">${t('set.themeLight')}</button>
@@ -192,12 +198,25 @@ export function renderSettings(host) {
     </div>`;
 
   /* ---------- المظهر ---------- */
+  qsa('#skinSeg button', host).forEach((b) => b.addEventListener('click', () => {
+    saveSettings({ skin: b.dataset.skin });
+    applySkin();
+    qsa('#skinSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
+    const label = SKINS.find((s) => s.id === b.dataset.skin);
+    toast(`الستايل: ${label ? label.ar : b.dataset.skin}`, 'ok');
+    renderSettings(host);
+  }));
   qsa('#themeSeg button', host).forEach((b) => b.addEventListener('click', () => {
     saveSettings({ theme: b.dataset.theme });
-    applyTheme();
+    applySkin();
     qsa('#themeSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
     toast(t('set.saved'), 'ok');
   }));
+  if ((settings.skin || 'kali') === 'kali') {
+    const themeHint = qs('#themeHint', host);
+    if (themeHint) themeHint.textContent = 'ستايل كالي داكن دائماً — اختر «GNOME» لتتمكن من التبديل بين الفاتح والداكن.';
+    qsa('#themeSeg button', host).forEach((b) => { b.disabled = true; b.style.opacity = '.45'; });
+  }
   qsa('#langSeg button', host).forEach((b) => b.addEventListener('click', () => {
     saveSettings({ uiLang: b.dataset.lang });
     setUiLang(b.dataset.lang);
@@ -417,7 +436,7 @@ export function renderSettings(host) {
     }
   });
   qs('#resetProgBtn', host)?.addEventListener('click', () => confirmAction('تصفير التقدّم', 'سيُحذف كل التقدم والنقاط والشارات، وتبقى الإعدادات وكلمة المرور.', () => { resetProgress(); toast('صُفِّر التقدّم', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
-  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', () => { resetSettings(); applyTheme(); applyLang(); toast('أُعيدت الإعدادات', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
+  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', () => { resetSettings(); applySkin(); applyLang(); toast('أُعيدت الإعدادات', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
   qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور (ستعود SAYPER). لا يمكن التراجع!', () => { wipeEverything(); location.reload(); }));
 
   qs('#installBtn', host)?.addEventListener('click', () => window.__leaInstall?.());
@@ -438,6 +457,21 @@ export function applyTheme() {
   const theme = settings.theme || 'auto';
   const dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+}
+
+/* الستايل: kali (داكن دائماً) | gnome | classic */
+export const SKINS = [
+  { id: 'kali', ar: 'Kali GNOME', desc: 'داكن بلون كالي الأزرق' },
+  { id: 'gnome', ar: 'GNOME', desc: 'Adwaita فاتح/داكن' },
+  { id: 'classic', ar: 'الكلاسيكي', desc: 'الأزرق الأكاديمي السابق' },
+];
+
+export function applySkin() {
+  const skin = SKINS.some((s) => s.id === settings.skin) ? settings.skin : 'kali';
+  document.documentElement.dataset.skin = skin;
+  if (skin === 'kali') document.documentElement.dataset.theme = 'dark';
+  else applyTheme();
+  return skin;
 }
 export function applyLang() {
   const lang = settings.uiLang === 'en' ? 'en' : 'ar';

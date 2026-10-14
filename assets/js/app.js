@@ -18,7 +18,7 @@ import { renderReading } from './views/reading.js';
 import { renderExams } from './views/exams.js';
 import { renderStats } from './views/stats.js';
 import { renderNotebook } from './views/notebook.js';
-import { renderSettings, applyTheme, applyLang } from './views/settings.js';
+import { renderSettings, applyTheme, applySkin, applyLang, SKINS } from './views/settings.js';
 import { renderAbout } from './views/about.js';
 import { addNotebook } from './core/gamify.js';
 import { startReminderLoop, initOneSignal, oneSignalConfigured } from './core/notify.js';
@@ -76,9 +76,29 @@ function bindGlobalEvents() {
   qs('#scrim')?.addEventListener('click', closeDrawer);
 
   qs('#btnTheme')?.addEventListener('click', () => {
+    if ((settings.skin || 'kali') === 'kali') {
+      // كالي داكن دائماً: الزر يبدّل إلى GNOME الفاتح كبديل سريع
+      saveSettings({ skin: 'gnome', theme: 'light' });
+      applySkin();
+      toast('الستايل: GNOME فاتح ☀️', 'info');
+      renderAll();
+      return;
+    }
     const isDark = document.documentElement.dataset.theme === 'dark';
     saveSettings({ theme: isDark ? 'light' : 'dark' });
-    applyTheme();
+    applySkin();
+  });
+
+  /* زر تبديل الستايل السريع: كالي → GNOME → الكلاسيكي */
+  qs('#btnStyle')?.addEventListener('click', () => {
+    const order = SKINS.map((s) => s.id);
+    const current = SKINS.some((s) => s.id === settings.skin) ? settings.skin : 'kali';
+    const next = order[(order.indexOf(current) + 1) % order.length];
+    saveSettings({ skin: next });
+    const applied = applySkin();
+    const label = SKINS.find((s) => s.id === applied);
+    toast(`الستايل: ${label ? label.ar : applied}`, 'ok');
+    renderAll();
   });
   qs('#btnLang')?.addEventListener('click', () => {
     const next = settings.uiLang === 'en' ? 'ar' : 'en';
@@ -212,7 +232,7 @@ function boot() {
 
 async function main() {
   ensureAuth();
-  applyTheme();
+  applySkin();
   applyLang();
   initSpeech();
   bindGlobalEvents();
@@ -231,7 +251,7 @@ async function main() {
   });
 
   const media = window.matchMedia('(prefers-color-scheme: dark)');
-  media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applyTheme(); });
+  media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applySkin(); });
 
   if (!isAuthed()) {
     qs('#boot')?.classList.add('is-hidden');

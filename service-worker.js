@@ -9,13 +9,15 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.0.2';
+const VERSION = 'v1.0.3';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './assets/css/main.css',
+  './assets/css/skins/gnome.css',
+  './assets/css/skins/kali.css',
   './assets/img/favicon.svg',
   './assets/img/icon-192.png',
   './assets/img/icon-512.png',

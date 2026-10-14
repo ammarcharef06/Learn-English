@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>أكاديمية الإنجليزية — Learn English</title>
   <meta name="description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
-  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#2777ff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#23272f" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="English Academy" />
@@ -23,6 +23,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/skins/gnome.css" />
+  <link rel="stylesheet" href="./assets/css/skins/kali.css" />
 
   <script>
     /* حارس الإقلاع: يشرح سبب عدم عمل الموقع بدلاً من صفحة صامتة */
@@ -71,6 +73,8 @@
         var s = raw ? JSON.parse(raw) : {};
         var theme = s.theme || 'auto';
         var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.skin = s.skin || 'kali';
+        if ((s.skin || 'kali') === 'kali') dark = true;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         document.documentElement.dataset.uiLang = s.uiLang === 'en' ? 'en' : 'ar';
         document.documentElement.dir = s.uiLang === 'en' ? 'ltr' : 'rtl';
@@ -107,6 +111,9 @@
       <div class="topbar__actions">
         <button class="icon-btn" id="btnInstall" type="button" hidden title="تثبيت التطبيق" aria-label="تثبيت التطبيق">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btnStyle" type="button" title="تبديل ستايل الواجهة" aria-label="تبديل ستايل الواجهة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.9 2-1.8 0-.5-.2-.9-.5-1.3-.3-.4-.4-.7-.4-1.1 0-.8.7-1.5 1.6-1.5H16a5 5 0 0 0 5-5c0-4-4-7.3-9-7.3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="7.6" cy="11.4" r="1.2" fill="currentColor"/><circle cx="10.6" cy="7.6" r="1.2" fill="currentColor"/><circle cx="15" cy="8.4" r="1.2" fill="currentColor"/></svg>
         </button>
         <button class="icon-btn" id="btnLang" type="button" title="تبديل لغة الواجهة" aria-label="تبديل لغة الواجهة">
           <span class="icon-btn__text" id="langLabel">EN</span>
