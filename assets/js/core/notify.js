@@ -143,10 +143,18 @@ function basePath() {
   return new URL('./', location.href).pathname;
 }
 
+const OS_FLAG = '__leaOneSignalInitialized';
+
+/* ملاحظة مهمة: في SDK v16 لا يوجد خاصية initialized، وكائن OneSignal.User
+   موجود قبل التهيئة أيضاً — لذلك نتتبّع التهيئة بأنفسنا. */
 function oneSignalReady() {
-  try { return !!(window.OneSignal && (window.OneSignal.initialized === true || window.OneSignal.User)); }
-  catch { return false; }
+  try {
+    if (window[OS_FLAG] === true) return true;
+    return !!window.OneSignal?.User?.PushSubscription?.id;
+  } catch { return false; }
 }
+
+function markOneSignalReady() { try { window[OS_FLAG] = true; } catch {} }
 
 /* ننتظر تنشيط Service Worker قبل تهيئة OneSignal (شرط لاكتمال الاشتراك) */
 async function waitForServiceWorker(timeout = 10000) {
@@ -194,7 +202,15 @@ export async function initOneSignal() {
         };
         const safariId = (window.LEA_ONESIGNAL_SAFARI_WEB_ID || '').trim();
         if (safariId) options.safari_web_id = safariId;
-        await OneSignal.init(options);
+        try {
+          await OneSignal.init(options);
+          markOneSignalReady();
+        } catch (initErr) {
+          const msg = String(initErr && initErr.message ? initErr.message : initErr);
+          // إن كانت التهيئة قد حدثت فعلاً (بدء متزامن) نكمل بدل الفشل
+          if (/already init|already been init/i.test(msg)) markOneSignalReady();
+          else throw initErr;
+        }
 
         // إغلاق أي نوافذ/تنبيهات إضافية يظهرها OneSignal من لوحة التحكم
         try { OneSignal.Slidedown?.setIsEnabled?.(false); } catch {}
@@ -203,7 +219,7 @@ export async function initOneSignal() {
         // ② إن كان الإذن ممنوحاً والاشتراك ناقصاً نُكمله تلقائياً
         let sub = OneSignal.User?.PushSubscription;
         if (!sub?.optedIn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-          try { await sub?.optIn?.(); } catch {}
+          try { await sub?.optIn?.()?.catch?.(() => {}); } catch {}
           for (let i = 0; i < 15; i++) {
             sub = OneSignal.User?.PushSubscription;
             if (sub?.id) break;
@@ -223,6 +239,11 @@ export async function initOneSignal() {
 }
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+/* أي وعد طويل (مثل optIn) لا يجب أن يعلّق التطبيق أبداً */
+const withTimeout = (p, ms = 8000) => Promise.race([
+  Promise.resolve(p).then(() => true).catch(() => false),
+  wait(ms).then(() => false),
+]);
 
 export async function enablePush() {
   const id = appId();
@@ -249,19 +270,26 @@ export async function enablePush() {
   // 3) الاشتراك ثم انتظار معرّف الاشتراك
   try {
     const OneSignal = window.OneSignal;
-    if (!OneSignal.User?.PushSubscription?.optedIn) await OneSignal.User.PushSubscription.optIn();
+    if (!OneSignal?.User?.PushSubscription) return { ok: false, error: 'لم يجهز OneSignal بعد — أعد المحاولة بعد لحظات.' };
+    if (!OneSignal.User.PushSubscription.optedIn) {
+      await withTimeout(OneSignal.User.PushSubscription.optIn(), 10000);
+    }
     let subId = '';
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 20; i++) {
       subId = OneSignal.User?.PushSubscription?.id || '';
       if (subId) break;
-      await wait(400);
+      await wait(500);
     }
     saveSettings({
       push: {
-        enabled: true, lastSync: new Date().toISOString(),
+        enabled: !!subId, lastSync: new Date().toISOString(),
         subscriptionId: subId, optedIn: !!OneSignal.User?.PushSubscription?.optedIn,
+        lastError: subId ? '' : 'لم يصل معرّف الاشتراك من OneSignal',
       },
     });
+    if (!subId) {
+      return { ok: false, error: 'تم منح الإذن لكن OneSignal لم يُعطِ معرّف اشتراك. تأكد من الإنترنت ثم أعد المحاولة، أو أرسل لي نتيجة «🔍 تشخيص الإشعارات».' };
+    }
     return { ok: true, id: subId };
   } catch (e) {
     return { ok: false, error: String(e && e.message ? e.message : e) };
@@ -277,11 +305,12 @@ export async function autoResubscribe() {
       if (!r.ok) return r;
     }
     const OneSignal = window.OneSignal;
-    const sub = OneSignal.User?.PushSubscription;
-    if (sub?.optedIn && sub?.id) return { ok: true, id: sub.id, already: true };
-    await sub?.optIn?.();
+    const sub = OneSignal?.User?.PushSubscription;
+    if (!sub) return { ok: false, error: 'no-sdk' };
+    if (sub.optedIn && sub.id) return { ok: true, id: sub.id, already: true };
+    await withTimeout(sub.optIn?.(), 10000);
     let subId = '';
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 20; i++) {
       subId = OneSignal.User?.PushSubscription?.id || '';
       if (subId) break;
       await wait(400);

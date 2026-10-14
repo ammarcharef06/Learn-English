@@ -53,12 +53,12 @@ function writeReport(extra = '') {
 
   await step('OneSignal مهيّأ تلقائياً', async () => {
     let ok = false;
-    for (let i = 0; i < 40; i++) {
-      if (window.OneSignal && window.OneSignal.initialized === true) { ok = true; break; }
+    for (let i = 0; i < 60; i++) {
+      if (window.__leaOneSignalInitialized === true || window.OneSignal?.User?.PushSubscription?.id) { ok = true; break; }
       await sleep(500);
     }
     A(ok, 'لم تكتمل التهيئة');
-    return 'initialized=true';
+    return 'flag=' + window.__leaOneSignalInitialized;
   });
 
   await step('الاشتراك يكتمل ويُعطي معرّفاً حقيقياً', async () => {
