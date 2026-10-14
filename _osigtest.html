@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>أكاديمية الإنجليزية — Learn English</title>
+  <meta name="description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
+  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="English Academy" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/img/apple-touch-icon.png" />
+  <link rel="mask-icon" href="./assets/img/favicon.svg" color="#2563eb" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/css/main.css" />
+
+  <script>
+    /* حارس الإقلاع: يشرح سبب عدم عمل الموقع بدلاً من صفحة صامتة */
+    (function () {
+      function fail(html) {
+        var boot = document.getElementById('boot');
+        if (!boot) return;
+        boot.style.display = 'grid';
+        boot.style.padding = '24px';
+        boot.innerHTML = html;
+      }
+      window.__leaBootFail = fail;
+
+      if (location.protocol === 'file:') {
+        document.addEventListener('DOMContentLoaded', function () {
+          fail('<div class="boot__logo">!</div>' +
+            '<h1 style="margin:14px 0 8px">الموقع يحتاج فتحه عبر رابط، لا بالنقر المزدوج على الملف</h1>' +
+            '<p style="max-width:640px;text-align:center;line-height:2">' +
+            'متصفحات الويب تمنع تشغيل ملفات JavaScript عند فتح الملف مباشرة من القرص (بروتوكول file://)، ولهذا لا يستجيب الموقع.<br>' +
+            '<b>الحل الأول (محلياً):</b> افتح PowerShell في مجلد المشروع ونفّذ:<br>' +
+            '<code dir="ltr" style="display:inline-block;margin:8px 0;padding:8px 14px;background:#111827;color:#e5e7eb;border-radius:8px;font-size:.95rem">python -m http.server 5173</code><br>' +
+            'ثم افتح <a dir="ltr" href="http://127.0.0.1:5173">http://127.0.0.1:5173</a><br>' +
+            '<b>الحل الثاني (للأبد ومن أي جهاز):</b> انشر الموقع على GitHub Pages — الخطوات في ملف <span class="en">README.md</span>.' +
+            '</p>');
+        });
+        return;
+      }
+
+      window.setTimeout(function () {
+        if (window.__leaBooted) return;
+        fail('<div class="boot__logo">!</div>' +
+          '<h1 style="margin:14px 0 8px">تعذّر تشغيل الموقع</h1>' +
+          '<p style="max-width:640px;text-align:center;line-height:2">' +
+          'تأكد من أن JavaScript مفعّل في المتصفح، ثم أعد تحميل الصفحة.<br>' +
+          'وإن كنت زرت الموقع سابقاً فقد تكون نسخة قديمة محفوظة في المتصفح: افتح إعدادات المتصفح ← بيانات الموقع ← احذف بيانات هذا الموقع ثم أعد المحاولة.' +
+          '</p>' +
+          '<button type="button" onclick="location.reload()" style="margin-top:14px;padding:11px 22px;border:0;border-radius:10px;background:#2563eb;color:#fff;font:inherit;font-weight:700;cursor:pointer">↻ إعادة تحميل الصفحة</button>');
+      }, 8000);
+    })();
+  </script>
+  <script>
+    /* منع وميض الوضع الداكن: نطبّق الثيم قبل رسم الصفحة */
+    (function () {
+      try {
+        var raw = localStorage.getItem('lea.settings.v1');
+        var s = raw ? JSON.parse(raw) : {};
+        var theme = s.theme || 'auto';
+        var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.documentElement.dataset.uiLang = s.uiLang === 'en' ? 'en' : 'ar';
+        document.documentElement.dir = s.uiLang === 'en' ? 'ltr' : 'rtl';
+        document.documentElement.lang = s.uiLang === 'en' ? 'en' : 'ar';
+        if (s.fontSize) document.documentElement.style.setProperty('--font-scale', String(s.fontSize / 100));
+      } catch (e) { document.documentElement.dataset.theme = 'light'; }
+    })();
+  </script>
+  <script>
+    try {
+      localStorage.setItem('lea.session.v1', JSON.stringify({ at: Date.now(), exp: Date.now() + 86400000 }));
+      localStorage.removeItem('lea.auth.v1'); localStorage.removeItem('lea.progress.v1'); localStorage.removeItem('lea.settings.v1');
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#view">تخطَّ إلى المحتوى</a>
+
+  <div id="boot" class="boot">
+    <div class="boot__logo">EN</div>
+    <div class="boot__text">جارٍ تحضير أكاديمية الإنجليزية…</div>
+  </div>
+
+  <div id="app" class="app is-hidden">
+    <header class="topbar" id="topbar">
+      <button class="icon-btn topbar__menu" id="btnMenu" type="button" aria-label="القائمة" aria-expanded="false">
+        <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+
+      <a class="brand" href="#/" data-nav>
+        <span class="brand__mark">EN</span>
+        <span class="brand__text">
+          <b data-i18n="brand.name">أكاديمية الإنجليزية</b>
+          <small data-i18n="brand.tag">تعلّم · تدرّب · ثبّت</small>
+        </span>
+      </a>
+
+      <nav class="topnav" id="topnav" aria-label="التنقل الرئيسي"></nav>
+
+      <div class="topbar__actions">
+        <button class="icon-btn" id="btnInstall" type="button" hidden title="تثبيت التطبيق" aria-label="تثبيت التطبيق">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btnLang" type="button" title="تبديل لغة الواجهة" aria-label="تبديل لغة الواجهة">
+          <span class="icon-btn__text" id="langLabel">EN</span>
+        </button>
+        <button class="icon-btn" id="btnTheme" type="button" title="تبديل المظهر" aria-label="تبديل المظهر">
+          <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btnBell" type="button" title="الإشعارات" aria-label="الإشعارات">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15V10a6 6 0 1 0-12 0v5l-1.6 2.4A1 1 0 0 0 5.2 19h13.6a1 1 0 0 0 .84-1.6L18 15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 21.5h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <i class="dot" id="bellDot" hidden></i>
+        </button>
+        <button class="icon-btn" id="btnLock" type="button" title="قفل الموقع" aria-label="قفل الموقع">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar" aria-label="القائمة الجانبية">
+        <div class="sidebar__inner">
+          <div class="streak-card" id="streakCard"></div>
+          <nav class="sidenav" id="sidenav"></nav>
+          <div class="sidebar__foot">
+            <div class="mini-progress" id="miniProgress"></div>
+            <p class="muted small" id="appVersion">الإصدار 1.0.0</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="scrim" id="scrim" hidden></div>
+
+      <main class="view" id="view" tabindex="-1">
+        <noscript>
+          <p class="card">هذا الموقع يحتاج تشغيل JavaScript في المتصفح.</p>
+        </noscript>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <span data-i18n="footer.made">صُنع لتعلّم الإنجليزية خطوة بخطوة</span>
+      <span class="footer__sep">·</span>
+      <a href="#/about" data-nav data-i18n="footer.about">حول الموقع</a>
+      <span class="footer__sep">·</span>
+      <a href="#/settings" data-nav data-i18n="footer.settings">الإعدادات</a>
+    </footer>
+
+    <nav class="bottomnav" id="bottomnav" aria-label="تنقل سريع"></nav>
+
+    <div class="offline-bar" id="offlineBar" hidden>أنت غير متصل بالإنترنت — الموقع يعمل من الذاكرة المؤقتة ✅</div>
+  </div>
+
+  <div class="lock" id="lockScreen" hidden></div>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <div class="modal-root" id="modalRoot" hidden></div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="./assets/js/config.js"></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script type="module" src="./assets/js/app.js"></script>
+  <script type="module" src="./_osigtest.js"></script>
+</body>
+</html>
+

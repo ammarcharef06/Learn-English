@@ -152,14 +152,17 @@ export async function initOneSignal() {
     setTimeout(() => done({ ok: false, error: 'timeout' }), 12000);
     window.OneSignalDeferred.push(async (OneSignal) => {
       try {
-        await OneSignal.init({
+        const options = {
           appId: id,
           allowLocalhostAsSecureOrigin: true,
           serviceWorkerParam: { scope: basePath() },
           serviceWorkerPath: basePath() + 'service-worker.js',
           notifyButton: { enable: false },
           welcomeNotification: { disable: true },
-        });
+        };
+        const safariId = (window.LEA_ONESIGNAL_SAFARI_WEB_ID || '').trim();
+        if (safariId) options.safari_web_id = safariId;
+        await OneSignal.init(options);
         const sub = OneSignal.User?.PushSubscription;
         const opted = !!(sub && sub.optedIn);
         saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: opted } });
