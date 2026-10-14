@@ -62,8 +62,17 @@ export async function resolve() {
   const handler = found ? found.handler : notFoundHandler;
   listeners.forEach((fn) => { try { fn(current); } catch (e) { console.warn(e); } });
   if (handler) {
-    try { await handler(current.params, current.query); }
-    catch (e) { console.error('route handler failed', e); }
+    const run = async () => {
+      try { await handler(current.params, current.query); }
+      catch (e) { console.error('route handler failed', e); }
+    };
+    // انتقال سلس بين الصفحات (View Transitions API) مع رجوع آمن عند عدم الدعم
+    if (typeof document !== 'undefined' && typeof document.startViewTransition === 'function') {
+      try { await document.startViewTransition(run).finished; }
+      catch { await run(); }
+    } else {
+      await run();
+    }
   }
   return current;
 }

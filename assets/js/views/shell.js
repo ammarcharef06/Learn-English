@@ -19,13 +19,9 @@ export const NAV_ITEMS = [
 ];
 
 export function renderNav() {
-  const top = qs('#topnav');
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
-  if (top) {
-    top.innerHTML = NAV_ITEMS.filter((i) => !['nav.notebook'].includes(i.key))
-      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}">${t(i.key)}</a>`).join('');
-  }
+
   if (side) {
     let html = '';
     let lastGroup = '';
@@ -34,29 +30,43 @@ export function renderNav() {
         html += `<div class="sidenav__group">${t(item.group)}</div>`;
         lastGroup = item.group;
       }
-      html += `<a href="${item.href}" data-nav data-route="${item.href}"><span class="ico">${item.icon}</span><span>${t(item.key)}</span></a>`;
+      html += `<a href="${item.href}" data-nav data-route="${item.href}" title="${t(item.key)}"><span class="ico" aria-hidden="true">${item.icon}</span><span class="lbl">${t(item.key)}</span></a>`;
     }
     html += `<div class="sidenav__group">${t('nav.group.learn')}</div>`;
     LEVELS.forEach((lv) => {
-      html += `<a href="#/level/${lv.id}" data-nav data-route="#/level/${lv.id}"><span class="ico">${lv.icon}</span><span>${esc(lv.label)}</span></a>`;
+      html += `<a href="#/level/${lv.id}" data-nav data-route="#/level/${lv.id}" title="${esc(lv.label)}"><span class="ico" aria-hidden="true">${lv.icon}</span><span class="lbl">${esc(lv.label)}</span></a>`;
     });
-    html += `<a href="#/about" data-nav data-route="#/about"><span class="ico">ℹ️</span><span>${t('nav.about')}</span></a>`;
+    html += `<div class="sidenav__group">${t('nav.group.me')}</div>`;
+    html += `<a href="#/about" data-nav data-route="#/about" title="${t('nav.about')}"><span class="ico" aria-hidden="true">ℹ️</span><span class="lbl">${t('nav.about')}</span></a>`;
     side.innerHTML = html;
   }
+
   if (bottom) {
     bottom.innerHTML = NAV_ITEMS.filter((i) => i.bottom)
-      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}"><span class="ico">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
+      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
   }
 }
 
+/* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
+const SECTION_MAP = {
+  '': '#/',
+  lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
+  reference: '#/reference', drills: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
+  exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',
+};
+
+export function activeHrefFor(path) {
+  const seg = String(path || '/').split('/').filter(Boolean)[0] || '';
+  return SECTION_MAP[seg] || null;
+}
+
 export function setActiveNav(path) {
+  const active = activeHrefFor(path);
   document.querySelectorAll('[data-route]').forEach((a) => {
-    const route = a.dataset.route;
-    const clean = route.replace('#', '');
-    const active = clean === path
-      || (clean !== '/' && path.startsWith(clean))
-      || (clean === '/' && path === '/');
-    a.classList.toggle('is-active', active);
+    const on = !!active && a.dataset.route === active;
+    a.classList.toggle('is-active', on);
+    if (on) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
   });
 }
 

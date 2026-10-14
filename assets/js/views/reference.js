@@ -134,8 +134,10 @@ function renderPronouns(host) {
         <span class="caret">▾</span>
       </button>
       <div class="acc__body">
+        <div class="acc__inner">
         ${g.note ? `<div class="tip-box" style="margin-bottom:10px">${esc(g.note)}</div>` : ''}
         ${g.items.map((it) => itemRow(it.en, it.ar, it.ex, it.note)).join('')}
+        </div>
       </div>
     </section>`).join('')}`;
 

@@ -131,6 +131,7 @@ export function renderUnit(host, unitId) {
             <a class="btn btn--sm btn--primary" href="#/lesson/${u.id}/${i}">فتح الدرس كاملاً ←</a>
             <button class="btn btn--sm" type="button" data-read="${i}">${read ? '✅ ' + t('lessons.read') : t('lessons.markRead')}</button>
           </div>
+          </div>
         </div>
       </section>`;
     }).join('')}
