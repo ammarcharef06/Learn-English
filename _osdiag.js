@@ -12,12 +12,26 @@ const errors = [];
 window.addEventListener('error', (e) => errors.push('error: ' + e.message));
 window.addEventListener('unhandledrejection', (e) => errors.push('rejection: ' + ((e.reason && e.reason.message) || e.reason)));
 const A = (c, m) => { if (!c) throw new Error(m); };
-async function step(n, f) { try { const x = await f(); out.push('PASS ' + n + (x ? ' :: ' + x : '')); } catch (e) { out.push('FAIL ' + n + ' :: ' + e.message); } }
 const out = [];
+async function step(n, f) { try { const x = await f(); out.push('PASS ' + n + (x ? ' :: ' + x : '')); } catch (e) { out.push('FAIL ' + n + ' :: ' + e.message); } }
+
+function writeReport(extra = '') {
+  const pre = document.createElement('pre');
+  pre.textContent = 'OSDIAG-RESULTS\n' + out.join('\n') + (extra ? '\nFATAL:' + extra : '')
+    + '\n--- LOGS ---\n' + logs.slice(-25).join('\n') + '\nERRORS:' + errors.length + '\nOSDIAG-END';
+  document.body.appendChild(pre);
+}
 
 (async () => {
-  await sleep(2500);
-  const notify = await import('./assets/js/core/notify.js');
+  try {
+    await sleep(2500);
+    let notify = null;
+    await step('تحميل وحدة الإشعارات', async () => {
+      notify = await import('./assets/js/core/notify.js');
+      A(notify && typeof notify.pushStatus === 'function', 'الوحدة لا تُصدّر pushStatus');
+      return 'ok';
+    });
+    if (!notify) { writeReport('تعذّر تحميل وحدة الإشعارات'); return; }
 
   await step('إذن المتصفح ممنوح لهذا الموقع', async () => {
     A(typeof Notification !== 'undefined', 'لا يوجد Notification');
@@ -26,9 +40,13 @@ const out = [];
   });
 
   await step('Service Worker نشط قبل التهيئة', async () => {
-    const regs = await navigator.serviceWorker.getRegistrations();
-    A(regs.length >= 1, 'لا يوجد عامل مسجّل');
-    const active = regs.map((r) => r.active).find(Boolean);
+    let active = null;
+    for (let i = 0; i < 60; i++) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      active = regs.map((r) => r.active).find(Boolean);
+      if (active) break;
+      await sleep(500);
+    }
     A(active, 'لا يوجد عامل نشط');
     return active.scope;
   });
@@ -74,8 +92,9 @@ const out = [];
   await step('لا أخطاء JavaScript', async () => {
     A(errors.length === 0, errors.join(' | '));
   });
-
-  const pre = document.createElement('pre');
-  pre.textContent = 'OSDIAG-RESULTS\n' + out.join('\n') + '\n--- LOGS ---\n' + logs.slice(-25).join('\n') + '\nERRORS:' + errors.length + '\nOSDIAG-END';
-  document.body.appendChild(pre);
+  } catch (e) {
+    out.push('FATAL :: ' + (e && e.message ? e.message : String(e)));
+  } finally {
+    writeReport();
+  }
 })();
