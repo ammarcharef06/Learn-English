@@ -122,8 +122,10 @@ export function nextReminderText() {
 /* ---------- OneSignal Push ---------- */
 export function appIdSource() {
   const fromSettings = (settings?.push?.appId || '').trim();
+  const fromConfig = (window.LEA_ONESIGNAL_APP_ID || '').trim();
+  if (fromSettings && fromConfig && fromSettings === fromConfig) return 'config';
   if (fromSettings) return 'settings';
-  if ((window.LEA_ONESIGNAL_APP_ID || '').trim()) return 'config';
+  if (fromConfig) return 'config';
   return 'none';
 }
 
@@ -189,21 +191,72 @@ export async function initOneSignal() {
   });
 }
 
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
 export async function enablePush() {
   const id = appId();
   if (!id) return { ok: false, error: 'أضف OneSignal App ID أولاً.' };
+  if (typeof Notification === 'undefined') return { ok: false, error: 'متصفحك لا يدعم الإشعارات.' };
+
+  // 1) إذن المتصفح أولاً وبشكل مباشر داخل نقرة المستخدم (أضمن طريقة)
+  const perm = await ensurePermission();
+  if (perm !== 'granted') {
+    return {
+      ok: false,
+      error: perm === 'denied'
+        ? 'الإشعارات محظورة لهذا الموقع. افتح رمز القفل 🔒 في شريط العنوان ← الإشعارات ← «سماح»، ثم أعد المحاولة.'
+        : 'لم يتم منح الإذن. اضغط الزر ثم اختر «السماح» في نافذة المتصفح.',
+    };
+  }
+
+  // 2) تهيئة OneSignal إن لم تكن جاهزة
   if (!oneSignalReady()) {
     const initRes = await initOneSignal();
     if (!initRes.ok) return { ok: false, error: `تعذّر تهيئة OneSignal (${initRes.error}).` };
   }
+
+  // 3) الاشتراك ثم انتظار معرّف الاشتراك
   try {
     const OneSignal = window.OneSignal;
-    await OneSignal.Notifications.requestPermission();
-    if (!OneSignal.Notifications.permission) return { ok: false, error: 'لم يُمنح إذن الإشعارات.' };
-    await OneSignal.User.PushSubscription.optIn();
+    if (!OneSignal.User?.PushSubscription?.optedIn) await OneSignal.User.PushSubscription.optIn();
+    let subId = '';
+    for (let i = 0; i < 12; i++) {
+      subId = OneSignal.User?.PushSubscription?.id || '';
+      if (subId) break;
+      await wait(400);
+    }
+    saveSettings({
+      push: {
+        enabled: true, lastSync: new Date().toISOString(),
+        subscriptionId: subId, optedIn: !!OneSignal.User?.PushSubscription?.optedIn,
+      },
+    });
+    return { ok: true, id: subId };
+  } catch (e) {
+    return { ok: false, error: String(e && e.message ? e.message : e) };
+  }
+}
+
+/* إعادة الاشتراك تلقائياً إذا كان الإذن ممنوحاً لكن الاشتراك مفقود */
+export async function autoResubscribe() {
+  try {
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return { ok: false, error: 'no-permission' };
+    if (!oneSignalReady()) {
+      const r = await initOneSignal();
+      if (!r.ok) return r;
+    }
+    const OneSignal = window.OneSignal;
     const sub = OneSignal.User?.PushSubscription;
-    saveSettings({ push: { enabled: true, lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: !!(sub && sub.optedIn) } });
-    return { ok: true, id: sub?.id || '' };
+    if (sub?.optedIn && sub?.id) return { ok: true, id: sub.id, already: true };
+    await sub?.optIn?.();
+    let subId = '';
+    for (let i = 0; i < 12; i++) {
+      subId = OneSignal.User?.PushSubscription?.id || '';
+      if (subId) break;
+      await wait(400);
+    }
+    saveSettings({ push: { enabled: !!subId, subscribedAt: new Date().toISOString(), subscriptionId: subId, optedIn: !!subId } });
+    return { ok: !!subId, id: subId };
   } catch (e) {
     return { ok: false, error: String(e && e.message ? e.message : e) };
   }

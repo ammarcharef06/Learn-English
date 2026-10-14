@@ -189,6 +189,7 @@ globalThis.window.OneSignal = {
   User: { PushSubscription: { id: 'sub-test-123', optedIn: false, optIn: async () => {} } },
   Notifications: { permission: true, requestPermission: async () => {} },
 };
+globalThis.Notification = { permission: 'granted', requestPermission: async () => 'granted' };
 const initAgain = await notify.initOneSignal();
 check('تهيئة OneSignal لا تتكرر عند وجود SDK مهيّأ', initAgain.ok === true && initAgain.alreadyInitialized === true, JSON.stringify(initAgain));
 check('تُعاد حالة الاشتراك الحالية', initAgain.id === 'sub-test-123');
@@ -196,7 +197,9 @@ const enabled = await notify.enablePush();
 check('زر «تفعيل Push» يعمل بعد التهيئة التلقائية', enabled.ok === true, JSON.stringify(enabled));
 check('معرّف الاشتراك يُحفظ في الإعدادات', (await notify.pushStatus()).id === 'sub-test-123');
 check('مصدر معرّف Push يُصنَّف صحيحاً', (await notify.pushStatus()).source === 'settings');
+check('إعادة الاشتراك التلقائي تعمل عند منح الإذن', (await notify.autoResubscribe()).ok === true);
 delete globalThis.window.OneSignal;
+delete globalThis.Notification;
 
 /* ================= 7. التخزين والنسخ الاحتياطي ================= */
 section('التخزين والنسخ الاحتياطي');

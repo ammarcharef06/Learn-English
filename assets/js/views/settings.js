@@ -1,10 +1,10 @@
 /* الإعدادات: المظهر، الصوت، الإشعارات، Push، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
-import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr, copyText } from '../core/utils.js';
+import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr, copyText, confetti } from '../core/utils.js';
 import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
 import { changePassword, lockNow, usingDefaultPassword, resetToDefaultPassword } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
-import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId } from '../core/notify.js';
+import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId, autoResubscribe } from '../core/notify.js';
 import { pageHead } from './shell.js';
 
 const DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
@@ -138,17 +138,15 @@ export function renderSettings(host) {
         </div>
         <span class="hint">${t('set.pushStatus')}: <b id="pushState">…</b></span>
       </div>
+      <div class="tip-box" id="pushHint" style="margin-bottom:12px">جارٍ قراءة حالة الاشتراك…</div>
       <div class="row row--wrap" style="gap:8px">
         <button class="btn btn--primary" type="button" id="pushOn">🔔 ${t('set.pushEnable')}</button>
         <button class="btn" type="button" id="pushOff">🔕 إيقاف</button>
         <button class="btn" type="button" id="pushTest">${t('set.pushTest')}</button>
+        <button class="btn btn--ghost btn--sm" type="button" id="refreshPush">🔄 تحديث الحالة</button>
         <button class="btn btn--ghost btn--sm" type="button" id="copySubId">📋 نسخ معرّف اشتراكي</button>
       </div>
-      <p class="hint" style="margin-top:8px">
-        المعرّف المحفوظ في هذه الشاشة يعمل على <b>هذا الجهاز فقط</b>. لتشغيل الإشعارات تلقائياً على كل أجهزتك،
-        ضع نفس المعرّف في الملف <span class="en">assets/js/config.js</span> في السطر
-        <span class="en" dir="ltr">window.LEA_ONESIGNAL_APP_ID = '…';</span>
-      </p>
+      <p class="hint" id="pushConfigNote" style="margin-top:8px"></p>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -270,18 +268,48 @@ export function renderSettings(host) {
   });
 
   /* ---------- Push ---------- */
+  const guidanceFor = (st) => {
+    if (!st.configured) return 'لم يُضبط App ID بعد.';
+    if (st.permission === 'unsupported') return 'متصفحك لا يدعم الإشعارات — جرّب Chrome أو Edge على الكمبيوتر، أو ثبّت الموقع كتطبيق على الهاتف.';
+    if (st.permission === 'denied') return 'الإشعارات محظورة في المتصفح. افتح رمز القفل 🔒 بجانب العنوان ← الإشعارات ← «سماح»، ثم اضغط الزر من جديد.';
+    if (st.permission === 'granted' && (st.id || st.optedIn)) return 'الاشتراك مكتمل ✅ سيصلك الإشعار عند إرساله من لوحة OneSignal.';
+    if (st.permission === 'granted') return 'الإذن ممنوح لكن الاشتراك لم يكتمل — اضغط «🔔 تفعيل إشعارات Push» مرة أخرى.';
+    return 'لم يُطلب الإذن بعد: اضغط «🔔 تفعيل إشعارات Push» ثم اختر «السماح» في نافذة المتصفح.';
+  };
+
   const refreshPushState = async () => {
     const st = await pushStatus();
     const el = qs('#pushState', host);
+    const hint = qs('#pushHint', host);
     if (!el) return;
     const sourceText = st.source === 'config' ? 'مضبوط في ملف الإعدادات (كل الأجهزة)'
       : st.source === 'settings' ? 'مضبوط على هذا الجهاز'
         : t('set.pushNotConfigured');
     el.textContent = !st.configured
       ? sourceText
-      : `${sourceText} · ${st.enabled || st.optedIn ? 'مُفعّل ✅' : 'غير مُفعّل'} · ${st.id ? `ID: ${st.id.slice(0, 14)}…` : 'لا مشترك'} · الإذن: ${st.permission}`;
+      : `${sourceText} · ${st.permission === 'granted' && (st.id || st.optedIn) ? 'مُفعّل ✅' : 'غير مُفعّل'} · ${st.id ? `ID: ${st.id.slice(0, 14)}…` : 'لا مشترك'} · الإذن: ${st.permission}`;
+    if (hint) {
+      hint.textContent = guidanceFor(st);
+      hint.className = `tip-box ${st.permission === 'granted' && (st.id || st.optedIn) ? 'tip-box--ok' : ''}`;
+    }
+    const note = qs('#pushConfigNote', host);
+    if (note) {
+      note.innerHTML = st.source === 'config'
+        ? 'المعرّف مضبوط في ملف <span class="en">assets/js/config.js</span>، لذا تعمل الإشعارات على كل أجهزتك تلقائياً — لا حاجة لإدخاله في كل جهاز.'
+        : 'لتشغيل الإشعارات تلقائياً على كل أجهزتك، ضع نفس المعرّف في الملف <span class="en">assets/js/config.js</span> في السطر <span class="en" dir="ltr">window.LEA_ONESIGNAL_APP_ID = \'…\';</span>';
+    }
+    return st;
   };
   refreshPushState();
+
+  // إن كان الإذن ممنوحاً والاشتراك مفقوداً، نحاول إكماله بصمت
+  autoResubscribe().then((r) => { if (r && r.ok) refreshPushState(); });
+
+  qs('#refreshPush', host)?.addEventListener('click', async () => {
+    await refreshPushState();
+    toast('حُدّثت حالة الاشتراك', 'info');
+  });
+
   qs('#saveAppId', host)?.addEventListener('click', async () => {
     const id = qs('#appIdInput', host).value.trim();
     saveSettings({ push: { appId: id } });
@@ -291,9 +319,13 @@ export function renderSettings(host) {
   qs('#pushOn', host)?.addEventListener('click', async () => {
     const id = qs('#appIdInput', host).value.trim();
     if (id) saveSettings({ push: { appId: id } });
-    toast('جارٍ تهيئة OneSignal…', 'info');
     const res = await enablePush();
-    toast(res.ok ? 'تم تفعيل إشعارات Push ✅' : (res.error || 'فشل التفعيل'), res.ok ? 'ok' : 'bad');
+    if (res.ok) {
+      toast(res.id ? `تم تفعيل الإشعارات ✅ معرّف اشتراكك: ${res.id}` : 'تم تفعيل الإشعارات ✅', 'ok', 'OneSignal');
+      confetti(40);
+    } else {
+      toast(res.error || 'فشل التفعيل', 'bad', 'تعذّر تفعيل الإشعارات');
+    }
     refreshPushState();
   });
   qs('#pushOff', host)?.addEventListener('click', async () => {
@@ -302,11 +334,18 @@ export function renderSettings(host) {
     refreshPushState();
   });
   qs('#pushTest', host)?.addEventListener('click', async () => {
-    const st = await pushStatus();
+    let st = await pushStatus();
     if (!st.configured) { toast('أضف OneSignal App ID أولاً', 'warn'); return; }
-    if (!st.id) { toast('لم يتم الاشتراك بعد — اضغط «تفعيل إشعارات Push»', 'warn'); return; }
-    toast(`معرّف اشتراكك: ${st.id}`, 'info', 'انسخه وأرسل منه إشعاراً تجريبياً من لوحة OneSignal');
-    await fireReminder({ test: true });
+    if (!st.id) {
+      toast('نجرّب تفعيل الاشتراك أولاً…', 'info');
+      const res = await enablePush();
+      if (!res.ok) { toast(res.error || 'تعذّر الاشتراك', 'bad'); refreshPushState(); return; }
+      st = await pushStatus();
+    }
+    toast(`معرّف اشتراكك: ${st.id}`, 'info', 'انسخه لتستهدف هذا الجهاز من لوحة OneSignal');
+    const sent = await fireReminder({ test: true });
+    toast(sent.ok ? 'أُرسل إشعار تجريبي محلي — وستصلك إشعارات لوحة OneSignal أيضاً ✅' : (sent.error || 'تعذّر الإرسال'), sent.ok ? 'ok' : 'warn');
+    refreshPushState();
   });
   qs('#copySubId', host)?.addEventListener('click', async () => {
     const st = await pushStatus();
