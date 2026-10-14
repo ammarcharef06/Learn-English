@@ -141,8 +141,23 @@ function basePath() {
   return new URL('./', location.href).pathname;
 }
 
+function oneSignalReady() {
+  try { return !!(window.OneSignal && (window.OneSignal.initialized === true || window.OneSignal.User)); }
+  catch { return false; }
+}
+
 export async function initOneSignal() {
   const id = appId();
+  // تهيئة واحدة فقط: إن كان SDK مهيّأً مسبقاً نعيد حالته بدل إحداث خطأ
+  if (oneSignalReady()) {
+    try {
+      const sub = window.OneSignal.User?.PushSubscription;
+      saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: !!(sub && sub.optedIn) } });
+      return { ok: true, alreadyInitialized: true, optedIn: !!(sub && sub.optedIn), id: sub?.id || '' };
+    } catch (e) {
+      return { ok: true, alreadyInitialized: true, optedIn: false, id: '' };
+    }
+  }
   if (!id) return { ok: false, error: 'no-app-id' };
   if (!('serviceWorker' in navigator)) return { ok: false, error: 'no-sw' };
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -177,15 +192,18 @@ export async function initOneSignal() {
 export async function enablePush() {
   const id = appId();
   if (!id) return { ok: false, error: 'أضف OneSignal App ID أولاً.' };
-  const initRes = await initOneSignal();
-  if (!initRes.ok) return { ok: false, error: `تعذّر تهيئة OneSignal (${initRes.error}).` };
+  if (!oneSignalReady()) {
+    const initRes = await initOneSignal();
+    if (!initRes.ok) return { ok: false, error: `تعذّر تهيئة OneSignal (${initRes.error}).` };
+  }
   try {
     const OneSignal = window.OneSignal;
     await OneSignal.Notifications.requestPermission();
     if (!OneSignal.Notifications.permission) return { ok: false, error: 'لم يُمنح إذن الإشعارات.' };
     await OneSignal.User.PushSubscription.optIn();
-    saveSettings({ push: { enabled: true, lastSync: new Date().toISOString(), subscriptionId: OneSignal.User?.PushSubscription?.id || '' } });
-    return { ok: true, id: OneSignal.User?.PushSubscription?.id || '' };
+    const sub = OneSignal.User?.PushSubscription;
+    saveSettings({ push: { enabled: true, lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: !!(sub && sub.optedIn) } });
+    return { ok: true, id: sub?.id || '' };
   } catch (e) {
     return { ok: false, error: String(e && e.message ? e.message : e) };
   }

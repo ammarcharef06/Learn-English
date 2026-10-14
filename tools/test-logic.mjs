@@ -183,6 +183,21 @@ saveSettings({ push: { appId: 'abc-123' } });
 check('Push يُعتبر مهيأً بعد إدخال App ID', notify.oneSignalConfigured() === true);
 check('وقت التذكير القادم نص عربي', typeof notify.nextReminderText() === 'string' && notify.nextReminderText().length > 3);
 
+/* تهيئة OneSignal لا تتكرر (المسار الذي يفشل عادة عند التهيئة التلقائية) */
+globalThis.window.OneSignal = {
+  initialized: true,
+  User: { PushSubscription: { id: 'sub-test-123', optedIn: false, optIn: async () => {} } },
+  Notifications: { permission: true, requestPermission: async () => {} },
+};
+const initAgain = await notify.initOneSignal();
+check('تهيئة OneSignal لا تتكرر عند وجود SDK مهيّأ', initAgain.ok === true && initAgain.alreadyInitialized === true, JSON.stringify(initAgain));
+check('تُعاد حالة الاشتراك الحالية', initAgain.id === 'sub-test-123');
+const enabled = await notify.enablePush();
+check('زر «تفعيل Push» يعمل بعد التهيئة التلقائية', enabled.ok === true, JSON.stringify(enabled));
+check('معرّف الاشتراك يُحفظ في الإعدادات', (await notify.pushStatus()).id === 'sub-test-123');
+check('مصدر معرّف Push يُصنَّف صحيحاً', (await notify.pushStatus()).source === 'settings');
+delete globalThis.window.OneSignal;
+
 /* ================= 7. التخزين والنسخ الاحتياطي ================= */
 section('التخزين والنسخ الاحتياطي');
 const exported = exportAll();
