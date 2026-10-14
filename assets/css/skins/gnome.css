@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    ستايل GNOME (Adwaita) — فاتح وداكن
    يُطبَّق فقط عند data-skin="gnome"
    ============================================================ */
@@ -22,6 +22,8 @@ html[data-skin="gnome"][data-theme="light"] {
   --ok: #2ec27e; --ok-soft: #d8f5e6;
   --bad: #e01b24; --bad-soft: #fde3e4;
   --warn: #e5a50a; --warn-soft: #fdf0d5;
+  --brand-text: #1c71d8;
+  --warn-text: #8a5300;
   --gnome-header: #f6f5f4;
   --gnome-sidebar: #efeeec;
   --gnome-hover: rgba(0, 0, 0, .06);
@@ -49,6 +51,8 @@ html[data-skin="gnome"][data-theme="dark"] {
   --ok: #57e389; --ok-soft: #14371f;
   --bad: #ff7b63; --bad-soft: #3a1611;
   --warn: #f8e45c; --warn-soft: #3a3208;
+  --brand-text: #8ab4f8;
+  --warn-text: #f8e45c;
   --gnome-header: #303030;
   --gnome-sidebar: #1e1e1e;
   --gnome-hover: rgba(255, 255, 255, .08);
@@ -158,3 +162,4 @@ html[data-skin="gnome"] .toasts { inset-block-start: auto; inset-block-end: 86px
 html[data-skin="gnome"] .acc__head { border-radius: 12px; }
 html[data-skin="gnome"] .seg { background: var(--surface-3); border-radius: 999px; }
 html[data-skin="gnome"] .seg button.is-active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
+

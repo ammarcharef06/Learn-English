@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    ستايل Kali GNOME — داكن بلون كالي الأزرق (الستايل الافتراضي)
    يُطبَّق فقط عند data-skin="kali"
    ============================================================ */
@@ -24,6 +24,8 @@ html[data-skin="kali"] {
   --shadow-1: none;
   --shadow-2: 0 2px 8px rgba(0, 0, 0, .35);
   --shadow-3: 0 12px 34px rgba(0, 0, 0, .55);
+  --brand-text: #8fb8ff;
+  --warn-text: #f8e45c;
   --kalihdr: #23272f;
   --kaliside: #171a20;
   --kalihover: rgba(255, 255, 255, .07);
@@ -98,7 +100,7 @@ html[data-skin="kali"] .hero p { color: rgba(255, 255, 255, .92); }
 html[data-skin="kali"] .hero .btn { background: rgba(255, 255, 255, .18); color: #fff; }
 html[data-skin="kali"] .hero .btn--solid { background: #fff; color: #1b4fd0; }
 html[data-skin="kali"] .chip { background: rgba(255, 255, 255, .09); color: #c6cedb; border: 0; border-radius: 999px; font-weight: 600; }
-html[data-skin="kali"] .chip--brand { background: var(--brand-soft); color: #a9c8ff; }
+html[data-skin="kali"] .chip--brand { background: var(--brand-soft); color: var(--brand-text); }
 html[data-skin="kali"] .chip--ok { background: #123524; color: #8ef0bd; }
 html[data-skin="kali"] .progress { background: rgba(255, 255, 255, .11); height: 8px; border-radius: 999px; }
 html[data-skin="kali"] .progress > i { background: linear-gradient(90deg, #2777ff, #5b9dff); border-radius: 999px; }
@@ -140,3 +142,4 @@ html[data-skin="kali"] .table.tbl td { border-color: var(--line); }
 html[data-skin="kali"] .input, html[data-skin="kali"] .select, html[data-skin="kali"] .textarea {
   background: #1f242c; border-color: var(--line); color: var(--text);
 }
+
