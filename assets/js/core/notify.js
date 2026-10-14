@@ -155,6 +155,7 @@ function oneSignalReady() {
 }
 
 function markOneSignalReady() { try { window[OS_FLAG] = true; } catch {} }
+let initPromise = null;
 
 /* ننتظر تنشيط Service Worker قبل تهيئة OneSignal (شرط لاكتمال الاشتراك) */
 async function waitForServiceWorker(timeout = 10000) {
@@ -166,18 +167,26 @@ async function waitForServiceWorker(timeout = 10000) {
   } catch { return null; }
 }
 
-export async function initOneSignal() {
-  const id = appId();
-  // تهيئة واحدة فقط: إن كان SDK مهيّأً مسبقاً نعيد حالته بدل إحداث خطأ
-  if (oneSignalReady()) {
-    try {
-      const sub = window.OneSignal.User?.PushSubscription;
-      saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: !!(sub && sub.optedIn) } });
-      return { ok: true, alreadyInitialized: true, optedIn: !!(sub && sub.optedIn), id: sub?.id || '' };
-    } catch (e) {
-      return { ok: true, alreadyInitialized: true, optedIn: false, id: '' };
-    }
+export function initOneSignal() {
+  if (oneSignalReady()) return Promise.resolve(currentOneSignalState());
+  if (initPromise) return initPromise;
+  initPromise = doInitOneSignal();
+  setTimeout(() => { initPromise = null; }, 30000);
+  return initPromise;
+}
+
+function currentOneSignalState() {
+  try {
+    const sub = window.OneSignal?.User?.PushSubscription;
+    saveSettings({ push: { lastSync: new Date().toISOString(), subscriptionId: sub?.id || '', optedIn: !!(sub && sub.optedIn) } });
+    return { ok: true, alreadyInitialized: true, optedIn: !!(sub && sub.optedIn), id: sub?.id || '' };
+  } catch (e) {
+    return { ok: true, alreadyInitialized: true, optedIn: false, id: '' };
   }
+}
+
+async function doInitOneSignal() {
+  const id = appId();
   if (!id) return { ok: false, error: 'no-app-id' };
   if (!('serviceWorker' in navigator)) return { ok: false, error: 'no-sw' };
 
@@ -188,7 +197,7 @@ export async function initOneSignal() {
   return new Promise((resolve) => {
     let settled = false;
     const done = (v) => { if (!settled) { settled = true; resolve(v); } };
-    setTimeout(() => done({ ok: false, error: 'timeout' }), 15000);
+    setTimeout(() => done({ ok: false, error: 'timeout' }), 25000);
     window.OneSignalDeferred.push(async (OneSignal) => {
       try {
         const options = {
@@ -367,6 +376,8 @@ export async function diagnostics() {
     controller: !!navigator.serviceWorker?.controller,
     serviceWorkers: sws,
     oneSignal: os,
+    initFlag: (() => { try { return window[OS_FLAG] === true; } catch { return null; } })(),
+    initInFlight: !!initPromise,
     lastError: settings?.push?.lastError || '',
     lastSync: settings?.push?.lastSync || '',
     savedSubscriptionId: settings?.push?.subscriptionId || '',

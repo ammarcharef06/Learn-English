@@ -1,4 +1,4 @@
-/* تشخيص الاشتراك في OneSignal — ملف مؤقت */
+﻿/* تشخيص الاشتراك في OneSignal — ملف مؤقت */
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const logs = [];
 const errors = [];
@@ -86,7 +86,7 @@ function writeReport(extra = '') {
     A(d.oneSignal.id, 'لا معرّف في التشخيص');
     A(d.oneSignal.optedIn === true, 'optedIn=false');
     A(d.controller === true, 'الصفحة غير محكومة بعامل الخدمة');
-    return JSON.stringify({ perm: d.browserPermission, sw: d.serviceWorkers, os: d.oneSignal });
+    return JSON.stringify({ perm: d.browserPermission, initFlag: d.initFlag, inFlight: d.initInFlight, lastError: d.lastError, os: d.oneSignal, sw: d.serviceWorkers });
   });
 
   await step('لا أخطاء JavaScript', async () => {
@@ -98,3 +98,4 @@ function writeReport(extra = '') {
     writeReport();
   }
 })();
+
