@@ -26,13 +26,21 @@ async function step(n, f) { try { const x = await f(); out.push('PASS ' + n + (x
     return 'SDK v16';
   });
 
-  await step('كودنا يمرّر المعرّف ويهيّئ OneSignal فعلياً', async () => {
+  await step('كودنا يهيّئ OneSignal تلقائياً عند الإقلاع', async () => {
     const notify = await import('./assets/js/core/notify.js');
     A(notify.appIdSource() === 'config', 'مصدر المعرّف: ' + notify.appIdSource());
     A(notify.appId() === window.LEA_ONESIGNAL_APP_ID, 'المعرّف المُمرَّر لا يطابق الملف');
-    const res = await notify.initOneSignal();
-    A(res.ok, 'فشل التهيئة: ' + (res.error || ''));
-    return 'init ناجح · optedIn=' + res.optedIn + (res.id ? ' · id=' + String(res.id).slice(0, 8) + '…' : '');
+    let sync = null;
+    for (let i = 0; i < 40; i++) {
+      const s = JSON.parse(localStorage.getItem('lea.settings.v1') || '{}');
+      sync = s?.push?.lastSync;
+      if (sync) break;
+      await sleep(500);
+    }
+    A(sync, 'التطبيق لم يسجّل تهيئة OneSignal تلقائياً');
+    let inited = null;
+    try { inited = window.OneSignal?.initialized === true; } catch { inited = 'unknown'; }
+    return `تهيئة تلقائية ناجحة · initialized=${inited}`;
   });
 
   await step('حالة الاشتراك والإذن', async () => {
@@ -43,12 +51,19 @@ async function step(n, f) { try { const x = await f(); out.push('PASS ' + n + (x
   });
 
   await step('عامل الخدمة الخاص بنا هو المسجَّل (لا عامل آخر)', async () => {
-    const regs = await navigator.serviceWorker.getRegistrations();
-    A(regs.length >= 1, 'لا يوجد Service Worker');
-    A(regs[0].scope.includes('Learn-English'), 'النطاق: ' + regs[0].scope);
-    const active = regs.find((r) => r.active);
-    A(active, 'لا يوجد عامل نشط');
-    return active.scope;
+    let regs = [];
+    let active = null;
+    for (let i = 0; i < 60; i++) {
+      regs = await navigator.serviceWorker.getRegistrations();
+      active = regs.map((r) => r.active).find(Boolean);
+      if (active) break;
+      await sleep(500);
+    }
+    A(regs.length >= 1, 'لا يوجد Service Worker مسجَّل');
+    A(active, 'لا يوجد عامل نشط بعد');
+    A(active.scope.includes('Learn-English'), 'النطاق: ' + active.scope);
+    const controlled = !!navigator.serviceWorker.controller;
+    return `${active.scope} · يتحكّم بالصفحة: ${controlled}`;
   });
 
   await step('طلب الإذن يعمل دون أخطاء', async () => {
