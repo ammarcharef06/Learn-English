@@ -1,18 +1,15 @@
-# ملفات مؤقتة واختبارات محلية
-.chrome-test/
-.chrome-test-fresh/
-.chrome-login/
-.chrome-file/
-.chrome-mob/
-.chrome-desk/
-.chrome-final/
-.chrome-*.html
-.dump-*.html
+# ملفات مؤقتة واختبارات محلية (لا تُرفع أبداً)
+.chrome-*/
 .serve/
+.verify/
+.dump-*.html
 _selftest.*
 _logintest.*
 _mobile.*
 _final.*
+_livetest.*
+_examtest.*
+_setuptest.*
 .tmp-check/
 
 # نظام
