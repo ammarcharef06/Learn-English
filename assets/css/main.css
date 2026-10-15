@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    أكاديمية الإنجليزية — نظام تصميم متجاوب (إعادة بناء)
    الطبقات: reset ← tokens ← base ← layout ← components ← utilities
    يدعم: هاتف · تابلت · آيباد · لابتوب · سطح مكتب · 2K/4K · RTL/LTR
@@ -553,6 +553,11 @@
   .feedback--bad { background: var(--bad-soft); border-inline-start: 4px solid var(--bad); }
   .feedback b { display: block; margin-block-end: 2px; }
   .feedback .answer-en { font-family: var(--font-en); direction: ltr; font-weight: 700; }
+  .badge-line {
+    margin-block-start: var(--sp-3); padding-block-start: var(--sp-2);
+    border-block-start: 1px dashed color-mix(in srgb, currentColor 35%, transparent);
+    font-size: .86rem; font-weight: 700; animation: rise var(--dur-3) var(--ease-spring) both;
+  }
 
   .word-bank { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: center; margin-block: var(--sp-4); }
   .word-chip { padding: 10px 16px; min-block-size: 44px; border-radius: var(--radius-pill); background: var(--surface-3); border: 1px solid var(--line-strong); font-family: var(--font-en); font-weight: 600; transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease), opacity var(--dur-2) var(--ease), transform var(--dur-1) var(--ease); }
@@ -630,9 +635,9 @@
   .modal__head h3 { margin: 0; }
   .modal__actions { display: flex; gap: var(--sp-2); justify-content: flex-end; flex-wrap: wrap; margin-block-start: var(--sp-4); }
 
-  .toasts { position: fixed; z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--sp-2); inline-size: min(380px, calc(100vw - 24px)); inset-block-start: calc(var(--topbar-h) + 10px); inset-inline-end: max(12px, env(safe-area-inset-right)); }
+  .toasts { position: fixed; z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--sp-2); inline-size: min(380px, calc(100vw - 24px)); inset-block-start: calc(var(--topbar-h) + 10px); inset-inline-end: max(12px, env(safe-area-inset-right)); pointer-events: none; }
   @media (max-width: 600px) { .toasts { inset-inline: 12px; inline-size: auto; } }
-  .toast { background: var(--surface); border: 1px solid var(--line); border-inline-start: 4px solid var(--brand-1); border-radius: var(--radius-sm); padding: 12px 14px; box-shadow: var(--shadow-2); font-size: .9rem; animation: slide-in var(--dur-3) var(--ease-spring) both; }
+  .toast { background: var(--surface); border: 1px solid var(--line); border-inline-start: 4px solid var(--brand-1); border-radius: var(--radius-sm); padding: 12px 14px; box-shadow: var(--shadow-2); font-size: .9rem; pointer-events: auto; animation: slide-in var(--dur-3) var(--ease-spring) both; }
   .toast--ok { border-inline-start-color: var(--ok); }
   .toast--bad { border-inline-start-color: var(--bad); }
   .toast--warn { border-inline-start-color: var(--warn); }
@@ -732,5 +737,6 @@ html[dir="ltr"] .sidebar.is-open { --drawer-from: -14px; }
   .print-area .btn, .print-area a.btn { display: none !important; }
   .print-only { display: block !important; }
 }
+
 
 

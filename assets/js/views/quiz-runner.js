@@ -42,10 +42,24 @@ export function checkTextAnswer(raw, q) {
   return { ok: false, near: false };
 }
 
-function celebrateBadges(badges) {
+function celebrateBadges(badges, hostEl) {
   if (!badges || !badges.length) return;
   confetti(70);
-  badges.forEach((b) => toast(`${b.icon} ${b.ar}`, 'ok', t('quiz.newBadge')));
+  const line = badges.map((b) => `${b.icon} ${b.ar}`).join(' · ');
+  const html = `<div class="badge-line">🏅 ${esc(t('quiz.newBadge'))}: ${esc(line)}</div>`;
+  // ملاحظة: صندوق التصحيح يُكتب بعد استدعاء record() — لذلك نؤجّل الإضافة قليلاً
+  const paint = () => {
+    const fb = hostEl?.querySelector?.('[data-fb]');
+    if (fb && document.body.contains(fb) && fb.innerHTML.trim()) {
+      fb.insertAdjacentHTML('beforeend', html);
+      return true;
+    }
+    return false;
+  };
+  if (paint()) return;
+  setTimeout(() => {
+    if (!paint()) badges.forEach((b) => toast(`${b.icon} ${b.ar}`, 'ok', t('quiz.newBadge')));
+  }, 80);
 }
 
 /* ---------- إدارة المؤقّتات النشطة (تتوقف عند مغادرة الصفحة) ---------- */
@@ -132,7 +146,7 @@ export function runQuiz(host, opts = {}) {
         seconds: seconds || 0,
       });
       if (q.itemId) gradeItem(q.itemId, correct ? 2 : 0);
-      if (res && res.badges && res.badges.length) celebrateBadges(res.badges);
+      if (res && res.badges && res.badges.length) celebrateBadges(res.badges, qhost);
     }
     beep(correct ? 'ok' : 'bad');
     updateBar();
