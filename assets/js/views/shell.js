@@ -51,7 +51,7 @@ export function renderNav() {
 const SECTION_MAP = {
   '': '#/',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
-  reference: '#/reference', drills: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
+  reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
   exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',
 };
 

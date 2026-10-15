@@ -414,6 +414,14 @@ export function runQuiz(host, opts = {}) {
   }
 
   /* ----- العرض ----- */
+  function keepInView() {
+    // لا نقفز لأعلى الصفحة بعد كل إجابة: نُحرّك فقط إذا خرجت بطاقة السؤال عن الشاشة
+    const shell = host.querySelector('.quiz-shell') || host;
+    if (!shell || !document.body.contains(shell)) return;
+    const r = shell.getBoundingClientRect();
+    if (r.top < 0) shell.scrollIntoView({ block: 'start', behavior: 'auto' });
+  }
+
   function renderQuestion() {
     const q = questions[state.i];
     state.qStart = Date.now();
@@ -423,7 +431,7 @@ export function runQuiz(host, opts = {}) {
     else if (q.ui === 'match') renderMatch(q);
     else renderChoice(q);
     if (q.speakText && (q.autoSpeak || settings.autoSpeak)) setTimeout(() => speak(q.speakText), 220);
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+    if (state.i > 0) keepInView();
   }
 
   /* ----- النهاية ----- */

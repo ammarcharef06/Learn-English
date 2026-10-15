@@ -13,6 +13,7 @@ import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
+import { renderDrillPage } from './views/drill.js';
 import { renderFlashcards } from './views/flashcards.js';
 import { renderReading } from './views/reading.js';
 import { renderExams } from './views/exams.js';
@@ -36,6 +37,7 @@ function setupRoutes() {
   route('/reference', () => renderReference(view(), null));
   route('/reference/:section', (p) => renderReference(view(), p.section));
   route('/drills', (p, q) => renderDrills(view(), q || {}));
+  route('/drill', (p, q) => renderDrillPage(view(), q || {}));
   route('/flashcards', () => renderFlashcards(view()));
   route('/reading', () => renderReading(view(), null));
   route('/reading/:id', (p) => renderReading(view(), p.id));

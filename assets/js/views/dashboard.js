@@ -1,4 +1,4 @@
-/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
+﻿/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, todayKey, pct, ringHTML } from '../core/utils.js';
 import { progress, settings, goalForToday } from '../core/store.js';
@@ -45,7 +45,7 @@ export function renderDashboard(host) {
       <p>${esc(t('dash.subtitle'))}</p>
       ${wod ? `<p class="mt-3"><b>📘 كلمة اليوم:</b> <span class="en" style="font-size:1.1rem">${esc(wod.en)}</span> — ${esc(wod.ar)} ${speakBtn(wod.en)}</p>` : ''}
       <div class="hero-actions">
-        <a class="btn btn--solid" href="#/drills?start=goal">🎯 ${esc(goalReached ? t('common.continue') : t('dash.goal'))}</a>
+        <a class="btn btn--solid" href="#/drill?mode=goal">🎯 ${esc(goalReached ? t('common.continue') : t('dash.goal'))}</a>
         <a class="btn" href="#/flashcards">🃏 ${esc(t('dash.quick.flash'))}${due ? ` (${due})` : ''}</a>
         <a class="btn" href="#/reading">📖 ${esc(t('dash.quick.read'))}</a>
       </div>
@@ -67,7 +67,7 @@ export function renderDashboard(host) {
             <p class="muted small">${goalReached ? 'أتممت هدف اليوم — أحسنت! 🎉' : `تبقّى ${Math.max(0, q.target - q.done)} سؤالاً لتُكمل هدف اليوم.`}</p>
             ${progressBar(pct(q.done, q.target), goalReached ? 'progress--ok' : '')}
             <div class="row wrap mt-3">
-              <a class="btn btn--primary btn--sm" href="#/drills?start=goal">${esc(goalReached ? t('common.continue') : t('common.start'))}</a>
+              <a class="btn btn--primary btn--sm" href="#/drill?mode=goal">${esc(goalReached ? t('common.continue') : t('common.start'))}</a>
               <a class="btn btn--ghost btn--sm" href="#/settings">${esc(t('common.goal'))}: ${q.target}</a>
             </div>
           </div>
@@ -85,7 +85,7 @@ export function renderDashboard(host) {
             <a class="btn btn--primary btn--sm" href="#/lesson/${next.unit.id}/${next.lessonIndex}">${esc(t('common.continue'))} ←</a>
           </div>` : `
           <p class="muted small">أكملت كل الوحدات — حافظ على مستواك بالتدريب والمراجعة.</p>
-          <a class="btn btn--primary btn--sm" href="#/drills?source=smart">🧠 ${esc(t('dash.smartDrill'))}</a>`}
+          <a class="btn btn--primary btn--sm" href="#/drill?mode=smart">🧠 ${esc(t('dash.smartDrill'))}</a>`}
         <div class="divider"></div>
         <p class="small muted">💡 ${esc(tipOfDay())}</p>
       </div>
@@ -130,7 +130,7 @@ export function renderDashboard(host) {
             ${speakBtn(e.en)}
             <button class="btn btn--ghost btn--sm" type="button" data-nb data-en="${esc(e.en)}" data-ar="${esc(e.ar)}" aria-label="أضف إلى دفتري">📒</button>
           </div>`).join('')}</div>
-          <a class="btn btn--sm btn--primary mt-3" href="#/drills?source=smart">🧠 ${esc(t('dash.smartDrill'))}</a>`
+          <a class="btn btn--sm btn--primary mt-3" href="#/drill?mode=smart">🧠 ${esc(t('dash.smartDrill'))}</a>`
         : `<div class="empty"><span class="ico" aria-hidden="true">✨</span><p>لا أخطاء مسجّلة بعد — ابدأ التدريب وسنراقب نقاط ضعفك تلقائياً.</p></div>`}
       </div>
 
@@ -147,3 +147,4 @@ export function renderDashboard(host) {
     </div>
   `;
 }
+

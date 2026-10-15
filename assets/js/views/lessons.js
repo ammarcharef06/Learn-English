@@ -1,12 +1,11 @@
-/* الدروس والمنهج: المستويات ← الوحدات ← الدروس */
+﻿/* الدروس والمنهج: المستويات ← الوحدات ← الدروس */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs, pct } from '../core/utils.js';
 import { progress, settings, saveProgress } from '../core/store.js';
 import { LEVELS, getLevel, getUnit, unitsOfLevel, unitPercent, levelPercent, isLevelUnlocked } from '../data/curriculum.js';
 import { markLessonRead, completeUnit, levelStats } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
-import { runQuiz } from './quiz-runner.js';
-import { buildQuestions } from '../core/quizgen.js';
+import { navigate } from '../core/router.js';
 
 /* ---------- قائمة المستويات ---------- */
 export function renderLessons(host) {
@@ -99,7 +98,6 @@ export function renderUnit(host, unitId) {
         <button class="btn btn--sm" type="button" id="unitDone">${done ? '✅ ' + t('common.done') : '✔️ ' + t('lessons.markRead')}</button>
         <a class="btn btn--sm" href="#/drills?source=unit:${u.id}">🎯 ${esc(t('common.practice'))}</a>
       </div>
-      <div id="quizHost" style="margin-top:16px"></div>
     </div>
 
     ${u.grammar.map((g, i) => {
@@ -195,22 +193,10 @@ export function renderUnit(host, unitId) {
   });
 
   qs('#unitQuiz', host)?.addEventListener('click', () => {
-    const quizHost = qs('#quizHost', host);
-    const questions = buildQuestions({ source: `unit:${u.id}`, types: ['mcq', 'fill'], count: 8, adaptive: true });
-    runQuiz(quizHost, {
-      questions,
+    // يُفتح في صفحة مستقلة كاملة (بدل واجهة مدمجة)
+    navigate('/drill', {
+      source: `unit:${u.id}`, unit: u.id, count: '8', timed: '1',
       title: `اختبار: ${u.title}`,
-      onFinish: (res) => {
-        const prev = progress.units?.[u.id]?.quiz || { q: 0, c: 0 };
-        saveProgress((p) => {
-          p.units = p.units || {};
-          p.units[u.id] = { ...(p.units[u.id] || {}), quiz: { q: prev.q + res.total, c: prev.c + res.correct } };
-        });
-        if (res.accuracy >= 80) completeUnit(u.id);
-        renderSidebarStats();
-        renderUnit(host, unitId);
-        import('../core/utils.js').then(({ toast }) => toast(`نتيجتك ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 60 ? 'ok' : 'warn', 'اختبار الوحدة'));
-      },
     });
   });
 }
@@ -255,12 +241,14 @@ export function renderLesson(host, unitId, index) {
             : `<a class="btn btn--sm btn--ok" href="#/unit/${u.id}">${t('lessons.unitQuiz')} ←</a>`}
         </div>
       </div>
-      <div id="lessonQuizHost" style="margin-top:16px"></div>
     </div>`;
 
   qs('#lessonQuiz', host)?.addEventListener('click', () => {
-    const quizHost = qs('#lessonQuizHost', host);
-    const questions = buildQuestions({ source: `unit:${u.id}`, types: ['mcq', 'fill', 'order'], count: 5, adaptive: true });
-    runQuiz(quizHost, { questions, title: `${g.title} — تمرين سريع` });
+    navigate('/drill', {
+      source: `unit:${u.id}`, unit: u.id, count: '5',
+      title: `${g.title} — تمرين سريع`,
+    });
   });
 }
+
+

@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Service Worker — عمل بلا إنترنت + دعم OneSignal Push
    ============================================================ */
 
@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.0.3';
+const VERSION = 'v1.0.4';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -49,6 +49,7 @@ const CORE = [
   './assets/js/views/lessons.js',
   './assets/js/views/reference.js',
   './assets/js/views/drills.js',
+  './assets/js/views/drill.js',
   './assets/js/views/flashcards.js',
   './assets/js/views/reading.js',
   './assets/js/views/exams.js',
@@ -168,3 +169,4 @@ self.addEventListener('notificationclick', (event) => {
     await self.clients.openWindow(target);
   })());
 });
+

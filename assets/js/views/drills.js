@@ -1,8 +1,9 @@
-/* التدريبات التفاعلية — ثمانية أنواع */
+﻿/* التدريبات التفاعلية — ثمانية أنواع */
 import { t } from '../core/i18n.js';
 import { esc, qs, toast } from '../core/utils.js';
 import { progress, goalForToday } from '../core/store.js';
 import { buildQuestions, SOURCES } from '../core/quizgen.js';
+import { navigate } from '../core/router.js';
 import { pageHead, renderSidebarStats } from './shell.js';
 import { runQuiz } from './quiz-runner.js';
 
@@ -16,6 +17,12 @@ const DRILL_TYPES = [
   { id: 'listen', icon: '🎧', key: 'drills.t.listen', descKey: 'drills.desc.listen', types: ['listen'] },
   { id: 'smart', icon: '🧠', key: 'drills.t.smart', descKey: 'drills.desc.smart', types: ['mcq', 'fill', 'translate', 'listen'], adaptive: true },
 ];
+
+export { DRILL_TYPES };
+
+export function drillTypeById(id) {
+  return DRILL_TYPES.find((d) => d.id === id) || DRILL_TYPES[0];
+}
 
 function notebookEntries() {
   return (progress.notebook || []).map((n) => ({
@@ -87,7 +94,7 @@ export function renderDrills(host, query = {}) {
       </div>
     </div>
 
-    <div id="drillHost" style="margin-top:18px"></div>`;
+  `;
 
   const preview = qs('#drillPreview', host);
   const updatePreview = () => {
@@ -104,8 +111,8 @@ export function renderDrills(host, query = {}) {
   qs('#drillSource', host).addEventListener('change', (e) => { state.source = e.target.value; updatePreview(); });
   qs('#drillCount', host).addEventListener('change', (e) => { state.count = Number(e.target.value); updatePreview(); });
 
-  const start = (countOverride = null, typeOverride = null) => {
-    const drillHost = qs('#drillHost', host);
+  /* كل تدريب يُفتح في صفحة مستقلة (#/drill) — لا واجهة مدمجة */
+  const start = (countOverride = null, typeOverride = null, mode = null) => {
     const type = typeOverride || state.type;
     const count = countOverride || state.count;
     const source = state.source;
@@ -113,39 +120,21 @@ export function renderDrills(host, query = {}) {
       toast('دفترك فارغ — أضف كلمات أثناء الدروس 📒', 'warn');
       return;
     }
-    const questions = questionsFor({ type, source, count, adaptive: true });
-    if (!questions.length) { toast(t('drills.noSource'), 'warn'); return; }
-    const timed = qs('#drillTimed', host).checked;
-    const d = DRILL_TYPES.find((x) => x.id === type);
-    runQuiz(drillHost, {
-      questions,
-      timed,
-      seconds: timed ? count * 30 : 0,
-      title: `${d.icon} ${t(d.key)}`,
-      onSummary: () => { renderSidebarStats(); },
-    });
-    drillHost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const timed = qs('#drillTimed', host).checked ? '1' : '0';
+    navigate('/drill', { type, source, count: String(count), timed, ...(mode ? { mode } : {}) });
   };
 
   qs('#startDrill', host).addEventListener('click', () => start());
-  qs('#startGoal', host).addEventListener('click', () => {
-    const q = goalForToday();
-    const remain = Math.max(5, q.target - q.done);
-    start(Math.min(30, remain), 'mixed');
-  });
+  qs('#startGoal', host).addEventListener('click', () => start(null, 'mixed', 'goal'));
 
-  if (query.source === 'smart') {
+  /* روابط قديمة: #/drills?start=goal أو ?source=smart → نحوّل لصفحة التدريب المستقلة */
+  if (query.source === 'smart' || query.mode === 'smart') {
     state.type = 'smart';
-    host.querySelectorAll('[data-type]').forEach((x) => x.classList.toggle('card--brand', x.dataset.type === 'smart'));
-    updatePreview();
-    setTimeout(() => { if (document.body.contains(host)) start(); }, 250);
-  }
-  if (query.start === 'mixed' || query.start === 'goal') {
-    const q = goalForToday();
-    const count = query.start === 'goal' ? Math.min(30, Math.max(5, q.target - q.done)) : state.count;
-    setTimeout(() => {
-      if (!document.body.contains(host)) return;   // غادر المستخدم قبل البدء
-      start(count, query.start === 'goal' ? 'mixed' : state.type);
-    }, 250);
+    setTimeout(() => { if (document.body.contains(host)) start(null, 'smart', 'smart'); }, 200);
+  } else if (query.start === 'goal') {
+    setTimeout(() => { if (document.body.contains(host)) start(null, 'mixed', 'goal'); }, 200);
+  } else if (query.start === 'mixed') {
+    setTimeout(() => { if (document.body.contains(host)) start(); }, 200);
   }
 }
+
