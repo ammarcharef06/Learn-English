@@ -186,10 +186,10 @@ function renderFocusStage(host, stage) {
       ${card(it)}
       ${actions(it)}
       <div class="znav2">
-        <button class="zbtn" type="button" data-nav2="prev" ${i === 0 ? 'disabled' : ''}>السابق</button>
+        <button class="zbtn" type="button" data-nav2="prev" ${i === 0 ? 'disabled' : ''}>→ السابق</button>
         ${i === items.length - 1
           ? `<a class="zbtn zbtn--primary" href="#/zero/drill/${stage.id}" data-nav>تدريب المرحلة (٥ أسئلة) ←</a>`
-          : '<button class="zbtn zbtn--primary" type="button" data-nav2="next">التالي ≥</button>'}
+          : '<button class="zbtn zbtn--primary" type="button" data-nav2="next">التالي ←</button>'}
       </div>
       <details class="zjump">
         <summary>${isLetters ? 'قائمة الحروف' : 'قائمة الحروف المركّبة'}</summary>
