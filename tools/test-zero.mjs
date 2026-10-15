@@ -297,6 +297,26 @@ describe('المراحل الثمانية', () => {
       }
     }
   });
+  it('كل عنصر له كلمة مثال يحمل ترجمتها ونطقها بالحقول التي تقرأها الواجهة', () => {
+    for (const s of ZERO_STAGES) {
+      for (const it of zeroItems(s.id)) {
+        if (!it.word) continue;
+        truthy(it.wordAr, `كلمة المثال بلا ترجمة في ${s.id}: ${it.key}`);
+        truthy(it.wordPronAr, `كلمة المثال بلا نطق عربي في ${s.id}: ${it.key} (الحقل wordPronAr مفقود)`);
+        assert(ARABIC_ONLY.test(it.wordPronAr), `نطق كلمة المثال ليس عربياً في ${s.id}: ${it.wordPronAr}`);
+      }
+    }
+  });
+  it('كل عنصر قابل للنطق له نص نطق صالح (say أو en)', () => {
+    for (const s of ZERO_STAGES) {
+      for (const it of zeroItems(s.id)) {
+        const say = it.say || it.en;
+        truthy(say, `لا نص للنطق في ${s.id}: ${it.key}`);
+        assert(/[A-Za-z]/.test(say), `نص النطق ليس إنجليزياً في ${s.id}: ${say}`);
+        if (s.kind === 'letters') assert(!/\s/.test(say), `نطق الحرف يجب أن يكون حرفاً واحداً، وجدنا: ${say}`);
+      }
+    }
+  });
 });
 
 /* ============================================================

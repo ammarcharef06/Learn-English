@@ -293,6 +293,12 @@ try {
       bad(`معرّفات مكرّرة في المرحلة ${st.id}: ${dup}`);
     }
     if (z.zeroStageSize(st.id) !== items.length) bad(`حجم المرحلة ${st.id} غير متطابق`);
+    /* كل عنصر له كلمة مثال يجب أن يحمل ترجمتها ونطقها بالحقول التي تقرأها الواجهة */
+    for (const it of items) {
+      if (!it.word) continue;
+      if (!it.wordAr) bad(`كلمة المثال بلا ترجمة (${st.id}): ${it.key}`);
+      if (!it.wordPronAr) bad(`كلمة المثال بلا نطق عربي (${st.id}): ${it.key}`);
+    }
   }
 
   // تدريب 5 أسئلة بعد كل مرحلة + اختبار نهائي ~30 سؤالاً

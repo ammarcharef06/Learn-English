@@ -21,6 +21,14 @@ import { writingPadHTML, initWritingPad } from '../core/zero-pad.js';
 /* مراحل تُعرَض شاشةً واحدة لكل عنصر */
 const FOCUS_KINDS = new Set(['letters', 'digraphs']);
 
+/* صيغة عربية سليمة لعدد العناصر */
+function itemsLabel(n) {
+  if (n === 1) return 'عنصر واحد';
+  if (n === 2) return 'عنصران';
+  if (n >= 3 && n <= 10) return `${arNum(n)} عناصر`;
+  return `${arNum(n)} عنصراً`;
+}
+
 const SENT_GROUP_AR = {
   greetings: 'تحيات', intro: 'تعريف بالنفس', family: 'العائلة', school: 'المدرسة',
   daily: 'يوميات', questions: 'أسئلة', shopping: 'تسوّق', polite: 'مجاملة',
@@ -105,11 +113,24 @@ export function renderZeroStage(host, stageId) {
 function stageHead(stage, extra = '') {
   const idx = ZERO_STAGES.findIndex((s) => s.id === stage.id);
   const next = ZERO_STAGES[idx + 1];
+  const snap = zeroSnapshot();
+  const state = snap.raw.stages?.[stage.id] || {};
+  const size = zeroItems(stage.id).length;
   return `
     <header class="zhead zhead--stage">
       <a class="zback" href="#/zero" data-nav>← المراحل</a>
-      <h1>${esc(stage.titleAr)}</h1>
-      <p>${esc(stage.subAr)}</p>
+      <div class="zhead__row">
+        <span class="zhead__icon" aria-hidden="true">${stage.icon}</span>
+        <div class="zhead__txt">
+          <h1>${esc(stage.titleAr)}</h1>
+          <p>${esc(stage.subAr)}</p>
+        </div>
+      </div>
+      <div class="zstage-chips">
+        <span class="chip chip--brand">${esc(itemsLabel(size))}</span>
+        <span class="chip chip--line">⏱ ${arNum(stage.minutes)} دقيقة</span>
+        ${state.done ? `<span class="chip chip--ok">✅ مكتملة · ${arNum(state.best)}٪</span>` : (state.seen ? '<span class="chip chip--warn">بدأت ولم تُكمل</span>' : '')}
+      </div>
       <div class="zstage-acts">
         <button class="zquiet" type="button" id="zAutoBtn">${zeroPrefs().autoSpeak ? '🔊 النطق التلقائي: مفعّل' : '🔇 النطق التلقائي: مطفأ'}</button>
         <a class="zquiet" href="#/zero/drill/${stage.id}" data-nav>🧪 تدريب المرحلة</a>
