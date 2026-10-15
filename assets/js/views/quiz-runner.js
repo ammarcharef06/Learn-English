@@ -48,6 +48,14 @@ function celebrateBadges(badges) {
   badges.forEach((b) => toast(`${b.icon} ${b.ar}`, 'ok', t('quiz.newBadge')));
 }
 
+/* ---------- إدارة المؤقّتات النشطة (تتوقف عند مغادرة الصفحة) ---------- */
+const activeTimers = new Set();
+
+export function stopActiveQuizzes() {
+  activeTimers.forEach((id) => { try { clearInterval(id); } catch {} });
+  activeTimers.clear();
+}
+
 /* ---------- الواجهة ---------- */
 export function runQuiz(host, opts = {}) {
   if (!host) { console.warn('runQuiz: لم يتم العثور على حاوية الأسئلة'); return null; }
@@ -111,6 +119,7 @@ export function runQuiz(host, opts = {}) {
     };
     tick();
     state.timerId = setInterval(tick, 1000);
+    activeTimers.add(state.timerId);
   }
 
   function record(q, correct, seconds) {
@@ -421,7 +430,7 @@ export function runQuiz(host, opts = {}) {
   function finish(reason = 'done') {
     if (state.finished) return;
     state.finished = true;
-    if (state.timerId) clearInterval(state.timerId);
+    if (state.timerId) { clearInterval(state.timerId); activeTimers.delete(state.timerId); }
     const seconds = Math.round((Date.now() - state.start) / 1000);
     const accuracy = totalWeight ? Math.round((state.correct / totalWeight) * 100) : 0;
     const result = {

@@ -20,6 +20,7 @@ import { renderStats } from './views/stats.js';
 import { renderNotebook } from './views/notebook.js';
 import { renderSettings, applyTheme, applySkin, applyLang, SKINS } from './views/settings.js';
 import { renderAbout } from './views/about.js';
+import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
 import { startReminderLoop, initOneSignal, oneSignalConfigured } from './core/notify.js';
 
@@ -242,38 +243,49 @@ async function main() {
   window.__leaRenderAll = renderAll;
   window.__leaLockNow = () => lockSite();
 
-  // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + العودة لأعلى الصفحة
+  // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
+    document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة
+    stopActiveQuizzes();            // لا مؤقّتات أسئلة تعمل في الخلفية
+    stopSpeaking();                 // لا نطق يستمر بعد مغادرة الصفحة
     try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
   });
 
   const media = window.matchMedia('(prefers-color-scheme: dark)');
   media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applySkin(); });
 
+  /* تشغيل التطبيق: يُستخدم بعد الدخول أو مباشرةً إن كانت الجلسة قائمة.
+     مهم: initRouter() يجب أن يُستدعى في الحالتين، وإلا لا يعمل التنقل
+     بعد أول تسجيل دخول (كان عطلاً حقيقياً: يظهر الموقع ولا يستجيب). */
+  let started = false;
+  const startApp = async () => {
+    if (started) return;
+    started = true;
+    boot();
+    window.__leaBooted = true;
+    await initRouter();
+    startReminderLoop();
+    if (oneSignalConfigured()) {
+      Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {
+        if (res.ok) console.info('OneSignal ready', res.id || '');
+      });
+    }
+  };
+
   if (!isAuthed()) {
     qs('#boot')?.classList.add('is-hidden');
     window.__leaBooted = true;
-    renderLock(() => {
-      boot();
+    renderLock(async () => {
       toast('أهلاً بك في أكاديميتك 👋', 'ok');
+      await startApp();
     });
     return;
   }
 
-  boot();
-  await initRouter();
-  window.__leaBooted = true;
-  startReminderLoop();
-
-  if (oneSignalConfigured()) {
-    // ننتظر جاهزية Service Worker أولاً — شرط أساسي لاكتمال الاشتراك في OneSignal
-    Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {
-      if (res.ok) console.info('OneSignal ready', res.id || '');
-    });
-  }
+  await startApp();
 
   // تجديد مدة الجلسة عند التنقل (بحد أقصى مرة كل ١٠ دقائق)
   let lastExtend = Date.now();

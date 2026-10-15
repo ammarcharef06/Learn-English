@@ -79,6 +79,7 @@ export function lockSite() {
   hideLock();
   renderLock(() => {
     toast('تم فتح الموقع من جديد', 'ok');
-    if (typeof window.__leaAfterUnlock === 'function') window.__leaAfterUnlock();
+    // إعادة رسم كاملة بدل الاعتماد على دالة داشبورد قد تشير إلى عنصر مُتلَف
+    if (typeof window.__leaRenderAll === 'function') window.__leaRenderAll();
   });
 }

@@ -138,11 +138,14 @@ export function renderDrills(host, query = {}) {
     state.type = 'smart';
     host.querySelectorAll('[data-type]').forEach((x) => x.classList.toggle('card--brand', x.dataset.type === 'smart'));
     updatePreview();
-    setTimeout(() => start(), 250);
+    setTimeout(() => { if (document.body.contains(host)) start(); }, 250);
   }
   if (query.start === 'mixed' || query.start === 'goal') {
     const q = goalForToday();
     const count = query.start === 'goal' ? Math.min(30, Math.max(5, q.target - q.done)) : state.count;
-    setTimeout(() => start(count, query.start === 'goal' ? 'mixed' : state.type), 250);
+    setTimeout(() => {
+      if (!document.body.contains(host)) return;   // غادر المستخدم قبل البدء
+      start(count, query.start === 'goal' ? 'mixed' : state.type);
+    }, 250);
   }
 }

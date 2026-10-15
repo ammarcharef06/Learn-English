@@ -146,5 +146,4 @@ export function renderDashboard(host) {
       </div>
     </div>
   `;
-  window.__leaAfterUnlock = () => renderDashboard(host);
 }

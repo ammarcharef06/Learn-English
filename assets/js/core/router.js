@@ -55,6 +55,8 @@ function match(path) {
   return null;
 }
 
+let vtActive = false;
+
 export async function resolve() {
   const { path, query } = parseHash();
   const found = match(path);
@@ -66,10 +68,22 @@ export async function resolve() {
       try { await handler(current.params, current.query); }
       catch (e) { console.error('route handler failed', e); }
     };
-    // انتقال سلس بين الصفحات (View Transitions API) مع رجوع آمن عند عدم الدعم
-    if (typeof document !== 'undefined' && typeof document.startViewTransition === 'function') {
-      try { await document.startViewTransition(run).finished; }
-      catch { await run(); }
+    // انتقال سلس بين الصفحات (View Transitions) مع تجاهل التنقلات المتلاحقة بأمان
+    const canTransition = typeof document !== 'undefined'
+      && typeof document.startViewTransition === 'function'
+      && !vtActive
+      && !document.hidden;
+    if (canTransition) {
+      vtActive = true;
+      try {
+        const vt = document.startViewTransition(run);
+        vt.ready?.catch?.(() => {});           // يُرفض عند إلغاء الانتقال — نتجاهله بلا ضجيج
+        await vt.finished?.catch?.(() => {});  // لا يوقف التنقل أبداً
+      } catch {
+        await run();
+      } finally {
+        vtActive = false;
+      }
     } else {
       await run();
     }
