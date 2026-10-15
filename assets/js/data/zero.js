@@ -28,12 +28,12 @@ export function zeroItems(stageId) {
   switch (stageId) {
     case 'letters':
       return LETTERS.map((l) => ({
-        key: `letter:${l.id}`, en: `${l.upper} ${l.lower}`, ar: l.nameAr, pron: l.nameAr,
+        key: `letter:${l.id}`, en: `${l.upper} ${l.lower}`, say: l.upper, ar: l.nameAr, pron: l.nameAr,
         emoji: l.emoji, word: l.word, wordAr: l.wordAr, wordPron: l.wordPronAr, soundAr: l.soundAr, tipAr: l.tipAr,
       }));
     case 'digraphs':
       return DIGRAPHS.map((d) => ({
-        key: `digraph:${d.id}`, en: d.combo, ar: d.wordAr, pron: d.wordPronAr,
+        key: `digraph:${d.id}`, en: d.combo, say: d.word, ar: d.wordAr, pron: d.wordPronAr,
         emoji: d.emoji, word: d.word, wordAr: d.wordAr, wordPron: d.wordPronAr, soundAr: d.soundAr, tipAr: d.tipAr,
       }));
     case 'numbers':
@@ -125,12 +125,12 @@ export function zeroStageQuestions(stageId, count = 5) {
       qs.push(choiceQ({
         instruction: 'ما اسم هذا الحرف كما يُنطق؟', main: l.en, answer: l.ar,
         wrongs: pickWrongs(items, l.ar, 'ar'), key: `name:${l.key}`, stageId, stageTitle: stage.titleAr,
-        speak: l.en, explain: `${l.en} = ${l.ar} · صوتها: ${l.soundAr || ''}`,
+        speak: l.say || l.en, explain: `${l.en} = ${l.ar} · صوتها: ${l.soundAr || ''}`,
       }));
       qs.push(choiceQ({
         instruction: 'أي كلمة تبدأ بهذا الحرف؟', main: l.en, answer: l.word,
         wrongs: pickWrongs(items, l.word, 'word'), key: `word:${l.key}`, stageId, stageTitle: stage.titleAr,
-        speak: l.en, explain: `${l.word} = ${l.wordAr} (${l.wordPronAr || ''})`,
+        speak: l.say || l.en, explain: `${l.word} = ${l.wordAr} (${l.wordPronAr || ''})`,
       }));
     }
   } else if (stageId === 'pronouns') {

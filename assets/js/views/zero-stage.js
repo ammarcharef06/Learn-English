@@ -58,12 +58,14 @@ function masteryOf(kind, it, raw) {
 function itemCard(it, kind, ctx) {
   const busy = masteryOf(kind, it, ctx.raw);
   const big = kind === 'letters' || kind === 'digraphs';
+  /* ما يُنطق فعلاً: الحرف مرة واحدة (say) وليس العرض المزدوج "A a" */
+  const say = it.say || it.en;
   const lines = [];
   if (it.soundAr) lines.push(`<span class="chip">🔉 الصوت: ${esc(it.soundAr)}</span>`);
   if (it.word) lines.push(`<span class="chip">${it.emoji || '📘'} ${esc(it.word)} = ${esc(it.wordAr || '')} <span class="muted">(${esc(it.wordPronAr || '')})</span></span>`);
   if (it.pron && !big) lines.push(`<span class="chip">🗣️ ${esc(it.pron)}</span>`);
 
-  return `<div class="zero-card ${busy ? 'zero-card--done' : ''}" data-item="${esc(it.key)}" data-say-text="${esc(it.en)}">
+  return `<div class="zero-card ${busy ? 'zero-card--done' : ''}" data-item="${esc(it.key)}" data-say-text="${esc(say)}">
     <div class="zero-card__top">
       <div class="zero-card__en ${big ? 'zero-card__en--big' : ''}" dir="ltr">${esc(it.en)}${it.emoji && !big ? ` <span class="zero-card__emoji">${it.emoji}</span>` : ''}</div>
       ${busy ? '<span class="chip chip--ok">✅ متقن</span>' : ''}
@@ -73,11 +75,12 @@ function itemCard(it, kind, ctx) {
     ${it.tipAr ? `<div class="tiny muted zero-card__tip">💡 ${esc(it.tipAr)}</div>` : ''}
     ${it.extra ? `<div class="small zero-card__extra" dir="ltr">${esc(it.extra)}</div><div class="tiny muted">${esc(it.extraAr || '')}</div>` : ''}
     <div class="row wrap zero-card__acts" style="gap:6px">
-      ${speakBtn(it.en)}
-      <button class="btn btn--ghost btn--sm" type="button" data-slow="${esc(it.en)}" title="نطق بطيء">🐢 ببطء</button>
-      <button class="btn btn--ghost btn--sm" type="button" data-write="${esc(it.en)}" data-write-ar="${esc(it.ar || '')}" title="اكتبها على اللوح">✍️ اكتب</button>
+      ${speakBtn(say)}
+      ${it.word && it.word !== say ? speakBtn(it.word, 'speak-btn--word') : ''}
+      <button class="btn btn--ghost btn--sm" type="button" data-slow="${esc(say)}" title="نطق بطيء">🐢 ببطء</button>
+      <button class="btn btn--ghost btn--sm" type="button" data-write="${esc(it.word || it.en)}" data-write-ar="${esc(it.ar || '')}" title="اكتبها على اللوح">✍️ اكتب</button>
       <button class="btn btn--ghost btn--sm" type="button" data-master="${esc(it.key)}" title="${busy ? 'إلغاء الإتقان' : 'وسمها كمتقنة'}">${busy ? '↩︎ إلغاء' : '✅ أتقنت'}</button>
-      <button class="btn btn--ghost btn--sm" type="button" data-nb data-en="${esc(it.en)}" data-ar="${esc(it.ar || '')}" title="أضف إلى دفتري">📒</button>
+      <button class="btn btn--ghost btn--sm" type="button" data-nb data-en="${esc(it.word || it.en)}" data-ar="${esc(it.ar || '')}" title="أضف إلى دفتري">📒</button>
     </div>
   </div>`;
 }
@@ -220,12 +223,8 @@ export function renderZeroStage(host, stageId) {
       <div class="grid ${kind === 'letters' || kind === 'digraphs' ? 'grid--3' : 'grid--2'} grid--tight zero-grid">${cards}</div>
     </div>`;
 
-    if (kind === 'letters' || kind === 'digraphs') {
-      // الحروف تُنطق بأسمائها الإنجليزية
-      createNarrator(body, items.map((it) => it.en.replace(/\s+/g, ' ')));
-    } else {
-      createNarrator(body, items.map((it) => (it.en || '').replace(/\s+/g, ' ')));
-    }
+    /* النطق التلقائي: الحرف مرة واحدة (say) لا "A a" مرّتين */
+    createNarrator(body, items.map((it) => it.say || it.en));
     bindCards(body, stage);
   }
 
