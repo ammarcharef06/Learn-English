@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    قسم «من الصفر» (A0) — تجميع المحتوى + بناء الأسئلة
    ============================================================ */
 import { esc } from '../core/utils.js';
@@ -33,7 +33,7 @@ export function zeroItems(stageId) {
       }));
     case 'digraphs':
       return DIGRAPHS.map((d) => ({
-        key: `digraph:${d.id}`, en: d.combo, say: d.word, ar: d.wordAr, pron: d.wordPronAr,
+        key: `digraph:${d.id}`, en: d.combo, say: d.combo, ar: d.soundAr, pron: d.soundAr,
         emoji: d.emoji, word: d.word, wordAr: d.wordAr, wordPronAr: d.wordPronAr, soundAr: d.soundAr, tipAr: d.tipAr,
       }));
     case 'numbers':

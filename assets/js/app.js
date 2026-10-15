@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
 import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange } from './core/router.js';
@@ -11,7 +11,7 @@ import { renderLock, hideLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
-import { shouldShowZeroChoice, showZeroChoice, ZERO_PAGE } from './views/zero-entry.js';
+import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -111,8 +111,6 @@ function bindGlobalEvents() {
     renderAll();
   });
 
-  /* الزر الدائم في الشريط العلوي: يفتح صفحة «من الصفر» المستقلة (zero.html) */
-  qs('#btnZero')?.addEventListener('click', () => { location.href = ZERO_PAGE; });
   qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
   qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
   qs('#btnInstall')?.addEventListener('click', () => window.__leaInstall?.());
@@ -218,19 +216,9 @@ function waitForActive(reg, timeout = 8000) {
   });
 }
 
-/* ---------------- زر A0 الدائم (يفتح صفحة مستقلة) ---------------- */
-function applyZeroButton() {
-  const btn = qs('#btnZero');
-  if (!btn) return;
-  btn.classList.remove('is-on');
-  btn.setAttribute('aria-pressed', 'false');
-  btn.title = 'فتح قسم «من الصفر» (A0) — صفحة مستقلة';
-  btn.setAttribute('aria-label', btn.title);
-}
 
 /* ---------------- إعادة الرسم ---------------- */
 function renderAll() {
-  applyZeroButton();
   renderNav();
   applyI18n(document);
   renderSidebarStats();
@@ -241,7 +229,6 @@ function renderAll() {
    يُستخدم قبل تغيير الرابط مباشرةً: نُحدّث الشريط والتنقّل، ثم نترك
    الموجّه يرسم الصفحة الجديدة وحدها (بلا تسابق بين رسمتين). */
 function refreshChrome() {
-  applyZeroButton();
   renderNav();
   renderSidebarStats();
 }

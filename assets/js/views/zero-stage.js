@@ -1,15 +1,14 @@
 /* ============================================================
    قسم «من الصفر» (A0) — مشغّل المرحلة
-   - الحروف والحروف المركّبة: شاشة واحدة لكل حرف (تركيز كامل)
-   - بقية المراحل: قوائم مختصرة مقسّمة إلى مجموعات (لا أكثر من ١٥ صفاً)
-   - القراءات: نصّ واحد لكل قسم
-   كل عنصر: سطر قصير ظاهر + زر «تفاصيل» للباقي، وبلا ازدحام أزرار.
+   • الحروف والحروف المركّبة: عنصر واحد في البطاقة (تركيز) + شريط اختيار
+   • بقية المراحل: مجموعات في .seg وقوائم .item-row
+   • القراءات: بطاقة لكل نص
+   كل شيء بمكوّنات الموقع نفسها: .page-head · .card · .grid · .btn · .chip · .item-row · .seg
    ============================================================ */
-import { esc, qs, qsa, toast, confetti, openModal, arNum } from '../core/utils.js';
+import { esc, qs, qsa, toast, confetti, openModal, speakBtn, arNum } from '../core/utils.js';
 import { navigate } from '../core/router.js';
 import { speak } from '../core/speech.js';
 import { progress } from '../core/store.js';
-import { renderSidebarStats } from './shell.js';
 import { ZERO_STAGES, zeroStage, zeroItems, zeroStageQuestions, READINGS } from '../data/zero.js';
 import {
   zeroSnapshot, markStageSeen, markLetter, markDigraph, markWord, markSentence,
@@ -17,17 +16,10 @@ import {
 } from '../core/zeroflow.js';
 import { runQuiz } from './quiz-runner.js';
 import { writingPadHTML, initWritingPad } from '../core/zero-pad.js';
+import { bar, stat, itemsLabel } from './zero.js';
 
-/* مراحل تُعرَض شاشةً واحدة لكل عنصر */
+/* مراحل تُعرَض عنصراً واحداً في البطاقة */
 const FOCUS_KINDS = new Set(['letters', 'digraphs']);
-
-/* صيغة عربية سليمة لعدد العناصر */
-function itemsLabel(n) {
-  if (n === 1) return 'عنصر واحد';
-  if (n === 2) return 'عنصران';
-  if (n >= 3 && n <= 10) return `${arNum(n)} عناصر`;
-  return `${arNum(n)} عنصراً`;
-}
 
 const SENT_GROUP_AR = {
   greetings: 'تحيات', intro: 'تعريف بالنفس', family: 'العائلة', school: 'المدرسة',
@@ -35,41 +27,42 @@ const SENT_GROUP_AR = {
 };
 const TIME_GROUP_AR = { day: 'أيام الأسبوع', month: 'شهور السنة', season: 'فصول السنة', time: 'عبارات الوقت', clock: 'قول الساعة' };
 
-/* ---------- نطق بطيء/عادي حسب الإعداد ---------- */
-function rate() {
-  return zeroPrefs().slowRate <= 0.6 ? 0.55 : undefined;
-}
+function rate() { return zeroPrefs().slowRate <= 0.6 ? 0.55 : undefined; }
 function say(text, slow = false) {
   if (!text) return;
   speak(text, slow ? { rate: 0.5 } : { rate: rate() });
 }
 
-/* ---------- نافذة التفاصيل ولوح الكتابة ---------- */
+/* ============================================================
+   تفاصيل العنصر + لوح الكتابة
+   ============================================================ */
 export function openDetails(it) {
   const rows = [];
-  if (it.ar) rows.push(`<div class="zrow2"><span class="zrow2__k">المعنى</span><span class="zrow2__v">${esc(it.ar)}</span></div>`);
-  if (it.pron) rows.push(`<div class="zrow2"><span class="zrow2__k">النطق</span><span class="zrow2__v">${esc(it.pron)}</span></div>`);
-  if (it.soundAr) rows.push(`<div class="zrow2"><span class="zrow2__k">الصوت</span><span class="zrow2__v">${esc(it.soundAr)}</span></div>`);
-  if (it.word) rows.push(`<div class="zrow2"><span class="zrow2__k">مثال</span><span class="zrow2__v"><b dir="ltr">${esc(it.word)}</b><span class="zmuted"> · ${esc(it.wordPronAr || '')} · ${esc(it.wordAr || '')}</span></span></div>`);
-  if (it.extra) rows.push(`<div class="zrow2"><span class="zrow2__k">جملة</span><span class="zrow2__v"><b dir="ltr">${esc(it.extra)}</b><span class="zmuted"> · ${esc(it.extraAr || '')}</span></span></div>`);
+  if (it.ar) rows.push(`<div class="zero-info"><span class="zero-info__k">المعنى</span><span class="zero-info__v">${esc(it.ar)}</span></div>`);
+  if (it.pron) rows.push(`<div class="zero-info"><span class="zero-info__k">النطق</span><span class="zero-info__v">${esc(it.pron)}</span></div>`);
+  if (it.soundAr) rows.push(`<div class="zero-info"><span class="zero-info__k">الصوت</span><span class="zero-info__v">${esc(it.soundAr)}</span></div>`);
+  if (it.word) rows.push(`<div class="zero-info"><span class="zero-info__k">مثال</span><span class="zero-info__v"><b dir="ltr">${esc(it.word)}</b> · ${esc(it.wordPronAr || '')} · ${esc(it.wordAr || '')}</span></div>`);
+  if (it.extra) rows.push(`<div class="zero-info"><span class="zero-info__k">جملة</span><span class="zero-info__v"><b dir="ltr">${esc(it.extra)}</b> · ${esc(it.extraAr || '')}</span></div>`);
 
   openModal({
     title: 'تفاصيل',
     body: `
-      <div class="zdetail">
-        <div class="zdetail__en" dir="ltr">${esc(it.en)}</div>
-        <div class="zrows2">${rows.join('')}</div>
-        ${it.tipAr ? `<p class="ztip">${esc(it.tipAr)}</p>` : ''}
-        <div class="zdetail__acts">
-          <button class="zbtn zbtn--primary" type="button" data-zsay="${esc(it.say || it.en)}">🔊 اسمع</button>
-          <button class="zbtn" type="button" data-zslow="${esc(it.say || it.en)}">🐢 ببطء</button>
-          ${it.word && it.word !== (it.say || it.en) ? `<button class="zbtn" type="button" data-zsay="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
+      <div class="stack">
+        <div class="center" style="text-align:center">
+          <div style="font-family:var(--font-en);font-size:2rem;font-weight:800" dir="ltr">${esc(it.en)}</div>
+        </div>
+        <div class="stack" style="gap:10px">${rows.join('')}</div>
+        ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
+        <div class="row row--wrap" style="gap:8px">
+          <button class="btn btn--primary" type="button" data-play="${esc(it.en)}">🔊 اسمع</button>
+          <button class="btn" type="button" data-play-slow="${esc(it.en)}">🐢 ببطء</button>
+          ${it.word && it.word !== it.en ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
       </div>`,
     actions: [{ label: 'إغلاق', variant: 'ghost' }],
     onMount: (root) => {
-      qsa('[data-zsay]', root).forEach((b) => b.addEventListener('click', () => say(b.dataset.zsay)));
-      qsa('[data-zslow]', root).forEach((b) => b.addEventListener('click', () => say(b.dataset.zslow, true)));
+      qsa('[data-play]', root).forEach((b) => b.addEventListener('click', () => say(b.dataset.play)));
+      qsa('[data-play-slow]', root).forEach((b) => b.addEventListener('click', () => say(b.dataset.playSlow, true)));
     },
   });
 }
@@ -85,9 +78,7 @@ export function openWritePad(text, ar = '') {
   const holder = root.querySelector('#padModalHost');
   holder.innerHTML = writingPadHTML({ text, mode: prefs.padMode, ar });
   const pad = initWritingPad(holder, {
-    text,
-    mode: prefs.padMode,
-    ar,
+    text, mode: prefs.padMode, ar,
     onChange: (mode) => setZeroPrefs({ padMode: mode }),
     onDraw: () => { const r = markPadUsed(); if (r.milestone) toast('أول كتابة على اللوح — أحسنت ✍️', 'ok'); },
   });
@@ -96,48 +87,32 @@ export function openWritePad(text, ar = '') {
 }
 
 /* ============================================================
-   مشغّل المرحلة
+   ترويسة المرحلة (بنفس شكل رؤوس صفحات الموقع)
    ============================================================ */
-export function renderZeroStage(host, stageId) {
-  const stage = zeroStage(stageId);
-  if (!stage) { navigate('/zero'); return; }
-  markStageSeen(stage.id);
-
-  const kind = stage.kind;
-  if (kind === 'reading') return renderReadingStage(host, stage);
-  if (FOCUS_KINDS.has(kind)) return renderFocusStage(host, stage);
-  return renderListStage(host, stage);
-}
-
-/* ---------- ترويسة المرحلة ---------- */
-function stageHead(stage, extra = '') {
+function stageHead(stage) {
   const idx = ZERO_STAGES.findIndex((s) => s.id === stage.id);
   const next = ZERO_STAGES[idx + 1];
-  const snap = zeroSnapshot();
-  const state = snap.raw.stages?.[stage.id] || {};
-  const size = zeroItems(stage.id).length;
+  const state = zeroSnapshot().raw.stages?.[stage.id] || {};
   return `
-    <header class="zhead zhead--stage">
-      <a class="zback" href="#/zero" data-nav>← المراحل</a>
-      <div class="zhead__row">
-        <span class="zhead__icon" aria-hidden="true">${stage.icon}</span>
-        <div class="zhead__txt">
-          <h1>${esc(stage.titleAr)}</h1>
-          <p>${esc(stage.subAr)}</p>
+    <div class="page-head">
+      <div>
+        <div class="page-title"><span class="ico" aria-hidden="true">${stage.icon}</span><h1>${esc(stage.titleAr)}</h1></div>
+        <p>${esc(stage.subAr)}</p>
+        <div class="row row--wrap mt-3" style="gap:8px">
+          <span class="chip chip--brand">${esc(itemsLabel(zeroItems(stage.id).length))}</span>
+          <span class="chip chip--line">⏱ ${arNum(stage.minutes)} دقيقة</span>
+          ${state.done ? `<span class="chip chip--ok">✅ مكتملة · ${arNum(state.best)}٪</span>` : (state.seen ? '<span class="chip chip--warn">بدأت ولم تُكمل</span>' : '')}
         </div>
       </div>
-      <div class="zstage-chips">
-        <span class="chip chip--brand">${esc(itemsLabel(size))}</span>
-        <span class="chip chip--line">⏱ ${arNum(stage.minutes)} دقيقة</span>
-        ${state.done ? `<span class="chip chip--ok">✅ مكتملة · ${arNum(state.best)}٪</span>` : (state.seen ? '<span class="chip chip--warn">بدأت ولم تُكمل</span>' : '')}
+      <div class="row row--wrap">
+        <a class="btn btn--sm" href="#/zero">← المراحل</a>
+        <button class="btn btn--sm" type="button" id="zAutoBtn">${zeroPrefs().autoSpeak ? '🔊 النطق التلقائي: مفعّل' : '🔇 النطق التلقائي: مطفأ'}</button>
+        <a class="btn btn--sm" href="#/zero/drill/${stage.id}">🧪 تدريب المرحلة</a>
+        ${next
+          ? `<a class="btn btn--sm" href="#/zero/stage/${next.id}">${esc(next.titleAr)} ←</a>`
+          : '<a class="btn btn--sm" href="#/zero/exam">الاختبار النهائي ←</a>'}
       </div>
-      <div class="zstage-acts">
-        <button class="zquiet" type="button" id="zAutoBtn">${zeroPrefs().autoSpeak ? '🔊 النطق التلقائي: مفعّل' : '🔇 النطق التلقائي: مطفأ'}</button>
-        <a class="zquiet" href="#/zero/drill/${stage.id}" data-nav>🧪 تدريب المرحلة</a>
-        ${next ? `<a class="zquiet" href="#/zero/stage/${next.id}" data-nav>${esc(next.titleAr)} ←</a>` : '<a class="zquiet" href="#/zero/exam" data-nav>الاختبار النهائي ←</a>'}
-      </div>
-      ${extra}
-    </header>`;
+    </div>`;
 }
 
 function bindAutoBtn(host) {
@@ -150,105 +125,131 @@ function bindAutoBtn(host) {
 }
 
 /* ============================================================
-   ١) شاشة لكل حرف (الحروف والحروف المركّبة)
+   مشغّل المرحلة
+   ============================================================ */
+export function renderZeroStage(host, stageId) {
+  const stage = zeroStage(stageId);
+  if (!stage) { navigate('/zero'); return; }
+  markStageSeen(stage.id);
+  const kind = stage.kind;
+  if (kind === 'reading') return renderReadingStage(host, stage);
+  if (FOCUS_KINDS.has(kind)) return renderFocusStage(host, stage);
+  return renderListStage(host, stage);
+}
+
+/* ============================================================
+   ١) الحروف والحروف المركّبة: عنصر واحد واضح
    ============================================================ */
 function renderFocusStage(host, stage) {
   const items = zeroItems(stage.id);
   const isLetters = stage.kind === 'letters';
   let i = 0;
 
-  host.innerHTML = `
-    <div class="zpage zpage--wide">
-      ${stageHead(stage)}
-      <div id="zFocus"></div>
-    </div>`;
-  bindAutoBtn(host);
-
-  const card = (it) => {
-    const done = isLetters
-      ? !!progress.zero?.letters?.[it.en.trim().split(/\s+/)[0].toLowerCase()]
-      : !!progress.zero?.digraphs?.[findDigraphId(it)];
-    const lead = isLetters
-      ? `<span class="zbig" dir="ltr">${esc(it.en.split(' ')[0])}</span><span class="zsmall" dir="ltr">${esc(it.en.split(' ')[1] || '')}</span>`
-      : `<span class="zbig zbig--combo" dir="ltr">${esc(it.en)}</span>`;
-    return `
-      <div class="zcard" data-i="${i}">
-        <div class="zcard__lead">${lead}</div>
-        <div class="zrows2">
-          <div class="zrow2"><span class="zrow2__k">الاسم</span><span class="zrow2__v">${esc(it.ar)}</span></div>
-          ${it.soundAr ? `<div class="zrow2"><span class="zrow2__k">الصوت</span><span class="zrow2__v">${esc(it.soundAr)}</span></div>` : ''}
-          ${it.word ? `<div class="zrow2"><span class="zrow2__k">مثال</span><span class="zrow2__v"><b dir="ltr">${esc(it.word)}</b><span class="zmuted"> · ${esc(it.wordPronAr || '')} · ${esc(it.wordAr || '')}</span></span></div>` : ''}
-        </div>
-      </div>`;
-  };
-
-  const actions = (it) => {
-    const done = isLetters
-      ? !!progress.zero?.letters?.[it.en.trim().split(/\s+/)[0].toLowerCase()]
-      : !!progress.zero?.digraphs?.[findDigraphId(it)];
-    return `
-      <div class="zacts">
-        <button class="zbtn zbtn--primary zbtn--big" type="button" data-act="say">🔊 اسمع</button>
-        <button class="zbtn" type="button" data-act="write">✍️ اكتب</button>
-        <button class="zbtn ${done ? 'is-done' : ''}" type="button" data-act="master">${done ? '✓ متقن' : '✅ أتقنت'}</button>
-        <button class="zquiet" type="button" data-act="details">تفاصيل</button>
-      </div>`;
-  };
-
-  const paint = (speakNow = true) => {
-    const it = items[i];
-    const box = qs('#zFocus', host);
-    if (!box) return;
-    box.innerHTML = `
-      <div class="zcount">
-        <span>الخطوة ${arNum(i + 1)} من ${arNum(items.length)}</span>
-        <span class="zbar"><i style="width:${Math.round(((i + 1) / items.length) * 100)}%"></i></span>
-      </div>
-      ${card(it)}
-      ${actions(it)}
-      <div class="znav2">
-        <button class="zbtn" type="button" data-nav2="prev" ${i === 0 ? 'disabled' : ''}>→ السابق</button>
-        ${i === items.length - 1
-          ? `<a class="zbtn zbtn--primary" href="#/zero/drill/${stage.id}" data-nav>تدريب المرحلة (٥ أسئلة) ←</a>`
-          : '<button class="zbtn zbtn--primary" type="button" data-nav2="next">التالي ←</button>'}
-      </div>
-      <details class="zjump">
-        <summary>${isLetters ? 'قائمة الحروف' : 'قائمة الحروف المركّبة'}</summary>
-        <div class="zjump__grid">
-          ${items.map((x, k) => `<button class="zchip ${k === i ? 'is-on' : ''}" type="button" data-jump="${k}" dir="ltr">${esc(isLetters ? x.en.split(/\s+/)[0] : x.en)}</button>`).join('')}
-        </div>
-      </details>`;
-
-    const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
-    act('say', () => say(it.say || it.en));
-    act('write', () => openWritePad(it.word || it.en, it.ar));
-    act('master', () => {
-      const badges = isLetters ? markLetter(it.en.trim().split(/\s+/)[0].toLowerCase(), !isDone(it)) : markDigraph(findDigraphId(it), !isDone(it));
-      if (badges?.length) toast(`🏅 ${badges.map((b) => b.ar).join(' · ')}`, 'ok');
-      paint(false);
-      renderSidebarStats();
-    });
-    act('details', () => openDetails(it));
-
-    box.querySelector('[data-nav2="prev"]')?.addEventListener('click', () => { if (i > 0) { i -= 1; paint(); } });
-    box.querySelector('[data-nav2="next"]')?.addEventListener('click', () => { if (i < items.length - 1) { i += 1; paint(); } });
-    qsa('[data-jump]', box).forEach((b) => b.addEventListener('click', () => { i = Number(b.dataset.jump); paint(); }));
-
-    if (speakNow && zeroPrefs().autoSpeak) say(it.say || it.en);
-    qs('.zcard', box)?.addEventListener('click', (e) => { if (!e.target.closest('button')) say(it.say || it.en); });
-  };
-
   const isDone = (it) => (isLetters
     ? !!progress.zero?.letters?.[it.en.trim().split(/\s+/)[0].toLowerCase()]
     : !!progress.zero?.digraphs?.[findDigraphId(it)]);
 
+  host.innerHTML = `
+    ${stageHead(stage)}
+    <div id="zFocus" class="mt-4"></div>
+    <div class="card mt-4">
+      <div class="card__title">
+        <span class="ico" aria-hidden="true">${isLetters ? '🔤' : '🔡'}</span>
+        <h3>${isLetters ? 'كل الحروف' : 'كل الحروف المركّبة'}</h3>
+        <span class="spacer small muted">انقر أيّها تشاء للانتقال إليه</span>
+      </div>
+      <div class="zero-strip" id="zStrip">
+        ${items.map((x, k) => `<button type="button" data-jump="${k}" dir="ltr" aria-label="انتقل إلى ${esc(x.en)}">${esc(isLetters ? x.en.split(/\s+/)[0] : x.en)}</button>`).join('')}
+      </div>
+    </div>`;
+  bindAutoBtn(host);
+
+  const paint = (speakNow = true) => {
+    const it = items[i];
+    const done = isDone(it);
+    const box = qs('#zFocus', host);
+    if (!box) return;
+
+    const lead = isLetters
+      ? `<span class="zero-letter__big" dir="ltr">${esc(it.en.split(' ')[0])}</span><span class="zero-letter__small" dir="ltr">${esc(it.en.split(' ')[1] || '')}</span>`
+      : `<span class="zero-letter__combo" dir="ltr">${esc(it.en)}</span>`;
+
+    box.innerHTML = `
+      <div class="card">
+        <div class="row row--between row--wrap" style="gap:8px">
+          <span class="chip chip--brand">الخطوة ${arNum(i + 1)} من ${arNum(items.length)}</span>
+          ${done ? '<span class="chip chip--ok">✅ متقن</span>' : ''}
+        </div>
+        <div class="mt-3">${bar(((i + 1) / items.length) * 100)}</div>
+
+        <div class="zero-letter" data-hear>
+          ${lead}
+        </div>
+
+        <div class="grid grid--3" style="gap:12px">
+          ${isLetters ? `<div class="zero-info"><span class="zero-info__k">الاسم</span><span class="zero-info__v">${esc(it.ar)}</span></div>` : ''}
+          ${it.soundAr ? `<div class="zero-info"><span class="zero-info__k">${isLetters ? 'الصوت' : 'الصوت الذي يصنعه'}</span><span class="zero-info__v">${esc(it.soundAr)}</span></div>` : ''}
+          ${it.word ? `<div class="zero-info"><span class="zero-info__k">كلمة عليها</span><span class="zero-info__v"><b dir="ltr">${esc(it.word)}</b> · ${esc(it.wordPronAr || '')} · ${esc(it.wordAr || '')}</span></div>` : ''}
+        </div>
+
+        <div class="row row--wrap mt-4" style="gap:8px">
+          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسمع الحرف' : 'اسمع الصوت'}</button>
+          ${it.word ? `<button class="btn" type="button" data-act="word">🔊 كلمة المثال</button>` : ''}
+          <button class="btn" type="button" data-act="write">✍️ اكتبه</button>
+          <button class="btn ${done ? 'btn--primary' : ''}" type="button" data-act="master">${done ? '✓ متقن' : '✅ أتقنت'}</button>
+          <button class="btn btn--ghost" type="button" data-act="details">ℹ️ تفاصيل</button>
+        </div>
+      </div>
+
+      <div class="row row--between mt-4" style="gap:10px">
+        <button class="btn" type="button" data-nav2="prev" ${i === 0 ? 'disabled' : ''}>→ السابق</button>
+        ${i === items.length - 1
+          ? `<a class="btn btn--primary" href="#/zero/drill/${stage.id}">🧪 تدريب المرحلة (٥ أسئلة) ←</a>`
+          : '<button class="btn btn--primary" type="button" data-nav2="next">التالي ←</button>'}
+      </div>`;
+
+    const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
+    act('say', () => say(it.say || it.en));          // الحرف/المقطع المركّب نفسه — لا كلمة المثال
+    act('word', () => say(it.word));
+    act('write', () => openWritePad(it.word || it.en, it.ar));
+    act('master', () => {
+      const badges = isLetters
+        ? markLetter(it.en.trim().split(/\s+/)[0].toLowerCase(), !isDone(it))
+        : markDigraph(findDigraphId(it), !isDone(it));
+      if (badges?.length) toast(`🏅 ${badges.map((b) => b.ar).join(' · ')}`, 'ok');
+      paint(false);
+      paintStrip();
+      window.__leaRefreshChrome?.();
+    });
+    act('details', () => openDetails(it));
+
+    qs('[data-hear]', box)?.addEventListener('click', () => say(it.say || it.en));
+    box.querySelector('[data-nav2="prev"]')?.addEventListener('click', () => { if (i > 0) { i -= 1; paint(); paintStrip(); } });
+    box.querySelector('[data-nav2="next"]')?.addEventListener('click', () => { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } });
+
+    if (speakNow && zeroPrefs().autoSpeak) say(it.say || it.en);
+  };
+
+  /* شريط اختيار الحروف */
+  const paintStrip = () => {
+    const strip = qs('#zStrip', host);
+    if (!strip) return;
+    qsa('[data-jump]', strip).forEach((b) => {
+      const k = Number(b.dataset.jump);
+      b.classList.toggle('is-active', k === i);
+      b.classList.toggle('is-done', isDone(items[k]));
+      b.setAttribute('aria-current', k === i ? 'true' : 'false');
+    });
+  };
+  qsa('[data-jump]', host).forEach((b) => b.addEventListener('click', () => { i = Number(b.dataset.jump); paint(); paintStrip(); }));
+
   paint(false);
+  paintStrip();
   if (zeroPrefs().autoSpeak) say(items[0].say || items[0].en);
 
-  /* لوحة المفاتيح: ← → للتنقل */
   document.onkeydown = (e) => {
-    if (e.key === 'ArrowLeft') { if (i < items.length - 1) { i += 1; paint(); } }
-    else if (e.key === 'ArrowRight') { if (i > 0) { i -= 1; paint(); } }
+    if (e.key === 'ArrowLeft') { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } }
+    else if (e.key === 'ArrowRight') { if (i > 0) { i -= 1; paint(); paintStrip(); } }
   };
 }
 
@@ -258,7 +259,7 @@ function findDigraphId(it) {
 }
 
 /* ============================================================
-   ٢) قوائم مختصرة مقسّمة (الرقام · الوقت · الضمائر · الكلمات · الجمل)
+   ٢) قوائم مختصرة مجمّعة (بمكوّنات الموقع)
    ============================================================ */
 function groupsFor(stage, snap) {
   const items = zeroItems(stage.id);
@@ -298,18 +299,18 @@ function renderListStage(host, stage) {
   let gi = 0;
 
   host.innerHTML = `
-    <div class="zpage zpage--wide">
-      ${stageHead(stage)}
-      <div class="ztabs" id="zTabs" role="tablist"></div>
-      <div id="zList"></div>
+    ${stageHead(stage)}
+    <div class="card mt-4">
+      <div class="seg" id="zTabs" role="tablist" aria-label="مجموعات المرحلة"></div>
+      <div class="mt-4" id="zList"></div>
     </div>`;
   bindAutoBtn(host);
 
   const paintTabs = () => {
     const tabs = qs('#zTabs', host);
     if (!tabs) return;
-    tabs.innerHTML = groups.map((g, k) => `<button class="ztab ${k === gi ? 'is-on' : ''}" type="button" data-g="${k}" role="tab" aria-selected="${k === gi}">
-      ${g.icon ? g.icon + ' ' : ''}${esc(g.title)} <span class="ztab__n">${arNum(g.items.length)}</span></button>`).join('');
+    tabs.innerHTML = groups.map((g, k) => `<button type="button" data-g="${k}" role="tab" aria-selected="${k === gi}" class="${k === gi ? 'is-active' : ''}">
+      ${g.icon ? g.icon + ' ' : ''}${esc(g.title)} <span class="muted">(${arNum(g.items.length)})</span></button>`).join('');
     qsa('[data-g]', tabs).forEach((b) => b.addEventListener('click', () => { gi = Number(b.dataset.g); paintTabs(); paintList(); }));
   };
 
@@ -318,37 +319,33 @@ function renderListStage(host, stage) {
     if (!box) return;
     const g = groups[gi];
     box.innerHTML = `
-      <ul class="zlist">
+      <div class="card card--flat" style="padding:0">
         ${g.items.map((it) => {
           const done = stage.id === 'words' ? !!snap.raw.words?.[it.en]
             : stage.id === 'sentences' ? !!snap.raw.sentences?.[it.en]
               : false;
-          return `<li class="zrow ${done ? 'is-done' : ''}" data-say="${esc(it.say || it.en)}" data-key="${esc(it.key)}">
-            <span class="zrow__en" dir="ltr">${esc(it.en)}</span>
-            <span class="zrow__ar">${esc(it.ar || '')}${it.extra ? ` <span class="zmuted">· ${esc(it.extra)}</span>` : ''}</span>
-            <span class="zrow__pron">${esc(it.pron || '')}</span>
-            <button class="zrow__tick" type="button" data-tick="${esc(it.key)}" aria-label="وسم كمتقن" aria-pressed="${done}">✓</button>
-          </li>`;
+          return `<div class="item-row ${done ? 'is-done' : ''}" data-key="${esc(it.key)}">
+            <span class="item-row__en">${esc(it.en)}</span>
+            <span class="item-row__ar">${esc(it.ar || '')}${it.pron ? ` <span class="muted">· ${esc(it.pron)}</span>` : ''}${it.extra ? ` <span class="muted">· ${esc(it.extra)}</span>` : ''}</span>
+            ${speakBtn(it.say || it.en)}
+            <button class="btn btn--ghost btn--sm" type="button" data-tick="${esc(it.key)}" aria-pressed="${done}" title="${done ? 'متقن — انقر للإلغاء' : 'وسم كمتقن'}" aria-label="${done ? 'متقن — انقر للإلغاء' : 'وسم كمتقن'}">✓</button>
+          </div>`;
         }).join('')}
-      </ul>
-      <p class="zhint">انقر أي سطر لتسمعه، وعلّم ✓ ما أتقنته.</p>`;
+      </div>
+      <p class="small muted mt-3">انقر 🔊 لتسمع النطق، و✓ لتعلّم ما أتقنته.</p>`;
 
-    qsa('.zrow', box).forEach((row) => row.addEventListener('click', (e) => {
-      if (e.target.closest('[data-tick]')) return;
-      say(row.dataset.say);
-    }));
     qsa('[data-tick]', box).forEach((b) => b.addEventListener('click', () => {
       const key = b.dataset.tick;
       const it = g.items.find((x) => x.key === key);
-      const on = !b.closest('.zrow').classList.contains('is-done');
+      const on = b.getAttribute('aria-pressed') !== 'true';
       let badges = [];
       if (key.startsWith('word:')) badges = markWord(it.en, on);
       else if (key.startsWith('sent:')) badges = markSentence(it.en, on);
       else badges = markWord(key, on);
       if (badges?.length) toast(`🏅 ${badges.map((x) => x.ar).join(' · ')}`, 'ok');
-      b.closest('.zrow').classList.toggle('is-done', on);
       b.setAttribute('aria-pressed', String(on));
-      renderSidebarStats();
+      b.closest('.item-row').classList.toggle('is-done', on);
+      window.__leaRefreshChrome?.();
     }));
   };
 
@@ -361,35 +358,32 @@ function renderListStage(host, stage) {
    ============================================================ */
 function renderReadingStage(host, stage) {
   host.innerHTML = `
-    <div class="zpage zpage--wide">
-      ${stageHead(stage)}
-      <div class="zreads">
-        ${READINGS.map((r) => {
-          const done = progress.zero?.readings?.[r.id]?.done;
-          return `<section class="zread" data-read="${r.id}">
-            <header class="zread__head">
-              <h2>${esc(r.titleAr)} <span class="zmuted" dir="ltr">${esc(r.titleEn)}</span></h2>
-              ${done ? '<span class="ztag ztag--ok">أتممتها</span>' : ''}
-            </header>
-            <ol class="zread__lines">
-              ${r.lines.map((l) => `<li class="zrow zrow--line" data-say="${esc(l.en)}">
-                <span class="zrow__en" dir="ltr">${esc(l.en)}</span>
-                <span class="zrow__ar">${esc(l.ar)}</span>
-                <span class="zrow__pron">${esc(l.pron)}</span>
-              </li>`).join('')}
-            </ol>
-            <div class="zread__acts">
-              <button class="zbtn zbtn--primary" type="button" data-read-quiz="${r.id}">اختبر فهمي (${arNum(r.questions.length)})</button>
-              <button class="zbtn" type="button" data-read-all="${r.id}">🔊 اقرأ النص كاملاً</button>
-            </div>
-            <div id="readQuiz-${r.id}"></div>
-          </section>`;
-        }).join('')}
-      </div>
+    ${stageHead(stage)}
+    <div class="stack mt-4">
+      ${READINGS.map((r) => {
+        const done = progress.zero?.readings?.[r.id]?.done;
+        return `<div class="card" data-read="${r.id}">
+          <div class="card__title">
+            <span class="ico" aria-hidden="true">${r.emoji || '📖'}</span>
+            <h3>${esc(r.titleAr)} <span class="muted tiny" dir="ltr">${esc(r.titleEn)}</span></h3>
+            ${done ? '<span class="spacer chip chip--ok">أتممتها ✓</span>' : ''}
+          </div>
+          <div class="card card--flat" style="padding:0">
+            ${r.lines.map((l) => `<div class="item-row">
+              <span class="item-row__en">${esc(l.en)}</span>
+              <span class="item-row__ar">${esc(l.ar)} <span class="muted">· ${esc(l.pron)}</span></span>
+              ${speakBtn(l.en)}
+            </div>`).join('')}
+          </div>
+          <div class="row row--wrap mt-3" style="gap:8px">
+            <button class="btn btn--primary btn--sm" type="button" data-read-quiz="${r.id}">اختبر فهمي (${arNum(r.questions.length)})</button>
+            <button class="btn btn--sm" type="button" data-read-all="${r.id}">🔊 اقرأ النص كاملاً</button>
+          </div>
+          <div id="readQuiz-${r.id}"></div>
+        </div>`;
+      }).join('')}
     </div>`;
   bindAutoBtn(host);
-
-  qsa('.zrow', host).forEach((row) => row.addEventListener('click', () => say(row.dataset.say)));
 
   qsa('[data-read-all]', host).forEach((b) => b.addEventListener('click', () => {
     const r = READINGS.find((x) => x.id === b.dataset.readAll);
@@ -397,11 +391,11 @@ function renderReadingStage(host, stage) {
     let k = 0;
     const go = () => {
       if (k >= r.lines.length) return;
-      speak(r.lines[k].en, { onend: () => { k += 1; setTimeout(go, 300); } });
+      const line = r.lines[k];
       k += 1;
-      setTimeout(go, 2800);
+      speak(line.en, { onend: () => setTimeout(go, 320) });
+      setTimeout(() => { if (k < r.lines.length + 1) go(); }, 2800);
     };
-    k = 0;
     go();
   }));
 
@@ -422,7 +416,7 @@ function renderReadingStage(host, stage) {
         answerText: qq.options[qq.answer],
         explain: qq.explain || '',
       })),
-      onSummary: (res) => { markReadingDone(r.id, res.correct, res.total); renderSidebarStats(); },
+      onSummary: (res) => { markReadingDone(r.id, res.correct, res.total); window.__leaRefreshChrome?.(); },
     });
   }));
 }
@@ -434,22 +428,22 @@ export function renderZeroDrill(host, stageId) {
   const stage = zeroStage(stageId);
   const questions = zeroStageQuestions(stage.id, 5);
   if (!questions.length) {
-    host.innerHTML = `<div class="zpage"><div class="znotice">لا أسئلة لهذه المرحلة بعد.</div>
-      <a class="zbtn" href="#/zero" data-nav>← المراحل</a></div>`;
+    host.innerHTML = `<div class="card"><div class="empty"><span class="ico">🤷</span><p>لا أسئلة لهذه المرحلة بعد.</p>
+      <a class="btn btn--primary mt-3" href="#/zero">← المراحل</a></div></div>`;
     return;
   }
   const idx = ZERO_STAGES.findIndex((s) => s.id === stage.id);
   const next = ZERO_STAGES[idx + 1];
 
   host.innerHTML = `
-    <div class="zpage">
-      <header class="zhead zhead--stage">
-        <a class="zback" href="#/zero/stage/${stage.id}" data-nav>← ${esc(stage.titleAr)}</a>
-        <h1>تدريب: ${esc(stage.titleAr)}</h1>
+    <div class="page-head">
+      <div>
+        <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>تدريب: ${esc(stage.titleAr)}</h1></div>
         <p>خمسة أسئلة قصيرة. النجاح من ٨٠٪ يُكمل المرحلة.</p>
-      </header>
-      <div id="zRun"></div>
-    </div>`;
+      </div>
+      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero/stage/${stage.id}">← ${esc(stage.titleAr)}</a></div>
+    </div>
+    <div id="zRun" class="mt-4"></div>`;
 
   runQuiz(qs('#zRun', host), {
     questions,
@@ -463,9 +457,9 @@ export function renderZeroDrill(host, stageId) {
       else if (res.accuracy >= 80) toast('✅ مراجعة ناجحة — المرحلة مكتملة', 'ok');
       else toast(`نتيجتك ${res.accuracy}% — تحتاج ٨٠٪ لإتمام المرحلة`, 'warn');
       if (badges.length) toast(`🏅 ${[...new Set(badges.map((b) => b.ar))].join(' · ')}`, 'ok');
-      renderSidebarStats();
+      window.__leaRefreshChrome?.();
     },
-    extraActionsHtml: `<a class="zbtn" href="#/zero/stage/${stage.id}" data-nav>مراجعة المرحلة</a>
-      ${next ? `<a class="zbtn zbtn--primary" href="#/zero/stage/${next.id}" data-nav>${esc(next.titleAr)} ←</a>` : '<a class="zbtn zbtn--primary" href="#/zero/exam" data-nav>الاختبار النهائي ←</a>'}`,
+    extraActionsHtml: `<a class="btn" href="#/zero/stage/${stage.id}">مراجعة المرحلة</a>
+      ${next ? `<a class="btn btn--primary" href="#/zero/stage/${next.id}">${esc(next.titleAr)} ←</a>` : '<a class="btn btn--primary" href="#/zero/exam">الاختبار النهائي ←</a>'}`,
   });
 }

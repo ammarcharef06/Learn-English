@@ -1,6 +1,6 @@
 /* ============================================================
-   شاشة الدخول (مرة واحدة) — تظهر في موقع المستويات فقط.
-   اختيار «من الصفر» ينقل إلى صفحة A0 المستقلة (zero.html).
+   شاشة الدخول (مرة واحدة) في موقع المستويات — بمكوّنات الموقع
+   اختيار «من الصفر» ينقل إلى صفحة A0 المستقلة (zero.html)
    ============================================================ */
 import { qs, toast } from '../core/utils.js';
 import { navigate } from '../core/router.js';
@@ -24,14 +24,15 @@ export function showZeroChoice({ force = false, onDone = null } = {}) {
   el.className = 'zchoice';
   el.setAttribute('role', 'dialog');
   el.setAttribute('aria-modal', 'true');
+  el.setAttribute('aria-labelledby', 'zchoiceTitle');
   el.innerHTML = `
     <div class="zchoice__panel">
-      <h2>من أين نبدأ؟</h2>
+      <h2 id="zchoiceTitle">من أين نبدأ؟</h2>
       <p class="zchoice__q">اختر مرة واحدة، ويمكنك التبديل في أي وقت.</p>
 
       <button class="zchoice__opt" type="button" data-choice="a0">
         <span class="zchoice__ico" aria-hidden="true">🌱</span>
-        <span class="zchoice__b"><b>من الصفر (A0)</b><small>لا أعرف الحروف بعد — ابدأ معي من الحرف الأول في صفحة مستقلة.</small></span>
+        <span class="zchoice__b"><b>من الصفر (A0)</b><small>لا أعرف الحروف بعد — ابدأ معي من الحرف الأول.</small></span>
       </button>
 
       <button class="zchoice__opt" type="button" data-choice="a1">

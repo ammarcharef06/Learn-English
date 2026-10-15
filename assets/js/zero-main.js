@@ -5,10 +5,11 @@
    ============================================================ */
 import { initRouter, route, setNotFound, resolve } from './core/router.js';
 import { setUiLang } from './core/i18n.js';
-import { initSpeech, stopSpeaking } from './core/speech.js';
+import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { isAuthed, extendSession } from './core/auth.js';
 import { flush } from './core/store.js';
 import { qs, toast } from './core/utils.js';
+import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
 import { setZeroFocus } from './core/zeroflow.js';
 import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
@@ -33,10 +34,31 @@ function setupRoutes() {
   });
 }
 
+/* ---------------- أحداث عامة (نفس سلوك الموقع) ---------------- */
+function bindGlobalEvents() {
+  document.addEventListener('click', (e) => {
+    /* النطق من أي زر [data-say] في الصفحة (نفس .speak-btn المستخدم في الموقع) */
+    const sayBtn = e.target.closest('[data-say]');
+    if (sayBtn && !e.target.closest('.quiz-shell')) {
+      sayBtn.classList.add('is-speaking');
+      speak(sayBtn.dataset.say, { onend: () => sayBtn.classList.remove('is-speaking') });
+      return;
+    }
+    /* إضافة كلمة إلى دفتر المتعلّم */
+    const nb = e.target.closest('[data-nb]');
+    if (nb) {
+      const added = addNotebook({ en: nb.dataset.en || '', ar: nb.dataset.ar || '' });
+      toast(added ? 'أُضيفت إلى دفترك 📒' : 'موجودة في دفترك مسبقاً', added ? 'ok' : 'info');
+      if (added) nb.textContent = '✅';
+    }
+  });
+}
+
 /* ---------------- الإقلاع ---------------- */
 async function main() {
   setUiLang('ar');
   initSpeech();
+  bindGlobalEvents();
   window.__leaBooted = true;
 
   /* هذه الصفحة محميّة بنفس جلسة الموقع؛ وإن لم تكن الجلسة قائمة نعود لبوابة الدخول */

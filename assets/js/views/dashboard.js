@@ -5,7 +5,6 @@ import { progress, settings, goalForToday } from '../core/store.js';
 import { streakInfo, overallStats, accuracy, badgesWithState } from '../core/gamify.js';
 import { LEVELS, nextLessonSuggestion, curriculumStats, levelPercent } from '../data/curriculum.js';
 import { STUDY_TIPS } from '../data/badges.js';
-import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 import { vocabularyEntries } from '../core/quizgen.js';
 import { weakestFirst, stats as srsStats } from '../core/srs.js';
 import { statCard, progressBar } from './shell.js';
@@ -38,7 +37,6 @@ export function renderDashboard(host) {
   const today = progress.activity[todayKey()] || { q: 0, c: 0, minutes: 0, points: 0 };
   const goalReached = q.done >= q.target;
   const wod = wordOfTheDay();
-  const zs = zeroStats(progress);
 
   host.innerHTML = `
     <section class="hero">
@@ -53,16 +51,6 @@ export function renderDashboard(host) {
       </div>
     </section>
 
-    <div class="zlinks zero-row mt-4">
-      <a class="zlink" href="./zero.html" title="صفحة مستقلة لتأسيس A0">
-        <span class="zlink__ico" aria-hidden="true">🌱</span>
-        <span class="zlink__b">
-          <b>من الصفر — تأسيس A0</b>
-          <small>لِمن لا يعرف الحروف بعد: ٨ مراحل قصيرة بترتيب واضح، بنطق عربي ولوح كتابة.</small>
-        </span>
-        <span class="zlink__s">${zs.percent ? `${zs.percent}% · تابع` : 'ابدأ ←'}</span>
-      </a>
-    </div>
 
     <div class="grid grid--4 mt-4">
       ${statCard({ label: t('common.points'), value: progress.points || 0, foot: `+${today.points || 0} ${t('common.today')}`, variant: 'stat--brand' })}

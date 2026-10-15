@@ -705,6 +705,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   const shellJs = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
   const shellSrc = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
   const stageJs = readFileSync(join(ROOT, 'assets/js/views/zero-stage.js'), 'utf8');
+  const homeJs = readFileSync(join(ROOT, 'assets/js/views/zero.js'), 'utf8');
   const zcss = readFileSync(join(ROOT, 'assets/css/zero.css'), 'utf8');
   const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
   const entryJs = readFileSync(join(ROOT, 'assets/js/views/zero-entry.js'), 'utf8');
@@ -721,52 +722,72 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
     assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
   });
-  it('صفحة A0 مستقلة تماماً: هيكلها ونقطة دخولها وبيانها الخاص', () => {
-    for (const id of ['id="zbar"', 'id="znav"', 'id="view"', 'id="toasts"', 'id="modalRoot"']) {
+  it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
+    for (const id of ['id="zbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
       assert(zeroHtml.includes(id), `zero.html ينقصه ${id}`);
     }
+    assert(/class="topbar" id="zbar"/.test(zeroHtml), 'شريط A0 لا يستخدم مكوّن الموقع (.topbar)');
+    assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
     assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
     assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
-    for (const chrome of ['class="topbar"', 'id="sidenav"', 'id="bottomnav"', 'class="sidebar"']) {
-      assert(!zeroHtml.includes(chrome), `zero.html يحتوي هيكل الموقع (${chrome})`);
+    for (const chrome of ['id="sidenav"', 'id="bottomnav"', 'class="sidebar"', 'zero-nav']) {
+      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً من الموقع (${chrome})`);
     }
     assert(/manifest-zero\.webmanifest/.test(zeroHtml), 'zero.html بلا بيان تثبيت خاص');
     assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
     assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
-    assert(/html\[data-zero="a0"\]/.test(zcss), 'قواعد الصفحة المستقلة مفقودة من zero.css');
-    assert(/\.zview/.test(zcss), 'لا أنماط لعرض محتوى صفحة A0 المستقلة');
   });
-  it('الموقع الرئيسي خالٍ من أي دمج لواجهة A0', () => {
-    assert(!/id="zbar"|id="znav"/.test(html), 'index.html ما زال يحتوي عناصر واجهة A0');
+  it('تنقّل A0 يستخدم مكوّنات الموقع (.seg) بأربع خانات', () => {
+    assert(/class="seg zseg"/.test(shellSrc), 'تنقّل A0 لا يستخدم .seg');
+    for (const l of ['المراحل', 'الاختبار', 'الشهادة', 'إعدادات']) {
+      assert(shellSrc.includes(l), `تنقّل A0 ينقصه: ${l}`);
+    }
+    assert(/class="brand"/.test(shellSrc) && /brand__mark/.test(shellSrc), 'شريط A0 لا يستخدم شعار الموقع (.brand)');
+    assert(/btn btn--sm/.test(shellSrc), 'زر الخروج لا يستخدم أزرار الموقع (.btn)');
+  });
+  it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
+    for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {
+      assert(new RegExp(cls).test(homeJs + stageJs), `مكوّن الموقع «${cls}» غير مستخدم في واجهات A0`);
+    }
+    for (const old of ['zhero', 'zstep', 'zlink', 'zbtn', 'zchip', 'ztab', 'zlist', 'zrow__']) {
+      assert(!(homeJs + stageJs).includes(old), `ما زالت هناك مكوّنات A0 القديمة: ${old}`);
+    }
+  });
+  it('خيار واحد فقط للدخول إلى A0 (بطاقة القائمة الجانبية)', () => {
+    assert(!/id="btnZero"/.test(html), 'index.html ما زال فيه زر A0 (خيار دخول ثانٍ)');
+    assert(!/id="zbar"|id="znav"/.test(html), 'index.html يحتوي عناصر واجهة A0');
+    const links = (shellJs.match(/href="\.\/zero\.html"/g) || []).length;
+    eq(links, 1, 'عدد روابط الدخول إلى A0 في القائمة الجانبية');
+    assert(!/zero\.html/.test(dash), 'لوحة التحكم فيها خيار دخول ثانٍ إلى A0');
+    const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
+    assert(!/zero\.html/.test(bottomBlock), 'الشريط السفلي فيه خيار دخول ثانٍ إلى A0');
     assert(!/zero-pad\.css/.test(html), 'index.html يُحمّل أنماط لوح الكتابة');
     assert(html.includes('./assets/css/zero.css'), 'أنماط شاشة الدخول غير مربوطة في index.html');
-    assert(/id="btnZero"/.test(html), 'لا يوجد زر A0 في index.html');
-    assert(/ZERO_PAGE|zero\.html/.test(app), 'زر A0 لا يفتح صفحة A0');
     assert(/zero\.html/.test(entryJs), 'اختيار «من الصفر» لا ينقل إلى صفحة A0');
   });
   it('زر الخروج من صفحة A0 يعيد إلى الموقع', () => {
     assert(/exitZeroMode/.test(shellSrc), 'لا زر خروج من صفحة A0');
     assert(/location\.href = '\.\/index\.html'/.test(shellSrc), 'الخروج لا ينقل إلى صفحة الموقع');
   });
-  it('روابط A0 في الموقع تنقل إلى الصفحة المستقلة', () => {
-    assert(/zero-nav/.test(shellJs), 'لا خانة في القائمة الجانبية');
-    assert(/href="\.\/zero\.html"/.test(shellJs), 'خانة القائمة الجانبية لا تنقل إلى صفحة A0');
-    const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
-    assert(/is-zero/.test(bottomBlock), 'لا خانة A0 في الشريط السفلي');
-    assert(/href="\.\/zero\.html"/.test(bottomBlock), 'خانة الشريط السفلي لا تنقل إلى صفحة A0');
-  });
-  it('الرئيسية فيها سطر هادئ ينقل إلى صفحة A0', () => {
-    assert(/zero-row/.test(dash), 'لا سطر إلى A0 في لوحة التحكم');
-    assert(/href="\.\/zero\.html"/.test(dash), 'السطر لا ينقل إلى صفحة A0');
-    assert(!/zero-banner/.test(dash), 'ما زالت اللافتة القديمة موجودة');
-  });
-  it('مشغّل المرحلة يعرض شاشة واحدة لكل حرف (بلا شبكة ٢٦ بطاقة)', () => {
+  it('مشغّل الحروف: عنصر واحد واضح + شريط اختيار', () => {
     assert(/FOCUS_KINDS/.test(stageJs), 'لا وضع تركيز للحروف');
-    assert(/zcard/.test(stageJs) && /zbig/.test(stageJs), 'لا بطاقة حرف كبيرة');
+    assert(/zero-letter__big/.test(stageJs) && /zero-letter__small/.test(stageJs), 'لا عرض كبير لشكل الحرف (كبير/صغير)');
+    assert(/zero-strip/.test(stageJs), 'لا شريط لاختيار الحروف');
     assert(/data-nav2/.test(stageJs), 'لا تنقّل السابق/التالي');
     assert(/data-act="details"/.test(stageJs), 'لا زر تفاصيل');
-    assert(/groupsFor|zlist/.test(stageJs), 'لا قوائم مختصرة للمفردات');
+    assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
+  });
+  it('الحروف المركّبة تُنطق هي نفسها لا كلمة المثال', () => {
+    const dg = zeroItems('digraphs');
+    for (const it of dg) {
+      eq(it.say, it.en, `نطق الحرف المركّب ${it.en} يجب أن يكون الحرف نفسه`);
+      assert(!/\s/.test(it.say), `نطق الحرف المركّب يجب أن يكون مقطعاً واحداً: ${it.say}`);
+      truthy(it.word, `الحرف المركّب ${it.en} بلا كلمة مثال`);
+      assert(it.word !== it.say, `كلمة المثال يجب ألا تكون هي النطق: ${it.say}`);
+    }
+    const lt = zeroItems('letters');
+    for (const it of lt) assert(!/\s/.test(it.say), `نطق الحرف يجب أن يكون حرفاً واحداً: ${it.say}`);
   });
   it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
     for (const p of [
@@ -781,7 +802,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/zero\.html/.test(sw) && /fallback/.test(sw), 'لا رجوع خاص بصفحة A0 عند انقطاع الإنترنت');
   });
   it('نسخة الـ Service Worker رُفعت لتحديث الملفات المخزّنة', () => {
-    assert(/VERSION\s*=\s*'v1\.(?:[3-9]\d*)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
+    assert(/VERSION\s*=\s*'v1\.(?:[4-9]\d*)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
   });
 });
 

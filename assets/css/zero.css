@@ -1,469 +1,120 @@
 /* ============================================================
-   قسم «من الصفر» (A0) — واجهة مستقلة بهوية الموقع
-   نفس لغة التصميم: تدرّجات العلامة · ظلال · شرائح · حلقات تقدّم
+   قسم «من الصفر» (A0) — إضافات فقط فوق نظام تصميم الموقع
+   كل المكوّنات الأساسية (شريط · بطاقات · أزرار · شرائح · تقدّم)
+   تأتي من main.css نفسه حتى لا يشعر المستخدم بأي اختلاف.
    ============================================================ */
 
-:root {
-  --z-grad: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-  --z-grad-soft: linear-gradient(135deg,
-    color-mix(in srgb, var(--brand-1) 14%, var(--surface)),
-    color-mix(in srgb, var(--brand-2) 11%, var(--surface)));
-  --z-grad-line: linear-gradient(135deg, var(--brand-1), var(--brand-3));
-}
-
-/* ============================================================
-   ١) صفحة مستقلة تماماً (zero.html): هيكلها الخاص
-   لا يوجد هنا شريط موقع ولا قائمة جانبية ولا شريط سفلي للمستويات —
-   الصفحة تحتوي شريط A0 الخاص و#view و.znav فقط.
-   ============================================================ */
+/* ---------------- ١) صفحة zero.html المستقلة ---------------- */
 html[data-zero="a0"] { background: var(--bg); }
-html[data-zero="a0"] body {
-  min-block-size: 100dvh; display: flex; flex-direction: column;
-  background:
-    radial-gradient(1100px 520px at 85% -12%, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent 70%),
-    radial-gradient(900px 480px at 5% 0%, color-mix(in srgb, var(--brand-3) 10%, transparent), transparent 70%),
-    var(--bg);
+html[data-zero="a0"] .layout { padding-block-start: var(--sp-4); }
+
+/* شريط A0: نفس شكل شريط الموقع + تنقّل مقسّم داخله */
+#zbar .brand__mark { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); }
+.zseg {
+  flex: 1 1 auto; min-inline-size: 0; margin-inline: auto;
+  max-inline-size: 620px;
 }
-/* محتوى الصفحة */
-.zview {
-  flex: 1 1 auto; inline-size: 100%;
-  max-inline-size: 860px; margin-inline: auto;
-  padding: 0 max(var(--sp-4), env(safe-area-inset-left)) 100px max(var(--sp-4), env(safe-area-inset-right));
+.zseg button { padding: 8px 13px; min-block-size: 42px; font-size: .82rem; }
+@media (max-width: 700px) {
+  .zseg { max-inline-size: none; justify-content: center; }
+  .zseg button { padding: 8px 11px; }
+  .zseg .zlabel { display: none; }
+  .zseg button .zico { font-size: 1.15rem; }
+}
+@media (max-width: 460px) {
+  .zbar-pct { display: none; }
+  #zExit { padding: 8px 11px; }
+  #zExit .zexit-label { display: none; }
 }
 
-/* ---------------- الشريط العلوي الخاص ---------------- */
-.zbar {
-  position: sticky; inset-block-start: 0; z-index: var(--z-topbar);
-  display: flex; align-items: center; gap: 12px;
-  min-block-size: 62px;
-  padding: 8px max(var(--sp-4), env(safe-area-inset-left)) 8px max(var(--sp-4), env(safe-area-inset-right));
-  background: color-mix(in srgb, var(--bg-2) 88%, transparent);
-  backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border-block-end: 1px solid var(--line);
-  box-shadow: var(--shadow-1);
+/* ---------------- ٢) بطاقة حرف كبيرة (التركيز) ---------------- */
+.zero-letter {
+  display: flex; align-items: center; justify-content: center; gap: clamp(10px, 4vw, 26px);
+  padding: clamp(14px, 4vw, 30px) 10px;
 }
-.zbar__brand { display: flex; align-items: center; gap: 9px; font-weight: 800; flex: 0 0 auto; }
-.zbar__mark {
-  inline-size: 36px; block-size: 36px; display: grid; place-content: center;
-  border-radius: 12px; background: var(--z-grad); color: #fff;
-  font-family: var(--font-en); font-size: .82rem; font-weight: 800; letter-spacing: .02em;
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-1) 38%, transparent);
+.zero-letter__big {
+  font-family: var(--font-en); font-weight: 800; line-height: .95;
+  font-size: clamp(4rem, 19vw, 7.5rem); letter-spacing: -.02em;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.zbar__name { font-size: .95rem; }
-.zbar__meter { display: flex; align-items: center; gap: 9px; flex: 1; min-inline-size: 0; }
-.zbar__bar { flex: 1; block-size: 8px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
-.zbar__bar i { display: block; block-size: 100%; background: var(--z-grad); transition: inline-size 320ms var(--ease); }
-.zbar__pct { font-family: var(--font-en); font-size: .82rem; font-weight: 800; color: var(--brand-text); }
-.zbar__exit {
-  flex: 0 0 auto; font: inherit; font-size: .82rem; font-weight: 700;
-  color: var(--text-2); background: var(--surface); border: 1px solid var(--line);
-  border-radius: 999px; padding: 8px 14px; cursor: pointer; min-block-size: 38px;
-  box-shadow: var(--shadow-1);
-  transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+.zero-letter__small {
+  font-family: var(--font-en); font-weight: 700;
+  font-size: clamp(2.2rem, 9vw, 3.6rem); color: var(--text-3);
 }
-.zbar__exit:hover { color: var(--brand-text); border-color: var(--brand-1); }
-@media (max-width: 560px) {
-  .zbar__name { display: none; }
-  .zbar__exit { padding: 8px 11px; font-size: .76rem; }
+.zero-letter__combo {
+  font-family: var(--font-en); font-weight: 800;
+  font-size: clamp(3.4rem, 15vw, 6rem); letter-spacing: -.01em;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-3));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+/* صف معلومة واحدة: عنوان صغير + قيمة */
+.zero-info { display: flex; flex-direction: column; gap: 2px; }
+.zero-info__k { color: var(--text-3); font-size: .78rem; font-weight: 700; }
+.zero-info__v { font-size: .95rem; }
 
-/* ---------------- التنقل السفلي الخاص ---------------- */
-.znav {
-  position: fixed; inset-block-end: 0; inset-inline: 0; z-index: var(--z-bottomnav);
-  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
-  padding: 6px max(6px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-right));
-  background: color-mix(in srgb, var(--bg-2) 94%, transparent);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-block-start: 1px solid var(--line);
+/* صفوف قوائم A0 داخل .item-row (تبقى في سطر واحد على الهاتف) */
+.item-row [data-tick] { min-inline-size: 42px; padding: 8px 10px; }
+.item-row [data-tick][aria-pressed="true"] {
+  color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent);
+  background: color-mix(in srgb, var(--ok-soft) 55%, transparent);
 }
-.znav a {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 8px 4px; border-radius: 14px; font-size: .72rem; font-weight: 700;
-  color: var(--text-3); min-block-size: 54px;
-  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
-}
-.znav a:hover { background: var(--surface-3); color: var(--text); text-decoration: none; }
-.znav a.is-active { background: var(--brand-soft); color: var(--brand-text); }
-.znav__ico { font-size: 1.2rem; line-height: 1; }
+.item-row.is-done { background: color-mix(in srgb, var(--ok) 6%, transparent); }
 
-/* ============================================================
-   ٢) عناصر الصفحة
-   ============================================================ */
-.zpage { padding-block: 26px 12px; display: flex; flex-direction: column; gap: 20px; }
-.zpage--wide { max-inline-size: 100%; }
-.zhead { display: flex; flex-direction: column; gap: 8px; }
-.zhead h1 { font-size: clamp(1.45rem, 4.6vw, 1.95rem); font-weight: 800; line-height: 1.32; }
-.zhead p { color: var(--text-3); font-size: .94rem; line-height: 1.85; }
-.zback { color: var(--text-3); font-size: .86rem; font-weight: 700; align-self: flex-start; }
-.zback:hover { color: var(--brand-text); text-decoration: none; }
-.zsection { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 800; margin-block-start: 4px; }
-.zsection::before { content: ""; inline-size: 4px; block-size: 18px; border-radius: 99px; background: var(--z-grad); }
-.zhint { color: var(--text-3); font-size: .84rem; line-height: 1.9; }
-.zmuted { color: var(--text-3); font-weight: 400; }
-.znotice {
-  padding: 16px; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--surface-2); color: var(--text-2); font-size: .9rem;
-}
-
-/* ============================================================
-   ٣) الرئيسية
-   ============================================================ */
-.zhero {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto;
-  gap: 20px; align-items: center;
-  padding: clamp(18px, 3.6vw, 28px);
-  border: 1px solid color-mix(in srgb, var(--brand-1) 30%, var(--line));
-  border-radius: var(--radius-lg); background: var(--z-grad-soft);
-  box-shadow: var(--shadow-2);
-}
-.zhero__kicker {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 12px; border-radius: 999px; background: var(--surface);
-  color: var(--brand-text); font-size: .76rem; font-weight: 800;
-  box-shadow: var(--shadow-1);
-}
-.zhero h1 { font-size: clamp(1.5rem, 5vw, 2.1rem); font-weight: 800; margin: 10px 0 6px; line-height: 1.3; }
-.zhero p { color: var(--text-2); font-size: .92rem; line-height: 1.9; max-inline-size: 46ch; }
-.zhero__acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-.zhero__ring { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.zhero__ring .ring { --p: 0; }
-.zhero__meta { display: flex; flex-direction: column; gap: 3px; align-items: center; text-align: center; color: var(--text-3); font-size: .76rem; }
-@media (max-width: 720px) {
-  .zhero { grid-template-columns: minmax(0, 1fr); text-align: center; }
-  .zhero__ring { order: -1; }
-  .zhero__kicker, .zhero__acts { justify-content: center; }
-  .zhero p { margin-inline: auto; }
-}
-
-/* بطاقة «تابع» */
-.zresume {
-  display: flex; align-items: center; gap: 14px;
-  padding: 16px; border-radius: var(--radius);
-  border: 1px solid color-mix(in srgb, var(--brand-1) 40%, var(--line));
-  background: var(--surface); box-shadow: var(--shadow-1); color: inherit;
-  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
-}
-.zresume:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); text-decoration: none; }
-.zresume__ico {
-  inline-size: 44px; block-size: 44px; flex: 0 0 44px; display: grid; place-content: center;
-  border-radius: 14px; background: var(--z-grad); font-size: 1.3rem;
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-1) 30%, transparent);
-}
-.zresume__b { display: flex; flex-direction: column; gap: 3px; flex: 1; min-inline-size: 0; }
-.zresume__b small { color: var(--text-3); font-size: .8rem; }
-.zresume__go { color: var(--brand-text); font-weight: 800; font-size: .88rem; white-space: nowrap; }
-
-/* قائمة المراحل */
-.zsteps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.zstep {
-  display: grid; grid-template-columns: 46px minmax(0, 1fr) auto auto;
-  align-items: center; gap: 14px;
-  padding: 14px 16px; color: inherit;
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow-1);
-  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
-}
-.zstep:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); border-color: var(--line-strong); text-decoration: none; }
-.zstep__n {
-  inline-size: 42px; block-size: 42px; display: grid; place-content: center;
-  border-radius: 14px; background: var(--z-grad); color: #fff;
-  font-weight: 800; font-size: 1.05rem;
-  box-shadow: 0 6px 14px color-mix(in srgb, var(--brand-1) 26%, transparent);
-}
-.zsteps li:nth-child(4n+2) .zstep__n { background: linear-gradient(135deg, var(--brand-2), var(--brand-3)); }
-.zsteps li:nth-child(4n+3) .zstep__n { background: linear-gradient(135deg, var(--brand-3), var(--brand-1)); }
-.zsteps li:nth-child(4n+4) .zstep__n { background: linear-gradient(135deg, var(--brand-2), var(--brand-1)); }
-.zstep--done .zstep__n { background: linear-gradient(135deg, var(--ok), color-mix(in srgb, var(--ok) 55%, var(--brand-3))); }
-.zstep__b { display: flex; flex-direction: column; gap: 3px; min-inline-size: 0; }
-.zstep__b b { font-size: .98rem; }
-.zstep__b small { color: var(--text-3); font-size: .79rem; line-height: 1.7; }
-.zstep__meta { color: var(--text-3); font-size: .75rem; white-space: nowrap; }
-.zstep__s { display: flex; align-items: center; }
-@media (max-width: 620px) {
-  .zstep { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 11px; }
-  .zstep__meta { display: none; }
-}
-
-/* روابط الاختبار والشهادة واللوح */
-.zlinks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.zlink {
-  display: flex; align-items: flex-start; gap: 12px; padding: 16px; color: inherit;
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow-1);
-  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
-}
-.zlink:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); border-color: var(--brand-1); text-decoration: none; }
-.zlink__ico {
-  inline-size: 42px; block-size: 42px; flex: 0 0 42px; display: grid; place-content: center;
-  border-radius: 13px; background: var(--brand-soft); color: var(--brand-text); font-size: 1.25rem;
-}
-.zlink__b { display: flex; flex-direction: column; gap: 3px; flex: 1; min-inline-size: 0; }
-.zlink__b b { font-size: .96rem; }
-.zlink__b small { color: var(--text-3); font-size: .78rem; line-height: 1.7; }
-.zlink__s { color: var(--text-3); font-size: .75rem; white-space: nowrap; align-self: center; }
-
-/* ============================================================
-   ٤) الإعدادات
-   ============================================================ */
-.zrows { display: flex; flex-direction: column; gap: 10px; }
-.zsetting {
-  display: flex; align-items: center; gap: 14px; padding: 15px 16px;
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); box-shadow: var(--shadow-1);
-}
-.zsetting__b { display: flex; flex-direction: column; gap: 3px; flex: 1; min-inline-size: 0; }
-.zsetting__b b { font-size: .94rem; }
-.zsetting__b small { color: var(--text-3); font-size: .79rem; line-height: 1.7; }
-.zsetting__sel { inline-size: 124px; flex: 0 0 auto; }
-.zstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 12px; }
-.zstats > div {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 14px; display: flex; flex-direction: column; gap: 3px; text-align: center;
-  box-shadow: var(--shadow-1);
-}
-.zstats b { font-family: var(--font-en); font-size: 1.25rem; background: var(--z-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.zstats span { color: var(--text-3); font-size: .75rem; }
-.zdanger {
-  border: 1px solid color-mix(in srgb, var(--bad) 42%, var(--line));
-  background: color-mix(in srgb, var(--bad-soft) 55%, var(--surface));
-  border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
-  box-shadow: var(--shadow-1);
-}
-.zdanger small { color: var(--text-3); font-size: .8rem; }
-
-/* ============================================================
-   ٥) الأزرار والشرائح
-   ============================================================ */
-.zbtn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  min-block-size: 46px; padding: 11px 18px;
-  border: 1px solid var(--line); border-radius: 14px;
-  background: var(--surface); color: var(--text);
-  font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer;
-  box-shadow: var(--shadow-1);
-  transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-1) var(--ease), filter var(--dur-1) var(--ease);
-}
-.zbtn:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); border-color: var(--line-strong); text-decoration: none; }
-.zbtn:active { transform: scale(.985); }
-.zbtn[disabled] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
-.zbtn--primary {
-  background: var(--z-grad); border-color: transparent; color: #fff;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--brand-1) 34%, transparent);
-}
-.zbtn--primary:hover { filter: brightness(1.06); }
-.zbtn--big { min-block-size: 54px; font-size: 1.02rem; inline-size: 100%; }
-.zbtn--danger { background: linear-gradient(135deg, var(--bad), color-mix(in srgb, var(--bad) 60%, var(--brand-2))); border-color: transparent; color: #fff; }
-.zbtn.is-done { border-color: color-mix(in srgb, var(--ok) 55%, var(--line)); color: var(--ok); background: color-mix(in srgb, var(--ok-soft) 60%, var(--surface)); }
-.zquiet {
-  background: none; border: 0; padding: 8px 4px; cursor: pointer;
-  font: inherit; font-size: .84rem; font-weight: 700; color: var(--brand-text);
-}
-.zquiet:hover { text-decoration: underline; }
-.zchip {
-  min-block-size: 36px; padding: 7px 14px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--surface);
-  font: inherit; font-size: .86rem; font-family: var(--font-en); font-weight: 700;
-  color: var(--text-2); cursor: pointer; box-shadow: var(--shadow-1);
+/* شريط اختيار الحروف */.zero-strip { display: flex; flex-wrap: wrap; gap: 6px; }
+.zero-strip button {
+  min-inline-size: 46px; min-block-size: 44px; padding: 6px 10px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface);
+  font: inherit; font-family: var(--font-en); font-weight: 700; font-size: .92rem;
+  color: var(--text-2); cursor: pointer;
   transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
 }
-.zchip:hover { border-color: var(--brand-1); color: var(--brand-text); }
-.zchip.is-on { background: var(--z-grad); border-color: transparent; color: #fff; }
-/* ترويسة المرحلة */
-.zhead__row { display: flex; align-items: center; gap: 14px; }
-.zhead__icon {
-  inline-size: 56px; block-size: 56px; flex: 0 0 56px; display: grid; place-content: center;
-  border-radius: 18px; background: var(--z-grad); font-size: 1.7rem;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--brand-1) 30%, transparent);
-}
-.zhead__txt { display: flex; flex-direction: column; gap: 3px; min-inline-size: 0; }
-.zstage-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.zstage-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.zstage-acts .zquiet { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; box-shadow: var(--shadow-1); }
-.zstage-acts .zquiet:hover { border-color: var(--brand-1); text-decoration: none; }
+.zero-strip button:hover { border-color: var(--brand-1); color: var(--brand-text); }
+.zero-strip button.is-active { background: var(--brand-soft); border-color: var(--brand-1); color: var(--brand-text); }
+.zero-strip button.is-done { border-color: color-mix(in srgb, var(--ok) 55%, var(--line)); }
 
-/* ============================================================
-   ٦) مشغّل الحرف
-   ============================================================ */
-.zcount { display: flex; align-items: center; gap: 12px; color: var(--text-3); font-size: .82rem; font-weight: 800; }
-.zcount .progress { flex: 1; }
-.zbar { flex: 1; block-size: 8px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
-.zbar i { display: block; block-size: 100%; background: var(--z-grad); }
-
-.zcard {
-  border: 1px solid color-mix(in srgb, var(--brand-1) 26%, var(--line));
-  border-radius: var(--radius-lg); background: var(--z-grad-soft);
-  box-shadow: var(--shadow-2);
-  padding: clamp(20px, 5vw, 36px);
-  display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;
-}
-.zcard__lead { display: flex; align-items: flex-end; justify-content: center; gap: 18px; }
-.zbig {
-  font-family: var(--font-en); font-weight: 800; line-height: .92;
-  font-size: clamp(4.8rem, 21vw, 8.4rem); letter-spacing: -.02em;
-  background: var(--z-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.zbig--combo { font-size: clamp(3.8rem, 16vw, 6.8rem); }
-.zsmall {
-  font-family: var(--font-en); font-weight: 700; font-size: clamp(2.4rem, 10vw, 4rem);
-  color: color-mix(in srgb, var(--text-3) 85%, var(--brand-1));
-}
-.zrows2 {
-  inline-size: 100%; max-inline-size: 440px; display: flex; flex-direction: column; gap: 10px; text-align: start;
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px;
-  box-shadow: var(--shadow-1);
-}
-.zrow2 { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 10px; align-items: baseline; }
-.zrow2 + .zrow2 { border-block-start: 1px solid var(--line); padding-block-start: 10px; }
-.zrow2__k { color: var(--text-3); font-size: .78rem; font-weight: 700; }
-.zrow2__v { font-size: .96rem; line-height: 1.75; }
-.zacts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
-.znav2 { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.znav2 > * { flex: 1; }
-.zjump {
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px;
-  background: var(--surface); box-shadow: var(--shadow-1);
-}
-.zjump summary { cursor: pointer; font-size: .86rem; font-weight: 800; color: var(--text-2); }
-.zjump__grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-
-/* ============================================================
-   ٧) القوائم المختصرة
-   ============================================================ */
-.ztabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.ztab {
-  min-block-size: 40px; padding: 9px 15px; border-radius: 999px;
-  border: 1px solid var(--line); background: var(--surface);
-  font: inherit; font-size: .86rem; font-weight: 700; color: var(--text-2); cursor: pointer;
-  box-shadow: var(--shadow-1);
-  transition: transform var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
-}
-.ztab:hover { transform: translateY(-1px); border-color: var(--brand-1); color: var(--brand-text); }
-.ztab.is-on { background: var(--z-grad); border-color: transparent; color: #fff; }
-.ztab__n { opacity: .72; font-size: .74rem; font-weight: 700; margin-inline-start: 3px; }
-
-.zlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.zrow {
-  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .8fr) 40px;
-  align-items: center; gap: 12px; padding: 12px 15px; cursor: pointer;
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); box-shadow: var(--shadow-1);
-  transition: transform var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
-}
-.zrow:hover { transform: translateY(-1px); border-color: var(--brand-1); box-shadow: var(--shadow-2); }
-.zrow.is-done { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); background: color-mix(in srgb, var(--ok-soft) 45%, var(--surface)); }
-.zrow__en { font-family: var(--font-en); font-weight: 700; font-size: 1rem; }
-.zrow__ar { color: var(--text-2); font-size: .9rem; }
-.zrow__pron { color: var(--text-3); font-size: .82rem; }
-.zrow__tick {
-  inline-size: 36px; block-size: 36px; border-radius: 12px; border: 1px solid var(--line);
-  background: var(--surface); color: var(--text-3); font-size: .95rem; cursor: pointer; font: inherit;
-  box-shadow: var(--shadow-1);
-  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
-}
-.zrow__tick:hover { border-color: var(--ok); color: var(--ok); }
-.zrow__tick[aria-pressed="true"] { background: linear-gradient(135deg, var(--ok), color-mix(in srgb, var(--ok) 60%, var(--brand-3))); border-color: transparent; color: #fff; font-weight: 800; }
-@media (max-width: 640px) {
-  /* على الهاتف: سطر للكلمة الإنجليزية، وسطر للعربي (المعنى ثم النطق) — بلا خلط لغوي */
-  .zrow { grid-template-columns: minmax(0, 1fr) 40px; row-gap: 4px; padding: 12px 14px; }
-  .zrow__en { grid-column: 1; grid-row: 1; }
-  .zrow__ar { grid-column: 1; grid-row: 2; }
-  .zrow__pron { grid-column: 1; grid-row: 2; justify-self: end; font-size: .8rem; }
-  .zrow__tick { grid-column: 2; grid-row: 1 / 3; align-self: center; }
-}
-
-/* ============================================================
-   ٨) القراءات
-   ============================================================ */
-.zreads { display: flex; flex-direction: column; gap: 16px; }
-.zread {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-1);
-}
-.zread__head { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
-.zread__head h2 { font-size: 1.08rem; font-weight: 800; }
-.zread__lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.zread__acts { display: flex; flex-wrap: wrap; gap: 8px; }
-.ztag {
-  font-size: .73rem; font-weight: 800; border-radius: 999px; padding: 4px 11px;
-  background: var(--ok-soft); color: var(--ok);
-}
-
-/* ============================================================
-   ٩) الاختبار والشهادة
-   ============================================================ */
-.zmeta { display: flex; flex-wrap: wrap; gap: 10px; }
-.zmeta > span {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px; border-radius: 999px; background: var(--surface);
-  border: 1px solid var(--line); box-shadow: var(--shadow-1);
-  color: var(--text-3); font-size: .84rem;
-}
-.zmeta b { color: var(--brand-text); font-family: var(--font-en); }
-.zreq { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
-.zreq li {
-  display: flex; align-items: center; gap: 11px; padding: 12px 15px;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
-  color: var(--text-2); font-size: .89rem; box-shadow: var(--shadow-1);
-}
-.zreq li b { color: var(--text); font-family: var(--font-en); }
-.zreq li.is-ok { border-color: color-mix(in srgb, var(--ok) 42%, var(--line)); background: color-mix(in srgb, var(--ok-soft) 45%, var(--surface)); color: var(--text); }
-.zreq li.is-ok b { color: var(--ok); }
-.zreq li > span { inline-size: 22px; text-align: center; font-weight: 800; }
-.zrun { display: flex; flex-direction: column; gap: 12px; }
-
+/* ---------------- ٣) شهادة التأسيس ---------------- */
 .zcert-wrap { display: flex; justify-content: center; }
 .zcert-wrap.is-locked .zcert { filter: grayscale(.45); opacity: .78; }
 .zcert {
-  inline-size: 100%; max-inline-size: 740px;
+  inline-size: 100%; max-inline-size: 720px;
   border: 2px solid transparent; border-radius: var(--radius-lg);
-  background:
-    linear-gradient(var(--surface), var(--surface)) padding-box,
-    var(--z-grad) border-box;
-  padding: clamp(18px, 4vw, 36px);
-  display: flex; flex-direction: column; gap: 13px; text-align: center;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, linear-gradient(135deg, var(--brand-1), var(--brand-2)) border-box;
+  padding: clamp(18px, 4vw, 34px);
+  display: flex; flex-direction: column; gap: 12px; text-align: center;
   box-shadow: var(--shadow-3);
 }
-.zcert__top { display: flex; align-items: center; justify-content: center; gap: 11px; }
+.zcert__top { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .zcert__mark {
   inline-size: 42px; block-size: 42px; display: grid; place-content: center; border-radius: 13px;
-  background: var(--z-grad); color: #fff; font-family: var(--font-en); font-weight: 800; font-size: .88rem;
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-1) 32%, transparent);
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff;
+  font-family: var(--font-en); font-weight: 800; font-size: .88rem;
 }
 .zcert__brand { display: flex; flex-direction: column; text-align: start; font-weight: 800; font-size: .98rem; }
 .zcert__brand small { color: var(--text-3); font-size: .73rem; font-weight: 400; }
-.zcert__title { font-size: clamp(1.25rem, 3.8vw, 1.8rem); font-weight: 800; }
-.zcert__sub { color: var(--text-3); font-family: var(--font-en); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; }
+.zcert__title { font-size: clamp(1.25rem, 3.8vw, 1.75rem); font-weight: 800; }
+.zcert__sub { color: var(--text-3); font-family: var(--font-en); font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; }
 .zcert__field { display: flex; flex-direction: column; gap: 5px; align-items: center; }
 .zcert__field span { color: var(--text-3); font-size: .77rem; }
 .zcert__field .input { max-inline-size: 330px; text-align: center; }
 .zcert__name {
-  font-size: clamp(1.25rem, 3.5vw, 1.8rem); font-weight: 800;
-  background: var(--z-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  font-size: clamp(1.2rem, 3.5vw, 1.7rem); font-weight: 800;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
   padding-block-end: 6px; border-block-end: 2px dotted var(--line-strong); word-break: break-word;
 }
 .zcert__body { color: var(--text-2); font-size: .89rem; line-height: 2; max-inline-size: 58ch; margin-inline: auto; }
-.zcert__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 10px; }
-.zcert__stats > div {
-  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm);
-  padding: 11px; display: flex; flex-direction: column; gap: 2px; text-align: center;
-}
-.zcert__stats b { font-family: var(--font-en); font-size: 1.1rem; color: var(--brand-text); }
-.zcert__stats span { color: var(--text-3); font-size: .73rem; }
 .zcert__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; text-align: start; font-size: .81rem; color: var(--text-2); }
 .zcert__seal {
-  inline-size: 82px; block-size: 82px; border-radius: 50%; display: grid; place-content: center;
+  inline-size: 80px; block-size: 80px; border-radius: 50%; display: grid; place-content: center;
   border: 2px dashed color-mix(in srgb, var(--brand-2) 60%, var(--line));
   background: color-mix(in srgb, var(--brand-2) 10%, var(--surface));
   color: var(--brand-text); font-size: 1.5rem;
 }
-.zcert__seal span { font-size: .63rem; line-height: 1.3; font-weight: 700; }
+.zcert__seal span { font-size: .62rem; line-height: 1.3; font-weight: 700; }
 .zcert__note { color: var(--text-3); font-size: .73rem; line-height: 1.8; }
-.zcert__acts { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* ============================================================
-   ١٠) شاشة الدخول
-   ============================================================ */
+/* ---------------- ٤) شاشة الدخول (مرة واحدة) ---------------- */
 .zchoice {
   position: fixed; inset: 0; z-index: var(--z-lock);
   display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; justify-items: center;
@@ -474,82 +125,61 @@ html[data-zero="a0"] body {
 .zchoice.is-closing { opacity: 0; transition: opacity 180ms var(--ease); }
 body.zero-choice-open { overflow: hidden; }
 .zchoice__panel {
-  inline-size: 100%; max-inline-size: 480px;
+  inline-size: 100%; max-inline-size: 460px;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
-  padding: clamp(20px, 4vw, 32px); display: flex; flex-direction: column; gap: 12px;
+  padding: clamp(18px, 4vw, 28px); display: flex; flex-direction: column; gap: 12px;
   box-shadow: var(--shadow-3);
   animation: zRise 220ms var(--ease-spring);
 }
-.zchoice__panel::before {
-  content: ""; block-size: 5px; border-radius: 99px; background: var(--z-grad); margin-block-end: 6px;
-}
-.zchoice__panel h2 { font-size: 1.3rem; font-weight: 800; }
+.zchoice__panel::before { content: ""; block-size: 5px; border-radius: var(--radius-pill); background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); }
+.zchoice__panel h2 { font-size: 1.25rem; font-weight: 800; }
 .zchoice__q { color: var(--text-3); font-size: .85rem; }
 .zchoice__opt {
-  display: flex; align-items: center; gap: 13px; text-align: start;
-  padding: 17px; border: 1px solid var(--line); border-radius: var(--radius);
+  display: flex; align-items: center; gap: 12px; text-align: start;
+  padding: 15px; border: 1px solid var(--line); border-radius: var(--radius);
   background: var(--surface-2); color: inherit; font: inherit; cursor: pointer;
   box-shadow: var(--shadow-1);
   transition: transform var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
-.zchoice__opt:hover { border-color: var(--brand-1); transform: translateY(-3px); box-shadow: var(--shadow-2); }
-.zchoice__opt:first-of-type { border-color: color-mix(in srgb, var(--brand-1) 45%, var(--line)); background: var(--z-grad-soft); }
-.zchoice__ico {
-  inline-size: 48px; block-size: 48px; flex: 0 0 48px; display: grid; place-content: center;
-  border-radius: 15px; background: var(--surface); font-size: 1.6rem; box-shadow: var(--shadow-1);
-}
+.zchoice__opt:hover { border-color: var(--brand-1); transform: translateY(-2px); box-shadow: var(--shadow-2); }
+.zchoice__opt:first-of-type { border-color: color-mix(in srgb, var(--brand-1) 45%, var(--line)); }
+.zchoice__ico { inline-size: 46px; block-size: 46px; flex: 0 0 46px; display: grid; place-content: center; border-radius: 14px; background: var(--brand-soft); font-size: 1.5rem; }
 .zchoice__b { display: flex; flex-direction: column; gap: 3px; }
-.zchoice__b b { font-size: 1.02rem; }
+.zchoice__b b { font-size: 1rem; }
 .zchoice__b small { color: var(--text-3); font-size: .81rem; line-height: 1.7; }
-.zchoice__later {
-  align-self: center; background: none; border: 0; font: inherit; font-size: .85rem;
-  color: var(--text-3); cursor: pointer; padding: 8px 12px; min-block-size: 44px;
-}
+.zchoice__later { align-self: center; background: none; border: 0; font: inherit; font-size: .85rem; color: var(--text-3); cursor: pointer; padding: 8px 12px; min-block-size: 44px; }
 .zchoice__later:hover { color: var(--brand-text); text-decoration: underline; }
 
-/* ============================================================
-   ١١) بطاقة التفاصيل + لوح الكتابة
-   ============================================================ */
-.zdetail { display: flex; flex-direction: column; gap: 14px; }
-.zdetail__en {
-  font-family: var(--font-en); font-size: 2.1rem; font-weight: 800; text-align: center;
-  background: var(--z-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.zdetail__acts { display: flex; flex-wrap: wrap; gap: 8px; }
-.ztip {
-  background: var(--brand-soft); border: 1px solid color-mix(in srgb, var(--brand-1) 35%, var(--line));
-  border-radius: var(--radius-sm); padding: 13px 15px; color: var(--text-2); font-size: .87rem; line-height: 1.9;
-}
-.zpadbar { display: flex; flex-wrap: wrap; gap: 8px; }
-.zpadcustom { display: flex; gap: 8px; align-items: center; }
-.zpadcustom .input { flex: 1; max-inline-size: 330px; }
-
-/* ============================================================
-   ١٢) خانة A0 في واجهة المستويات
-   ============================================================ */
+/* ---------------- ٥) الخيار الوحيد للدخول إلى A0 (بطاقة القائمة الجانبية) ---------------- */
 .zero-nav {
-  display: flex; align-items: center; gap: 11px; margin-block-end: 10px;
-  padding: 12px; border-radius: var(--radius);
-  background: var(--z-grad-soft); border: 1px solid color-mix(in srgb, var(--brand-1) 34%, var(--line));
-  color: inherit; text-decoration: none; box-shadow: var(--shadow-1);
-  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 12px;
+  margin: 6px 6px 10px; padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--brand-1) 42%, var(--line));
+  background:
+    radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--brand-2) 20%, transparent), transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 16%, var(--surface)), color-mix(in srgb, var(--brand-3) 12%, var(--surface)));
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
 }
-.zero-nav:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); text-decoration: none; }
-.zero-nav__ico { font-size: 1.35rem; }
-.zero-nav__txt { display: flex; flex-direction: column; gap: 2px; flex: 1; min-inline-size: 0; }
-.zero-nav__txt b { font-size: .92rem; }
-.zero-nav__txt small { color: var(--text-3); font-size: .73rem; }
-.zero-nav__arrow { color: var(--brand-text); font-weight: 800; }
-.bottomnav a.is-zero { background: var(--brand-soft); color: var(--brand-text); border-radius: 14px; }
+.zero-nav:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); border-color: var(--brand-1); text-decoration: none; }
+.zero-nav__badge {
+  inline-size: 42px; block-size: 42px; flex: 0 0 42px; display: grid; place-content: center;
+  border-radius: 13px; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff; font-family: var(--font-en); font-weight: 800; font-size: .9rem;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-1) 34%, transparent);
+}
+.zero-nav__txt { display: flex; flex-direction: column; gap: 4px; flex: 1; min-inline-size: 0; }
+.zero-nav__txt b { font-size: .95rem; display: flex; align-items: center; gap: 6px; }
+.zero-nav__txt small { color: var(--text-2); font-size: .74rem; }
+.zero-nav .progress { block-size: 6px; }
+.zero-nav__arrow { color: var(--brand-text); font-weight: 800; flex: 0 0 auto; }
 
-/* ============================================================
-   ١٣) حركات وطباعة
-   ============================================================ */
+/* ---------------- ٦) الطباعة: الشهادة وحدها ---------------- */
 @keyframes zFade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) {
-  .zchoice, .zchoice__panel, .zbar__bar i, .zstep, .zlink, .zbtn { animation: none; transition: none; }
-}
+@keyframes zRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .zchoice, .zchoice__panel { animation: none; } }
 
 @media print {
   body.printing-cert * { visibility: hidden !important; box-shadow: none !important; }
@@ -559,12 +189,9 @@ body.zero-choice-open { overflow: hidden; }
     position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: 100%;
     background: #fff !important; border: 2px solid #000 !important; border-radius: 0 !important;
   }
-  body.printing-cert #zeroCert .zcert__field,
   body.printing-cert #zeroCert .zcert__mark,
-  body.printing-cert #zeroCert .zcert__seal { background: #fff !important; border-color: #000 !important; }
-  body.printing-cert #zeroCert .zcert__stats,
-  body.printing-cert #zeroCert .zcert__stats > div { background: #fff !important; border-color: #000 !important; }
-  body.printing-cert #zeroCert .zcert__mark,
+  body.printing-cert #zeroCert .zcert__seal,
   body.printing-cert #zeroCert .zcert__name,
-  body.printing-cert #zeroCert .zcert__stats b { color: #000 !important; -webkit-text-fill-color: #000 !important; }
+  body.printing-cert #zeroCert .zcert__field,
+  body.printing-cert #zeroCert .stat { background: #fff !important; -webkit-text-fill-color: #000 !important; border-color: #000 !important; }
 }

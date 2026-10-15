@@ -1,7 +1,6 @@
 /* ============================================================
-   قسم «من الصفر» (A0) — الهيكل المستقل
-   عند تفعيل وضع A0 يتحوّل الموقع إلى واجهة أخرى تماماً:
-   شريط خاص أعلى + تنقل خاص أسفل، وتُخفى واجهة المستويات كلها.
+   قسم «من الصفر» (A0) — هيكل صفحة zero.html
+   يستخدم نفس مكوّنات الموقع: .topbar · .brand · .seg · .btn
    ============================================================ */
 import { esc, qs, toast, arNum } from '../core/utils.js';
 import { progress, settings } from '../core/store.js';
@@ -12,12 +11,12 @@ export function zeroModeOn() {
   return zeroFocus() === 'a0';
 }
 
-/* تنقل قسم A0 — أربع خانات فقط بترتيب ثابت */
+/* تنقّل قسم A0 — أربع خانات فقط بترتيب ثابت */
 const NAV = [
-  { href: '#/zero', icon: '🗺️', label: 'المراحل', key: 'stages' },
-  { href: '#/zero/exam', icon: '🧪', label: 'الاختبار', key: 'exam' },
-  { href: '#/zero/certificate', icon: '🎓', label: 'الشهادة', key: 'cert' },
-  { href: '#/zero/settings', icon: '⚙️', label: 'إعدادات', key: 'settings' },
+  { hash: '#/zero', icon: '🗺️', label: 'المراحل', key: 'stages' },
+  { hash: '#/zero/exam', icon: '🧪', label: 'الاختبار', key: 'exam' },
+  { hash: '#/zero/certificate', icon: '🎓', label: 'الشهادة', key: 'cert' },
+  { hash: '#/zero/settings', icon: '⚙️', label: 'إعدادات', key: 'settings' },
 ];
 
 function activeKey(hash) {
@@ -28,7 +27,7 @@ function activeKey(hash) {
   return 'stages';
 }
 
-/** يطبّق الواجهة المستقلة ويُرسم شريطها وتنقلها. يُستدعى عند كل رسم/تنقّل. */
+/** يرسم شريط A0 العلوي بنفس شكل شريط الموقع. يُستدعى عند كل رسم/تنقّل. */
 export function applyZeroShell(hash = null) {
   const on = zeroModeOn();
   const root = document.documentElement;
@@ -36,38 +35,42 @@ export function applyZeroShell(hash = null) {
   else delete root.dataset.zero;
 
   const bar = qs('#zbar');
-  const nav = qs('#znav');
-  if (bar) bar.hidden = !on;
-  if (nav) nav.hidden = !on;
-  if (!on) return;
+  if (!bar || !on) return;
 
   const zs = zeroStats(progress);
   const cert = certificate();
+  const key = activeKey(hash || location.hash);
+  const pct = zs.percent;
 
-  if (bar) {
-    bar.innerHTML = `
-      <a class="zbar__brand" href="#/zero" data-nav>
-        <span class="zbar__mark" aria-hidden="true">A0</span>
-        <span class="zbar__name">من الصفر</span>
-      </a>
-      <span class="zbar__meter" role="img" aria-label="نسبة الإتقان ${zs.percent}%">
-        <span class="zbar__bar"><i style="width:${zs.percent}%"></i></span>
-        <span class="zbar__pct">${arNum(zs.percent)}٪</span>
+  bar.innerHTML = `
+    <a class="brand" href="#/zero" title="من الصفر — تأسيس A0">
+      <span class="brand__mark">A0</span>
+      <span class="brand__text">
+        <b>من الصفر</b>
+        <small>تأسيس A0 · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل${cert.earned ? ' · الشهادة مُستلَمة ✓' : ''}</small>
       </span>
-      <button class="zbar__exit" type="button" id="zExit">الخروج إلى المستويات</button>`;
-    bar.querySelector('#zExit')?.addEventListener('click', () => exitZeroMode());
-  }
+    </a>
 
-  if (nav) {
-    const key = activeKey(hash || location.hash);
-    nav.innerHTML = NAV.map((n) => `<a href="${n.href}" data-nav data-route="${n.href}"
-      class="${n.key === key ? 'is-active' : ''}" ${n.key === key ? 'aria-current="page"' : ''}>
-      <span class="znav__ico" aria-hidden="true">${n.icon}</span><span>${n.label}</span></a>`).join('');
-    nav.setAttribute('aria-label', `تنقل قسم من الصفر · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل${cert.earned ? ' · الشهادة مُستلَمة' : ''}`);
-  }
+    <nav class="seg zseg" aria-label="تنقل قسم من الصفر">
+      ${NAV.map((n) => `<button type="button" data-go="${n.hash}" class="${n.key === key ? 'is-active' : ''}"
+        ${n.key === key ? 'aria-current="page"' : ''} aria-label="${n.label}">
+        <span class="zico" aria-hidden="true">${n.icon}</span> <span class="zlabel">${n.label}</span></button>`).join('')}
+    </nav>
+
+    <div class="topbar__actions">
+      <span class="chip chip--brand zbar-pct" title="نسبة الإتقان في التأسيس">${arNum(pct)}٪</span>
+      <button class="btn btn--sm" type="button" id="zExit" title="العودة إلى موقع المستويات" aria-label="العودة إلى موقع المستويات">↩ <span class="zexit-label">المستويات</span></button>
+    </div>`;
+
+  bar.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => {
+    const target = b.dataset.go;
+    if (location.hash === target) { window.__leaRenderAll?.(); return; }
+    location.hash = target;
+  }));
+  bar.querySelector('#zExit')?.addEventListener('click', () => exitZeroMode());
 }
 
-/** الخروج إلى واجهة المستويات (A1–B1) */
+/** الخروج إلى موقع المستويات (A1–B1) — انتقال حقيقي إلى صفحة أخرى */
 export function exitZeroMode() {
   setZeroFocus('levels');
   location.href = './index.html';

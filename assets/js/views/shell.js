@@ -1,6 +1,6 @@
-﻿/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
+/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
 import { t } from '../core/i18n.js';
-import { esc, qs, todayKey, pct } from '../core/utils.js';
+import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
 import { progress, settings } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
@@ -25,13 +25,14 @@ export function renderNav() {
   const zs = zeroStats(progress);
 
   if (side) {
-    /* خانة قسم «من الصفر» — رابط حقيقي إلى صفحة A0 المستقلة */
+    /* الخيار الوحيد للدخول إلى قسم «من الصفر» (A0) — صفحة zero.html المستقلة */
     let html = `
       <a class="zero-nav" href="./zero.html" title="من الصفر — تأسيس A0 (صفحة مستقلة)">
-        <span class="zero-nav__ico" aria-hidden="true">🌱</span>
+        <span class="zero-nav__badge" aria-hidden="true">A0</span>
         <span class="zero-nav__txt">
-          <b>من الصفر — A0</b>
-          <small>${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل</small>
+          <b>من الصفر — تأسيس A0</b>
+          <small>${zs.percent ? `${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل` : 'ابدأ من الحرف الأول'}</small>
+          <span class="progress"><i style="width:${zs.percent}%"></i></span>
         </span>
         <span class="zero-nav__arrow" aria-hidden="true">←</span>
       </a>`;
@@ -54,10 +55,9 @@ export function renderNav() {
   }
 
   if (bottom) {
-    /* A0 أولاً في شريط التنقل السفلي (أبرز خانة) */
-    bottom.innerHTML = `<a href="./zero.html" class="is-zero" aria-label="من الصفر — تأسيس A0 (صفحة مستقلة)"><span class="ico" aria-hidden="true">🌱</span><span>A0</span></a>`
-      + NAV_ITEMS.filter((i) => i.bottom)
-        .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
+    /* بلا خانة A0 هنا: الدخول إلى القسم من بطاقة القائمة الجانبية وحدها */
+    bottom.innerHTML = NAV_ITEMS.filter((i) => i.bottom)
+      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
   }
 }
 
