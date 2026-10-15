@@ -32,6 +32,11 @@ function say(text, slow = false) {
   if (!text) return;
   speak(text, slow ? { rate: 0.5 } : { rate: rate() });
 }
+/** نطق عنصر: الحروف المركّبة لها ملف صوتي مسجّل (مقطع واحد لا حروف منفصلة) */
+function sayItem(it, slow = false) {
+  if (!it) return;
+  say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
+}
 
 /* ============================================================
    تفاصيل العنصر + لوح الكتابة
@@ -54,8 +59,8 @@ export function openDetails(it) {
         <div class="stack" style="gap:10px">${rows.join('')}</div>
         ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
         <div class="row row--wrap" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-play="${esc(it.en)}">🔊 اسمع</button>
-          <button class="btn" type="button" data-play-slow="${esc(it.en)}">🐢 ببطء</button>
+          <button class="btn btn--primary" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🔊 اسمع</button>
+          <button class="btn" type="button" data-play-slow="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🐢 ببطء</button>
           ${it.word && it.word !== it.en ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
       </div>`,
@@ -209,7 +214,7 @@ function renderFocusStage(host, stage) {
       </div>`;
 
     const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
-    act('say', () => say(it.say || it.en));          // الحرف/المقطع المركّب نفسه — لا كلمة المثال
+    act('say', () => sayItem(it));                     // الحرف/المقطع المركّب نفسه — لا كلمة المثال
     act('word', () => say(it.word));
     act('write', () => openWritePad(it.word || it.en, it.ar));
     act('master', () => {
@@ -223,11 +228,11 @@ function renderFocusStage(host, stage) {
     });
     act('details', () => openDetails(it));
 
-    qs('[data-hear]', box)?.addEventListener('click', () => say(it.say || it.en));
+    qs('[data-hear]', box)?.addEventListener('click', () => sayItem(it));
     box.querySelector('[data-nav2="prev"]')?.addEventListener('click', () => { if (i > 0) { i -= 1; paint(); paintStrip(); } });
     box.querySelector('[data-nav2="next"]')?.addEventListener('click', () => { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } });
 
-    if (speakNow && zeroPrefs().autoSpeak) say(it.say || it.en);
+    if (speakNow && zeroPrefs().autoSpeak) sayItem(it);
   };
 
   /* شريط اختيار الحروف */
@@ -245,7 +250,7 @@ function renderFocusStage(host, stage) {
 
   paint(false);
   paintStrip();
-  if (zeroPrefs().autoSpeak) say(items[0].say || items[0].en);
+  if (zeroPrefs().autoSpeak) sayItem(items[0]);
 
   document.onkeydown = (e) => {
     if (e.key === 'ArrowLeft') { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } }

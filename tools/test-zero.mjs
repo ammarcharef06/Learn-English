@@ -6,7 +6,7 @@
  *        الشهادة، لوح الكتابة، والتوصية بالانتقال إلى A1.
  * ============================================================
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -778,7 +778,23 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
-  it('الحروف المركّبة تُنطق هي نفسها لا كلمة المثال', () => {
+  it('لكل حرف مركّب ملف صوتي مسجّل (مقطع واحد لا حروف منفصلة)', () => {
+    const dg = zeroItems('digraphs');
+    for (const it of dg) {
+      truthy(it.sayId, `الحرف المركّب ${it.en} بلا معرّف صوت`);
+      const f = join(ROOT, 'assets/audio/zero', `${it.sayId}.wav`);
+      assert(existsSync(f), `ملف الصوت مفقود: ${it.sayId}.wav`);
+      const size = statSync(f).size;
+      assert(size > 4000 && size < 60000, `حجم ملف الصوت غير معقول (${it.sayId}): ${size}`);
+    }
+    assert(new Set(dg.map((x) => x.sayId)).size === dg.length, 'معرّفات الأصوات مكرّرة');
+    const bank = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
+    const speech = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
+    assert(/registerSoundBank/.test(speech) && /soundBank/.test(speech), 'محرّك النطق لا يدعم الأصوات المسجّلة');
+    assert(/registerZeroSounds/.test(bank), 'بنك أصوات A0 لا يسجّل نفسه');
+    assert(/registerZeroSounds\(\)/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8')), 'صفحة A0 لا تُفعّل بنك الأصوات');
+    assert(/soundFix|sayId/.test(stageJs), 'مشغّل المرحلة لا يستخدم الصوت المسجّل');
+  });  it('الحروف المركّبة تُنطق هي نفسها لا كلمة المثال', () => {
     const dg = zeroItems('digraphs');
     for (const it of dg) {
       eq(it.say, it.en, `نطق الحرف المركّب ${it.en} يجب أن يكون الحرف نفسه`);

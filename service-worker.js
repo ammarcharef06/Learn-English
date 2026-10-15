@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Service Worker — عمل بلا إنترنت + دعم OneSignal Push
    ============================================================ */
 
@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.4.0';
+const VERSION = 'v1.5.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -29,6 +29,18 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
+  './assets/audio/zero/sh.wav',
+  './assets/audio/zero/ch.wav',
+  './assets/audio/zero/th-voiceless.wav',
+  './assets/audio/zero/th-voiced.wav',
+  './assets/audio/zero/ph.wav',
+  './assets/audio/zero/ck.wav',
+  './assets/audio/zero/ng.wav',
+  './assets/audio/zero/oo-long.wav',
+  './assets/audio/zero/oo-short.wav',
+  './assets/audio/zero/ee.wav',
+  './assets/audio/zero/ea.wav',
+  './assets/audio/zero/ou.wav',
   './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
@@ -42,6 +54,7 @@ const CORE = [
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
+  './assets/js/core/zero-audio.js',
   './assets/js/data/reference.js',
   './assets/js/data/curriculum.js',
   './assets/js/data/curriculum-a1.js',

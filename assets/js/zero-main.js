@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    نقطة دخول قسم «من الصفر» (A0) — صفحة مستقلة تماماً (zero.html)
    لا تُحمّل هذه الصفحة نقطة دخول الموقع (app.js) ولا هيكله:
    لا شريط موقع، ولا قائمة جانبية، ولا شريط سفلي للمستويات.
@@ -12,6 +12,7 @@ import { qs, toast } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
 import { setZeroFocus } from './core/zeroflow.js';
+import { registerZeroSounds } from './core/zero-audio.js';
 import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
 import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
 import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
@@ -58,6 +59,7 @@ function bindGlobalEvents() {
 async function main() {
   setUiLang('ar');
   initSpeech();
+  registerZeroSounds();
   bindGlobalEvents();
   window.__leaBooted = true;
 

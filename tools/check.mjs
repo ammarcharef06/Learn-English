@@ -412,6 +412,20 @@ try {
   for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
     if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
   }
+  // أصوات الحروف المركّبة المسجّلة (لا يتهجّأها محرّك الجهاز)
+  const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
+  let soundFiles = 0;
+  for (const it of zs.zeroItems('digraphs')) {
+    if (!it.sayId) { bad(`الحرف المركّب ${it.en} بلا معرّف صوت`); continue; }
+    const f = join(ROOT, 'assets/audio/zero', `${it.sayId}.wav`);
+    if (!existsSync(f)) bad(`ملف صوت الحرف المركّب مفقود: ${it.sayId}.wav`);
+    else soundFiles++;
+  }
+  if (new Set(zs.zeroItems('digraphs').map((x) => x.sayId)).size !== zs.DIGRAPHS.length) bad('معرّفات أصوات الحروف المركّبة غير فريدة');
+  if (!/registerSoundBank/.test(readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8'))) bad('محرّك النطق لا يدعم الأصوات المسجّلة');
+  if (!/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8'))) bad('بنك أصوات A0 مفقود');
+  ok(`أصوات الحروف المركّبة: ${soundFiles} مقطعاً مسجّلاً موجوداً`);
+
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }
 

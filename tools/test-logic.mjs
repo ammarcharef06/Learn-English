@@ -169,7 +169,12 @@ saveSettings({ reminder: { enabled: false } });
 check('التذكير مُعطَّل لا يُطلق', !notify.shouldFireNow(new Date()));
 saveSettings({ reminder: { enabled: true, time: '00:00', days: [0, 1, 2, 3, 4, 5, 6], lastFired: '' } });
 check('التذكير المُفعَّل يُطلق بعد الوقت', notify.shouldFireNow(new Date()));
-saveSettings({ reminder: { lastFired: new Date().toISOString().slice(0, 10) } });
+/* التاريخ المحلي (لا UTC) — التطبيق يقارن بالتاريخ المحلي، فنتجنّب فرق المنطقة الزمنية */
+const localTodayKey = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+saveSettings({ reminder: { lastFired: localTodayKey() } });
 check('لا يُطلق مرتين في اليوم', !notify.shouldFireNow(new Date()));
 saveSettings({ reminder: { lastFired: '' } });
 const fireRes = await notify.fireReminder({ test: false });
