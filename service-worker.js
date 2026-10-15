@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -56,6 +56,7 @@ const CORE = [
   './assets/js/views/dashboard.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
+  './assets/js/views/zero-shell.js',
   './assets/js/views/zero-stage.js',
   './assets/js/views/zero-exam.js',
   './assets/js/views/zero-entry.js',

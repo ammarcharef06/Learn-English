@@ -679,11 +679,14 @@ describe('ربط القسم بالموقع', () => {
   const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
   const sw = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
-  const shell = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
+  const shellJs = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
+  const shellSrc = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
+  const stageJs = readFileSync(join(ROOT, 'assets/js/views/zero-stage.js'), 'utf8');
+  const zcss = readFileSync(join(ROOT, 'assets/css/zero.css'), 'utf8');
   const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
 
   it('كل مسارات A0 مسجّلة في الموجّه', () => {
-    for (const r of ['/zero', '/zero/pad', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
+    for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
       assert(app.includes(`route('${r}'`), `المسار ${r} غير مسجّل`);
     }
   });
@@ -691,24 +694,42 @@ describe('ربط القسم بالموقع', () => {
     assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
     assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
   });
-  it('الزر الدائم للتبديل موجود في الشريط العلوي ويعمل', () => {
+  it('واجهة A0 مستقلة تماماً: تُخفي واجهة المستويات كلها', () => {
     assert(/id="btnZero"/.test(html), 'لا يوجد زر A0 في index.html');
-    assert(/btnZero/.test(app), 'لا معالج للزر الدائم');
-    assert(/setZeroFocus/.test(app), 'الزر لا يحفظ الوضع');
-    assert(/applyZeroButton/.test(app), 'الزر لا يُحدَّث مع إعادة الرسم');
+    assert(/enterZeroMode/.test(app), 'زر الدخول إلى واجهة A0 غير مربوط');
+    assert(/applyZeroShell/.test(app), 'الهيكل المستقل غير مربوط بإعادة الرسم');
+    assert(/id="zbar"/.test(html) && /id="znav"/.test(html), 'شريط/تنقّل A0 مفقود من index.html');
+    for (const sel of ['\\.topbar', '\\.sidebar', '\\.bottomnav', '\\.footer']) {
+      assert(new RegExp(`html\\[data-zero="a0"\\][^{]*${sel}`).test(zcss), `الواجهة المستقلة لا تُخفي ${sel}`);
+    }
+    assert(/zeroModeOn\(\)/.test(shellJs), 'renderNav لا يعرف وضع A0');
+    assert(/if \(zeroModeOn\(\)\)/.test(shellJs), 'renderNav لا يتوقف في وضع A0');
   });
-  it('خانة تنقّل بارزة في القائمة الجانبية والشريط السفلي', () => {
-    assert(/zero-nav/.test(shell), 'لا خانة بارزة في القائمة الجانبية');
-    const bottomBlock = shell.slice(shell.indexOf('if (bottom)'));
+  it('زر الخروج من واجهة A0 يعيد المستويات', () => {
+    assert(/exitZeroMode/.test(shellSrc), 'لا زر خروج من واجهة A0');
+    assert(/setZeroFocus\('levels'\)/.test(shellSrc), 'الخروج لا يعيد واجهة المستويات');
+  });
+  it('خانة تنقّل إلى A0 في القائمة الجانبية والشريط السفلي', () => {
+    assert(/zero-nav/.test(shellJs), 'لا خانة في القائمة الجانبية');
+    const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
     assert(bottomBlock.length > 0, 'لا كتلة للشريط السفلي في shell.js');
-    assert(/is-zero/.test(bottomBlock), 'لا خانة A0 بارزة في الشريط السفلي');
+    assert(/is-zero/.test(bottomBlock), 'لا خانة A0 في الشريط السفلي');
     assert(/#\/zero/.test(bottomBlock), 'خانة الشريط السفلي لا تُنقل إلى القسم');
-    assert(/data-route="#\/zero"/.test(shell), 'الخانة بلا تفعيل تلقائي');
-    assert(/zero: '#\/zero'/.test(shell) || /zero:\s*'#\/zero'/.test(shell), 'SECTION_MAP لا يعرف قسم zero');
+    assert(/data-route="#\/zero"/.test(shellJs), 'الخانة بلا تفعيل تلقائي');
+    assert(/zero:\s*'#\/zero'/.test(shellJs), 'SECTION_MAP لا يعرف قسم zero');
   });
-  it('لافتة A0 بارزة في الرئيسية', () => {
-    assert(/zero-banner/.test(dash), 'لا لافتة بارزة في لوحة التحكم');
-    assert(/#\/zero/.test(dash), 'اللافتة لا تُنقل إلى القسم');
+  it('الرئيسية فيها سطر هادئ إلى A0 (بلا لافتة صاخبة)', () => {
+    assert(/zero-row/.test(dash), 'لا سطر إلى A0 في لوحة التحكم');
+    assert(/#\/zero/.test(dash), 'السطر لا ينقل إلى القسم');
+    assert(!/zero-banner/.test(dash), 'ما زالت اللافتة القديمة موجودة');
+  });
+  it('مشغّل المرحلة يعرض شاشة واحدة لكل حرف (بلا شبكة ٢٦ بطاقة)', () => {
+    assert(/FOCUS_KINDS/.test(stageJs), 'لا وضع تركيز للحروف');
+    assert(/zcard/.test(stageJs) && /zbig/.test(stageJs), 'لا بطاقة حرف كبيرة');
+    assert(/data-nav2/.test(stageJs), 'لا تنقّل السابق/التالي');
+    assert(/data-act="details"/.test(stageJs), 'لا زر تفاصيل');
+    assert(/groupsFor|zlist/.test(stageJs), 'لا قوائم مختصرة للمفردات');
+    assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
   it('ملفات CSS الجديدة مربوطة في index.html', () => {
     assert(html.includes('./assets/css/zero.css'), 'zero.css غير مربوط');

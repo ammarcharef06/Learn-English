@@ -56,15 +56,21 @@ function match(path) {
 }
 
 let vtActive = false;
+/* رقم تسلسلي لكل عملية توجيه: يمنع نتيجة قديمة من الكتابة فوق أحدث منها
+   (كان يحدث فعلاً عند تنقّلين متلاحقين أثناء انتقال العرض). */
+let resolveToken = 0;
 
 export async function resolve() {
+  const myToken = ++resolveToken;
   const { path, query } = parseHash();
   const found = match(path);
   current = { path, params: found ? found.params : {}, query, pattern: found ? found.pattern : null };
   const handler = found ? found.handler : notFoundHandler;
+  if (myToken !== resolveToken) return current;   // تجاوزناها عملية أحدث
   listeners.forEach((fn) => { try { fn(current); } catch (e) { console.warn(e); } });
   if (handler) {
     const run = async () => {
+      if (myToken !== resolveToken) return;        // لا ترسم صفحة قديمة فوق الأحدث
       try { await handler(current.params, current.query); }
       catch (e) { console.error('route handler failed', e); }
     };

@@ -9,14 +9,14 @@ import { WORD_GROUPS, SENTENCES, READINGS } from './zero-words.js';
 export { LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE, NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS };
 
 export const ZERO_STAGES = [
-  { id: 'letters', n: 1, icon: '🔤', titleAr: 'الحروف وأصواتها', subAr: '26 حرفاً · اسمها · صوتها · كلمة عليها', kind: 'letters', minutes: 20 },
-  { id: 'digraphs', n: 2, icon: '🔡', titleAr: 'الحروف المركّبة', subAr: 'sh · ch · th · ph · ee · oo', kind: 'digraphs', minutes: 12 },
-  { id: 'numbers', n: 3, icon: '🔢', titleAr: 'الأرقام', subAr: 'من 0 إلى 100 والأرقام الترتيبية', kind: 'numbers', minutes: 12 },
+  { id: 'letters', n: 1, icon: '🔤', titleAr: 'الحروف وأصواتها', subAr: '٢٦ حرفاً · اسمها · صوتها · كلمة عليها', kind: 'letters', minutes: 20 },
+  { id: 'digraphs', n: 2, icon: '🔡', titleAr: 'الحروف المركّبة', subAr: 'sh · ch · th · ph · ee · oo وغيرها', kind: 'digraphs', minutes: 12 },
+  { id: 'numbers', n: 3, icon: '🔢', titleAr: 'الأرقام', subAr: 'من ٠ إلى ١٠٠ والأرقام الترتيبية', kind: 'numbers', minutes: 12 },
   { id: 'time', n: 4, icon: '📅', titleAr: 'الأيام والشهور والوقت', subAr: 'الأسبوع · السنة · الفصول · الساعة', kind: 'time', minutes: 15 },
   { id: 'pronouns', n: 5, icon: '🙋', titleAr: 'الضمائر و to be', subAr: 'I am · you are · he is', kind: 'pronouns', minutes: 12 },
-  { id: 'words', n: 6, icon: '🧺', titleAr: 'أول 120 كلمة', subAr: '8 مجموعات × 15 كلمة', kind: 'words', minutes: 25 },
-  { id: 'sentences', n: 7, icon: '💬', titleAr: 'أول الجمل والأسئلة', subAr: '40 جملة للتحيات والتعريف', kind: 'sentences', minutes: 18 },
-  { id: 'reading', n: 8, icon: '📖', titleAr: 'قراءة وكتابة أولى', subAr: '4 نصوص قصيرة جداً', kind: 'reading', minutes: 20 },
+  { id: 'words', n: 6, icon: '🧺', titleAr: 'أول ١٢٠ كلمة', subAr: '٨ مجموعات · ١٥ كلمة في كل مجموعة', kind: 'words', minutes: 25 },
+  { id: 'sentences', n: 7, icon: '💬', titleAr: 'أول الجمل والأسئلة', subAr: '٤٠ جملة للتحيات والتعريف', kind: 'sentences', minutes: 18 },
+  { id: 'reading', n: 8, icon: '📖', titleAr: 'قراءة وكتابة أولى', subAr: '٤ نصوص قصيرة جداً', kind: 'reading', minutes: 20 },
 ];
 
 export function zeroStage(id) {

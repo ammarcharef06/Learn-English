@@ -11,11 +11,11 @@ import { renderLock, hideLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
-import { renderZero, renderZeroPad } from './views/zero.js';
+import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
 import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
 import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
 import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
-import { zeroFocus, setZeroFocus } from './core/zeroflow.js';
+import { applyZeroShell, exitZeroMode, enterZeroMode, zeroModeOn } from './views/zero-shell.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -39,6 +39,7 @@ function setupRoutes() {
   /* قسم «من الصفر» (A0) */
   route('/zero', () => renderZero(view()));
   route('/zero/pad', () => renderZeroPad(view()));
+  route('/zero/settings', () => renderZeroSettings(view()));
   route('/zero/stage/:stageId', (p) => renderZeroStage(view(), p.stageId));
   route('/zero/drill/:stageId', (p) => renderZeroDrill(view(), p.stageId));
   route('/zero/exam', () => renderZeroExam(view()));
@@ -122,14 +123,10 @@ function bindGlobalEvents() {
     renderAll();
   });
 
-  /* الزر الدائم لتبديل وضع «من الصفر» (متاح في كل صفحات الموقع) */
+  /* الزر الدائم في الشريط العلوي: يدخل إلى واجهة «من الصفر» المستقلة */
   qs('#btnZero')?.addEventListener('click', () => {
-    const next = setZeroFocus(zeroFocus() === 'a0' ? 'levels' : 'a0');
-    applyZeroButton();
-    toast(next === 'a0'
-      ? 'وضع «من الصفر» مفعّل — قسم التأسيس في المقدمة 🌱'
-      : 'وضع «من الصفر» مُطفأ — المستويات في المقدمة 📚', 'ok');
-    renderAll();
+    if (zeroModeOn()) exitZeroMode();
+    else enterZeroMode('/zero');
   });
   qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
   qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
@@ -240,10 +237,10 @@ function waitForActive(reg, timeout = 8000) {
 function applyZeroButton() {
   const btn = qs('#btnZero');
   if (!btn) return;
-  const on = zeroFocus() === 'a0';
+  const on = zeroModeOn();
   btn.classList.toggle('is-on', on);
   btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-  btn.title = on ? 'وضع «من الصفر» مفعّل — انقر لإطفائه' : 'تشغيل وضع «من الصفر» (A0)';
+  btn.title = on ? 'أنت في واجهة «من الصفر»' : 'الدخول إلى واجهة «من الصفر» (A0)';
   btn.setAttribute('aria-label', btn.title);
 }
 
@@ -251,9 +248,20 @@ function applyZeroButton() {
 function renderAll() {
   applyZeroButton();
   renderNav();
+  applyZeroShell();
   applyI18n(document);
   renderSidebarStats();
   resolve();
+}
+
+/* ---------------- تحديث الواجهة بلا إعادة توجيه ----------------
+   يُستخدم قبل تغيير الرابط مباشرةً: نُحدّث الشريط والتنقّل، ثم نترك
+   الموجّه يرسم الصفحة الجديدة وحدها (بلا تسابق بين رسمتين). */
+function refreshChrome() {
+  applyZeroButton();
+  renderNav();
+  applyZeroShell(currentRoute().path);
+  renderSidebarStats();
 }
 
 /* ---------------- الإقلاع ---------------- */
@@ -277,6 +285,7 @@ async function main() {
   registerSW();
   setupRoutes();
   window.__leaRenderAll = renderAll;
+  window.__leaRefreshChrome = refreshChrome;
   window.__leaLockNow = () => lockSite();
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
@@ -284,6 +293,9 @@ async function main() {
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
+    applyZeroShell(route.path);
+    /* في واجهة A0: لا شريط جانبي ولا قائمة مستويات */
+    if (zeroModeOn()) closeDrawer();
     /* شبكة أمان: لا تبقَ شاشة الاختيار مقفلة للتمرير إن أُزيلت بلا إغلاق */
     if (!qs('#zeroChoice')) document.body.classList.remove('zero-choice-open');
     document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة

@@ -5,6 +5,7 @@ import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
 import { progress, settings } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
 import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
+import { zeroModeOn } from './zero-shell.js';
 
 export const NAV_ITEMS = [
   { href: '#/', key: 'nav.home', icon: '🏠', group: 'nav.group.learn', bottom: true },
@@ -22,17 +23,24 @@ export const NAV_ITEMS = [
 export function renderNav() {
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
+
+  /* في واجهة «من الصفر» المستقلة لا نرسم تنقّل المستويات إطلاقاً */
+  if (zeroModeOn()) {
+    if (side) side.innerHTML = '';
+    if (bottom) bottom.innerHTML = '';
+    return;
+  }
+
   const zs = zeroStats(progress);
-  const zeroOn = (settings.zero?.focus || 'levels') === 'a0';
 
   if (side) {
     /* خانة تنقّل بارزة لقسم «من الصفر» — تظهر دائماً في مقدمة القائمة الجانبية */
     let html = `
-      <a class="zero-nav ${zeroOn ? 'zero-nav--on' : ''}" href="#/zero" data-nav data-route="#/zero" title="من الصفر — تأسيس A0 (حروف · أرقام · وقت · ١٢٠ كلمة)">
+      <a class="zero-nav" href="#/zero" data-nav data-route="#/zero" title="من الصفر — تأسيس A0 (حروف · أرقام · وقت · ١٢٠ كلمة)">
         <span class="zero-nav__ico" aria-hidden="true">🌱</span>
         <span class="zero-nav__txt">
           <b>من الصفر — A0</b>
-          <small>${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل · ${zs.lettersMastered}/${ZERO_TOTALS.letters} حرفاً</small>
+          <small>${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل</small>
         </span>
         <span class="zero-nav__arrow" aria-hidden="true">←</span>
       </a>`;

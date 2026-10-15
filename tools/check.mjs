@@ -344,27 +344,36 @@ try {
   const need = [
     'assets/js/data/zero.js', 'assets/js/data/zero-letters.js', 'assets/js/data/zero-time.js', 'assets/js/data/zero-words.js',
     'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js',
-    'assets/js/views/zero.js', 'assets/js/views/zero-stage.js', 'assets/js/views/zero-exam.js', 'assets/js/views/zero-entry.js',
+    'assets/js/views/zero.js', 'assets/js/views/zero-shell.js', 'assets/js/views/zero-stage.js',
+    'assets/js/views/zero-exam.js', 'assets/js/views/zero-entry.js',
     'assets/css/zero.css', 'assets/css/zero-pad.css',
     'tools/test-zero.mjs',
   ];
   for (const p of need) if (!existsSync(join(ROOT, p))) bad(`ملف قسم A0 مفقود: ${p}`);
 
   const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
-  for (const r of ['/zero', '/zero/pad', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
+  for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
     if (!app.includes(`route('${r}'`)) bad(`مسار A0 غير مسجّل في الموجّه: ${r}`);
   }
   if (!/shouldShowZeroChoice\(\)/.test(app)) bad('شاشة الاختيار مرة واحدة غير مربوطة');
-  if (!/btnZero/.test(app) || !/setZeroFocus/.test(app)) bad('زر التبديل الدائم A0 غير مربوط');
+  if (!/btnZero/.test(app) || !/enterZeroMode/.test(app)) bad('زر الدخول إلى واجهة A0 غير مربوط');
+  if (!/applyZeroShell/.test(app)) bad('الهيكل المستقل لقسم A0 غير مربوط');
 
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
-  if (!/id="btnZero"/.test(html)) bad('زر التبديل الدائم A0 مفقود من index.html');
+  if (!/id="btnZero"/.test(html)) bad('زر الدخول إلى A0 مفقود من index.html');
+  if (!/id="zbar"/.test(html) || !/id="znav"/.test(html)) bad('شريط/تنقّل واجهة A0 المستقلة مفقود من index.html');
   if (!html.includes('./assets/css/zero.css') || !html.includes('./assets/css/zero-pad.css')) bad('أنماط A0 غير مربوطة في index.html');
 
   const shell = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
-  if (!/zero-nav/.test(shell)) bad('خانة التنقّل البارزة لـ A0 مفقودة من القائمة الجانبية');
+  if (!/zero-nav/.test(shell)) bad('خانة التنقّل إلى A0 مفقودة من القائمة الجانبية');
   if (!/zero:\s*'#\/zero'/.test(shell)) bad('قسم A0 غير مضاف إلى SECTION_MAP');
-  ok('ملفات A0 ومساراته وخانة التنقّل والزر الدائم: مكتملة');
+
+  const zcss = readFileSync(join(ROOT, 'assets/css/zero.css'), 'utf8');
+  if (!/html\[data-zero="a0"\]/.test(zcss)) bad('قواعد الواجهة المستقلة (html[data-zero="a0"]) مفقودة من zero.css');
+  for (const sel of ['.topbar', '.sidebar', '.bottomnav']) {
+    if (!new RegExp(`html\\[data-zero="a0"\\][^{]*\\${sel}`).test(zcss)) bad(`الواجهة المستقلة لا تُخفي ${sel}`);
+  }
+  ok('ملفات A0 ومساراته والواجهة المستقلة وخانة التنقّل: مكتملة');
 } catch (e) { bad(`فشل فحص ملفات A0: ${e.message}`); }
 
 /* ---------- التقرير ---------- */

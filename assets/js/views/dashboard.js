@@ -39,7 +39,6 @@ export function renderDashboard(host) {
   const goalReached = q.done >= q.target;
   const wod = wordOfTheDay();
   const zs = zeroStats(progress);
-  const zeroOn = (settings.zero?.focus || 'levels') === 'a0';
 
   host.innerHTML = `
     <section class="hero">
@@ -54,17 +53,16 @@ export function renderDashboard(host) {
       </div>
     </section>
 
-    <a class="zero-banner ${zeroOn ? 'zero-banner--on' : ''}" href="#/zero" data-nav>
-      <span class="zero-banner__ico" aria-hidden="true">🌱</span>
-      <span class="zero-banner__body">
-        <b>من الصفر — تأسيس A0 ${zeroOn ? '<span class="chip chip--on">الوضع مفعّل</span>' : ''}</b>
-        <small>الحروف · الحروف المركّبة · الأرقام · الوقت · الضمائر · ١٢٠ كلمة · ٤٠ جملة · ٤ قراءات — بنطق عربي ولوح كتابة واختبار وشهادة.</small>
-        <span class="zero-banner__bar"><span class="progress"><i style="width:${zs.percent}%"></i></span>
-          <span class="tiny">${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل · ${zs.lettersMastered}/${ZERO_TOTALS.letters} حرفاً${zs.examBest ? ` · الاختبار ${zs.examBest}%` : ''}</span>
+    <div class="zlinks zero-row mt-4">
+      <a class="zlink" href="#/zero" data-nav>
+        <span class="zlink__ico" aria-hidden="true">🌱</span>
+        <span class="zlink__b">
+          <b>من الصفر — تأسيس A0</b>
+          <small>لِمن لا يعرف الحروف بعد: ٨ مراحل قصيرة بترتيب واضح، بنطق عربي ولوح كتابة.</small>
         </span>
-      </span>
-      <span class="zero-banner__cta">${zs.percent ? 'تابع' : 'ابدأ'} ←</span>
-    </a>
+        <span class="zlink__s">${zs.percent ? `${zs.percent}% · تابع` : 'ابدأ ←'}</span>
+      </a>
+    </div>
 
     <div class="grid grid--4 mt-4">
       ${statCard({ label: t('common.points'), value: progress.points || 0, foot: `+${today.points || 0} ${t('common.today')}`, variant: 'stat--brand' })}

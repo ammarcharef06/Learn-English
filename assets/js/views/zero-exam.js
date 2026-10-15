@@ -1,15 +1,13 @@
-/* ============================================================
+﻿/* ============================================================
    قسم «من الصفر» (A0) — الاختبار النهائي + شهادة التأسيس
    ============================================================ */
-import { esc, qs, qsa, toast, confetti, prettyDateAr, dateKey } from '../core/utils.js';
-import { navigate } from '../core/router.js';
+import { esc, qs, qsa, toast, confetti, prettyDateAr, dateKey, arNum } from '../core/utils.js';
 import { progress } from '../core/store.js';
 import { renderSidebarStats } from './shell.js';
-import { pageHead } from './shell.js';
 import { ZERO_STAGES, zeroExamQuestions, ZERO_TOTALS } from '../data/zero.js';
 import {
   zeroSnapshot, recordZeroExam, certificateReady, grantCertificate, certificate,
-  saveCertificateName, resetZeroProgress, a1Recommendation,
+  saveCertificateName, resetZeroProgress,
 } from '../core/zeroflow.js';
 import { runQuiz } from './quiz-runner.js';
 
@@ -19,78 +17,70 @@ const PASS = 90;
 /* ============================================================
    الاختبار النهائي
    ============================================================ */
-function examStatusHTML(snap, cert, ready) {
-  return `
-    <div class="grid grid--3 mt-2">
-      <div class="card">
-        <div class="card__title"><span class="ico" aria-hidden="true">🎯</span><h3>حالة الاستحقاق</h3></div>
-        <ul class="zero-req">
-          <li class="${snap.doneStages === ZERO_TOTALS.stages ? 'is-ok' : ''}">${snap.doneStages === ZERO_TOTALS.stages ? '✅' : '⭕'} إتمام المراحل الثمانية (${snap.doneStages}/${ZERO_TOTALS.stages})</li>
-          <li class="${snap.lettersMastered === ZERO_TOTALS.letters ? 'is-ok' : ''}">${snap.lettersMastered === ZERO_TOTALS.letters ? '✅' : '⭕'} إتقان ٢٦ حرفاً (${snap.lettersMastered}/${ZERO_TOTALS.letters})</li>
-          <li class="${snap.examBest >= PASS ? 'is-ok' : ''}">${snap.examBest >= PASS ? '✅' : '⭕'} نتيجة ${PASS}% أو أكثر في الاختبار (${snap.examBest}%)</li>
-        </ul>
-        <div class="small muted">المستويات الأخرى مفتوحة دائماً — هذه شروط الشهادة فقط، لا شروط دخول.</div>
-      </div>
-      <div class="card">
-        <div class="card__title"><span class="ico" aria-hidden="true">📊</span><h3>سجلّك</h3></div>
-        <div class="stack">
-          <div class="row row--between"><span>أفضل نتيجة</span><b>${snap.examBest}%</b></div>
-          <div class="row row--between"><span>آخر نتيجة</span><b>${snap.raw.exam?.last || 0}%</b></div>
-          <div class="row row--between"><span>عدد المحاولات</span><b>${snap.raw.exam?.attempts || 0}</b></div>
-          <div class="row row--between"><span>الشهادة</span><b>${cert.earned ? 'مُستلَمة ✅' : 'لم تُستلم بعد'}</b></div>
-        </div>
-      </div>
-      <div class="card ${ready ? 'card--ok' : ''}">
-        <div class="card__title"><span class="ico" aria-hidden="true">${ready ? '🎉' : '🧭'}</span><h3>${ready ? 'أنت مستحقّ للشهادة' : 'أكمل ثم عد'}</h3></div>
-        <p class="small muted">لا حدّ لعدد المحاولات، والاختبار يُبنى عشوائياً من كل المراحل في كل مرة.</p>
-        <div class="row wrap" style="gap:8px">
-          <button class="btn btn--primary btn--lg" type="button" id="zeroExamStart">▶ ابدأ الاختبار (${EXAM_SIZE} سؤالاً)</button>
-          ${ready ? '<a class="btn" href="#/zero/certificate">🎓 إلى الشهادة</a>' : ''}
-        </div>
-      </div>
-    </div>
-
-    <div class="card mt-4">
-      <div class="card__title"><span class="ico" aria-hidden="true">🗺️</span><h3>مصادر الأسئلة</h3></div>
-      <div class="row wrap" style="gap:8px">
-        ${ZERO_STAGES.map((s) => {
-          const st = snap.raw.stages?.[s.id] || {};
-          return `<a class="chip ${st.done ? 'chip--ok' : 'chip--brand'}" href="#/zero/stage/${s.id}">${s.icon} ${esc(s.titleAr)}</a>`;
-        }).join('')}
-      </div>
-    </div>`;
-}
-
 export function renderZeroExam(host) {
   const snap = zeroSnapshot();
   const cert = certificate();
   const ready = certificateReady();
 
   host.innerHTML = `
-    ${pageHead({
-      icon: '🧪',
-      title: 'الاختبار النهائي لتأسيس A0',
-      subtitle: `${EXAM_SIZE} سؤالاً موزّعة على المراحل الثمانية: الحروف، المركّبة، الأرقام، الوقت، الضمائر، الكلمات، الجمل، والقراءة.`,
-      actionsHtml: '<a class="btn" href="#/zero">← من الصفر</a>',
-    })}
-    <div id="zeroExamStatus">${examStatusHTML(snap, cert, ready)}</div>
-    <div id="zeroExamRun" class="mt-4"></div>`;
+    <div class="zpage">
+      <header class="zhead">
+        <a class="zback" href="#/zero" data-nav>← المراحل</a>
+        <h1>الاختبار النهائي</h1>
+        <p>${EXAM_SIZE} سؤالاً من المراحل الثمانية. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.</p>
+      </header>
 
-  bindExamStart(host);
+      <div class="zmeta">
+        <span>أفضل نتيجة: <b>${arNum(snap.examBest)}٪</b></span>
+        <span>المحاولات: <b>${arNum(snap.raw.exam?.attempts || 0)}</b></span>
+      </div>
+
+      <ol class="zreq">
+        <li class="${snap.doneStages === ZERO_TOTALS.stages ? 'is-ok' : ''}">
+          <span>${snap.doneStages === ZERO_TOTALS.stages ? '✓' : '○'}</span>
+          إتمام المراحل الثمانية <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b>
+        </li>
+        <li class="${snap.lettersMastered === ZERO_TOTALS.letters ? 'is-ok' : ''}">
+          <span>${snap.lettersMastered === ZERO_TOTALS.letters ? '✓' : '○'}</span>
+          إتقان الحروف الستة والعشرين <b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b>
+        </li>
+        <li class="${snap.examBest >= PASS ? 'is-ok' : ''}">
+          <span>${snap.examBest >= PASS ? '✓' : '○'}</span>
+          النتيجة في الاختبار <b>${arNum(snap.examBest)}٪</b> من ${arNum(PASS)}٪
+        </li>
+      </ol>
+      <p class="zhint">هذه شروط شهادة التأسيس فقط — لا شروط دخول. كل المستويات مفتوحة دائماً.</p>
+
+      <button class="zbtn zbtn--primary zbtn--big" type="button" id="zeroExamStart">ابدأ الاختبار</button>
+      ${ready ? '<a class="zbtn" href="#/zero/certificate" data-nav>🎓 إلى الشهادة</a>' : ''}
+      <div id="zeroExamRun" class="zrun"></div>
+    </div>`;
+
+  bindStart(host);
 }
 
-function bindExamStart(host) {
+function statusBlock(snap, cert, ready) {
+  return `
+    <div class="zmeta">
+      <span>أفضل نتيجة: <b>${arNum(snap.examBest)}٪</b></span>
+      <span>المحاولات: <b>${arNum(snap.raw.exam?.attempts || 0)}</b></span>
+      <span>الشهادة: <b>${cert.earned ? 'مُستلَمة ✓' : ready ? 'جاهزة' : 'لم تُستحق بعد'}</b></span>
+    </div>
+    <ol class="zreq">
+      <li class="${snap.doneStages === ZERO_TOTALS.stages ? 'is-ok' : ''}"><span>${snap.doneStages === ZERO_TOTALS.stages ? '✓' : '○'}</span>إتمام المراحل الثمانية <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b></li>
+      <li class="${snap.lettersMastered === ZERO_TOTALS.letters ? 'is-ok' : ''}"><span>${snap.lettersMastered === ZERO_TOTALS.letters ? '✓' : '○'}</span>إتقان الحروف الستة والعشرين <b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b></li>
+      <li class="${snap.examBest >= PASS ? 'is-ok' : ''}"><span>${snap.examBest >= PASS ? '✓' : '○'}</span>النتيجة في الاختبار <b>${arNum(snap.examBest)}٪</b> من ${arNum(PASS)}٪</li>
+    </ol>`;
+}
+
+function bindStart(host) {
   qs('#zeroExamStart', host)?.addEventListener('click', () => {
     const runHost = qs('#zeroExamRun', host);
     runHost.innerHTML = '';
-    runHost.scrollIntoView({ block: 'start' });
+    runHost.scrollIntoView({ block: 'start', behavior: 'smooth' });
     const questions = zeroExamQuestions(EXAM_SIZE);
-    if (!questions.length) {
-      runHost.innerHTML = '<div class="empty"><span class="ico">🤷</span><p>تعذّر توليد أسئلة الاختبار.</p></div>';
-      return;
-    }
+    if (!questions.length) { runHost.innerHTML = '<div class="znotice">تعذّر توليد الأسئلة.</div>'; return; }
     runQuiz(runHost, {
-      title: `🧪 الاختبار النهائي — ${questions.length} سؤالاً`,
       questions,
       allowReveal: true,
       onSummary: (res) => {
@@ -98,158 +88,102 @@ function bindExamStart(host) {
         if (r.badges?.length) toast(`🏅 ${r.badges.map((b) => b.ar).join(' · ')}`, 'ok');
         if (certificateReady()) {
           const g = grantCertificate();
-          confetti(140);
-          toast(g.granted ? `🎓 مبروك! استحققت شهادة التأسيس (${g.code})` : '✅ ما زلت مستحقاً للشهادة', 'ok', 'شهادة التأسيس');
+          confetti(120);
+          toast(g.granted ? '🎓 استحققت شهادة التأسيس!' : 'ما زلت مستحقاً للشهادة ✓', 'ok');
         }
         renderSidebarStats();
-        const st = qs('#zeroExamStatus', host);
-        if (st) st.innerHTML = examStatusHTML(zeroSnapshot(), certificate(), certificateReady());
-        bindExamStart(host);
-        toast(`اختبار مكتمل: ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 70 ? 'ok' : 'warn');
-        qs('#zeroExamStatus', host)?.scrollIntoView({ block: 'start' });
+        const status = qs('.zstatus', host);
+        if (status) status.innerHTML = statusBlock(zeroSnapshot(), certificate(), certificateReady());
       },
-      extraActionsHtml: '<a class="btn" href="#/zero">من الصفر</a><a class="btn" href="#/zero/certificate">شهادة التأسيس</a>',
+      extraActionsHtml: '<a class="zbtn" href="#/zero" data-nav>المراحل</a><a class="zbtn" href="#/zero/certificate" data-nav>الشهادة</a>',
     });
   });
 }
 
 /* ============================================================
-   شهادة التأسيس (قابلة للطباعة)
+   شهادة التأسيس
    ============================================================ */
 export function renderZeroCertificate(host) {
   const snap = zeroSnapshot();
+  if (certificateReady() && !certificate().earned) grantCertificate();
   const cert = certificate();
-  const ready = certificateReady();
-  const rec = a1Recommendation();
-
-  if (ready && !cert.earned) grantCertificate();
-  const current = certificate();
 
   host.innerHTML = `
-    ${pageHead({
-      icon: '🎓',
-      title: 'شهادة تأسيس A0',
-      subtitle: 'شهادة شخصية تُطبع أو تُحفظ بصيغة PDF من نافذة الطبع في المتصفح.',
-      actionsHtml: `
-        <a class="btn" href="#/zero">← من الصفر</a>
-        <button class="btn btn--primary" type="button" id="certPrint" ${current.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>`,
-    })}
+    <div class="zpage zpage--wide">
+      <header class="zhead">
+        <a class="zback" href="#/zero" data-nav>← المراحل</a>
+        <h1>شهادة التأسيس</h1>
+        <p>${cert.earned ? 'مُستلَمة. اكتب اسمك ثم اطبعها أو احفظها PDF.' : 'أكمل الشروط الثلاثة ثم ستُمنح تلقائياً.'}</p>
+      </header>
 
-    ${!current.earned ? `
-      <div class="card card--warn">
-        <div class="card__title"><span class="ico" aria-hidden="true">🔒</span><h3>الشهادة لم تُستحق بعد</h3></div>
-        <ul class="zero-req">
-          <li class="${snap.doneStages === ZERO_TOTALS.stages ? 'is-ok' : ''}">${snap.doneStages === ZERO_TOTALS.stages ? '✅' : '⭕'} المراحل الثمانية (${snap.doneStages}/${ZERO_TOTALS.stages})</li>
-          <li class="${snap.lettersMastered === ZERO_TOTALS.letters ? 'is-ok' : ''}">${snap.lettersMastered === ZERO_TOTALS.letters ? '✅' : '⭕'} إتقان الحروف (${snap.lettersMastered}/${ZERO_TOTALS.letters})</li>
-          <li class="${snap.examBest >= PASS ? 'is-ok' : ''}">${snap.examBest >= PASS ? '✅' : '⭕'} الاختبار النهائي ${PASS}% (${snap.examBest}%)</li>
-        </ul>
-        <p class="small muted">${esc(rec.text)}</p>
-        <div class="row wrap" style="gap:8px">
-          <a class="btn btn--primary" href="#/zero">🌱 أكمل المراحل</a>
-          <a class="btn" href="#/zero/exam">🧪 الاختبار النهائي</a>
-        </div>
-      </div>` : ''}
+      <div class="zstatus">${statusBlock(snap, cert, certificateReady())}</div>
 
-    <div class="zero-cert-wrap ${current.earned ? '' : 'is-locked'}">
-      <div class="zero-cert print-area" id="zeroCert">
-        <div class="zero-cert__border">
-          <div class="zero-cert__head">
-            <div class="zero-cert__logo">EN</div>
-            <div>
-              <div class="zero-cert__brand">أكاديمية الإنجليزية</div>
-              <div class="zero-cert__brand-en" dir="ltr">English Academy · Learn English</div>
-            </div>
+      ${cert.earned ? '' : '<p class="zhint">يمكنك متابعة المستويات A1–B1 في أي وقت — لا يوجد أي قفل.</p>'}
+
+      <div class="zcert-wrap ${cert.earned ? '' : 'is-locked'}">
+        <div class="zcert print-area" id="zeroCert">
+          <div class="zcert__top">
+            <span class="zcert__mark">EN</span>
+            <span class="zcert__brand">أكاديمية الإنجليزية<small dir="ltr">English Academy</small></span>
           </div>
-          <div class="zero-cert__title">شهادة إتمام التأسيس</div>
-          <div class="zero-cert__sub" dir="ltr">Foundation Certificate — Level A0</div>
+          <h2 class="zcert__title">شهادة إتمام التأسيس</h2>
+          <p class="zcert__sub" dir="ltr">Foundation Certificate — Level A0</p>
 
-          <div class="zero-cert__nameRow">
-            <label for="certName">الاسم على الشهادة</label>
-            <input class="input" id="certName" type="text" maxlength="60" placeholder="اكتب اسمك هنا" value="${esc(current.name || '')}" />
-          </div>
-          <div class="zero-cert__name" id="certNameOut">${esc(current.name || '................................')}</div>
+          <label class="zcert__field">
+            <span>الاسم على الشهادة</span>
+            <input class="input" id="certName" type="text" maxlength="60" placeholder="اكتب اسمك هنا" value="${esc(cert.name || '')}" />
+          </label>
+          <div class="zcert__name" id="certNameOut">${esc(cert.name || '................................')}</div>
 
-          <p class="zero-cert__body">
-            أتمّ المتعلّم المراحل الثمانية لقسم «من الصفر»: الحروف الستة والعشرين، والحروف المركّبة،
-            والأرقام، والأيام والشهور والفصول والوقت، والضمائر وفعل الكينونة، وأول ١٢٠ كلمة،
-            وأول ٤٠ جملة، وأربع قراءات — وأتقن ذلك بتدريباته واختباره النهائي.
+          <p class="zcert__body">
+            أتمّ المتعلّم المراحل الثمانية لقسم «من الصفر»: الحروف الستة والعشرين، والحروف المركّبة، والأرقام،
+            والأيام والشهور والفصول والوقت، والضمائر وفعل الكينونة، وأول ١٢٠ كلمة، وأول ٤٠ جملة، وأربع قراءات.
           </p>
 
-          <div class="zero-cert__grid">
-            <div><b>${snap.percent}%</b><span>نسبة الإتقان</span></div>
-            <div><b>${snap.examBest}%</b><span>الاختبار النهائي</span></div>
-            <div><b>${snap.lettersMastered}/${ZERO_TOTALS.letters}</b><span>الحروف المتقنة</span></div>
-            <div><b>${snap.wordsLearned}/${ZERO_TOTALS.words}</b><span>الكلمات المتقنة</span></div>
+          <div class="zcert__stats">
+            <div><b>${arNum(snap.percent)}٪</b><span>الإتقان</span></div>
+            <div><b>${arNum(snap.examBest)}٪</b><span>الاختبار</span></div>
+            <div><b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b><span>الحروف</span></div>
+            <div><b>${arNum(snap.wordsLearned)}/${arNum(ZERO_TOTALS.words)}</b><span>الكلمات</span></div>
           </div>
 
-          <div class="zero-cert__foot">
+          <div class="zcert__foot">
             <div>
-              <div class="zero-cert__meta">رقم الشهادة: <b dir="ltr">${esc(current.code || '—')}</b></div>
-              <div class="zero-cert__meta">تاريخ الاستحقاق: ${esc(current.at ? prettyDateAr(dateKey(new Date(current.at))) : '—')}</div>
+              <div>رقم الشهادة: <b dir="ltr">${esc(cert.code || '—')}</b></div>
+              <div>تاريخ الاستحقاق: ${esc(cert.at ? prettyDateAr(dateKey(new Date(cert.at))) : '—')}</div>
             </div>
-            <div class="zero-cert__seal">🎓<span>معتمدة<br>محلياً</span></div>
+            <div class="zcert__seal">🎓<span>شهادة<br>شخصية</span></div>
           </div>
-
-          <div class="zero-cert__note tiny">
-            هذه شهادة شخصية من موقعك التعليمي الخاص، تُخزَّن على جهازك فقط. المستوى A1 مفتوح بلا أي قفل — هذه الشهادة تشجيعية لا شرطية.
-          </div>
+          <p class="zcert__note">شهادة شخصية من موقعك التعليمي، محفوظة على جهازك. المستوى A1 مفتوح بلا أي قفل.</p>
         </div>
       </div>
-    </div>
 
-    <div class="grid grid--2 mt-4 no-print">
-      <div class="card">
-        <div class="card__title"><span class="ico" aria-hidden="true">🚀</span><h3>الخطوة التالية</h3></div>
-        <p class="small muted">${esc(rec.text)}</p>
-        <div class="row wrap" style="gap:8px">
-          <a class="btn btn--primary" href="#/lessons">📚 ابدأ المستوى A1</a>
-          <a class="btn" href="#/drills">🔁 راجع بتدريب مختلط</a>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card__title"><span class="ico" aria-hidden="true">🧰</span><h3>أدوات</h3></div>
-        <div class="row wrap" style="gap:8px">
-          <button class="btn btn--sm" type="button" id="certShare">📋 انسخ ملخّص تقدّمي</button>
-          <button class="btn btn--sm" type="button" id="certCelebrate">🎉 احتفل</button>
-          <button class="btn btn--sm btn--ghost" type="button" id="certReset">↺ تصفير تقدّم قسم A0</button>
-        </div>
-        <p class="tiny muted mt-3">تصفير قسم A0 لا يمسّ تقدّمك في A1 و A2 و B1 إطلاقاً.</p>
+      <div class="zcert__acts">
+        <button class="zbtn zbtn--primary" type="button" id="certPrint" ${cert.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>
+        <a class="zbtn" href="#/lessons" data-nav>📚 ابدأ المستوى A1</a>
+        <button class="zbtn" type="button" id="certCopy">📋 انسخ ملخّص تقدّمي</button>
       </div>
     </div>`;
 
   const nameInput = qs('#certName', host);
   nameInput?.addEventListener('input', () => {
-    const v = nameInput.value.trim();
     const out = qs('#certNameOut', host);
-    if (out) out.textContent = v || '................................';
+    if (out) out.textContent = nameInput.value.trim() || '................................';
   });
   nameInput?.addEventListener('change', () => saveCertificateName(nameInput.value));
 
   qs('#certPrint', host)?.addEventListener('click', () => {
     saveCertificateName(nameInput?.value || '');
     document.body.classList.add('printing-cert');
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => document.body.classList.remove('printing-cert'), 400);
-    }, 60);
+    setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove('printing-cert'), 400); }, 60);
   });
 
-  qs('#certShare', host)?.addEventListener('click', async () => {
-    const text = `شهادة تأسيس A0 — أكاديمية الإنجليزية\nالاسم: ${certificate().name || '—'}\nرقم الشهادة: ${certificate().code || '—'}\nنسبة الإتقان: ${snap.percent}%\nالاختبار النهائي: ${snap.examBest}%\nالمراحل: ${snap.doneStages}/${ZERO_TOTALS.stages}\nالحروف المتقنة: ${snap.lettersMastered}/${ZERO_TOTALS.letters}\nالكلمات المتقنة: ${snap.wordsLearned}/${ZERO_TOTALS.words}`;
-    try {
-      await navigator.clipboard.writeText(text);
-      toast('نُسخ ملخّص تقدّمك 📋', 'ok');
-    } catch {
-      toast('تعذّر النسخ — انسخه يدوياً من نافذة الطباعة', 'warn');
-    }
-  });
-  qs('#certCelebrate', host)?.addEventListener('click', () => confetti(160));
-
-  qs('#certReset', host)?.addEventListener('click', () => {
-    if (!window.confirm('تصفير تقدّم قسم «من الصفر» (A0) فقط؟ لن يتأثر A1/A2/B1.')) return;
-    resetZeroProgress();
-    toast('تم تصفير تقدّم قسم A0', 'ok');
-    renderZeroCertificate(host);
-    renderSidebarStats();
+  qs('#certCopy', host)?.addEventListener('click', async () => {
+    const c = certificate();
+    const text = `شهادة تأسيس A0 — أكاديمية الإنجليزية\nالاسم: ${c.name || '—'}\nرقم الشهادة: ${c.code || '—'}\nالإتقان: ${snap.percent}%\nالاختبار: ${snap.examBest}%\nالمراحل: ${snap.doneStages}/${ZERO_TOTALS.stages}\nالحروف: ${snap.lettersMastered}/${ZERO_TOTALS.letters}\nالكلمات: ${snap.wordsLearned}/${ZERO_TOTALS.words}`;
+    try { await navigator.clipboard.writeText(text); toast('نُسخ ملخّص تقدّمك 📋', 'ok'); }
+    catch { toast('تعذّر النسخ — انسخه يدوياً', 'warn'); }
   });
 }
+
+export { resetZeroProgress };

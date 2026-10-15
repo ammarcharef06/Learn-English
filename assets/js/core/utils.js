@@ -30,6 +30,12 @@ export function sample(arr, n, exclude = []) {
 export function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 export function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 export function pct(part, whole) { return whole > 0 ? Math.round((part / whole) * 100) : 0; }
+
+/* أرقام عربية-هندية للعرض في الواجهة العربية */
+const AR_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+export function arNum(value) {
+  return String(value ?? '').replace(/[0-9]/g, (d) => AR_DIGITS[Number(d)]);
+}
 export function debounce(fn, ms = 250) {
   let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
