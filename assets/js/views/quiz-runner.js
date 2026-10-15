@@ -291,7 +291,7 @@ export function runQuiz(host, opts = {}) {
     let answered = false;
 
     const paint = () => {
-      drop.innerHTML = chosen.map((w, i) => `<button class="word-chip" type="button" data-rm="${i}">${esc(w)}</button>`).join('');
+      drop.innerHTML = chosen.map((w, i) => `<button class="word-chip" type="button" data-rm="${i}">${esc(w.t)}</button>`).join('');
       bankEl.innerHTML = bank.map((w, i) => `<button class="word-chip ${w.used ? 'is-used' : ''}" type="button" data-add="${i}">${esc(w.t)}</button>`).join('');
       drop.querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => {
         if (answered) return;
