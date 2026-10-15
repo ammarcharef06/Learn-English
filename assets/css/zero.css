@@ -1,0 +1,316 @@
+/* ============================================================
+   قسم «من الصفر» (A0) — الأنماط
+   يعتمد بالكامل على متغيّرات main.css فيعمل مع الثيمات والستايلات
+   ============================================================ */
+
+/* ---------------- زر التبديل الدائم في الشريط العلوي ---------------- */
+.topbar .zero-toggle {
+  font-weight: 800;
+  font-family: var(--font-en);
+  letter-spacing: .02em;
+  border: 1px solid var(--line);
+}
+.topbar .zero-toggle.is-on {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-1) 22%, transparent);
+}
+
+/* ---------------- خانة التنقّل البارزة في القائمة الجانبية ---------------- */
+.zero-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--brand-1) 38%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 16%, var(--surface)), color-mix(in srgb, var(--brand-2) 12%, var(--surface)));
+  text-decoration: none;
+  color: inherit;
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+.zero-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--brand-1) 22%, transparent); }
+.zero-nav.is-active, .zero-nav--on { border-color: var(--brand-1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-1) 20%, transparent); }
+.zero-nav__ico { font-size: 1.6rem; line-height: 1; }
+.zero-nav__txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.zero-nav__txt b { font-size: .98rem; }
+.zero-nav__txt small { color: var(--text-3); font-size: .74rem; line-height: 1.5; }
+.zero-nav__arrow { color: var(--brand-text); font-weight: 800; }
+
+/* شريط التنقل السفلي: A0 أولاً وأبرز */
+.bottomnav a.is-zero {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff;
+  border-radius: var(--radius-sm);
+}
+.bottomnav a.is-zero .ico { filter: none; }
+
+/* ---------------- لافتة الانتقال البارزة في الرئيسية ---------------- */
+.zero-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid color-mix(in srgb, var(--brand-1) 45%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 14%, var(--surface)), color-mix(in srgb, var(--brand-3) 12%, var(--surface)));
+  text-decoration: none;
+  color: inherit;
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+.zero-banner:hover { transform: translateY(-2px); box-shadow: 0 10px 24px color-mix(in srgb, var(--brand-1) 20%, transparent); }
+.zero-banner--on { border-color: var(--brand-1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-1) 20%, transparent); }
+.zero-banner__ico { font-size: 2rem; line-height: 1; }
+.zero-banner__body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.zero-banner__body b { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 1.05rem; }
+.zero-banner__body small { color: var(--text-2); line-height: 1.7; }
+.zero-banner__bar { display: flex; align-items: center; gap: 10px; }
+.zero-banner__bar .progress { flex: 1; min-inline-size: 90px; }
+.zero-banner__cta { font-weight: 800; color: var(--brand-text); white-space: nowrap; }
+.chip--on { background: var(--ok-soft); color: var(--ok); }
+
+/* ---------------- ترويسة صفحة من الصفر ---------------- */
+.zero-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.zero-hero__meter { border-inline-start: 1px solid var(--line); padding-inline-start: 18px; }
+.zero-hero__pct { font-size: 2.6rem; font-weight: 800; line-height: 1.1; color: var(--brand-text); }
+@media (max-width: 900px) {
+  .zero-hero { grid-template-columns: 1fr; }
+  .zero-hero__meter { border-inline-start: 0; padding-inline-start: 0; border-block-start: 1px solid var(--line); padding-block-start: 14px; }
+}
+
+/* ---------------- بطاقات المراحل ---------------- */
+.zero-stage { display: flex; gap: 12px; align-items: flex-start; text-decoration: none; color: inherit; }
+.zero-stage__num {
+  inline-size: 34px; block-size: 34px; flex: 0 0 34px;
+  display: grid; place-content: center;
+  border-radius: 12px;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font-weight: 800;
+  font-family: var(--font-en);
+}
+.zero-stage--done .zero-stage__num { background: var(--ok-soft); color: var(--ok); }
+.zero-stage__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+
+/* ---------------- شبكة بطاقات العناصر ---------------- */
+.zero-grid { align-items: stretch; }
+.zero-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: border-color 160ms var(--ease), transform 160ms var(--ease);
+}
+.zero-card:hover { border-color: var(--brand-1); transform: translateY(-1px); }
+.zero-card--done { border-color: color-mix(in srgb, var(--ok) 55%, var(--line)); background: color-mix(in srgb, var(--ok-soft) 45%, var(--surface)); }
+.zero-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.zero-card__en { font-family: var(--font-en); font-weight: 700; font-size: 1.15rem; word-break: break-word; }
+.zero-card__en--big { font-size: 2rem; line-height: 1.15; letter-spacing: .02em; }
+.zero-card__emoji { font-size: 1.3rem; }
+.zero-card__ar { font-weight: 700; color: var(--text); }
+.zero-card__chips .chip { font-size: .74rem; }
+.zero-card__tip { line-height: 1.7; }
+.zero-card__extra { font-family: var(--font-en); }
+.zero-card__acts { margin-top: auto; padding-top: 6px; }
+.zero-card.is-speaking, .zero-card__en.is-speaking { color: var(--brand-text); }
+
+/* ---------------- شريط النطق التلقائي ---------------- */
+.zero-narrator {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  position: sticky;
+  inset-block-start: calc(var(--topbar-h) + 6px);
+  z-index: var(--z-sticky);
+}
+@media (max-width: 640px) {
+  .zero-narrator { position: static; }
+}
+
+/* ---------------- قوائم الشروط ---------------- */
+.zero-req { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.zero-req li { display: flex; gap: 8px; align-items: flex-start; color: var(--text-2); }
+.zero-req li.is-ok { color: var(--ok); font-weight: 700; }
+
+/* ---------------- القراءات ---------------- */
+.zero-reading__lines { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 14px; }
+.zero-line {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.zero-line__n { color: var(--text-3); font-size: .8rem; text-align: center; }
+.zero-line__en { font-family: var(--font-en); font-weight: 600; font-size: 1.05rem; }
+.zero-line__ar { color: var(--text-2); }
+.zero-line__pron { color: var(--text-3); font-size: .85rem; }
+@media (max-width: 820px) {
+  .zero-line { grid-template-columns: 22px minmax(0, 1fr) auto; }
+  .zero-line__ar, .zero-line__pron { grid-column: 2 / -1; }
+}
+
+/* ---------------- شاشة الاختيار عند الدخول ---------------- */
+.zero-choice {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-lock);
+  display: grid;
+  /* مهم: minmax(0,1fr) يمنع الشبكة من التمدّد بعرض محتواها وتجاوز الشاشة على الهواتف */
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+  background: var(--overlay);
+  backdrop-filter: blur(6px);
+  animation: zeroFade 220ms var(--ease-out);
+}
+.zero-choice.is-closing { opacity: 0; transition: opacity 200ms var(--ease); }
+body.zero-choice-open { overflow: hidden; }
+.zero-choice__panel {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 860px;
+  max-block-size: calc(100dvh - 40px);
+  overflow: auto;
+  padding: clamp(18px, 3vw, 30px);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+  animation: zeroRise 260ms var(--ease-spring);
+}
+.zero-choice__head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.zero-choice__head h2 { margin: 0 0 4px; }
+.zero-choice__logo {
+  inline-size: 56px; block-size: 56px; flex: 0 0 56px;
+  display: grid; place-content: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff; font-family: var(--font-en); font-weight: 800; font-size: 1.25rem;
+}
+.zero-choice__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; }
+.zero-choice__card {
+  display: flex; flex-direction: column; gap: 8px; text-align: start;
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 160ms var(--ease), border-color 160ms var(--ease), box-shadow 160ms var(--ease);
+}
+.zero-choice__card:hover { transform: translateY(-3px); border-color: var(--brand-1); box-shadow: 0 14px 30px color-mix(in srgb, var(--brand-1) 20%, transparent); }
+.zero-choice__card--a0 { border-color: color-mix(in srgb, var(--brand-1) 55%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 12%, var(--surface)), color-mix(in srgb, var(--brand-2) 10%, var(--surface))); }
+.zero-choice__card b { font-size: 1.1rem; }
+.zero-choice__card .small { color: var(--text-2); line-height: 1.8; }
+.zero-choice__icon { font-size: 2rem; line-height: 1; }
+.zero-choice__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; }
+.zero-choice__skip {
+  position: absolute; inset-block-start: 12px; inset-inline-end: 12px;
+  inline-size: 34px; block-size: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text-2);
+  cursor: pointer; font: inherit; line-height: 1;
+}
+.zero-choice__skip:hover { border-color: var(--brand-1); color: var(--brand-text); }
+
+/* ---------------- شهادة التأسيس ---------------- */
+.zero-cert-wrap { margin-top: 18px; }
+.zero-cert-wrap.is-locked .zero-cert { filter: grayscale(.55); opacity: .78; }
+.zero-cert {
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 18%, var(--surface)), color-mix(in srgb, var(--brand-2) 14%, var(--surface)), color-mix(in srgb, var(--brand-3) 12%, var(--surface)));
+}
+.zero-cert__border {
+  border: 3px double color-mix(in srgb, var(--brand-1) 55%, var(--line));
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: clamp(18px, 4vw, 40px);
+  text-align: center;
+}
+.zero-cert__head { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.zero-cert__logo {
+  inline-size: 52px; block-size: 52px; display: grid; place-content: center;
+  border-radius: 16px; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff; font-family: var(--font-en); font-weight: 800;
+}
+.zero-cert__brand { font-weight: 800; font-size: 1.1rem; }
+.zero-cert__brand-en { font-family: var(--font-en); font-size: .8rem; color: var(--text-3); }
+.zero-cert__title { font-size: clamp(1.4rem, 3.4vw, 2.1rem); font-weight: 800; margin-top: 6px; }
+.zero-cert__sub { font-family: var(--font-en); color: var(--text-3); letter-spacing: .06em; text-transform: uppercase; font-size: .78rem; }
+.zero-cert__nameRow { display: flex; flex-direction: column; gap: 6px; align-items: center; margin: 18px auto 4px; max-inline-size: 380px; }
+.zero-cert__nameRow label { font-size: .8rem; color: var(--text-3); }
+.zero-cert__nameRow .input { text-align: center; }
+.zero-cert__name {
+  font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 800;
+  margin: 6px 0 14px; padding-bottom: 8px;
+  border-bottom: 2px dotted var(--line-strong);
+  color: var(--brand-text);
+  word-break: break-word;
+}
+.zero-cert__body { max-inline-size: 62ch; margin: 0 auto 18px; color: var(--text-2); line-height: 2; }
+.zero-cert__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.zero-cert__grid > div { padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); display: flex; flex-direction: column; gap: 2px; }
+.zero-cert__grid b { font-size: 1.2rem; font-family: var(--font-en); }
+.zero-cert__grid span { font-size: .78rem; color: var(--text-3); }
+.zero-cert__foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; text-align: start; }
+.zero-cert__meta { font-size: .86rem; color: var(--text-2); }
+.zero-cert__seal {
+  inline-size: 92px; block-size: 92px; border-radius: 50%;
+  display: grid; place-content: center; gap: 2px;
+  border: 2px dashed color-mix(in srgb, var(--brand-2) 60%, var(--line));
+  color: var(--brand-text);
+  font-size: 1.6rem;
+  background: color-mix(in srgb, var(--brand-2) 10%, var(--surface));
+}
+.zero-cert__seal span { font-size: .66rem; line-height: 1.35; font-weight: 700; }
+.zero-cert__note { margin-top: 16px; color: var(--text-3); line-height: 1.8; }
+
+/* ---------------- الرسوم المتحركة ---------------- */
+@keyframes zeroFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zeroRise { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .zero-choice, .zero-choice__panel { animation: none; }
+  .zero-card, .zero-nav, .zero-banner, .zero-choice__card { transition: none; }
+}
+
+/* ---------------- الطباعة: الشهادة وحدها ---------------- */
+@media print {
+  body.printing-cert { background: #fff !important; }
+  body.printing-cert * { visibility: hidden !important; box-shadow: none !important; }
+  body.printing-cert #zeroCert,
+  body.printing-cert #zeroCert * { visibility: visible !important; color: #000 !important; }
+  body.printing-cert #zeroCert {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    background: #fff !important;
+  }
+  body.printing-cert #zeroCert .zero-cert__border { border-color: #000 !important; background: #fff !important; }
+  body.printing-cert #zeroCert .zero-cert__logo,
+  body.printing-cert #zeroCert .zero-cert__seal { background: #fff !important; color: #000 !important; border: 1px solid #000 !important; }
+  body.printing-cert #zeroCert .zero-cert__nameRow { display: none !important; }
+  body.printing-cert #zeroCert .zero-cert__grid > div { border-color: #000 !important; background: #fff !important; }
+}

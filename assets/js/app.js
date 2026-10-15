@@ -11,6 +11,11 @@ import { renderLock, hideLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
+import { renderZero, renderZeroPad } from './views/zero.js';
+import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
+import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
+import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
+import { zeroFocus, setZeroFocus } from './core/zeroflow.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -31,6 +36,13 @@ const view = () => qs('#view');
 function setupRoutes() {
   route('/', () => renderDashboard(view()));
   route('/lessons', () => renderLessons(view()));
+  /* قسم «من الصفر» (A0) */
+  route('/zero', () => renderZero(view()));
+  route('/zero/pad', () => renderZeroPad(view()));
+  route('/zero/stage/:stageId', (p) => renderZeroStage(view(), p.stageId));
+  route('/zero/drill/:stageId', (p) => renderZeroDrill(view(), p.stageId));
+  route('/zero/exam', () => renderZeroExam(view()));
+  route('/zero/certificate', () => renderZeroCertificate(view()));
   route('/level/:levelId', (p) => renderLevel(view(), p.levelId));
   route('/unit/:unitId', (p) => renderUnit(view(), p.unitId));
   route('/lesson/:unitId/:index', (p) => renderLesson(view(), p.unitId, p.index));
@@ -107,6 +119,16 @@ function bindGlobalEvents() {
     const next = settings.uiLang === 'en' ? 'ar' : 'en';
     saveSettings({ uiLang: next });
     applyLang();
+    renderAll();
+  });
+
+  /* الزر الدائم لتبديل وضع «من الصفر» (متاح في كل صفحات الموقع) */
+  qs('#btnZero')?.addEventListener('click', () => {
+    const next = setZeroFocus(zeroFocus() === 'a0' ? 'levels' : 'a0');
+    applyZeroButton();
+    toast(next === 'a0'
+      ? 'وضع «من الصفر» مفعّل — قسم التأسيس في المقدمة 🌱'
+      : 'وضع «من الصفر» مُطفأ — المستويات في المقدمة 📚', 'ok');
     renderAll();
   });
   qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
@@ -214,8 +236,20 @@ function waitForActive(reg, timeout = 8000) {
   });
 }
 
+/* ---------------- زر A0 الدائم ---------------- */
+function applyZeroButton() {
+  const btn = qs('#btnZero');
+  if (!btn) return;
+  const on = zeroFocus() === 'a0';
+  btn.classList.toggle('is-on', on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.title = on ? 'وضع «من الصفر» مفعّل — انقر لإطفائه' : 'تشغيل وضع «من الصفر» (A0)';
+  btn.setAttribute('aria-label', btn.title);
+}
+
 /* ---------------- إعادة الرسم ---------------- */
 function renderAll() {
+  applyZeroButton();
   renderNav();
   applyI18n(document);
   renderSidebarStats();
@@ -250,6 +284,8 @@ async function main() {
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
+    /* شبكة أمان: لا تبقَ شاشة الاختيار مقفلة للتمرير إن أُزيلت بلا إغلاق */
+    if (!qs('#zeroChoice')) document.body.classList.remove('zero-choice-open');
     document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة
     stopActiveQuizzes();            // لا مؤقّتات أسئلة تعمل في الخلفية
     stopSpeaking();                 // لا نطق يستمر بعد مغادرة الصفحة
@@ -269,6 +305,8 @@ async function main() {
     boot();
     window.__leaBooted = true;
     await initRouter();
+    /* شاشة الاختيار عند الدخول — مرة واحدة فقط (A0 أم A1) */
+    if (shouldShowZeroChoice()) setTimeout(() => showZeroChoice(), 420);
     startReminderLoop();
     if (oneSignalConfigured()) {
       Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {

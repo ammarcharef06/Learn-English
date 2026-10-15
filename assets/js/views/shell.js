@@ -4,6 +4,7 @@ import { esc, qs, todayKey, pct } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
 import { progress, settings } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
+import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 
 export const NAV_ITEMS = [
   { href: '#/', key: 'nav.home', icon: '🏠', group: 'nav.group.learn', bottom: true },
@@ -21,9 +22,21 @@ export const NAV_ITEMS = [
 export function renderNav() {
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
+  const zs = zeroStats(progress);
+  const zeroOn = (settings.zero?.focus || 'levels') === 'a0';
 
   if (side) {
-    let html = '';
+    /* خانة تنقّل بارزة لقسم «من الصفر» — تظهر دائماً في مقدمة القائمة الجانبية */
+    let html = `
+      <a class="zero-nav ${zeroOn ? 'zero-nav--on' : ''}" href="#/zero" data-nav data-route="#/zero" title="من الصفر — تأسيس A0 (حروف · أرقام · وقت · ١٢٠ كلمة)">
+        <span class="zero-nav__ico" aria-hidden="true">🌱</span>
+        <span class="zero-nav__txt">
+          <b>من الصفر — A0</b>
+          <small>${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل · ${zs.lettersMastered}/${ZERO_TOTALS.letters} حرفاً</small>
+        </span>
+        <span class="zero-nav__arrow" aria-hidden="true">←</span>
+      </a>`;
+
     let lastGroup = '';
     for (const item of NAV_ITEMS) {
       if (item.group !== lastGroup) {
@@ -42,14 +55,17 @@ export function renderNav() {
   }
 
   if (bottom) {
-    bottom.innerHTML = NAV_ITEMS.filter((i) => i.bottom)
-      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
+    /* A0 أولاً في شريط التنقل السفلي (أبرز خانة) */
+    bottom.innerHTML = `<a href="#/zero" data-nav data-route="#/zero" class="is-zero" aria-label="من الصفر — تأسيس A0"><span class="ico" aria-hidden="true">🌱</span><span>A0</span></a>`
+      + NAV_ITEMS.filter((i) => i.bottom)
+        .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
   }
 }
 
 /* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
 const SECTION_MAP = {
   '': '#/',
+  zero: '#/zero',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
   exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',
@@ -87,10 +103,12 @@ export function renderSidebarStats() {
   const mini = qs('#miniProgress');
   if (mini) {
     const o = overallStats();
+    const zs = zeroStats(progress);
     mini.innerHTML = `
       <b>${t('dash.courseProgress')}</b>
       <div class="progress"><i style="width:${o.percent}%"></i></div>
       <div class="small muted" style="margin-top:6px">${o.unitsDone} / ${o.unitsTotal} ${t('lessons.units')} · ${o.percent}%</div>
+      <div class="small muted">🌱 التأسيس A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل</div>
       <div class="small muted">⭐ ${progress.points || 0} ${t('common.points')}</div>`;
   }
 }

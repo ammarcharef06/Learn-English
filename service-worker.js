@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    Service Worker — عمل بلا إنترنت + دعم OneSignal Push
    ============================================================ */
 
@@ -9,13 +9,15 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.0.4';
+const VERSION = 'v1.1.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './assets/css/main.css',
+  './assets/css/zero.css',
+  './assets/css/zero-pad.css',
   './assets/css/skins/gnome.css',
   './assets/css/skins/kali.css',
   './assets/img/favicon.svg',
@@ -35,6 +37,8 @@ const CORE = [
   './assets/js/core/gamify.js',
   './assets/js/core/notify.js',
   './assets/js/core/quizgen.js',
+  './assets/js/core/zeroflow.js',
+  './assets/js/core/zero-pad.js',
   './assets/js/data/reference.js',
   './assets/js/data/curriculum.js',
   './assets/js/data/curriculum-a1.js',
@@ -42,11 +46,19 @@ const CORE = [
   './assets/js/data/curriculum-b1.js',
   './assets/js/data/readings.js',
   './assets/js/data/badges.js',
+  './assets/js/data/zero.js',
+  './assets/js/data/zero-letters.js',
+  './assets/js/data/zero-time.js',
+  './assets/js/data/zero-words.js',
   './assets/js/views/shell.js',
   './assets/js/views/auth.js',
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
   './assets/js/views/lessons.js',
+  './assets/js/views/zero.js',
+  './assets/js/views/zero-stage.js',
+  './assets/js/views/zero-exam.js',
+  './assets/js/views/zero-entry.js',
   './assets/js/views/reference.js',
   './assets/js/views/drills.js',
   './assets/js/views/drill.js',

@@ -230,6 +230,143 @@ try {
   }
 } catch (e) { bad(`فشل فحص index.html: ${e.message}`); }
 
+/* ---------- 9. قسم «من الصفر» (A0): سلامة المحتوى ---------- */
+const ARABIC_PRON = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s\u060C\u061B\u061F\u0640\u064B-\u0652\u0670\u06D6-\u06ED.,!؟:؛'"()\-·…0-9%\/|]+$/;
+try {
+  const z = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
+  const T = z.ZERO_TOTALS;
+  ok(`قسم A0: ${z.ZERO_STAGES.length} مراحل · ${T.items} عنصراً · ${T.letters} حرفاً · ${T.digraphs} مركّباً · ${T.words} كلمة · ${T.sentences} جملة · ${T.readings} قراءات`);
+
+  if (z.ZERO_STAGES.length !== 8) bad(`عدد مراحل A0 ${z.ZERO_STAGES.length} بدل 8`);
+  if (z.LETTERS.length !== 26) bad(`عدد حروف A0 ${z.LETTERS.length} بدل 26`);
+  if (z.DIGRAPHS.length !== 12) bad(`عدد الحروف المركّبة ${z.DIGRAPHS.length} بدل 12`);
+  if (z.WORD_GROUPS.length !== 8) bad(`عدد مجموعات الكلمات ${z.WORD_GROUPS.length} بدل 8`);
+  if (z.SENTENCES.length !== 40) bad(`عدد جمل A0 ${z.SENTENCES.length} بدل 40`);
+  if (z.READINGS.length !== 4) bad(`عدد قراءات A0 ${z.READINGS.length} بدل 4`);
+  if (z.DAYS.length !== 7 || z.MONTHS.length !== 12 || z.SEASONS.length !== 4) bad('الأيام/الشهور/الفصول في A0 غير مكتملة');
+  if (z.PRONOUNS.length !== 8 || z.TO_BE.length !== 3) bad('الضمائر أو أفعال to be في A0 غير مكتملة');
+  if (z.ORDINALS.length !== 10) bad(`عدد الأرقام الترتيبية ${z.ORDINALS.length} بدل 10`);
+
+  const nums = z.NUMBERS.map((x) => x.n);
+  for (let i = 0; i <= 20; i++) if (!nums.includes(i)) bad(`رقم مفقود في A0: ${i}`);
+  for (const n of [30, 40, 50, 60, 70, 80, 90, 100]) if (!nums.includes(n)) bad(`رقم مفقود في A0: ${n}`);
+
+  const words = z.WORD_GROUPS.flatMap((g) => g.words.map((w) => w.en.toLowerCase()));
+  if (words.length !== 120) bad(`إجمالي كلمات A0 ${words.length} بدل 120`);
+  if (new Set(words).size !== words.length) bad('كلمات A0 فيها تكرار');
+  for (const g of z.WORD_GROUPS) {
+    if (g.words.length !== 15) bad(`مجموعة ${g.id} فيها ${g.words.length} كلمة بدل 15`);
+    for (const w of g.words) if (!w.en || !w.ar || !w.pron || !w.emoji) bad(`كلمة ناقصة في A0 (${g.id}): ${w.en}`);
+  }
+
+  // نطق عربي لكل حرف وكل كلمة وكل جملة (شرط أساسي في هذا القسم)
+  for (const l of z.LETTERS) {
+    if (!l.nameAr || !l.soundAr || !l.word || !l.wordAr || !l.wordPronAr || !l.tipAr) bad(`حرف ناقص البيانات: ${l.id}`);
+    if (!ARABIC_PRON.test(l.nameAr)) bad(`اسم الحرف ${l.id} ليس بحروف عربية: ${l.nameAr}`);
+    if (!ARABIC_PRON.test(l.wordPronAr)) bad(`نطق كلمة الحرف ${l.id} ليس بحروف عربية: ${l.wordPronAr}`);
+  }
+  for (const d of z.DIGRAPHS) {
+    if (!d.combo || !d.soundAr || !d.word || !d.wordPronAr) bad(`حرف مركّب ناقص: ${d.id}`);
+    if (!ARABIC_PRON.test(d.wordPronAr)) bad(`نطق ${d.id} ليس بحروف عربية: ${d.wordPronAr}`);
+  }
+  for (const g of z.WORD_GROUPS) for (const w of g.words) if (!ARABIC_PRON.test(w.pron)) bad(`نطق الكلمة ${w.en} ليس بحروف عربية: ${w.pron}`);
+  for (const s of z.SENTENCES) { if (!s.en || !s.ar || !s.pron) bad(`جملة A0 ناقصة: ${s.en}`); if (!ARABIC_PRON.test(s.pron)) bad(`نطق الجملة ليس بحروف عربية: ${s.en}`); }
+  for (const l of z.LETTERS) if (!ARABIC_PRON.test(l.soundAr)) bad(`صوت الحرف ${l.id} ليس بحروف عربية: ${l.soundAr}`);
+
+  for (const r of z.READINGS) {
+    if (!r.titleEn || !r.titleAr) bad(`قراءة ناقصة العنوان: ${r.id}`);
+    if (r.lines.length < 5 || r.lines.length > 7) bad(`قراءة ${r.id}: ${r.lines.length} أسطر (المطلوب 5–7)`);
+    if (r.questions.length < 3 || r.questions.length > 4) bad(`قراءة ${r.id}: ${r.questions.length} أسئلة (المطلوب 3–4)`);
+    for (const q of r.questions) {
+      if (q.options.length !== 4 || new Set(q.options).size !== 4) bad(`خيارات غير سليمة في القراءة ${r.id}`);
+      if (!(q.answer >= 0 && q.answer <= 3)) bad(`مؤشّر إجابة غير صالح في القراءة ${r.id}`);
+    }
+  }
+
+  // معرّفات العناصر: فريدة داخل كل مرحلة (تكرارها يخلط سجل الإتقان)
+  for (const st of z.ZERO_STAGES) {
+    const items = z.zeroItems(st.id);
+    if (!items.length) bad(`المرحلة ${st.id} بلا عناصر`);
+    const keys = items.map((x) => x.key);
+    if (new Set(keys).size !== keys.length) {
+      const dup = keys.find((k, i) => keys.indexOf(k) !== i);
+      bad(`معرّفات مكرّرة في المرحلة ${st.id}: ${dup}`);
+    }
+    if (z.zeroStageSize(st.id) !== items.length) bad(`حجم المرحلة ${st.id} غير متطابق`);
+  }
+
+  // تدريب 5 أسئلة بعد كل مرحلة + اختبار نهائي ~30 سؤالاً
+  let stageQs = 0;
+  for (const st of z.ZERO_STAGES) {
+    const qs = z.zeroStageQuestions(st.id, 5);
+    if (qs.length !== 5) bad(`المرحلة ${st.id} تولّد ${qs.length} أسئلة بدل 5`);
+    for (const q of qs) {
+      if (q.options.filter((o) => o.correct).length !== 1) bad(`سؤال بخيارات غير سليمة في ${st.id}: ${q.id}`);
+      if (new Set(q.options.map((o) => o.label)).size !== q.options.length) bad(`خيارات مكرّرة في ${st.id}: ${q.id}`);
+      if (!q.answerText || !q.explain) bad(`سؤال بلا إجابة/توضيح في ${st.id}: ${q.id}`);
+    }
+    stageQs += qs.length;
+  }
+  const exam = z.zeroExamQuestions(30);
+  if (exam.length !== 30) bad(`الاختبار النهائي يولّد ${exam.length} سؤالاً بدل 30`);
+  if (new Set(exam.map((q) => q.id)).size !== exam.length) bad('أسئلة الاختبار النهائي فيها تكرار');
+  if (new Set(exam.map((q) => q.topic)).size < 6) bad('الاختبار النهائي لا يغطّي 6 مراحل على الأقل');
+  ok(`أسئلة A0: ${stageQs} سؤال تدريب (5 لكل مرحلة) + ${exam.length} في الاختبار النهائي على ${new Set(exam.map((q) => q.topic)).size} مراحل`);
+
+  // منطق الإتقان: 0% ثم 100% ثم التوصية بالانتقال إلى A1
+  const st0 = z.zeroStats({});
+  if (st0.percent !== 0 || st0.readyForA1) bad('إحصاءات A0 لا تبدأ من الصفر');
+  const full = { zero: { stages: {}, letters: {}, words: {}, exam: { best: 100 } } };
+  z.ZERO_STAGES.forEach((s) => { full.zero.stages[s.id] = { done: true }; });
+  z.LETTERS.forEach((l) => { full.zero.letters[l.id] = true; });
+  z.WORD_GROUPS.forEach((g) => g.words.forEach((w) => { full.zero.words[w.en] = true; }));
+  const stFull = z.zeroStats(full);
+  if (stFull.percent !== 100) bad(`نسبة الإتقان الكاملة ${stFull.percent} بدل 100`);
+  if (!stFull.readyForA1) bad('التوصية بالانتقال إلى A1 لا تُفعَّل عند الإتقان');
+  ok('منطق A0: 0% → 100% والشهادة والتوصية بالانتقال إلى A1 تعمل');
+} catch (e) { bad(`فشل فحص قسم A0: ${e.message}`); }
+
+/* ---------- 10. شارات A0 وشهادته ---------- */
+try {
+  const b = await import(pathToFileURL(join(ROOT, 'assets/js/data/badges.js')).href);
+  const a0 = b.BADGES.filter((x) => String(x.id).startsWith('a0-'));
+  if (a0.length !== 13) bad(`عدد شارات A0 ${a0.length} بدل 13`);
+  for (const x of a0) {
+    if (!x.icon || !x.ar || !x.en || !x.descAr || typeof x.check !== 'function') bad(`شارة A0 ناقصة: ${x.id}`);
+  }
+  if (!a0.some((x) => x.id === 'a0-certificate')) bad('شارة شهادة التأسيس مفقودة');
+  if (!a0.some((x) => x.id === 'a0-exam90')) bad('شارة الاختبار النهائي مفقودة');
+  ok(`شارات A0: ${a0.length} شارة (تشمل الاختبار النهائي وشهادة التأسيس)`);
+} catch (e) { bad(`فشل فحص شارات A0: ${e.message}`); }
+
+/* ---------- 11. ملفات قسم A0 ومساراته ---------- */
+try {
+  const need = [
+    'assets/js/data/zero.js', 'assets/js/data/zero-letters.js', 'assets/js/data/zero-time.js', 'assets/js/data/zero-words.js',
+    'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js',
+    'assets/js/views/zero.js', 'assets/js/views/zero-stage.js', 'assets/js/views/zero-exam.js', 'assets/js/views/zero-entry.js',
+    'assets/css/zero.css', 'assets/css/zero-pad.css',
+    'tools/test-zero.mjs',
+  ];
+  for (const p of need) if (!existsSync(join(ROOT, p))) bad(`ملف قسم A0 مفقود: ${p}`);
+
+  const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
+  for (const r of ['/zero', '/zero/pad', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
+    if (!app.includes(`route('${r}'`)) bad(`مسار A0 غير مسجّل في الموجّه: ${r}`);
+  }
+  if (!/shouldShowZeroChoice\(\)/.test(app)) bad('شاشة الاختيار مرة واحدة غير مربوطة');
+  if (!/btnZero/.test(app) || !/setZeroFocus/.test(app)) bad('زر التبديل الدائم A0 غير مربوط');
+
+  const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  if (!/id="btnZero"/.test(html)) bad('زر التبديل الدائم A0 مفقود من index.html');
+  if (!html.includes('./assets/css/zero.css') || !html.includes('./assets/css/zero-pad.css')) bad('أنماط A0 غير مربوطة في index.html');
+
+  const shell = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
+  if (!/zero-nav/.test(shell)) bad('خانة التنقّل البارزة لـ A0 مفقودة من القائمة الجانبية');
+  if (!/zero:\s*'#\/zero'/.test(shell)) bad('قسم A0 غير مضاف إلى SECTION_MAP');
+  ok('ملفات A0 ومساراته وخانة التنقّل والزر الدائم: مكتملة');
+} catch (e) { bad(`فشل فحص ملفات A0: ${e.message}`); }
+
 /* ---------- التقرير ---------- */
 console.log('نتائج الفحص:');
 notes.forEach((n) => console.log(n));

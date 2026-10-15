@@ -1,10 +1,11 @@
-﻿/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
+/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, todayKey, pct, ringHTML } from '../core/utils.js';
 import { progress, settings, goalForToday } from '../core/store.js';
 import { streakInfo, overallStats, accuracy, badgesWithState } from '../core/gamify.js';
 import { LEVELS, nextLessonSuggestion, curriculumStats, levelPercent } from '../data/curriculum.js';
 import { STUDY_TIPS } from '../data/badges.js';
+import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 import { vocabularyEntries } from '../core/quizgen.js';
 import { weakestFirst, stats as srsStats } from '../core/srs.js';
 import { statCard, progressBar } from './shell.js';
@@ -37,6 +38,8 @@ export function renderDashboard(host) {
   const today = progress.activity[todayKey()] || { q: 0, c: 0, minutes: 0, points: 0 };
   const goalReached = q.done >= q.target;
   const wod = wordOfTheDay();
+  const zs = zeroStats(progress);
+  const zeroOn = (settings.zero?.focus || 'levels') === 'a0';
 
   host.innerHTML = `
     <section class="hero">
@@ -50,6 +53,18 @@ export function renderDashboard(host) {
         <a class="btn" href="#/reading">📖 ${esc(t('dash.quick.read'))}</a>
       </div>
     </section>
+
+    <a class="zero-banner ${zeroOn ? 'zero-banner--on' : ''}" href="#/zero" data-nav>
+      <span class="zero-banner__ico" aria-hidden="true">🌱</span>
+      <span class="zero-banner__body">
+        <b>من الصفر — تأسيس A0 ${zeroOn ? '<span class="chip chip--on">الوضع مفعّل</span>' : ''}</b>
+        <small>الحروف · الحروف المركّبة · الأرقام · الوقت · الضمائر · ١٢٠ كلمة · ٤٠ جملة · ٤ قراءات — بنطق عربي ولوح كتابة واختبار وشهادة.</small>
+        <span class="zero-banner__bar"><span class="progress"><i style="width:${zs.percent}%"></i></span>
+          <span class="tiny">${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل · ${zs.lettersMastered}/${ZERO_TOTALS.letters} حرفاً${zs.examBest ? ` · الاختبار ${zs.examBest}%` : ''}</span>
+        </span>
+      </span>
+      <span class="zero-banner__cta">${zs.percent ? 'تابع' : 'ابدأ'} ←</span>
+    </a>
 
     <div class="grid grid--4 mt-4">
       ${statCard({ label: t('common.points'), value: progress.points || 0, foot: `+${today.points || 0} ${t('common.today')}`, variant: 'stat--brand' })}

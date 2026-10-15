@@ -29,6 +29,16 @@ export const DEFAULT_SETTINGS = {
   session: { rememberDays: 30 },
   showTranslation: true,
   reduceAnimations: false,
+  /* قسم «من الصفر» (A0): الوضع المختار، شاشة الاختيار مرة واحدة، تفضيلات الصوت واللوح */
+  zero: {
+    focus: 'levels',      // a0 = القسم في المقدمة | levels = المستويات في المقدمة
+    onboarded: false,     // هل عُرضت شاشة الاختيار مرة واحدة؟
+    autoSpeak: true,      // نطق تلقائي لعناصر التأسيس
+    slowRate: 0.55,       // سرعة النطق البطيء
+    padMode: 'print',     // print = مطبوع | cursive = متصل
+    showA0Card: true,     // إظهار اللافتة البارزة في الرئيسية
+    chosenAt: '',
+  },
 };
 
 export const DEFAULT_PROGRESS = {

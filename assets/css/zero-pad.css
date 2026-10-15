@@ -1,0 +1,249 @@
+/* ============================================================
+   لوح كتابة تفاعلي — لوح الحروف (مطبوع / متصل)
+   كل الأصناف مسبوقة بـ zpad لتفادي أي تعارض مع بقية الموقع.
+   لا نُعرّف رموزاً جديدة في :root — نستهلك رموز الموقع فقط.
+   ============================================================ */
+
+.zpad {
+  /* رموز محلية (مستهلكة من رموز الموقع) — قابلة للتوريث إلى Canvas */
+  --zpad-h: clamp(190px, 30vw, 300px);
+  --zpad-ink: var(--brand-1);
+  --zpad-ghost: color-mix(in srgb, var(--text) 30%, transparent);
+  --zpad-guide: color-mix(in srgb, var(--text) 22%, transparent);
+  --zpad-mid: color-mix(in srgb, var(--brand-1) 60%, transparent);
+  --zpad-base: var(--line-strong);
+  --zpad-paper: var(--surface-2);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  max-inline-size: 100%;
+  padding: var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  color: var(--text);
+  direction: rtl;
+}
+
+/* ---------- الترويسة ---------- */
+.zpad__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+}
+
+.zpad__legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-2);
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.zpad__swatch {
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+.zpad__swatch--ghost {
+  background: repeating-linear-gradient(90deg, var(--zpad-ghost) 0 3px, transparent 3px 6px);
+  border: 1px solid var(--line);
+}
+.zpad__swatch--ink { background: var(--zpad-ink); }
+
+.zpad__state {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand-text);
+  font-size: .78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- شريط الأدوات ---------- */
+.zpad__bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.zpad__spacer { flex: 1 1 auto; }
+
+.zpad__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-block-size: 42px;
+  padding: 8px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-ar);
+  font-size: .84rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease), transform var(--dur-1) var(--ease);
+}
+.zpad__btn > span[aria-hidden="true"] { font-size: 1rem; line-height: 1; }
+.zpad__btn:hover { background: var(--surface-3); border-color: var(--brand-1); }
+.zpad__btn:active { transform: scale(.97); }
+.zpad__btn[aria-pressed="true"] {
+  background: var(--brand-soft);
+  border-color: var(--brand-1);
+  color: var(--brand-text);
+}
+
+.zpad__modes {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+}
+.zpad__mode {
+  min-block-size: 40px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  color: var(--text-2);
+  font-family: var(--font-ar);
+  font-size: .84rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.zpad__mode:hover { color: var(--text); }
+.zpad__mode[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--brand-text);
+  box-shadow: var(--shadow-1);
+}
+
+/* ---------- منطقة الرسم ---------- */
+.zpad__wrap {
+  position: relative;
+  inline-size: 100%;
+  min-inline-size: 0;
+  direction: ltr;      /* النص الإنجليزي دائماً من اليسار لليمين */
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(0deg, color-mix(in srgb, var(--brand-1) 3%, transparent), transparent),
+    var(--zpad-paper);
+  overflow: hidden;
+}
+
+.zpad__canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--zpad-h);
+  touch-action: none;                 /* لا تمرير ولا سحب-للتحديث أثناء الرسم */
+  cursor: crosshair;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: inherit;
+}
+
+/* ---------- السطران السفليان ---------- */
+.zpad__hint,
+.zpad__info {
+  direction: ltr;
+  text-align: left;
+  font-family: var(--font-en);
+  margin: 0;
+}
+
+.zpad__hint {
+  min-block-size: 1.1em;
+  color: var(--text-3);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  overflow-wrap: anywhere;
+}
+.zpad__hint:empty { display: none; }
+
+.zpad__info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.zpad__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  color: var(--text-2);
+  font-size: .78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---------- الاستجابة ---------- */
+@media (max-width: 480px) {
+  .zpad { padding: var(--sp-3); gap: var(--sp-2); }
+  .zpad__bar { gap: 6px; }
+  .zpad__btn { padding: 8px 11px; }
+  .zpad__btn-t { display: none; }      /* أيقونات فقط على الشاشات الضيقة */
+  .zpad__btn { min-inline-size: 44px; }
+  .zpad__mode { padding: 8px 13px; }
+  .zpad__hint { font-size: .76rem; }
+}
+
+@media (max-width: 360px) {
+  .zpad { padding: var(--sp-2); }
+  .zpad__legend { display: none; }
+  .zpad__spacer { display: none; }
+  .zpad__bar { justify-content: space-between; }
+}
+
+@media (pointer: coarse) {
+  .zpad__btn { min-block-size: 46px; }
+  .zpad__mode { min-block-size: 44px; }
+}
+
+/* ---------- تقليل الحركة ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .zpad__btn,
+  .zpad__mode {
+    transition: none;
+  }
+  .zpad__btn:active { transform: none; }
+}
+
+/* ---------- الطباعة: لوح نظيف للتتبّع بالورق ---------- */
+@media print {
+  .zpad {
+    box-shadow: none;
+    border-color: #999;
+    background: #fff;
+    padding: 0;
+    break-inside: avoid;
+  }
+  .zpad__bar,
+  .zpad__head { display: none !important; }
+  .zpad__wrap { border-color: #999; background: #fff; }
+  .zpad__canvas { cursor: auto; }
+  .zpad__hint { color: #333; }
+  .zpad__chip { background: #fff; border: 1px solid #999; color: #000; }
+}

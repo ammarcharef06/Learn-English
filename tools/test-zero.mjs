@@ -1,0 +1,740 @@
+/**
+ * ============================================================
+ *  اختبارات قسم «من الصفر» (A0) — بلا أي مكتبات خارجية
+ *  التشغيل:  node tools/test-zero.mjs
+ *  يفحص: سلامة المحتوى، توليد الأسئلة، منطق التقدّم، الشارات،
+ *        الشهادة، لوح الكتابة، والتوصية بالانتقال إلى A1.
+ * ============================================================
+ */
+import { readFileSync } from 'node:fs';
+import { join, dirname, resolve } from 'node:path';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const load = (p) => import(pathToFileURL(join(ROOT, p)).href);
+
+/* ---------------- إطار اختبار مصغّر ---------------- */
+let passed = 0;
+const failures = [];
+const results = [];
+const pending = [];
+let group = 'عام';
+function describe(name, fn) { group = name; results.push(`\n── ${name}`); fn(); }
+function it(name, fn) {
+  const done = () => { passed++; results.push(`  ✅ ${name}`); };
+  const fail = (e) => { failures.push(`  ❌ [${group}] ${name}\n       ${e.message}`); results.push(`  ❌ ${name}`); };
+  try {
+    const r = fn();
+    if (r && typeof r.then === 'function') { pending.push(r.then(done, fail)); return; }
+    done();
+  } catch (e) { fail(e); }
+}
+function assert(cond, msg) { if (!cond) throw new Error(msg || 'شرط غير محقّق'); }
+function eq(a, b, msg) { if (a !== b) throw new Error(`${msg || 'قيمة غير متوقعة'}: ${JSON.stringify(a)} ≠ ${JSON.stringify(b)}`); }
+function gte(a, b, msg) { if (!(a >= b)) throw new Error(`${msg || 'القيمة أصغر من المطلوب'}: ${a} < ${b}`); }
+function lte(a, b, msg) { if (!(a <= b)) throw new Error(`${msg || 'القيمة أكبر من المطلوب'}: ${a} > ${b}`); }
+function truthy(v, msg) { if (!v) throw new Error(msg || 'قيمة فارغة'); }
+const ARABIC_ONLY = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s\u060C\u061B\u061F\u0640\u064B-\u0652\u0670\u06D6-\u06ED.,!؟:؛'"()\-·…0-9%\/|]+$/;
+
+/* ---------------- بيئة DOM مبسّطة (كما في tools/check.mjs) ---------------- */
+const mem = new Map();
+const elStub = () => ({
+  style: { setProperty() {} }, dataset: {}, classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+  addEventListener() {}, removeEventListener() {}, appendChild() {}, remove() {}, setAttribute() {}, removeAttribute() {},
+  querySelector: () => null, querySelectorAll: () => [], insertAdjacentHTML() {}, focus() {}, closest: () => null,
+  textContent: '', innerHTML: '', value: '', checked: false, hidden: false,
+});
+globalThis.localStorage = {
+  getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+  setItem: (k, v) => mem.set(k, String(v)),
+  removeItem: (k) => mem.delete(k),
+  clear: () => mem.clear(),
+};
+globalThis.document = {
+  documentElement: { dataset: {}, style: { setProperty() {} }, classList: { add() {}, remove() {}, toggle() {} } },
+  body: elStub(), hidden: false,
+  addEventListener() {}, removeEventListener() {}, dispatchEvent() {},
+  querySelector: () => null, querySelectorAll: () => [],
+  createElement: elStub, getElementById: () => null,
+};
+globalThis.window = {
+  addEventListener() {}, removeEventListener() {},
+  matchMedia: () => ({ matches: false, addEventListener() {} }),
+  location: { href: 'https://example.com/Learn-English/index.html#/', hash: '#/', replace() {}, pathname: '/Learn-English/index.html' },
+  scrollTo() {}, localStorage: globalThis.localStorage, print() {},
+};
+globalThis.location = globalThis.window.location;
+try {
+  Object.defineProperty(globalThis, 'navigator', { value: { userAgent: 'node-test', language: 'ar', clipboard: { writeText: async () => {} } }, configurable: true, writable: true });
+} catch {}
+globalThis.CustomEvent = class { constructor(type, init) { this.type = type; this.detail = init?.detail; } };
+globalThis.devicePixelRatio = 2;
+globalThis.requestAnimationFrame = (fn) => setTimeout(() => fn(Date.now()), 0);
+globalThis.cancelAnimationFrame = (id) => clearTimeout(id);
+globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+
+/* ============================================================
+   1) سلامة البيانات
+   ============================================================ */
+const Z = await load('assets/js/data/zero.js');
+const {
+  LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
+  NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS, ZERO_STAGES, ZERO_TOTALS,
+  zeroItems, zeroStageSize, zeroStageQuestions, zeroExamQuestions, zeroStats, zeroAdvice, zeroStage,
+} = Z;
+
+describe('الحروف (26)', () => {
+  it('العدد 26 وترتيب a..z بلا تكرار', () => {
+    eq(LETTERS.length, 26, 'عدد الحروف');
+    const ids = LETTERS.map((l) => l.id).join('');
+    eq(ids, 'abcdefghijklmnopqrstuvwxyz', 'ترتيب المعرّفات');
+  });
+  it('كل حرف له اسم وصوت وكلمة ومثال ونطق عربي', () => {
+    for (const l of LETTERS) {
+      for (const k of ['upper', 'lower', 'nameAr', 'soundAr', 'word', 'wordAr', 'wordPronAr', 'emoji', 'tipAr']) {
+        truthy(l[k], `الحرف ${l.id} ينقصه ${k}`);
+      }
+      assert(ARABIC_ONLY.test(l.nameAr), `اسم الحرف ${l.id} يجب أن يكون بحروف عربية فقط: ${l.nameAr}`);
+      assert(ARABIC_ONLY.test(l.wordPronAr), `نطق كلمة ${l.id} يجب أن يكون بحروف عربية فقط: ${l.wordPronAr}`);
+      eq(l.upper.toLowerCase(), l.id, `الحرف الكبير لـ ${l.id}`);
+      eq(l.lower, l.id, `الحرف الصغير لـ ${l.id}`);
+    }
+  });
+  it('كلمات الأمثلة الـ26 مختلفة', () => {
+    const set = new Set(LETTERS.map((l) => l.word.toLowerCase()));
+    eq(set.size, 26, 'عدد الكلمات المختلفة');
+  });
+});
+
+describe('الحروف المركّبة (12)', () => {
+  it('العدد 12 وتشمل sh/ch/th/ph/ee/oo', () => {
+    eq(DIGRAPHS.length, 12, 'عدد الحروف المركّبة');
+    const combos = new Set(DIGRAPHS.map((d) => d.combo));
+    for (const c of ['sh', 'ch', 'th', 'ph', 'ee', 'oo', 'ck', 'ng', 'ea', 'ou']) {
+      assert(combos.has(c), `الحرف المركّب ${c} مفقود`);
+    }
+  });
+  it('كل حرف مركّب له صوت وكلمة ونطق عربي وتوضيح', () => {
+    for (const d of DIGRAPHS) {
+      for (const k of ['id', 'combo', 'soundAr', 'word', 'wordAr', 'wordPronAr', 'emoji', 'tipAr']) truthy(d[k], `${d.id} ينقصه ${k}`);
+      assert(ARABIC_ONLY.test(d.soundAr), `صوت ${d.id} ليس عربياً: ${d.soundAr}`);
+      assert(ARABIC_ONLY.test(d.wordPronAr), `نطق ${d.id} ليس عربياً: ${d.wordPronAr}`);
+    }
+    eq(new Set(DIGRAPHS.map((d) => d.id)).size, 12, 'معرّفات فريدة');
+  });
+});
+
+describe('الأرقام والأرقام الترتيبية', () => {
+  it('تغطي 0..20 ثم العشرات ثم 100', () => {
+    const ns = NUMBERS.map((x) => x.n);
+    for (let i = 0; i <= 20; i++) assert(ns.includes(i), `الرقم ${i} مفقود`);
+    for (const n of [30, 40, 50, 60, 70, 80, 90, 100]) assert(ns.includes(n), `الرقم ${n} مفقود`);
+    eq(new Set(ns).size, ns.length, 'لا تكرار');
+  });
+  it('كل رقم إنجليزي/عربي/نطق غير فارغ والنطق عربي', () => {
+    for (const x of NUMBERS) {
+      truthy(x.en && x.ar && x.pron, `رقم ناقص: ${JSON.stringify(x)}`);
+      assert(ARABIC_ONLY.test(x.pron), `نطق ${x.en} ليس عربياً: ${x.pron}`);
+    }
+    eq(ORDINALS.length, 10, 'عدد الأرقام الترتيبية');
+    for (const x of ORDINALS) { truthy(x.en && x.ar && x.pron, `ترتيبي ناقص ${x.n}`); }
+  });
+});
+
+describe('الأيام والشهور والفصول والوقت', () => {
+  it('7 أيام و12 شهراً و4 فصول', () => {
+    eq(DAYS.length, 7, 'عدد الأيام');
+    eq(MONTHS.length, 12, 'عدد الشهور');
+    eq(SEASONS.length, 4, 'عدد الفصول');
+  });
+  it('شهور السنة مرقّمة 1..12 بلا تكرار ولكل شهر فصل موجود', () => {
+    const ns = MONTHS.map((m) => m.n);
+    eq(ns.join(','), '1,2,3,4,5,6,7,8,9,10,11,12', 'ترقيم الشهور');
+    const seasonIds = new Set(SEASONS.map((s) => s.id));
+    for (const m of MONTHS) assert(seasonIds.has(m.season), `فصل غير معروف للشهر ${m.en}`);
+  });
+  it('عبارات الوقت وقول الساعة كافية ولها نطق عربي', () => {
+    gte(TIME_WORDS.length, 12, 'عدد عبارات الوقت');
+    gte(NUMBERS_TIME.length, 6, 'عدد صيغ الساعة');
+    for (const x of [...DAYS, ...MONTHS, ...SEASONS, ...TIME_WORDS, ...NUMBERS_TIME]) {
+      truthy(x.en && x.ar && x.pron, `عنصر وقت ناقص: ${JSON.stringify(x)}`);
+      assert(ARABIC_ONLY.test(x.pron), `نطق ${x.en} ليس عربياً: ${x.pron}`);
+    }
+  });
+});
+
+describe('الضمائر وفعل الكينونة', () => {
+  it('8 ضمائر لكل منها فعل كينونة صحيح ومثال بترجمة ونطق', () => {
+    eq(PRONOUNS.length, 8, 'عدد الضمائر');
+    const beOf = (en) => (en === 'I' ? 'am' : (en === 'He' || en === 'She' || en === 'It') ? 'is' : 'are');
+    for (const p of PRONOUNS) {
+      truthy(p.en && p.ar && p.pron && p.emoji, `ضمير ناقص: ${JSON.stringify(p)}`);
+      truthy(p.example && p.exampleAr && p.examplePron, `مثال ناقص للضمير ${p.en}`);
+      eq(p.be, beOf(p.en), `فعل الكينونة للضمير ${p.en}`);
+      assert(p.example.toLowerCase().includes(` ${p.be} `), `المثال لا يحتوي ${p.be}: ${p.example}`);
+    }
+  });
+  it('أفعال to be الثلاثة لكل منها 3 أمثلة', () => {
+    eq(TO_BE.length, 3, 'عدد صيغ to be');
+    eq(TO_BE.map((b) => b.verb).sort().join(','), 'am,are,is', 'صيغ to be');
+    for (const b of TO_BE) {
+      eq(b.examples.length, 3, `أمثلة ${b.verb}`);
+      truthy(b.ruleAr && b.withAr, `شرح ناقص لـ ${b.verb}`);
+      for (const e of b.examples) {
+        truthy(e.en && e.ar && e.pron, `مثال ناقص لـ ${b.verb}`);
+        assert(new RegExp(`\\b${b.verb}\\b`).test(e.en), `المثال لا يحتوي ${b.verb}: ${e.en}`);
+      }
+    }
+  });
+});
+
+describe('أول 120 كلمة', () => {
+  it('8 مجموعات × 15 كلمة = 120 كلمة فريدة', () => {
+    eq(WORD_GROUPS.length, 8, 'عدد المجموعات');
+    let total = 0;
+    for (const g of WORD_GROUPS) {
+      eq(g.words.length, 15, `كلمات مجموعة ${g.id}`);
+      truthy(g.titleAr && g.icon && g.id, `مجموعة ناقصة: ${g.id}`);
+      total += g.words.length;
+    }
+    eq(total, 120, 'إجمالي الكلمات');
+    const all = WORD_GROUPS.flatMap((g) => g.words.map((w) => w.en.toLowerCase()));
+    eq(new Set(all).size, 120, 'كلمات فريدة على مستوى الملف كله');
+  });
+  it('كل كلمة لها ترجمة ونطق عربي ورمز', () => {
+    for (const g of WORD_GROUPS) {
+      for (const w of g.words) {
+        truthy(w.en && w.ar && w.pron && w.emoji, `كلمة ناقصة في ${g.id}: ${JSON.stringify(w)}`);
+        assert(ARABIC_ONLY.test(w.pron), `نطق الكلمة ${w.en} ليس عربياً: ${w.pron}`);
+        assert(/^[a-z' -]+$/.test(w.en), `الكلمة ${w.en} ليست إنجليزية بسيطة`);
+      }
+    }
+  });
+});
+
+describe('أول 40 جملة', () => {
+  it('40 جملة فريدة موزّعة على 8 مجموعات', () => {
+    eq(SENTENCES.length, 40, 'عدد الجمل');
+    eq(new Set(SENTENCES.map((s) => s.en.toLowerCase())).size, 40, 'جمل فريدة');
+    gte(new Set(SENTENCES.map((s) => s.group)).size, 8, 'عدد مجموعات الجمل');
+  });
+  it('كل جملة لها ترجمة ونطق عربي وعلامة ترقيم', () => {
+    for (const s of SENTENCES) {
+      truthy(s.en && s.ar && s.pron && s.group, `جملة ناقصة: ${JSON.stringify(s)}`);
+      assert(/[.!?]$/.test(s.en), `الجملة بلا علامة ترقيم: ${s.en}`);
+      assert(ARABIC_ONLY.test(s.pron), `نطق الجملة ليس عربياً: ${s.en} → ${s.pron}`);
+      assert(/^[A-Z]/.test(s.en), `الجملة لا تبدأ بحرف كبير: ${s.en}`);
+    }
+  });
+});
+
+describe('القراءات الأربع', () => {
+  it('4 نصوص بمعرّفات zr1..zr4', () => {
+    eq(READINGS.length, 4, 'عدد القراءات');
+    eq(READINGS.map((r) => r.id).join(','), 'zr1,zr2,zr3,zr4', 'معرّفات القراءات');
+  });
+  it('لكل نص 5–7 أسطر بترجمة ونطق عربي', () => {
+    for (const r of READINGS) {
+      truthy(r.titleEn && r.titleAr && r.emoji, `عنوان ناقص: ${r.id}`);
+      gte(r.lines.length, 5, `أسطر ${r.id}`);
+      lte(r.lines.length, 7, `أسطر ${r.id}`);
+      for (const l of r.lines) {
+        truthy(l.en && l.ar && l.pron, `سطر ناقص في ${r.id}`);
+        assert(ARABIC_ONLY.test(l.pron), `نطق سطر ليس عربياً في ${r.id}: ${l.pron}`);
+      }
+    }
+  });
+  it('3–4 أسئلة لكل نص، 4 خيارات مختلفة، ومؤشّر إجابة صحيح', () => {
+    for (const r of READINGS) {
+      gte(r.questions.length, 3, `أسئلة ${r.id}`);
+      lte(r.questions.length, 4, `أسئلة ${r.id}`);
+      for (const q of r.questions) {
+        truthy(q.q && q.qAr && q.explain, `سؤال ناقص في ${r.id}`);
+        eq(q.options.length, 4, `خيارات سؤال في ${r.id}`);
+        eq(new Set(q.options).size, 4, `خيارات مكرّرة في ${r.id}`);
+        assert(Number.isInteger(q.answer) && q.answer >= 0 && q.answer <= 3, `مؤشّر إجابة غير صالح في ${r.id}`);
+        for (const o of q.options) truthy(String(o).trim(), `خيار فارغ في ${r.id}`);
+      }
+    }
+  });
+});
+
+/* ============================================================
+   2) المراحل
+   ============================================================ */
+describe('المراحل الثمانية', () => {
+  it('8 مراحل بمعرّفات فريدة وبترتيب 1..8', () => {
+    eq(ZERO_STAGES.length, 8, 'عدد المراحل');
+    eq(new Set(ZERO_STAGES.map((s) => s.id)).size, 8, 'معرّفات فريدة');
+    eq(ZERO_STAGES.map((s) => s.n).join(','), '1,2,3,4,5,6,7,8', 'ترقيم المراحل');
+  });
+  it('كل مرحلة لها محتوى فعلي', () => {
+    for (const s of ZERO_STAGES) {
+      truthy(s.icon && s.titleAr && s.subAr && s.minutes, `مرحلة ناقصة: ${s.id}`);
+      gte(zeroStageSize(s.id), 4, `عناصر المرحلة ${s.id}`);
+    }
+    eq(zeroStage('لا-يوجد').id, ZERO_STAGES[0].id, 'المرحلة الاحتياطية');
+  });
+  it('الإجماليات مطابقة لعدد العناصر الفعلي', () => {
+    eq(ZERO_TOTALS.letters, 26, 'إجمالي الحروف');
+    eq(ZERO_TOTALS.digraphs, 12, 'إجمالي المركّبة');
+    eq(ZERO_TOTALS.words, 120, 'إجمالي الكلمات');
+    eq(ZERO_TOTALS.sentences, 40, 'إجمالي الجمل');
+    eq(ZERO_TOTALS.readings, 4, 'إجمالي القراءات');
+    const sum = ZERO_STAGES.reduce((n, s) => n + zeroStageSize(s.id), 0);
+    eq(ZERO_TOTALS.items, sum, 'إجمالي عناصر المراحل');
+    gte(ZERO_TOTALS.items, 300, 'إجمالي عناصر المرحلة');
+  });
+  it('كل عنصر له معنى عربي (أو نطق) ومفتاح فريد', () => {
+    for (const s of ZERO_STAGES) {
+      const keys = new Set();
+      for (const it of zeroItems(s.id)) {
+        truthy(it.key, `عنصر بلا مفتاح في ${s.id}`);
+        assert(!keys.has(it.key), `مفتاح مكرر في ${s.id}: ${it.key}`);
+        keys.add(it.key);
+        truthy(it.en, `عنصر بلا نص إنجليزي في ${s.id}`);
+        truthy(it.ar || it.soundAr, `عنصر بلا معنى في ${s.id}: ${it.key}`);
+      }
+    }
+  });
+});
+
+/* ============================================================
+   3) توليد الأسئلة
+   ============================================================ */
+describe('أسئلة تدريب المرحلة (5 أسئلة)', () => {
+  it('كل مرحلة تولّد 5 أسئلة سليمة', () => {
+    for (const s of ZERO_STAGES) {
+      const qs = zeroStageQuestions(s.id, 5);
+      eq(qs.length, 5, `عدد أسئلة المرحلة ${s.id}`);
+      const ids = new Set(qs.map((q) => q.id));
+      eq(ids.size, qs.length, `معرّفات أسئلة فريدة في ${s.id}`);
+      for (const q of qs) {
+        truthy(q.instruction, `سؤال بلا تعليمات في ${s.id}`);
+        truthy(q.stemHtml, `سؤال بلا نص في ${s.id}`);
+        truthy(Array.isArray(q.options) && q.options.length >= 2, `خيارات ناقصة في ${s.id}: ${q.id}`);
+        eq(q.options.filter((o) => o.correct).length, 1, `عدد الإجابات الصحيحة في ${s.id}: ${q.id}`);
+        eq(new Set(q.options.map((o) => o.label)).size, q.options.length, `خيارات مكرّرة في ${s.id}: ${q.id}`);
+        truthy(q.answerText, `سؤال بلا نص إجابة في ${s.id}: ${q.id}`);
+        const correct = q.options.find((o) => o.correct);
+        eq(correct.label, q.answerText, `نص الإجابة لا يطابق الخيار الصحيح: ${q.id}`);
+      }
+    }
+  });
+  it('الأسئلة تختلف بين محاولتين (عشوائية)', () => {
+    const a = zeroStageQuestions('numbers', 5).map((q) => q.id).join('|');
+    const b = zeroStageQuestions('numbers', 5).map((q) => q.id).join('|');
+    assert(a !== b || zeroStageSize('numbers') <= 5, 'توليد الأسئلة لا يتغيّر بين المحاولات');
+  });
+  it('لا خيار إجابة فارغ، والنص العربي لا يُعرض LTR', () => {
+    for (const s of ZERO_STAGES) {
+      for (const q of zeroStageQuestions(s.id, 5)) {
+        for (const o of q.options) truthy(String(o.label).trim(), `خيار فارغ في ${q.id}`);
+        if (q.speakText) assert(/[A-Za-z]/.test(q.speakText), `نص النطق ليس إنجليزياً: ${q.id}`);
+      }
+    }
+  });
+});
+
+describe('الاختبار النهائي (~30 سؤالاً)', () => {
+  it('يولّد 30 سؤالاً فريداً', () => {
+    const qs = zeroExamQuestions(30);
+    eq(qs.length, 30, 'عدد أسئلة الاختبار');
+    eq(new Set(qs.map((q) => q.id)).size, 30, 'أسئلة فريدة');
+  });
+  it('يغطّي 6 مراحل مختلفة على الأقل', () => {
+    const topics = new Set(zeroExamQuestions(30).map((q) => q.topic));
+    gte(topics.size, 6, 'عدد المراحل المغطاة');
+  });
+  it('كل سؤال سليم', () => {
+    for (const q of zeroExamQuestions(30)) {
+      eq(q.options.filter((o) => o.correct).length, 1, `إجابة صحيحة واحدة: ${q.id}`);
+      truthy(q.id && q.instruction && q.answerText && q.explain, `سؤال ناقص: ${q.id}`);
+      eq(q.level, 'a0', `مستوى السؤال ${q.id}`);
+    }
+  });
+  it('5 أسئلة متكرّرة الطلب تعطي 5 دائماً', () => {
+    for (const n of [3, 5, 10, 40]) {
+      const qs = zeroExamQuestions(n);
+      lte(qs.length, n, `عدد الأسئلة المطلوب ${n}`);
+      gte(qs.length, Math.min(n, 5), `عدد الأسئلة الفعلي ${n}`);
+    }
+  });
+});
+
+/* ============================================================
+   4) منطق التقدّم + zeroflow
+   ============================================================ */
+const store = await load('assets/js/core/store.js');
+const flow = await load('assets/js/core/zeroflow.js');
+const gamify = await load('assets/js/core/gamify.js');
+const { progress, saveProgress, settings, resetProgress } = store;
+
+describe('إحصاءات التقدّم (zeroStats)', () => {
+  it('التقدّم الفارغ = 0% وغير مستحق', () => {
+    const st = zeroStats({});
+    eq(st.percent, 0, 'نسبة الإتقان');
+    eq(st.doneStages, 0, 'المراحل');
+    eq(st.lettersMastered, 0, 'الحروف');
+    eq(st.readyForA1, false, 'الاستحقاق');
+    gte(zeroAdvice(st).text.length, 10, 'نص التوصية');
+  });
+  it('التقدّم الكامل = 100% ومستحق للانتقال', () => {
+    const zero = { stages: {}, letters: {}, words: {}, exam: { best: 100 } };
+    for (const s of ZERO_STAGES) zero.stages[s.id] = { seen: true, done: true };
+    for (const l of LETTERS) zero.letters[l.id] = true;
+    for (const g of WORD_GROUPS) for (const w of g.words) zero.words[w.en] = true;
+    const st = zeroStats({ zero });
+    eq(st.percent, 100, 'نسبة الإتقان');
+    eq(st.doneStages, 8, 'المراحل');
+    eq(st.lettersMastered, 26, 'الحروف');
+    eq(st.wordsLearned, 120, 'الكلمات');
+    eq(st.readyForA1, true, 'الاستحقاق');
+    assert(/A1/.test(zeroAdvice(st).text), 'التوصية يجب أن تذكر A1');
+  });
+  it('نسبة 100% تتطلّب اختباراً كاملاً (96% تعطي 99%)', () => {
+    const zero = { stages: {}, letters: {}, words: {}, exam: { best: 96 } };
+    for (const s of ZERO_STAGES) zero.stages[s.id] = { seen: true, done: true };
+    for (const l of LETTERS) zero.letters[l.id] = true;
+    for (const g of WORD_GROUPS) for (const w of g.words) zero.words[w.en] = true;
+    const st = zeroStats({ zero });
+    eq(st.percent, 99, 'النسبة مع اختبار ٩٦٪');
+    eq(st.readyForA1, true, '٩٦٪ كافية للاستحقاق (الحد ٩٠٪)');
+    eq(st.remaining.exam, 0, 'لا متبقٍّ في الاختبار');
+  });
+  it('النسبة تتقدّم بشكل رتيب مع المراحل', () => {
+    let last = -1;
+    for (let k = 0; k <= 8; k++) {
+      const zero = { stages: {}, letters: {}, words: {}, exam: { best: 0 } };
+      ZERO_STAGES.slice(0, k).forEach((s) => { zero.stages[s.id] = { done: true }; });
+      const p = zeroStats({ zero }).percent;
+      gte(p, last, `النسبة عند ${k} مراحل`);
+      last = p;
+    }
+    eq(zeroStats({ zero: { stages: Object.fromEntries(ZERO_STAGES.map((s) => [s.id, { done: true }])), letters: {}, words: {}, exam: { best: 0 } } }).readyForA1, false, 'المراحل وحدها لا تكفي للاستحقاق');
+  });
+});
+
+describe('كتابة التقدّم (zeroflow)', () => {
+  it('البداية من صفر نظيف', () => {
+    resetProgress();
+    const st = flow.zeroSnapshot();
+    eq(st.percent, 0, 'النسبة بعد التصفير');
+    eq(st.stageList.length, 8, 'قائمة المراحل');
+    eq(st.wordGroups.length, 8, 'قائمة مجموعات الكلمات');
+    eq(st.wordGroups.reduce((n, g) => n + g.words.length, 0), 120, 'كلمات اللقطة');
+  });
+  it('زيارة مرحلة وإتمامها يُسجّلان', () => {
+    flow.markStageSeen('letters');
+    eq(flow.zeroSnapshot().raw.stages.letters.seen, true, 'الزيارة');
+    flow.markStageDone('letters', 100);
+    const st = flow.zeroSnapshot();
+    eq(st.raw.stages.letters.done, true, 'الإتمام');
+    eq(st.raw.stages.letters.best, 100, 'أفضل نتيجة');
+    eq(st.doneStages, 1, 'عدد المراحل المكتملة');
+    gte(st.percent, 5, 'النسبة بعد أول مرحلة');
+  });
+  it('إتقان الحروف يُحسب ويُلغى', () => {
+    flow.markLetter('a', true);
+    eq(flow.zeroSnapshot().lettersMastered, 1, 'حرف واحد');
+    flow.markLetter('a', false);
+    eq(flow.zeroSnapshot().lettersMastered, 0, 'بعد الإلغاء');
+    for (const l of LETTERS) flow.markLetter(l.id, true);
+    eq(flow.zeroSnapshot().lettersMastered, 26, 'كل الحروف');
+  });
+  it('إتقان الكلمات والجمل والحروف المركّبة', () => {
+    flow.markWord('mother', true);
+    flow.markSentence('Hello!', true);
+    flow.markDigraph('sh', true);
+    const st = flow.zeroSnapshot();
+    eq(st.raw.words.mother, true, 'كلمة متقنة');
+    eq(st.raw.sentences['Hello!'], true, 'جملة متقنة');
+    eq(st.raw.digraphs.sh, true, 'حرف مركّب متقن');
+  });
+  it('applyAnswer يربط معرّفات الأسئلة بالعناصر الصحيحة', () => {
+    resetProgress();
+    flow.applyAnswer('zero:name:letter:b', true);
+    eq(flow.zeroSnapshot().raw.letters.b, true, 'حرف من سؤال الاسم');
+    flow.applyAnswer('zero:word:letter:c', true);
+    eq(flow.zeroSnapshot().raw.letters.c, true, 'حرف من سؤال الكلمة');
+    flow.applyAnswer('zero:name:digraph:ch', true);
+    eq(flow.zeroSnapshot().raw.digraphs.ch, true, 'حرف مركّب');
+    flow.applyAnswer('zero:ar:word:sun', true);
+    eq(flow.zeroSnapshot().raw.words.sun, true, 'كلمة');
+    flow.applyAnswer('zero:en:sent:Hello!', true);
+    eq(flow.zeroSnapshot().raw.sentences['Hello!'], true, 'جملة');
+    flow.applyAnswer('zero:ar:word:moon', false);
+    eq(flow.zeroSnapshot().raw.words.moon, undefined, 'الإجابة الخاطئة لا تُتقن');
+    flow.applyAnswer('', true);
+    flow.applyAnswer(null, true);
+  });
+  it('القراءة تُسجَّل بمرة واحدة', () => {
+    resetProgress();
+    flow.markReadingDone('zr1', 4, 4);
+    flow.markReadingDone('zr1', 3, 4);
+    const st = flow.zeroSnapshot();
+    eq(st.raw.readings.zr1.done, true, 'إتمام القراءة');
+    eq(st.raw.readings.zr1.score, 4, 'أفضل نتيجة محفوظة');
+  });
+  it('الاختبار النهائي يحفظ الأفضل والمحاولات', () => {
+    resetProgress();
+    const a = flow.recordZeroExam(20, 30);
+    eq(a.improved, true, 'تحسّن أول');
+    eq(flow.zeroSnapshot().examBest, 67, 'النسبة المحسوبة');
+    flow.recordZeroExam(30, 30);
+    eq(flow.zeroSnapshot().examBest, 100, 'النتيجة الأفضل');
+    eq(flow.zeroSnapshot().raw.exam.attempts, 2, 'عدد المحاولات');
+    const c = flow.recordZeroExam(10, 30);
+    eq(c.improved, false, 'لا تحسّن عند نتيجة أدنى');
+    eq(flow.zeroSnapshot().examBest, 100, 'الأفضل لا ينزل');
+  });
+  it('لوح الكتابة يُسجّل الاستخدام', () => {
+    resetProgress();
+    eq(flow.markPadUsed().milestone, true, 'أول استخدام');
+    eq(flow.markPadUsed().milestone, false, 'الاستخدام التالي');
+    eq(flow.zeroSnapshot().raw.padCount, 2, 'عدّاد اللوح');
+  });
+  it('الشهادة لا تُمنح إلا بعد الإتقان الكامل', () => {
+    resetProgress();
+    eq(flow.certificateReady(), false, 'غير جاهز في البداية');
+    eq(flow.certificate().earned, false, 'لم تُمنح');
+    for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
+    for (const l of LETTERS) flow.markLetter(l.id, true);
+    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
+    flow.recordZeroExam(29, 30);
+    eq(flow.certificateReady(), true, 'جاهز بعد الإتقان');
+    const g = flow.grantCertificate('متعلّم تجريبي');
+    eq(g.granted, true, 'مُنحت');
+    assert(/^A0-[A-Z0-9]+-\d{3}$/.test(g.code), `رقم الشهادة غير متوقّع: ${g.code}`);
+    eq(flow.certificate().earned, true, 'محفوظة');
+    eq(flow.certificate().name, 'متعلّم تجريبي', 'الاسم');
+    eq(flow.grantCertificate().granted, false, 'لا تُمنح مرتين');
+  });
+  it('اسم الشهادة يُحفظ ويُقصّ', () => {
+    flow.saveCertificateName('  أحمد  ');
+    eq(flow.certificate().name, 'أحمد', 'الاسم بعد القصّ');
+    flow.saveCertificateName('x'.repeat(200));
+    lte(flow.certificate().name.length, 60, 'طول الاسم');
+  });
+  it('وضع «من الصفر» يُحفظ ويُقرأ', () => {
+    eq(flow.setZeroFocus('a0'), 'a0', 'تشغيل الوضع');
+    eq(flow.zeroFocus(), 'a0', 'قراءة الوضع');
+    eq(flow.setZeroFocus('levels'), 'levels', 'إطفاء الوضع');
+    eq(flow.zeroFocus(), 'levels', 'قراءة الوضع بعد الإطفاء');
+    flow.setZeroPrefs({ autoSpeak: false, padMode: 'cursive', slowRate: 0.5 });
+    const pr = flow.zeroPrefs();
+    eq(pr.autoSpeak, false, 'النطق التلقائي');
+    eq(pr.padMode, 'cursive', 'وضع اللوح');
+    eq(pr.slowRate, 0.5, 'سرعة البطء');
+  });
+  it('شاشة الاختيار تُكمل مرة واحدة فقط', () => {
+    store.resetSettings();
+    eq(flow.zeroPrefs().onboarded, false, 'قبل الاختيار');
+    flow.completeOnboarding('a0');
+    const pr = flow.zeroPrefs();
+    eq(pr.onboarded, true, 'بعد الاختيار');
+    eq(pr.focus, 'a0', 'الوضع المختار');
+    const st = flow.zeroSnapshot();
+    eq(st.raw.stages.letters.seen, true, 'تُعلَّم المرحلة الأولى كمزارة');
+  });
+  it('تصفير قسم A0 لا يمسّ تقدّم المستويات', () => {
+    saveProgress((p) => {
+      p.units = { a1u1: { done: true } };
+      p.readings = { r1: { done: true } };
+      p.notebook = [{ en: 'book', ar: 'كتاب' }];
+    });
+    const before = store.progress.points || 0;
+    flow.markStageDone('letters', 100);
+    flow.resetZeroProgress();
+    eq(flow.zeroSnapshot().percent, 0, 'تصفير A0');
+    eq(store.progress.units?.a1u1?.done, true, 'وحدات A1 سليمة');
+    eq(store.progress.readings?.r1?.done, true, 'مطالعات المستويات سليمة');
+    eq(store.progress.notebook?.length, 1, 'دفتر الكلمات سليم');
+    gte(store.progress.points || 0, before, 'النقاط المكسوبة لا تُخصم عند تصفير A0');
+  });
+});
+
+describe('شارات التأسيس', () => {
+  it('13 شارة A0 بمعرّفات a0-* وأوصاف عربية', () => {
+    const A0 = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-'));
+    eq(A0.length, 13, 'عدد شارات A0');
+    for (const b of A0) {
+      truthy(b.icon && b.ar && b.en && b.descAr && b.descEn, `شارة ناقصة: ${b.id}`);
+      eq(typeof b.check, 'function', `شارة بلا دالة فحص: ${b.id}`);
+    }
+  });
+  it('كل الشارات تُفتح عند الإتقان الكامل', () => {
+    resetProgress();
+    for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
+    for (const l of LETTERS) flow.markLetter(l.id, true);
+    for (const d of DIGRAPHS) flow.markDigraph(d.id, true);
+    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
+    flow.markReadingDone('zr1', 4, 4);
+    flow.recordZeroExam(30, 30);
+    flow.grantCertificate();
+    gamify.evaluateBadges();
+    const earned = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-') && b.earned).map((b) => b.id);
+    const all = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-')).map((b) => b.id);
+    const missing = all.filter((id) => !earned.includes(id));
+    eq(missing.length, 0, `شارات A0 غير مفتوحة: ${missing.join(', ')}`);
+  });
+  it('لا شارات A0 في البداية', () => {
+    resetProgress();
+    const earned = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-') && b.earned);
+    eq(earned.length, 0, 'شارات مفتوحة بالخطأ');
+  });
+});
+
+describe('التوصية بالانتقال إلى A1 (بلا قفل)', () => {
+  it('قبل الإتقان: توصية غير مانعة', () => {
+    resetProgress();
+    const rec = flow.a1Recommendation();
+    eq(rec.ready, false, 'ليست جاهزة');
+    assert(!/مقفل|محظور|ممنوع|غير مسموح|لا يمكنك/.test(rec.text), 'التوصية يجب ألا تمنع الانتقال');
+    assert(/مفتوحة/.test(rec.text), 'التوصية يجب أن تُصرّح بأن المستويات مفتوحة');
+  });
+  it('بعد الإتقان: توصية صريحة بالانتقال', () => {
+    resetProgress();
+    for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
+    for (const l of LETTERS) flow.markLetter(l.id, true);
+    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
+    flow.recordZeroExam(30, 30);
+    const rec = flow.a1Recommendation();
+    eq(rec.ready, true, 'جاهزة');
+    assert(/A1/.test(rec.text), 'التوصية تذكر A1');
+  });
+  it('المستوى A1 مفتوح دائماً ولا يعتمد على تقدّم A0', async () => {
+    resetProgress();
+    const cur = await load('assets/js/data/curriculum.js');
+    eq(cur.isLevelUnlocked(0), true, 'A1 يجب أن يكون مفتوحاً بلا أي تقدّم في A0');
+    for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
+    eq(cur.isLevelUnlocked(0), true, 'A1 يبقى مفتوحاً بعد إتمام A0');
+    eq(cur.levelPercent('a1'), 0, 'لا تقدّم في A1 بعد');
+  });
+});
+
+/* ============================================================
+   5) لوح الكتابة
+   ============================================================ */
+const pad = await load('assets/js/core/zero-pad.js');
+describe('لوح الكتابة التفاعلي', () => {
+  it('يصدّر الدالتين المطلوبتين', () => {
+    eq(typeof pad.writingPadHTML, 'function', 'writingPadHTML');
+    eq(typeof pad.initWritingPad, 'function', 'initWritingPad');
+  });
+  it('يولّد لوحاً فيه canvas ويدعم الوضعين', () => {
+    const print = pad.writingPadHTML({ text: 'A a', mode: 'print' });
+    const cursive = pad.writingPadHTML({ text: 'A a', mode: 'cursive' });
+    truthy(print && print.length > 200, 'طول HTML المطبوع');
+    truthy(/<canvas/i.test(print), 'لا يوجد canvas');
+    truthy(/<canvas/i.test(cursive), 'لا يوجد canvas في الوضع المتصل');
+    assert(print !== cursive, 'الوضعان يجب أن يختلفا فعلياً');
+    truthy(/zpad/.test(print), 'أصناف CSS بادئتها zpad');
+  });
+  it('يهرّب النص المُدخل ولا يحقن HTML', () => {
+    const evil = pad.writingPadHTML({ text: '<img src=x onerror=alert(1)>' });
+    assert(!/<img/i.test(evil), 'النص لم يُهرَّب (خطر حقن)');
+  });
+  it('initWritingPad يُرجع null بأمان بلا حاوية', () => {
+    eq(pad.initWritingPad(null, {}), null, 'بلا حاوية');
+  });
+  it('initWritingPad يعمل مع DOM وهمي ويُرجع وحدة تحكّم', () => {
+    const mk = () => ({
+      innerHTML: '', dataset: {}, className: '', hidden: false, style: { setProperty() {} },
+      classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+      addEventListener() {}, removeEventListener() {}, setAttribute() {}, removeAttribute() {},
+      appendChild() {}, remove() {}, focus() {},
+      querySelector: () => null, querySelectorAll: () => [], insertAdjacentHTML() {},
+      getBoundingClientRect: () => ({ width: 600, height: 200, top: 0, left: 0 }),
+    });
+    const host = mk();
+    const canvas = Object.assign(mk(), {
+      width: 0, height: 0, clientWidth: 600, clientHeight: 200,
+      getContext: () => new Proxy({ measureText: () => ({ width: 10 }) }, {
+        get(t, k) {
+          if (k in t) return t[k];
+          if (k === 'canvas') return canvas;
+          return () => {};
+        },
+        set(t, k, v) { t[k] = v; return true; },
+      }),
+    });
+    host.querySelector = (sel) => (/canvas/i.test(sel) ? canvas : null);
+    host.querySelectorAll = () => [];
+    let ctrl = null;
+    try { ctrl = pad.initWritingPad(host, { text: 'A a', mode: 'print' }); } catch (e) { throw new Error(`initWritingPad رمى استثناءً: ${e.message}`); }
+    truthy(ctrl, 'لم تُرجع وحدة التحكّم');
+    for (const m of ['destroy', 'clear', 'setText', 'setMode', 'getMode']) eq(typeof ctrl[m], 'function', `الوظيفة ${m}`);
+    ctrl.setMode('cursive');
+    ctrl.clear();
+    ctrl.destroy();
+    ctrl.destroy(); // يجب أن يكون آمناً عند التكرار
+  });
+});
+
+/* ============================================================
+   6) ملفات القسم وربطها بالموقع
+   ============================================================ */
+describe('ربط القسم بالموقع', () => {
+  const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
+  const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  const sw = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
+  const shell = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
+  const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
+
+  it('كل مسارات A0 مسجّلة في الموجّه', () => {
+    for (const r of ['/zero', '/zero/pad', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
+      assert(app.includes(`route('${r}'`), `المسار ${r} غير مسجّل`);
+    }
+  });
+  it('شاشة الاختيار تُستدعى مرة واحدة عند الإقلاع', () => {
+    assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
+    assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
+  });
+  it('الزر الدائم للتبديل موجود في الشريط العلوي ويعمل', () => {
+    assert(/id="btnZero"/.test(html), 'لا يوجد زر A0 في index.html');
+    assert(/btnZero/.test(app), 'لا معالج للزر الدائم');
+    assert(/setZeroFocus/.test(app), 'الزر لا يحفظ الوضع');
+    assert(/applyZeroButton/.test(app), 'الزر لا يُحدَّث مع إعادة الرسم');
+  });
+  it('خانة تنقّل بارزة في القائمة الجانبية والشريط السفلي', () => {
+    assert(/zero-nav/.test(shell), 'لا خانة بارزة في القائمة الجانبية');
+    const bottomBlock = shell.slice(shell.indexOf('if (bottom)'));
+    assert(bottomBlock.length > 0, 'لا كتلة للشريط السفلي في shell.js');
+    assert(/is-zero/.test(bottomBlock), 'لا خانة A0 بارزة في الشريط السفلي');
+    assert(/#\/zero/.test(bottomBlock), 'خانة الشريط السفلي لا تُنقل إلى القسم');
+    assert(/data-route="#\/zero"/.test(shell), 'الخانة بلا تفعيل تلقائي');
+    assert(/zero: '#\/zero'/.test(shell) || /zero:\s*'#\/zero'/.test(shell), 'SECTION_MAP لا يعرف قسم zero');
+  });
+  it('لافتة A0 بارزة في الرئيسية', () => {
+    assert(/zero-banner/.test(dash), 'لا لافتة بارزة في لوحة التحكم');
+    assert(/#\/zero/.test(dash), 'اللافتة لا تُنقل إلى القسم');
+  });
+  it('ملفات CSS الجديدة مربوطة في index.html', () => {
+    assert(html.includes('./assets/css/zero.css'), 'zero.css غير مربوط');
+    assert(html.includes('./assets/css/zero-pad.css'), 'zero-pad.css غير مربوط');
+  });
+  it('كل ملفات القسم مخزّنة في Service Worker', () => {
+    for (const p of [
+      './assets/js/data/zero.js', './assets/js/data/zero-letters.js', './assets/js/data/zero-time.js',
+      './assets/js/data/zero-words.js', './assets/js/core/zeroflow.js', './assets/js/core/zero-pad.js',
+      './assets/js/views/zero.js', './assets/js/views/zero-stage.js', './assets/js/views/zero-exam.js',
+      './assets/js/views/zero-entry.js', './assets/css/zero.css', './assets/css/zero-pad.css',
+    ]) assert(sw.includes(p), `غير مخزّن: ${p}`);
+  });
+  it('نسخة الـ Service Worker رُفعت لتحديث الملفات المخزّنة', () => {
+    assert(/VERSION\s*=\s*'v1\.(?:[1-9]\d*)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
+  });
+});
+
+/* ---------------- التقرير ---------------- */
+await Promise.all(pending);
+console.log(results.join('\n'));
+console.log(`\n${'─'.repeat(52)}`);
+if (failures.length) {
+  console.log(`❌ فشل ${failures.length} اختباراً من ${passed + failures.length}:\n`);
+  failures.forEach((f) => console.log(f));
+  console.log('');
+  process.exit(1);
+}
+console.log(`✅ نجحت كل اختبارات قسم «من الصفر» (${passed} اختباراً)\n`);
