@@ -11,11 +11,7 @@ import { renderLock, hideLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
-import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
-import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
-import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
-import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
-import { applyZeroShell, exitZeroMode, enterZeroMode, zeroModeOn } from './views/zero-shell.js';
+import { shouldShowZeroChoice, showZeroChoice, ZERO_PAGE } from './views/zero-entry.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -36,14 +32,6 @@ const view = () => qs('#view');
 function setupRoutes() {
   route('/', () => renderDashboard(view()));
   route('/lessons', () => renderLessons(view()));
-  /* قسم «من الصفر» (A0) */
-  route('/zero', () => renderZero(view()));
-  route('/zero/pad', () => renderZeroPad(view()));
-  route('/zero/settings', () => renderZeroSettings(view()));
-  route('/zero/stage/:stageId', (p) => renderZeroStage(view(), p.stageId));
-  route('/zero/drill/:stageId', (p) => renderZeroDrill(view(), p.stageId));
-  route('/zero/exam', () => renderZeroExam(view()));
-  route('/zero/certificate', () => renderZeroCertificate(view()));
   route('/level/:levelId', (p) => renderLevel(view(), p.levelId));
   route('/unit/:unitId', (p) => renderUnit(view(), p.unitId));
   route('/lesson/:unitId/:index', (p) => renderLesson(view(), p.unitId, p.index));
@@ -123,11 +111,8 @@ function bindGlobalEvents() {
     renderAll();
   });
 
-  /* الزر الدائم في الشريط العلوي: يدخل إلى واجهة «من الصفر» المستقلة */
-  qs('#btnZero')?.addEventListener('click', () => {
-    if (zeroModeOn()) exitZeroMode();
-    else enterZeroMode('/zero');
-  });
+  /* الزر الدائم في الشريط العلوي: يفتح صفحة «من الصفر» المستقلة (zero.html) */
+  qs('#btnZero')?.addEventListener('click', () => { location.href = ZERO_PAGE; });
   qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
   qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
   qs('#btnInstall')?.addEventListener('click', () => window.__leaInstall?.());
@@ -233,14 +218,13 @@ function waitForActive(reg, timeout = 8000) {
   });
 }
 
-/* ---------------- زر A0 الدائم ---------------- */
+/* ---------------- زر A0 الدائم (يفتح صفحة مستقلة) ---------------- */
 function applyZeroButton() {
   const btn = qs('#btnZero');
   if (!btn) return;
-  const on = zeroModeOn();
-  btn.classList.toggle('is-on', on);
-  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-  btn.title = on ? 'أنت في واجهة «من الصفر»' : 'الدخول إلى واجهة «من الصفر» (A0)';
+  btn.classList.remove('is-on');
+  btn.setAttribute('aria-pressed', 'false');
+  btn.title = 'فتح قسم «من الصفر» (A0) — صفحة مستقلة';
   btn.setAttribute('aria-label', btn.title);
 }
 
@@ -248,7 +232,6 @@ function applyZeroButton() {
 function renderAll() {
   applyZeroButton();
   renderNav();
-  applyZeroShell();
   applyI18n(document);
   renderSidebarStats();
   resolve();
@@ -260,7 +243,6 @@ function renderAll() {
 function refreshChrome() {
   applyZeroButton();
   renderNav();
-  applyZeroShell(currentRoute().path);
   renderSidebarStats();
 }
 
@@ -293,9 +275,6 @@ async function main() {
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
-    applyZeroShell(route.path);
-    /* في واجهة A0: لا شريط جانبي ولا قائمة مستويات */
-    if (zeroModeOn()) closeDrawer();
     /* شبكة أمان: لا تبقَ شاشة الاختيار مقفلة للتمرير إن أُزيلت بلا إغلاق */
     if (!qs('#zeroChoice')) document.body.classList.remove('zero-choice-open');
     document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة

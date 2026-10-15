@@ -1,11 +1,10 @@
-/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
+﻿/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
 import { t } from '../core/i18n.js';
 import { esc, qs, todayKey, pct } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
 import { progress, settings } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
 import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
-import { zeroModeOn } from './zero-shell.js';
 
 export const NAV_ITEMS = [
   { href: '#/', key: 'nav.home', icon: '🏠', group: 'nav.group.learn', bottom: true },
@@ -23,20 +22,12 @@ export const NAV_ITEMS = [
 export function renderNav() {
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
-
-  /* في واجهة «من الصفر» المستقلة لا نرسم تنقّل المستويات إطلاقاً */
-  if (zeroModeOn()) {
-    if (side) side.innerHTML = '';
-    if (bottom) bottom.innerHTML = '';
-    return;
-  }
-
   const zs = zeroStats(progress);
 
   if (side) {
-    /* خانة تنقّل بارزة لقسم «من الصفر» — تظهر دائماً في مقدمة القائمة الجانبية */
+    /* خانة قسم «من الصفر» — رابط حقيقي إلى صفحة A0 المستقلة */
     let html = `
-      <a class="zero-nav" href="#/zero" data-nav data-route="#/zero" title="من الصفر — تأسيس A0 (حروف · أرقام · وقت · ١٢٠ كلمة)">
+      <a class="zero-nav" href="./zero.html" title="من الصفر — تأسيس A0 (صفحة مستقلة)">
         <span class="zero-nav__ico" aria-hidden="true">🌱</span>
         <span class="zero-nav__txt">
           <b>من الصفر — A0</b>
@@ -64,7 +55,7 @@ export function renderNav() {
 
   if (bottom) {
     /* A0 أولاً في شريط التنقل السفلي (أبرز خانة) */
-    bottom.innerHTML = `<a href="#/zero" data-nav data-route="#/zero" class="is-zero" aria-label="من الصفر — تأسيس A0"><span class="ico" aria-hidden="true">🌱</span><span>A0</span></a>`
+    bottom.innerHTML = `<a href="./zero.html" class="is-zero" aria-label="من الصفر — تأسيس A0 (صفحة مستقلة)"><span class="ico" aria-hidden="true">🌱</span><span>A0</span></a>`
       + NAV_ITEMS.filter((i) => i.bottom)
         .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
   }
@@ -73,7 +64,6 @@ export function renderNav() {
 /* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
 const SECTION_MAP = {
   '': '#/',
-  zero: '#/zero',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
   exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',

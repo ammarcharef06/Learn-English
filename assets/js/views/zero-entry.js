@@ -1,11 +1,15 @@
 /* ============================================================
-   شاشة الدخول (مرة واحدة) — سؤال واحد بخيارين واضحين، بلا زحام
+   شاشة الدخول (مرة واحدة) — تظهر في موقع المستويات فقط.
+   اختيار «من الصفر» ينقل إلى صفحة A0 المستقلة (zero.html).
    ============================================================ */
 import { qs, toast } from '../core/utils.js';
 import { navigate } from '../core/router.js';
 import { zeroPrefs, completeOnboarding, setZeroPrefs } from '../core/zeroflow.js';
 
 const ID = 'zeroChoice';
+
+/** صفحة قسم A0 المستقلة */
+export const ZERO_PAGE = './zero.html';
 
 export function shouldShowZeroChoice() {
   return !zeroPrefs().onboarded;
@@ -27,7 +31,7 @@ export function showZeroChoice({ force = false, onDone = null } = {}) {
 
       <button class="zchoice__opt" type="button" data-choice="a0">
         <span class="zchoice__ico" aria-hidden="true">🌱</span>
-        <span class="zchoice__b"><b>من الصفر (A0)</b><small>لا أعرف الحروف بعد — ابدأ معي من الحرف الأول.</small></span>
+        <span class="zchoice__b"><b>من الصفر (A0)</b><small>لا أعرف الحروف بعد — ابدأ معي من الحرف الأول في صفحة مستقلة.</small></span>
       </button>
 
       <button class="zchoice__opt" type="button" data-choice="a1">
@@ -52,9 +56,9 @@ export function showZeroChoice({ force = false, onDone = null } = {}) {
     completeOnboarding(choice);
     if (choice === 'later') setZeroPrefs({ focus: 'levels' });
     close();
-    window.__leaRefreshChrome?.();
-    if (choice === 'a0') { toast('واجهة «من الصفر» جاهزة 🌱', 'ok'); navigate('/zero'); }
+    if (choice === 'a0') { toast('جارٍ فتح قسم «من الصفر» 🌱', 'ok'); location.href = ZERO_PAGE; }
     else if (choice === 'a1') { toast('المستويات جاهزة 📚', 'ok'); navigate('/'); }
+    else window.__leaRefreshChrome?.();
     onDone?.(choice);
   };
 

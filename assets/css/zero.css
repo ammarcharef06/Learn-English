@@ -12,28 +12,24 @@
 }
 
 /* ============================================================
-   ١) الواجهة المستقلة: إخفاء واجهة المستويات كلها
+   ١) صفحة مستقلة تماماً (zero.html): هيكلها الخاص
+   لا يوجد هنا شريط موقع ولا قائمة جانبية ولا شريط سفلي للمستويات —
+   الصفحة تحتوي شريط A0 الخاص و#view و.znav فقط.
    ============================================================ */
-html[data-zero="a0"] .topbar,
-html[data-zero="a0"] .sidebar,
-html[data-zero="a0"] .scrim,
-html[data-zero="a0"] .bottomnav,
-html[data-zero="a0"] .footer,
-html[data-zero="a0"] .skip-link { display: none !important; }
-
-html[data-zero="a0"] .app {
+html[data-zero="a0"] { background: var(--bg); }
+html[data-zero="a0"] body {
+  min-block-size: 100dvh; display: flex; flex-direction: column;
   background:
     radial-gradient(1100px 520px at 85% -12%, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent 70%),
     radial-gradient(900px 480px at 5% 0%, color-mix(in srgb, var(--brand-3) 10%, transparent), transparent 70%),
     var(--bg);
 }
-html[data-zero="a0"] .layout {
-  grid-template-columns: minmax(0, 1fr);
-  max-inline-size: 860px;
-  gap: 0;
+/* محتوى الصفحة */
+.zview {
+  flex: 1 1 auto; inline-size: 100%;
+  max-inline-size: 860px; margin-inline: auto;
   padding: 0 max(var(--sp-4), env(safe-area-inset-left)) 100px max(var(--sp-4), env(safe-area-inset-right));
 }
-html[data-zero="a0"] .view { max-inline-size: 860px; }
 
 /* ---------------- الشريط العلوي الخاص ---------------- */
 .zbar {

@@ -1,11 +1,10 @@
-﻿/* ============================================================
+/* ============================================================
    قسم «من الصفر» (A0) — الهيكل المستقل
    عند تفعيل وضع A0 يتحوّل الموقع إلى واجهة أخرى تماماً:
    شريط خاص أعلى + تنقل خاص أسفل، وتُخفى واجهة المستويات كلها.
    ============================================================ */
 import { esc, qs, toast, arNum } from '../core/utils.js';
 import { progress, settings } from '../core/store.js';
-import { navigate } from '../core/router.js';
 import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 import { zeroFocus, setZeroFocus, certificate } from '../core/zeroflow.js';
 
@@ -71,14 +70,8 @@ export function applyZeroShell(hash = null) {
 /** الخروج إلى واجهة المستويات (A1–B1) */
 export function exitZeroMode() {
   setZeroFocus('levels');
-  toast('رجعت إلى واجهة المستويات 📚', 'info');
-  window.__leaRefreshChrome?.();
-  navigate('/');
+  location.href = './index.html';
 }
 
-/** الدخول إلى واجهة «من الصفر» */
-export function enterZeroMode(to = '/zero') {
-  setZeroFocus('a0');
-  window.__leaRefreshChrome?.();
-  navigate(to);
-}
+/** رابط صفحة A0 المستقلة (يستخدمه موقع المستويات) */
+export const ZERO_PAGE = './zero.html';

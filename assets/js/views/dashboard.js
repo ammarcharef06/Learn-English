@@ -1,4 +1,4 @@
-/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
+﻿/* لوحة التقدّم (الرئيسية) — تخطيط منظّم بلا تكرار */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, todayKey, pct, ringHTML } from '../core/utils.js';
 import { progress, settings, goalForToday } from '../core/store.js';
@@ -54,7 +54,7 @@ export function renderDashboard(host) {
     </section>
 
     <div class="zlinks zero-row mt-4">
-      <a class="zlink" href="#/zero" data-nav>
+      <a class="zlink" href="./zero.html" title="صفحة مستقلة لتأسيس A0">
         <span class="zlink__ico" aria-hidden="true">🌱</span>
         <span class="zlink__b">
           <b>من الصفر — تأسيس A0</b>

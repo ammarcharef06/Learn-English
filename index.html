@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
@@ -26,7 +26,6 @@
   <link rel="stylesheet" href="./assets/css/skins/gnome.css" />
   <link rel="stylesheet" href="./assets/css/skins/kali.css" />
   <link rel="stylesheet" href="./assets/css/zero.css" />
-  <link rel="stylesheet" href="./assets/css/zero-pad.css" />
 
   <script>
     /* حارس الإقلاع: يشرح سبب عدم عمل الموقع بدلاً من صفحة صامتة */
@@ -95,9 +94,6 @@
   </div>
 
   <div id="app" class="app is-hidden">
-    <!-- ===== شريط قسم «من الصفر» (A0): واجهة مستقلة تماماً ===== -->
-    <header class="zbar" id="zbar" hidden></header>
-
     <header class="topbar" id="topbar">
       <button class="icon-btn topbar__menu" id="btnMenu" type="button" aria-label="القائمة" aria-expanded="false">
         <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -114,7 +110,7 @@
       <nav class="topnav" id="topnav" hidden></nav>
 
       <div class="topbar__actions">
-        <button class="icon-btn zero-toggle" id="btnZero" type="button" aria-pressed="false" title="تشغيل وضع «من الصفر» (A0)" aria-label="تشغيل وضع «من الصفر» (A0)">
+        <button class="icon-btn zero-toggle" id="btnZero" type="button" aria-pressed="false" title="قسم «من الصفر» (A0) — صفحة مستقلة" aria-label="قسم «من الصفر» (A0) — صفحة مستقلة">
           <span class="icon-btn__text">A0</span>
         </button>
         <button class="icon-btn" id="btnInstall" type="button" hidden title="تثبيت التطبيق" aria-label="تثبيت التطبيق">
@@ -168,9 +164,6 @@
     </footer>
 
     <nav class="bottomnav" id="bottomnav" aria-label="تنقل سريع"></nav>
-
-    <!-- ===== تنقل قسم «من الصفر» (A0) ===== -->
-    <nav class="znav" id="znav" aria-label="تنقل قسم من الصفر" hidden></nav>
 
     <div class="offline-bar" id="offlineBar" hidden>أنت غير متصل بالإنترنت — الموقع يعمل من الذاكرة المؤقتة ✅</div>
   </div>

@@ -9,12 +9,14 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.3.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
+  './zero.html',
   './manifest.webmanifest',
+  './manifest-zero.webmanifest',
   './assets/css/main.css',
   './assets/css/zero.css',
   './assets/css/zero-pad.css',
@@ -26,6 +28,7 @@ const CORE = [
   './assets/img/icon-maskable-512.png',
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
+  './assets/js/zero-main.js',
   './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
@@ -114,17 +117,18 @@ self.addEventListener('fetch', (event) => {
   if (!isSameOrigin(url)) return;
   if (url.pathname.endsWith('OneSignalSDKWorker.js')) return;
 
-  // التنقل: الشبكة أولاً ثم النسخة المخزّنة
+  // التنقل: الشبكة أولاً ثم النسخة المخزّنة (ولكل صفحة نسختها: الموقع أو قسم A0)
   if (req.mode === 'navigate') {
     event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      const isZeroPage = /\/zero(\.html)?$/.test(url.pathname) || url.pathname.endsWith('zero.html');
+      const fallback = isZeroPage ? './zero.html' : './index.html';
       try {
         const fresh = await fetch(req);
-        const cache = await caches.open(CACHE);
-        cache.put('./index.html', fresh.clone()).catch(() => {});
+        cache.put(fallback, fresh.clone()).catch(() => {});
         return fresh;
       } catch {
-        const cache = await caches.open(CACHE);
-        return (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
+        return (await cache.match(fallback)) || (await cache.match('./index.html')) || (await cache.match('./')) || Response.error();
       }
     })());
     return;

@@ -345,11 +345,12 @@ try {
   ok(`شارات A0: ${a0.length} شارة (تشمل الاختبار النهائي وشهادة التأسيس)`);
 } catch (e) { bad(`فشل فحص شارات A0: ${e.message}`); }
 
-/* ---------- 11. ملفات قسم A0 ومساراته ---------- */
+/* ---------- 11. صفحة «من الصفر» (A0) المستقلة ---------- */
 try {
   const need = [
+    'zero.html', 'manifest-zero.webmanifest',
     'assets/js/data/zero.js', 'assets/js/data/zero-letters.js', 'assets/js/data/zero-time.js', 'assets/js/data/zero-words.js',
-    'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js',
+    'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js', 'assets/js/zero-main.js',
     'assets/js/views/zero.js', 'assets/js/views/zero-shell.js', 'assets/js/views/zero-stage.js',
     'assets/js/views/zero-exam.js', 'assets/js/views/zero-entry.js',
     'assets/css/zero.css', 'assets/css/zero-pad.css',
@@ -357,30 +358,50 @@ try {
   ];
   for (const p of need) if (!existsSync(join(ROOT, p))) bad(`ملف قسم A0 مفقود: ${p}`);
 
-  const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
-  for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
-    if (!app.includes(`route('${r}'`)) bad(`مسار A0 غير مسجّل في الموجّه: ${r}`);
+  /* ---------- صفحة A0 المستقلة: هيكلها الخاص ---------- */
+  const zeroHtml = readFileSync(join(ROOT, 'zero.html'), 'utf8');
+  for (const id of ['id="zbar"', 'id="znav"', 'id="view"', 'id="toasts"', 'id="modalRoot"']) {
+    if (!zeroHtml.includes(id)) bad(`zero.html ينقصه: ${id}`);
   }
-  if (!/shouldShowZeroChoice\(\)/.test(app)) bad('شاشة الاختيار مرة واحدة غير مربوطة');
-  if (!/btnZero/.test(app) || !/enterZeroMode/.test(app)) bad('زر الدخول إلى واجهة A0 غير مربوط');
-  if (!/applyZeroShell/.test(app)) bad('الهيكل المستقل لقسم A0 غير مربوط');
+  if (!zeroHtml.includes('./assets/js/zero-main.js')) bad('zero.html لا يُحمّل نقطة دخول A0 (zero-main.js)');
+  if (/assets\/js\/app\.js/.test(zeroHtml)) bad('zero.html يُحمّل app.js — يجب أن تكون صفحة مستقلة تماماً');
+  for (const chrome of ['class="topbar"', 'id="sidenav"', 'id="bottomnav"', 'class="bottomnav"', 'class="sidebar"']) {
+    if (zeroHtml.includes(chrome)) bad(`zero.html يحتوي هيكل الموقع (${chrome}) — يجب ألا يكون مدمجاً`);
+  }
+  if (!/rel="manifest" href="\.\/manifest-zero\.webmanifest"/.test(zeroHtml)) bad('zero.html بلا بيان تثبيت خاص');
+  if (!zeroHtml.includes('./assets/css/zero.css') || !zeroHtml.includes('./assets/css/zero-pad.css')) bad('zero.html لا يُحمّل أنماط A0');
+  if (!/data-zero="a0"/.test(zeroHtml)) bad('zero.html لا يضبط سمة القسم المستقل');
+
+  /* ---------- نقطة دخول A0: مساراتها الخاصة ---------- */
+  const zeroMain = readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8');
+  for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
+    if (!zeroMain.includes(`route('${r}'`)) bad(`مسار A0 غير مسجّل في zero-main.js: ${r}`);
+  }
+  if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
+
+  /* ---------- الموقع الرئيسي: بلا أي دمج لقسم A0 ---------- */
+  const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
+  if (/route\('\/zero/.test(app)) bad('app.js ما زال يسجّل مسارات A0 — يجب أن تكون صفحة منفصلة');
+  if (/zero-(stage|exam|shell)\.js/.test(app)) bad('app.js يستورد واجهات A0 — يجب فصلها تماماً');
+  if (!/btnZero/.test(app) || !/ZERO_PAGE/.test(app)) bad('زر الدخول إلى صفحة A0 غير مربوط');
 
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
   if (!/id="btnZero"/.test(html)) bad('زر الدخول إلى A0 مفقود من index.html');
-  if (!/id="zbar"/.test(html) || !/id="znav"/.test(html)) bad('شريط/تنقّل واجهة A0 المستقلة مفقود من index.html');
-  if (!html.includes('./assets/css/zero.css') || !html.includes('./assets/css/zero-pad.css')) bad('أنماط A0 غير مربوطة في index.html');
+  if (/id="zbar"|id="znav"/.test(html)) bad('index.html ما زال يحتوي عناصر واجهة A0 (يجب فصلها)');
+  if (/zero-pad\.css/.test(html)) bad('index.html يُحمّل أنماط لوح الكتابة (خاص بصفحة A0)');
+  if (!html.includes('./assets/css/zero.css')) bad('أنماط شاشة الدخول غير مربوطة في index.html');
+  if (!/zero\.html/.test(readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8'))) bad('خانة A0 في القائمة الجانبية لا تنقل إلى صفحة A0');
 
-  const shell = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
-  if (!/zero-nav/.test(shell)) bad('خانة التنقّل إلى A0 مفقودة من القائمة الجانبية');
-  if (!/zero:\s*'#\/zero'/.test(shell)) bad('قسم A0 غير مضاف إلى SECTION_MAP');
+  const man = JSON.parse(readFileSync(join(ROOT, 'manifest-zero.webmanifest'), 'utf8'));
+  if (man.start_url !== './zero.html') bad(`start_url لبيان A0 غير صحيح: ${man.start_url}`);
+  if (!man.name || !man.icons?.length) bad('بيان A0 ناقص الاسم أو الأيقونات');
 
-  const zcss = readFileSync(join(ROOT, 'assets/css/zero.css'), 'utf8');
-  if (!/html\[data-zero="a0"\]/.test(zcss)) bad('قواعد الواجهة المستقلة (html[data-zero="a0"]) مفقودة من zero.css');
-  for (const sel of ['.topbar', '.sidebar', '.bottomnav']) {
-    if (!new RegExp(`html\\[data-zero="a0"\\][^{]*\\${sel}`).test(zcss)) bad(`الواجهة المستقلة لا تُخفي ${sel}`);
+  const swSrc = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
+  for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
+    if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
   }
-  ok('ملفات A0 ومساراته والواجهة المستقلة وخانة التنقّل: مكتملة');
-} catch (e) { bad(`فشل فحص ملفات A0: ${e.message}`); }
+  ok('صفحة A0 مستقلة تماماً: zero.html بهيكلها ونقطة دخولها وبيان تثبيتها، والموقع الرئيسي بلا أي دمج');
+} catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }
 
 /* ---------- التقرير ---------- */
 console.log('نتائج الفحص:');
