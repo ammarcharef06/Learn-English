@@ -1,4 +1,4 @@
-/**
+﻿/**
  * فحص سلامة المشروع — يعمل بدون أي مكتبات خارجية
  * الاستخدام:  node tools/check.mjs
  */
@@ -225,7 +225,7 @@ try {
     if (!existsSync(target)) bad(`index.html يشير إلى ملف غير موجود: ${r}`);
   }
   ok(`index.html: ${refs.length} مرجعاً محلياً — كلها موجودة`);
-  for (const need of ['id="view"', 'id="lockScreen"', 'id="toasts"', 'id="modalRoot"', 'id="bottomnav"', 'assets/js/app.js']) {
+  for (const need of ['id="view"', 'id="lockScreen"', 'id="toasts"', 'id="modalRoot"', 'id="topbar"', 'id="sidebar"', 'id="scrim"', 'assets/js/app.js']) {
     if (!html.includes(need)) bad(`index.html ينقصه: ${need}`);
   }
 } catch (e) { bad(`فشل فحص index.html: ${e.message}`); }
@@ -360,16 +360,19 @@ try {
 
   /* ---------- صفحة A0 المستقلة: هيكلها الخاص بنفس ستايل الموقع ---------- */
   const zeroHtml = readFileSync(join(ROOT, 'zero.html'), 'utf8');
-  for (const id of ['id="zbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
+  for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
     if (!zeroHtml.includes(id)) bad(`zero.html ينقصه: ${id}`);
   }
   if (!zeroHtml.includes('./assets/js/zero-main.js')) bad('zero.html لا يُحمّل نقطة دخول A0 (zero-main.js)');
   if (/assets\/js\/app\.js/.test(zeroHtml)) bad('zero.html يُحمّل app.js — يجب أن تكون صفحة مستقلة تماماً');
   /* نفس هيكل الموقع (topbar/view) لكن بلا أي عنصر من تنقّل المستويات */
-  for (const chrome of ['id="sidenav"', 'id="bottomnav"', 'class="sidebar"', 'zero-nav']) {
-    if (zeroHtml.includes(chrome)) bad(`zero.html يحتوي عنصراً من مستويات الموقع (${chrome})`);
+  for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
+    if (zeroHtml.includes(chrome)) bad(`zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
   }
-  if (!/class="topbar" id="zbar"/.test(zeroHtml)) bad('zero.html لا يستخدم شريط الموقع نفسه (topbar)');
+  if (!/class="topbar" id="topbar"/.test(zeroHtml)) bad('zero.html لا يستخدم شريط الموقع نفسه (topbar)');
+  for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
+    if (!zeroHtml.includes(need)) bad(`zero.html ينقصه ${need} — الدرج المشترك`);
+  }
   if (!/rel="manifest" href="\.\/manifest-zero\.webmanifest"/.test(zeroHtml)) bad('zero.html بلا بيان تثبيت خاص');
   if (!zeroHtml.includes('./assets/css/zero.css') || !zeroHtml.includes('./assets/css/zero-pad.css')) bad('zero.html لا يُحمّل أنماط A0');
   if (!/data-zero="a0"/.test(zeroHtml)) bad('zero.html لا يضبط سمة القسم المستقل');
@@ -381,10 +384,16 @@ try {
   }
   if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
   const zeroShell = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
-  if (!/class="seg zseg"/.test(zeroShell)) bad('تنقّل A0 لا يستخدم مكوّن الموقع (.seg)');
-  for (const l of ['المراحل', 'الاختبار', 'الشهادة', 'إعدادات']) {
-    if (!zeroShell.includes(l)) bad(`تنقّل A0 ينقصه: ${l}`);
+  if (!/renderZeroDrawer/.test(zeroShell) || !/sidenav/.test(zeroShell)) bad('درج A0 غير مربوط بالقائمة الجانبية');
+  for (const l of ['المراحل الثمانية', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
+    if (!zeroShell.includes(l)) bad(`درج A0 ينقصه: ${l}`);
   }
+  const appSrc = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
+  const topbar = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+  if (!/topbarHTML/.test(topbar) || !/renderTopbar/.test(topbar)) bad('الشريط العلوي المشترك مفقود');
+  if (!/renderTopbar/.test(appSrc)) bad('صفحة الموقع لا تستخدم الشريط المشترك');
+  if (!/renderTopbar/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('صفحة A0 لا تستخدم الشريط المشترك');
+  if (!/export \{ openDrawer, closeDrawer/.test(readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8'))) bad('دوال الدرج غير موحّدة');
 
   /* ---------- الموقع الرئيسي: بلا دمج، وخيار واحد فقط للدخول ---------- */
   const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
@@ -412,19 +421,25 @@ try {
   for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
     if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
   }
-  // أصوات الحروف المركّبة المسجّلة (لا يتهجّأها محرّك الجهاز)
+  // حزمة أصوات المرحلتين ١ و ٢: ٢٦ حرفاً + ١٢ حرفاً مركّباً
   const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
+  const audioIds = [...zs.zeroItems('letters').map((x) => x.sayId), ...zs.zeroItems('digraphs').map((x) => x.sayId)];
+  if (audioIds.some((x) => !x)) bad('بعض عناصر المرحلتين ١ و ٢ بلا معرّف صوت');
+  if (new Set(audioIds).size !== audioIds.length) bad('معرّفات الأصوات غير فريدة');
+  if (audioIds.length !== 38) bad(`عدد أصوات المرحلتين ${audioIds.length} بدل 38 (26 حرفاً + 12 مركّباً)`);
   let soundFiles = 0;
-  for (const it of zs.zeroItems('digraphs')) {
-    if (!it.sayId) { bad(`الحرف المركّب ${it.en} بلا معرّف صوت`); continue; }
-    const f = join(ROOT, 'assets/audio/zero', `${it.sayId}.wav`);
-    if (!existsSync(f)) bad(`ملف صوت الحرف المركّب مفقود: ${it.sayId}.wav`);
+  for (const raw of audioIds) {
+    const id = String(raw).startsWith('letter:') ? String(raw).slice(7) : raw;
+    const f = join(ROOT, 'assets/audio/zero', `${id}.wav`);
+    if (!existsSync(f)) { bad(`ملف صوت مفقود: ${id}.wav`); continue; }
+    const size = statSync(f).size;
+    if (size < 4000 || size > 60000) bad(`حجم ملف الصوت غير معقول (${id}): ${size}`);
     else soundFiles++;
   }
-  if (new Set(zs.zeroItems('digraphs').map((x) => x.sayId)).size !== zs.DIGRAPHS.length) bad('معرّفات أصوات الحروف المركّبة غير فريدة');
   if (!/registerSoundBank/.test(readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8'))) bad('محرّك النطق لا يدعم الأصوات المسجّلة');
-  if (!/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8'))) bad('بنك أصوات A0 مفقود');
-  ok(`أصوات الحروف المركّبة: ${soundFiles} مقطعاً مسجّلاً موجوداً`);
+  const audioJs = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
+  if (!/registerZeroSounds/.test(audioJs) || !/LETTER_IDS/.test(audioJs)) bad('بنك أصوات A0 ناقص');
+  ok(`حزمة أصوات المرحلتين ١ و ٢: ${soundFiles}/${audioIds.length} مقطعاً مسجّلاً (٢٦ حرفاً + ١٢ مركّباً)`);
 
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl" data-zero="a0">
 <head>
   <meta charset="utf-8" />
@@ -53,14 +53,22 @@
 
   <!-- نفس هيكل الموقع: شريط علوي + محتوى — بلا قائمة مستويات ولا أي عنصر من موقع المستويات -->
   <div id="app" class="app">
-    <header class="topbar" id="zbar"></header>
+    <header class="topbar" id="topbar"></header>
 
     <div class="layout">
+      <aside class="sidebar" id="sidebar" aria-label="قائمة قسم من الصفر">
+        <div class="sidebar__inner">
+          <nav class="sidenav" id="sidenav"></nav>
+        </div>
+      </aside>
+
       <main class="view" id="view" tabindex="-1">
         <div class="card"><div class="empty"><span class="ico">🌱</span><p>جارٍ تحضير قسم «من الصفر»…</p></div></div>
         <noscript><div class="card">هذه الصفحة تحتاج تشغيل JavaScript في المتصفح.</div></noscript>
       </main>
     </div>
+
+    <div class="scrim" id="scrim" hidden></div>
   </div>
 
   <div class="toasts" id="toasts" role="status" aria-live="polite"></div>

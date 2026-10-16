@@ -11,6 +11,7 @@ import { flush } from './core/store.js';
 import { qs, toast } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
+import { renderTopbar, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
 import { registerZeroSounds } from './core/zero-audio.js';
 import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
@@ -69,6 +70,9 @@ async function main() {
   /* الوقوف على هذه الصفحة يعني أن وضع «من الصفر» مفعّل دائماً */
   setZeroFocus('a0');
 
+  renderTopbar(qs('#topbar'), 'zero', { onRerender: () => applyZeroShell(location.hash) });
+  qs('#scrim')?.addEventListener('click', closeDrawer);
+
   setupRoutes();
   if (!location.hash) location.replace('#/zero');
   await initRouter();
@@ -79,7 +83,7 @@ async function main() {
   window.addEventListener('beforeunload', flush);
 
   /* زر الرجوع في المتصفح/الهاتف يخرج إلى المستويات عند أول الصفحة */
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') exitZeroMode(); });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
 }
 
 main().catch((err) => {

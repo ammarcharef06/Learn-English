@@ -723,27 +723,34 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
   });
   it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
-    for (const id of ['id="zbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
+    for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
       assert(zeroHtml.includes(id), `zero.html ينقصه ${id}`);
     }
-    assert(/class="topbar" id="zbar"/.test(zeroHtml), 'شريط A0 لا يستخدم مكوّن الموقع (.topbar)');
+    assert(/class="topbar" id="topbar"/.test(zeroHtml), 'شريط A0 لا يستخدم شريط الموقع نفسه');
     assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
     assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
     assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
-    for (const chrome of ['id="sidenav"', 'id="bottomnav"', 'class="sidebar"', 'zero-nav']) {
-      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً من الموقع (${chrome})`);
+    for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
+      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
+    }
+    for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
+      assert(zeroHtml.includes(need), `zero.html ينقصه ${need} — الدرج المشترك`);
     }
     assert(/manifest-zero\.webmanifest/.test(zeroHtml), 'zero.html بلا بيان تثبيت خاص');
     assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
     assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
   });
-  it('تنقّل A0 يستخدم مكوّنات الموقع (.seg) بأربع خانات', () => {
-    assert(/class="seg zseg"/.test(shellSrc), 'تنقّل A0 لا يستخدم .seg');
-    for (const l of ['المراحل', 'الاختبار', 'الشهادة', 'إعدادات']) {
-      assert(shellSrc.includes(l), `تنقّل A0 ينقصه: ${l}`);
+  it('تنقّل A0 = نفس درج الموقع (تنقّل واحد لكل الأجهزة)', () => {
+    assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
+    assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
+    for (const l of ['المراحل الثمانية', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
+      assert(shellSrc.includes(l), `درج A0 ينقصه: ${l}`);
     }
-    assert(/class="brand"/.test(shellSrc) && /brand__mark/.test(shellSrc), 'شريط A0 لا يستخدم شعار الموقع (.brand)');
-    assert(/btn btn--sm/.test(shellSrc), 'زر الخروج لا يستخدم أزرار الموقع (.btn)');
+    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+    assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');
+    assert(/renderTopbar/.test(zeroMain), 'صفحة A0 لا ترسم الشريط المشترك');
+    assert(/renderTopbar/.test(app), 'صفحة الموقع لا ترسم الشريط المشترك');
+    assert(!/id="bottomnav"/.test(html) && !/class="bottomnav" id="bottomnav"/.test(html), 'الشريط السفلي ما زال في صفحة الموقع');
   });
   it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
     for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {

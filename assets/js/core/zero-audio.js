@@ -1,40 +1,49 @@
 /* ============================================================
-   أصوات قسم «من الصفر» (A0)
-   الحروف المركّبة (sh · ch · th · ph · ck · ng · oo · ee · ea · ou)
-   لا ينطقها محرّك النطق في الجهاز كنطق واحد — بل يتهجّأها حرفاً حرفاً،
-   لذلك نُولّدها كأصوات مسجّلة (مقطع واحد) ونشغّلها بدل النطق الآلي.
-   ملفات الأصوات: assets/audio/zero/*.wav
+   حزمة أصوات قسم «من الصفر» (A0)
+   المرحلتان ١ و ٢: الحروف الستة والعشرون (أسماؤها) + الحروف المركّبة.
+   السبب: محرّك النطق في الجهاز يتهجّأ الحروف المركّبة حرفاً حرفاً
+   (sh → ess-aitch) ويتفاوت صوته بين الأجهزة، لذلك نُشغّل مقاطع
+   صوتية مسجّلة بنطق إنجليزي موحّد على كل الأجهزة.
+   الملفات: assets/audio/zero/<id>.wav  (16kHz · مقطع واحد)
    ============================================================ */
 import { registerSoundBank } from './speech.js';
 
 const DIR = './assets/audio/zero/';
 
-/** معرّف كل مقطع صوتي (يطابق ids في data/zero-letters.js) */
-export const SOUND_IDS = [
+/** أسماء الحروف الستة والعشرين */
+export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+/** أصوات الحروف المركّبة (تطابق ids في data/zero-letters.js) */
+export const DIGRAPH_IDS = [
   'sh', 'ch', 'th-voiceless', 'th-voiced', 'ph', 'ck', 'ng',
   'oo-long', 'oo-short', 'ee', 'ea', 'ou',
 ];
 
-/* مفاتيح النصّ المباشرة: تُستخدم تلقائياً عند نطق هذا النص في أي مكان */
-const BY_TEXT = {
+/** كل معرّفات الحزمة */
+export const SOUND_IDS = [...LETTER_IDS, ...DIGRAPH_IDS];
+
+/* الحروف المركّبة المتشابهة في الكتابة (th مرتان · oo مرتان) لها مفتاح صريح */
+const DIGRAPH_BY_TEXT = {
   sh: 'sh', ch: 'ch', th: 'th-voiceless', ph: 'ph',
   ck: 'ck', ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea', ou: 'ou',
 };
 
-/** يبني بنك الأصوات ويسجّله في محرّك النطق */
+/** يبني بنك الأصوات ويسجّله في محرّك النطق. يُرجع عدد المفاتيح. */
 export function registerZeroSounds() {
   const bank = {};
-  for (const id of SOUND_IDS) {
-    bank[`sound:${id}`] = `${DIR}${id}.wav`;
-  }
-  for (const [text, id] of Object.entries(BY_TEXT)) {
-    bank[text] = `${DIR}${id}.wav`;
-  }
+  /* مفتاح صريح لكل مقطع — يطابق sayId في data/zero.js:
+     الحروف: sound:letter:a   ·   المركّبة: sound:sh
+     (ويميّز th المهموسة من المجهورة و oo الطويلة من القصيرة) */
+  for (const ch of LETTER_IDS) bank[`sound:letter:${ch}`] = `${DIR}${ch}.wav`;
+  for (const id of DIGRAPH_IDS) bank[`sound:${id}`] = `${DIR}${id}.wav`;
+  /* مفاتيح النص المباشرة: تُستخدم تلقائياً عند نطق الحرف نفسه في أي مكان */
+  for (const ch of LETTER_IDS) bank[ch] = `${DIR}${ch}.wav`;
+  for (const [text, id] of Object.entries(DIGRAPH_BY_TEXT)) bank[text] = `${DIR}${id}.wav`;
   registerSoundBank(bank);
   return Object.keys(bank).length;
 }
 
-/** رابط ملف صوت مقطع مركّب (أو null) */
+/** رابط ملف صوت (أو null) */
 export function soundSrc(id) {
   return SOUND_IDS.includes(id) ? `${DIR}${id}.wav` : null;
 }

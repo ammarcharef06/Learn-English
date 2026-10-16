@@ -723,6 +723,54 @@
 html[dir="rtl"] .sidebar.is-open { --drawer-from: 14px; }
 html[dir="ltr"] .sidebar.is-open { --drawer-from: -14px; }
 
+/* ============================================================
+   تنقّل واحد لكل الأجهزة: درج يُفتح بزر ☰
+   (أُلغي الشريط السفلي والقائمة الجانبية الثابتة في التابلت/سطح المكتب)
+   ============================================================ */
+.bottomnav { display: none !important; }
+.layout { grid-template-columns: minmax(0, 1fr) !important; }
+.sidebar { display: none !important; inline-size: auto !important; }
+.sidebar.is-open {
+  display: block !important;
+  position: fixed; z-index: var(--z-drawer); inset-block: 0; inset-inline-start: 0;
+  inline-size: min(340px, 90vw);
+  background: var(--bg-2);
+  padding: var(--sp-4);
+  padding-block-start: calc(var(--sp-4) + env(safe-area-inset-top));
+  padding-block-end: calc(var(--sp-4) + env(safe-area-inset-bottom));
+  overflow-y: auto; overscroll-behavior: contain;
+  box-shadow: var(--shadow-3);
+  animation: drawer var(--dur-3) var(--ease) both;
+}
+.sidebar.is-open .sidenav { border: 0; background: transparent; padding: 0; }
+.sidebar.is-open .sidenav__group { display: block; }
+.sidebar.is-open .streak-card,
+.sidebar.is-open .mini-progress,
+.sidebar.is-open .sidebar__foot { display: revert; }
+.sidebar.is-open .sidebar__inner { position: static; max-block-size: none; overflow: visible; }
+body.drawer-open { overflow: hidden; }
+.sidenav a.is-done { color: var(--ok); }
+
+/* ============================================================
+   تكيّف دقيق مع الجهاز: النتوء والحواف · لوحة المفاتيح · اللمس
+   ============================================================ */
+
+/* شريط الحالة/النتوء في الوضع المثبّت على الجوال */
+.topbar { padding-block-start: calc(var(--sp-2) + env(safe-area-inset-top)); }
+.layout {
+  padding-inline: max(var(--sp-4), env(safe-area-inset-left)) max(var(--sp-4), env(safe-area-inset-right));
+}
+.view { padding-block-end: calc(var(--sp-5) + env(safe-area-inset-bottom)); }
+
+/* الحقول: 16px على الجوال حتى لا يكبّر iOS الصفحة عند الكتابة */
+@media (max-width: 820px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select, textarea, .input, .select { font-size: 16px; }
+}
+
+/* أهداف لمس مريحة (٤٤px) لكل عنصر تفاعلي */
+.btn, .icon-btn, .sidenav a, .seg button { min-block-size: 44px; }
+
 /* الطباعة: إعادة تعريف الرموز لوضع ورقي نظيف (لا نص فاتح على خلفية بيضاء) */
 @media print {
   /* محدّد أقوى من `html[data-skin][data-theme]` في ملفات الستايلات حتى لا تتجاوزه */

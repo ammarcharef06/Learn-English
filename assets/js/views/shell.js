@@ -1,4 +1,4 @@
-/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
+﻿/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
 import { t } from '../core/i18n.js';
 import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
@@ -54,12 +54,12 @@ export function renderNav() {
     side.innerHTML = html;
   }
 
-  if (bottom) {
-    /* بلا خانة A0 هنا: الدخول إلى القسم من بطاقة القائمة الجانبية وحدها */
-    bottom.innerHTML = NAV_ITEMS.filter((i) => i.bottom)
-      .map((i) => `<a href="${i.href}" data-nav data-route="${i.href}" aria-label="${t(i.key)}"><span class="ico" aria-hidden="true">${i.icon}</span><span>${t(i.key)}</span></a>`).join('');
-  }
+  /* تنقّل واحد لكل الأجهزة: لا شريط سفلي — الدرج وحده */
+  if (bottom) bottom.innerHTML = '';
 }
+
+/* درج التنقّل: تنفيذ واحد مشترك بين الصفحتين (views/topbar.js) */
+export { openDrawer, closeDrawer, toggleDrawer, isDrawerOpen } from './topbar.js';
 
 /* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
 const SECTION_MAP = {
@@ -111,22 +111,7 @@ export function renderSidebarStats() {
   }
 }
 
-export function openDrawer() {
-  const sb = qs('#sidebar');
-  const scrim = qs('#scrim');
-  if (!sb) return;
-  sb.classList.add('is-open');
-  if (scrim) scrim.hidden = false;
-  qs('#btnMenu')?.setAttribute('aria-expanded', 'true');
-}
-export function closeDrawer() {
-  const sb = qs('#sidebar');
-  const scrim = qs('#scrim');
-  if (!sb) return;
-  sb.classList.remove('is-open');
-  if (scrim) scrim.hidden = true;
-  qs('#btnMenu')?.setAttribute('aria-expanded', 'false');
-}
+
 
 export function pageHead({ icon = '', title = '', subtitle = '', actionsHtml = '' }) {
   return `

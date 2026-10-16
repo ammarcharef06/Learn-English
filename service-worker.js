@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v1.5.0';
+const VERSION = 'v1.7.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -29,6 +29,32 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
+  './assets/audio/zero/a.wav',
+  './assets/audio/zero/b.wav',
+  './assets/audio/zero/c.wav',
+  './assets/audio/zero/d.wav',
+  './assets/audio/zero/e.wav',
+  './assets/audio/zero/f.wav',
+  './assets/audio/zero/g.wav',
+  './assets/audio/zero/h.wav',
+  './assets/audio/zero/i.wav',
+  './assets/audio/zero/j.wav',
+  './assets/audio/zero/k.wav',
+  './assets/audio/zero/l.wav',
+  './assets/audio/zero/m.wav',
+  './assets/audio/zero/n.wav',
+  './assets/audio/zero/o.wav',
+  './assets/audio/zero/p.wav',
+  './assets/audio/zero/q.wav',
+  './assets/audio/zero/r.wav',
+  './assets/audio/zero/s.wav',
+  './assets/audio/zero/t.wav',
+  './assets/audio/zero/u.wav',
+  './assets/audio/zero/v.wav',
+  './assets/audio/zero/w.wav',
+  './assets/audio/zero/x.wav',
+  './assets/audio/zero/y.wav',
+  './assets/audio/zero/z.wav',
   './assets/audio/zero/sh.wav',
   './assets/audio/zero/ch.wav',
   './assets/audio/zero/th-voiceless.wav',
@@ -55,6 +81,7 @@ const CORE = [
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
   './assets/js/core/zero-audio.js',
+  './assets/js/core/theme.js',
   './assets/js/data/reference.js',
   './assets/js/data/curriculum.js',
   './assets/js/data/curriculum-a1.js',
@@ -67,6 +94,7 @@ const CORE = [
   './assets/js/data/zero-time.js',
   './assets/js/data/zero-words.js',
   './assets/js/views/shell.js',
+  './assets/js/views/topbar.js',
   './assets/js/views/auth.js',
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',

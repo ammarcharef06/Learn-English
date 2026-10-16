@@ -453,33 +453,5 @@ function confirmAction(title, body, onOk) {
   });
 }
 
-export function applyTheme() {
-  const theme = settings.theme || 'auto';
-  const dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-}
-
-/* الستايل: kali (داكن دائماً) | gnome | classic */
-export const SKINS = [
-  { id: 'kali', ar: 'Kali GNOME', desc: 'داكن بلون كالي الأزرق' },
-  { id: 'gnome', ar: 'GNOME', desc: 'Adwaita فاتح/داكن' },
-  { id: 'classic', ar: 'الكلاسيكي', desc: 'الأزرق الأكاديمي السابق' },
-];
-
-export function applySkin() {
-  const skin = SKINS.some((s) => s.id === settings.skin) ? settings.skin : 'kali';
-  document.documentElement.dataset.skin = skin;
-  if (skin === 'kali') document.documentElement.dataset.theme = 'dark';
-  else applyTheme();
-  return skin;
-}
-export function applyLang() {
-  const lang = settings.uiLang === 'en' ? 'en' : 'ar';
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
-  document.documentElement.dataset.uiLang = lang;
-  setUiLang(lang);
-  applyI18n(document);
-  const btn = qs('#langLabel');
-  if (btn) btn.textContent = lang === 'en' ? 'ع' : 'EN';
-}
+/* المظهر واللغة: منطق مشترك بين الصفحتين (انظر core/theme.js) */
+export { SKINS, applyTheme, applySkin, applyLang } from '../core/theme.js';

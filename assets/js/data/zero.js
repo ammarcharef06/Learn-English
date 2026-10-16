@@ -28,7 +28,7 @@ export function zeroItems(stageId) {
   switch (stageId) {
     case 'letters':
       return LETTERS.map((l) => ({
-        key: `letter:${l.id}`, en: `${l.upper} ${l.lower}`, say: l.upper, ar: l.nameAr, pron: l.nameAr,
+        key: `letter:${l.id}`, en: `${l.upper} ${l.lower}`, say: l.upper, sayId: `letter:${l.id}`, ar: l.nameAr, pron: l.nameAr,
         emoji: l.emoji, word: l.word, wordAr: l.wordAr, wordPronAr: l.wordPronAr, soundAr: l.soundAr, tipAr: l.tipAr,
       }));
     case 'digraphs':

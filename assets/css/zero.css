@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    قسم «من الصفر» (A0) — إضافات فقط فوق نظام تصميم الموقع
    كل المكوّنات الأساسية (شريط · بطاقات · أزرار · شرائح · تقدّم)
    تأتي من main.css نفسه حتى لا يشعر المستخدم بأي اختلاف.
@@ -8,24 +8,7 @@
 html[data-zero="a0"] { background: var(--bg); }
 html[data-zero="a0"] .layout { padding-block-start: var(--sp-4); }
 
-/* شريط A0: نفس شكل شريط الموقع + تنقّل مقسّم داخله */
-#zbar .brand__mark { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); }
-.zseg {
-  flex: 1 1 auto; min-inline-size: 0; margin-inline: auto;
-  max-inline-size: 620px;
-}
-.zseg button { padding: 8px 13px; min-block-size: 42px; font-size: .82rem; }
-@media (max-width: 700px) {
-  .zseg { max-inline-size: none; justify-content: center; }
-  .zseg button { padding: 8px 11px; }
-  .zseg .zlabel { display: none; }
-  .zseg button .zico { font-size: 1.15rem; }
-}
-@media (max-width: 460px) {
-  .zbar-pct { display: none; }
-  #zExit { padding: 8px 11px; }
-  #zExit .zexit-label { display: none; }
-}
+/* قسم A0 يستخدم نفس شريط الموقع ودرجه — لا أنماط شريط خاصة به */
 
 /* ---------------- ٢) بطاقة حرف كبيرة (التركيز) ---------------- */
 .zero-letter {

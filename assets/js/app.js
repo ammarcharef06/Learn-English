@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
 import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange } from './core/router.js';
@@ -9,6 +9,7 @@ import { isAuthed, extendSession, lockNow, ensureAuth } from './core/auth.js';
 import { qs, qsa, toast, esc } from './core/utils.js';
 import { renderLock, hideLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
+import { renderTopbar } from './views/topbar.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
 import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
@@ -73,47 +74,14 @@ function bindGlobalEvents() {
     if (e.target.closest('[data-nav]')) closeDrawer();
   });
 
-  qs('#btnMenu')?.addEventListener('click', () => {
-    const sb = qs('#sidebar');
-    if (sb?.classList.contains('is-open')) closeDrawer(); else openDrawer();
-  });
+  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة · الستايل · اللغة · المظهر · التثبيت */
+  renderTopbar(qs('#topbar'), 'site', { onRerender: renderAll });
+
   qs('#scrim')?.addEventListener('click', closeDrawer);
 
-  qs('#btnTheme')?.addEventListener('click', () => {
-    if ((settings.skin || 'kali') === 'kali') {
-      // كالي داكن دائماً: الزر يبدّل إلى GNOME الفاتح كبديل سريع
-      saveSettings({ skin: 'gnome', theme: 'light' });
-      applySkin();
-      toast('الستايل: GNOME فاتح ☀️', 'info');
-      renderAll();
-      return;
-    }
-    const isDark = document.documentElement.dataset.theme === 'dark';
-    saveSettings({ theme: isDark ? 'light' : 'dark' });
-    applySkin();
-  });
-
-  /* زر تبديل الستايل السريع: كالي → GNOME → الكلاسيكي */
-  qs('#btnStyle')?.addEventListener('click', () => {
-    const order = SKINS.map((s) => s.id);
-    const current = SKINS.some((s) => s.id === settings.skin) ? settings.skin : 'kali';
-    const next = order[(order.indexOf(current) + 1) % order.length];
-    saveSettings({ skin: next });
-    const applied = applySkin();
-    const label = SKINS.find((s) => s.id === applied);
-    toast(`الستايل: ${label ? label.ar : applied}`, 'ok');
-    renderAll();
-  });
-  qs('#btnLang')?.addEventListener('click', () => {
-    const next = settings.uiLang === 'en' ? 'ar' : 'en';
-    saveSettings({ uiLang: next });
-    applyLang();
-    renderAll();
-  });
-
+  /* أزرار خاصة بموقع المستويات فقط */
   qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
   qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
-  qs('#btnInstall')?.addEventListener('click', () => window.__leaInstall?.());
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDrawer();

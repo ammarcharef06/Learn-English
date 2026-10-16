@@ -1,73 +1,67 @@
 /* ============================================================
    قسم «من الصفر» (A0) — هيكل صفحة zero.html
-   يستخدم نفس مكوّنات الموقع: .topbar · .brand · .seg · .btn
+   نفس شريط الموقع ونفس الدرج (views/topbar.js) — تنقّل واحد لكل الأجهزة.
    ============================================================ */
-import { esc, qs, toast, arNum } from '../core/utils.js';
-import { progress, settings } from '../core/store.js';
-import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
+import { esc, qs, arNum } from '../core/utils.js';
+import { progress } from '../core/store.js';
+import { zeroStats, ZERO_TOTALS, ZERO_STAGES } from '../data/zero.js';
 import { zeroFocus, setZeroFocus, certificate } from '../core/zeroflow.js';
 
 export function zeroModeOn() {
   return zeroFocus() === 'a0';
 }
 
-/* تنقّل قسم A0 — أربع خانات فقط بترتيب ثابت */
+/* أقسام قسم A0 في الدرج (بنفس شكل قائمة الموقع) */
 const NAV = [
-  { hash: '#/zero', icon: '🗺️', label: 'المراحل', key: 'stages' },
-  { hash: '#/zero/exam', icon: '🧪', label: 'الاختبار', key: 'exam' },
-  { hash: '#/zero/certificate', icon: '🎓', label: 'الشهادة', key: 'cert' },
-  { hash: '#/zero/settings', icon: '⚙️', label: 'إعدادات', key: 'settings' },
+  { hash: '#/zero', icon: '🗺️', label: 'المراحل الثمانية', key: 'stages' },
+  { hash: '#/zero/exam', icon: '🧪', label: 'الاختبار النهائي', key: 'exam' },
+  { hash: '#/zero/certificate', icon: '🎓', label: 'شهادة التأسيس', key: 'cert' },
+  { hash: '#/zero/pad', icon: '✍️', label: 'لوح الكتابة', key: 'pad' },
+  { hash: '#/zero/settings', icon: '⚙️', label: 'إعدادات التأسيس', key: 'settings' },
 ];
 
 function activeKey(hash) {
   const h = String(hash || '').replace(/^#/, '');
   if (h.startsWith('/zero/exam')) return 'exam';
   if (h.startsWith('/zero/certificate')) return 'cert';
+  if (h.startsWith('/zero/pad')) return 'pad';
   if (h.startsWith('/zero/settings')) return 'settings';
   return 'stages';
 }
 
-/** يرسم شريط A0 العلوي بنفس شكل شريط الموقع. يُستدعى عند كل رسم/تنقّل. */
+/** يرسم درج قسم A0 (نفس درج الموقع) */
+export function renderZeroDrawer(hash = null) {
+  const nav = qs('#sidenav');
+  if (!nav) return;
+  const zs = zeroStats(progress);
+  const cert = certificate();
+  const key = activeKey(hash || location.hash);
+
+  nav.innerHTML = `
+    <div class="sidenav__group">من الصفر — تأسيس A0</div>
+    <div class="mini-progress" style="margin:0 0 10px">
+      <div class="progress"><i style="width:${zs.percent}%"></i></div>
+      <div class="small muted" style="margin-top:6px">${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل · ${arNum(zs.lettersMastered)}/${arNum(ZERO_TOTALS.letters)} حرفاً${cert.earned ? ' · الشهادة مُستلَمة ✓' : ''}</div>
+    </div>
+    ${NAV.map((n) => `<a href="${n.hash}" data-nav data-route="${n.hash}" class="${n.key === key ? 'is-active' : ''}" ${n.key === key ? 'aria-current="page"' : ''}><span class="ico" aria-hidden="true">${n.icon}</span><span class="lbl">${esc(n.label)}</span></a>`).join('')}
+    <div class="sidenav__group">الموقع</div>
+    <a href="./index.html" title="العودة إلى موقع المستويات"><span class="ico" aria-hidden="true">📚</span><span class="lbl">المستويات A1–B1</span></a>`;
+
+  /* وسم المراحل المكتملة داخل الدرج */
+  const done = progress.zero?.stages || {};
+  ZERO_STAGES.forEach((s) => {
+    const a = nav.querySelector(`[data-route="#/zero/stage/${s.id}"]`);
+    if (a && done[s.id]?.done) a.classList.add('is-done');
+  });
+}
+
+/** يُستدعى عند كل رسم/تنقّل: يثبّت وضع A0 ويرسم الدرج */
 export function applyZeroShell(hash = null) {
   const on = zeroModeOn();
   const root = document.documentElement;
   if (on) root.dataset.zero = 'a0';
   else delete root.dataset.zero;
-
-  const bar = qs('#zbar');
-  if (!bar || !on) return;
-
-  const zs = zeroStats(progress);
-  const cert = certificate();
-  const key = activeKey(hash || location.hash);
-  const pct = zs.percent;
-
-  bar.innerHTML = `
-    <a class="brand" href="#/zero" title="من الصفر — تأسيس A0">
-      <span class="brand__mark">A0</span>
-      <span class="brand__text">
-        <b>من الصفر</b>
-        <small>تأسيس A0 · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل${cert.earned ? ' · الشهادة مُستلَمة ✓' : ''}</small>
-      </span>
-    </a>
-
-    <nav class="seg zseg" aria-label="تنقل قسم من الصفر">
-      ${NAV.map((n) => `<button type="button" data-go="${n.hash}" class="${n.key === key ? 'is-active' : ''}"
-        ${n.key === key ? 'aria-current="page"' : ''} aria-label="${n.label}">
-        <span class="zico" aria-hidden="true">${n.icon}</span> <span class="zlabel">${n.label}</span></button>`).join('')}
-    </nav>
-
-    <div class="topbar__actions">
-      <span class="chip chip--brand zbar-pct" title="نسبة الإتقان في التأسيس">${arNum(pct)}٪</span>
-      <button class="btn btn--sm" type="button" id="zExit" title="العودة إلى موقع المستويات" aria-label="العودة إلى موقع المستويات">↩ <span class="zexit-label">المستويات</span></button>
-    </div>`;
-
-  bar.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => {
-    const target = b.dataset.go;
-    if (location.hash === target) { window.__leaRenderAll?.(); return; }
-    location.hash = target;
-  }));
-  bar.querySelector('#zExit')?.addEventListener('click', () => exitZeroMode());
+  if (on) renderZeroDrawer(hash);
 }
 
 /** الخروج إلى موقع المستويات (A1–B1) — انتقال حقيقي إلى صفحة أخرى */
