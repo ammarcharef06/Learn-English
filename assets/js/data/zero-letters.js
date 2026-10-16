@@ -41,7 +41,7 @@ export const DIGRAPHS = [
   { id: 'oo-short', combo: 'oo', soundAr: 'و (قصير)', word: 'Book', wordAr: 'كتاب', wordPronAr: 'بوك', emoji: '📚', tipAr: 'oo هنا قصيرة مثل «و» في Book وCook.' },
   { id: 'ee', combo: 'ee', soundAr: 'إي (طويل)', word: 'Bee', wordAr: 'نحلة', wordPronAr: 'بي', emoji: '🐝', tipAr: 'ee تنطق «إي» طويلة مثل اسم حرف E.' },
   { id: 'ea', combo: 'ea', soundAr: 'إي', word: 'Sea', wordAr: 'بحر', wordPronAr: 'سي', emoji: '🌊', tipAr: 'ea غالباً تنطق «إي» مثل Sea وTea.' },
-  { id: 'ou', combo: 'ou', soundAr: 'آو', word: 'House', wordAr: 'منزل', wordPronAr: 'هاوس', emoji: '🏠', tipAr: 'ou تنطق «آو» في House وMouse.' }
+  { id: 'ou', combo: 'ou', soundAr: 'آو', word: 'Mouse', wordAr: 'فأر', wordPronAr: 'ماوس', emoji: '🐭', tipAr: 'ou تنطق «آو» في House وMouse.' }
 ];
 
 export const NUMBERS = [

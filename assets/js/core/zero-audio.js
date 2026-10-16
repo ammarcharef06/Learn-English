@@ -1,16 +1,15 @@
-/* ============================================================
+﻿/* ============================================================
    حزمة أصوات قسم «من الصفر» (A0) — المرحلتان ١ و ٢
-   ١٠٢ ملفاً بصوت إنجليزي عالمي موحّد على كل الأجهزة:
-     • g/name-*.mp3  اسم الحرف (Google TTS · نطق عالمي حديث)
-     • g/word-*.mp3  كلمة المثال (Google TTS)
-     • s/*.wav       الصوت المفرد بدقّة (SSML phoneme) — ما لا يستطيعه
-                     محرّك الجهاز (يتهجّأ الحروف المركّبة)
-   لماذا ملفات مسجّلة؟ لأن نطق الجهاز يتفاوت ويتغيّر، ويتهجّأ sh/ch/th.
+   ١٠٢ ملفاً بصوت **بشري** حقيقي (تسجيلات بشرية من ويكيميديا كومنز):
+     • h/name-*.wav   اسم الحرف   (تسجيل بشري)
+     • h/word-*.wav   كلمة المثال (تسجيل بشري)
+     • h/sound-*.wav  الصوت المفرد (تسجيلات نطق صوتي بشرية)
+   لماذا ملفات؟ لأن نطق الجهاز يتفاوت بين الأجهزة ويتهجّأ الحروف المركّبة.
+   المصدر: Wikimedia Commons (ملكية عامة/CC) — انظر README للتفاصيل.
    ============================================================ */
 import { registerSoundBank } from './speech.js';
 
-const G = './assets/audio/zero/g/';
-const S = './assets/audio/zero/s/';
+const H = './assets/audio/zero/h/';
 
 /** أسماء الحروف الستة والعشرين */
 export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -24,7 +23,7 @@ export const DIGRAPH_IDS = [
 /** كلمات أمثلة الحروف المركّبة (بنفس ترتيب بيانات المرحلة) */
 const DIGRAPH_WORDS = {
   sh: 'ship', ch: 'chair', 'th-voiceless': 'three', 'th-voiced': 'this', ph: 'phone',
-  ck: 'duck', ng: 'sing', 'oo-long': 'spoon', 'oo-short': 'book', ee: 'see', ea: 'tea', ou: 'house',
+  ck: 'duck', ng: 'sing', 'oo-long': 'spoon', 'oo-short': 'book', ee: 'see', ea: 'tea', ou: 'mouse',
 };
 
 /* الحروف المركّبة المتشابهة كتابةً (th مرتان · oo مرتان) لها مفتاح صريح */
@@ -44,11 +43,11 @@ export function soundPack() {
 /** المصدر الحقيقي لكل معرّف (يُستخدم أيضاً في الفحوصات) */
 export function resolveSound(key) {
   const k = String(key || '').trim();
-  if (k.startsWith('name:letter:')) return G + 'name-' + k.slice(12) + '.mp3';
-  if (k.startsWith('sound:letter:')) return S + 'letter-' + k.slice(13) + '.wav';
-  if (k.startsWith('word:letter:')) return G + 'word-' + k.slice(12) + '.mp3';
-  if (k.startsWith('sound:')) return S + 'dig-' + k.slice(6) + '.wav';
-  if (k.startsWith('word:')) return G + 'word-' + k.slice(5) + '.mp3';
+  if (k.startsWith('name:letter:')) return H + 'name-' + k.slice(12) + '.wav';
+  if (k.startsWith('sound:letter:')) return H + 'sound-' + k.slice(13) + '.wav';
+  if (k.startsWith('word:letter:')) return H + 'word-' + k.slice(12) + '.wav';
+  if (k.startsWith('sound:')) return H + 'sound-' + k.slice(6) + '.wav';
+  if (k.startsWith('word:')) return H + 'word-' + k.slice(5) + '.wav';
   return null;
 }
 
@@ -58,9 +57,9 @@ export function registerZeroSounds() {
   /* مفاتيح صريحة (تطابق sayId/nameId/wordId في data/zero.js) */
   for (const k of soundPack().all) bank[k] = resolveSound(k);
   /* مفاتيح النص المباشرة: أي نطق لنفس النص يستخدم التسجيل تلقائياً */
-  for (const ch of LETTER_IDS) bank[ch] = G + 'name-' + ch + '.mp3';       // نطق «A» = اسم الحرف
-  for (const [text, id] of Object.entries(DIGRAPH_BY_TEXT)) bank[text] = S + 'dig-' + id + '.wav';
-  for (const [id, word] of Object.entries(DIGRAPH_WORDS)) bank[word] = G + 'word-' + id + '.mp3';
+  for (const ch of LETTER_IDS) bank[ch] = H + 'name-' + ch + '.wav';       // نطق «A» = اسم الحرف
+  for (const [text, id] of Object.entries(DIGRAPH_BY_TEXT)) bank[text] = H + 'sound-' + id + '.wav';
+  for (const [id, word] of Object.entries(DIGRAPH_WORDS)) bank[word] = H + 'word-' + id + '.wav';
   registerSoundBank(bank);
   return Object.keys(bank).length;
 }
