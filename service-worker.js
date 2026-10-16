@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v2.4.0';
+const VERSION = 'v2.5.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -29,18 +29,18 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
-  './assets/audio/zero/d/sh.wav',
-  './assets/audio/zero/d/ch.wav',
-  './assets/audio/zero/d/th-voiceless.wav',
-  './assets/audio/zero/d/th-voiced.wav',
-  './assets/audio/zero/d/ph.wav',
-  './assets/audio/zero/d/ck.wav',
-  './assets/audio/zero/d/ng.wav',
-  './assets/audio/zero/d/oo-long.wav',
-  './assets/audio/zero/d/oo-short.wav',
-  './assets/audio/zero/d/ee.wav',
-  './assets/audio/zero/d/ea.wav',
-  './assets/audio/zero/d/ou.wav',
+  './assets/audio/zero/d/sh.mp3',
+  './assets/audio/zero/d/ch.mp3',
+  './assets/audio/zero/d/th-voiceless.mp3',
+  './assets/audio/zero/d/th-voiced.mp3',
+  './assets/audio/zero/d/ph.mp3',
+  './assets/audio/zero/d/ck.mp3',
+  './assets/audio/zero/d/ng.mp3',
+  './assets/audio/zero/d/oo-long.mp3',
+  './assets/audio/zero/d/oo-short.mp3',
+  './assets/audio/zero/d/ee.mp3',
+  './assets/audio/zero/d/ea.mp3',
+  './assets/audio/zero/d/ou.mp3',
   './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',

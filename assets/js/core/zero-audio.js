@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    أصوات الحروف المركّبة الـ١٢ فقط (المرحلة ٢)
    السبب: محرّك النطق المدمج في بعض الأجهزة يتهجّأ «sh · ch · th»
    حرفاً حرفاً بدل نطقها مقطعاً واحداً.
@@ -9,6 +9,7 @@
 import { registerSoundBank } from './speech.js';
 
 const DIR = './assets/audio/zero/d/';
+const EXT = '.mp3';
 
 /** معرّفات الحروف المركّبة التي لها تسجيل */
 export const DIGRAPH_SOUND_IDS = [
@@ -24,14 +25,14 @@ const BY_TEXT = {
 
 /** رابط ملف صوت الحرف المركّب (أو null) */
 export function digraphSound(id) {
-  return DIGRAPH_SOUND_IDS.includes(id) ? `${DIR}${id}.wav` : null;
+  return DIGRAPH_SOUND_IDS.includes(id) ? `${DIR}${id}${EXT}` : null;
 }
 
 /** يسجّل الأصوات الاثني عشر في محرّك النطق. يُرجع عدد المفاتيح. */
 export function registerDigraphSounds() {
   const bank = {};
-  for (const id of DIGRAPH_SOUND_IDS) bank[`sound:${id}`] = `${DIR}${id}.wav`;
-  for (const [text, id] of Object.entries(BY_TEXT)) bank[text] = `${DIR}${id}.wav`;
+  for (const id of DIGRAPH_SOUND_IDS) bank[`sound:${id}`] = `${DIR}${id}${EXT}`;
+  for (const [text, id] of Object.entries(BY_TEXT)) bank[text] = `${DIR}${id}${EXT}`;
   registerSoundBank(bank);
   return Object.keys(bank).length;
 }

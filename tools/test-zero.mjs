@@ -796,10 +796,10 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     // الحروف المركّبة: لها معرّف صوت وملف موجود
     for (const it of zeroItems('digraphs')) {
       assert(it.sayId, `حرف مركّب بلا معرّف صوت: ${it.en}`);
-      const f = join(ROOT, 'assets/audio/zero/d', `${it.sayId}.wav`);
-      assert(existsSync(f), `ملف صوت مفقود: ${it.sayId}.wav`);
+      const f = join(ROOT, 'assets/audio/zero/d', `${it.sayId}.mp3`);
+      assert(existsSync(f), `ملف صوت مفقود: ${it.sayId}.mp3`);
       const size = statSync(f).size;
-      assert(size > 4000 && size < 60000, `حجم غير معقول (${it.sayId}): ${size}`);
+      assert(size > 4000 && size < 40000, `حجم غير معقول (${it.sayId}): ${size}`);
     }
     assert(/registerDigraphSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل أصوات الحروف المركّبة');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
