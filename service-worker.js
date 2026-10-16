@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v2.5.0';
+const VERSION = 'v3.0.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -29,18 +29,6 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
-  './assets/audio/zero/d/sh.mp3',
-  './assets/audio/zero/d/ch.mp3',
-  './assets/audio/zero/d/th-voiceless.mp3',
-  './assets/audio/zero/d/th-voiced.mp3',
-  './assets/audio/zero/d/ph.mp3',
-  './assets/audio/zero/d/ck.mp3',
-  './assets/audio/zero/d/ng.mp3',
-  './assets/audio/zero/d/oo-long.mp3',
-  './assets/audio/zero/d/oo-short.mp3',
-  './assets/audio/zero/d/ee.mp3',
-  './assets/audio/zero/d/ea.mp3',
-  './assets/audio/zero/d/ou.mp3',
   './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
@@ -121,7 +109,18 @@ const isSameOrigin = (url) => url.origin === self.location.origin;
 const isCacheableAsset = (url) => /\.(?:css|js|mjs|json|webmanifest|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname);
 const isCodeAsset = (url) => /\.(?:js|mjs|css|json|webmanifest)$/i.test(url.pathname);
 
+/* حزمة أصوات المرحلتين ١ و ٢ (٧٦ ملفاً ≈٨٤٠KB): تُخزَّن عند الطلب */
 self.addEventListener('fetch', (event) => {
+  const u0 = new URL(event.request.url);
+  if (event.request.method === 'GET' && u0.pathname.includes('/assets/audio/zero/')) {
+    event.respondWith(
+      caches.match(event.request).then((hit) => hit || fetch(event.request).then((res) => {
+        if (res && res.ok) { const c = res.clone(); caches.open(CACHE).then((x) => x.put(event.request, c)).catch(() => {}); }
+        return res;
+      }))
+    );
+    return;
+  }
   const req = event.request;
   if (req.method !== 'GET') return;
 

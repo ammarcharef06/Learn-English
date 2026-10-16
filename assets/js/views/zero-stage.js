@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    قسم «من الصفر» (A0) — مشغّل المرحلة
    • الحروف والحروف المركّبة: عنصر واحد في البطاقة (تركيز) + شريط اختيار
    • بقية المراحل: مجموعات في .seg وقوائم .item-row
@@ -35,12 +35,12 @@ function say(text, slow = false) {
 /** نطق اسم الحرف (النطق المدمج في المتصفح) */
 function sayName(it, slow = false) {
   if (!it) return;
-  say(it.say || it.en, slow);
+  say(it.nameId ? `name:${it.nameId}` : (it.say || it.en), slow);
 }
 /** نطق كلمة المثال */
 function sayWord(it, slow = false) {
   if (!it || !it.word) return;
-  say(it.word, slow);
+  say(it.wordId ? `word:${it.wordId}` : it.word, slow);
 }
 /** نطق الحرف المركّب: تسجيل بشري للاثني عشر (والباقي بالنطق المدمج) */
 function sayDigraph(it, slow = false) {

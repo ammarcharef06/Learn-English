@@ -13,7 +13,7 @@ import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
 import { renderTopbar, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
-import { registerDigraphSounds } from './core/zero-audio.js';
+import { registerZeroSounds } from './core/zero-audio.js';
 import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
 import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
 import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
@@ -60,7 +60,7 @@ function bindGlobalEvents() {
 async function main() {
   setUiLang('ar');
   initSpeech();
-  registerDigraphSounds();
+  registerZeroSounds();
   bindGlobalEvents();
   window.__leaBooted = true;
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ============================================================
  *  اختبارات قسم «من الصفر» (A0) — بلا أي مكتبات خارجية
  *  التشغيل:  node tools/test-zero.mjs
@@ -791,7 +791,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/registerSoundBank/.test(speech), 'محرّك النطق لا يدعم التسجيلات الاختيارية');
     // الحروف المفردة: بلا أي ملف صوت
     for (const it of zeroItems('letters')) {
-      assert(!it.sayId && !it.nameId && !it.wordId, `حرف مفرد يشير إلى ملف صوت: ${it.en}`);
+      assert(it.nameId && it.wordId, `حرف بلا تسجيل: ${it.en}`);
     }
     // الحروف المركّبة: لها معرّف صوت وملف موجود
     for (const it of zeroItems('digraphs')) {
@@ -801,7 +801,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
       const size = statSync(f).size;
       assert(size > 4000 && size < 40000, `حجم غير معقول (${it.sayId}): ${size}`);
     }
-    assert(/registerDigraphSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل أصوات الحروف المركّبة');
+    assert(/registerZeroSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل الحزمة');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
   });
   it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
