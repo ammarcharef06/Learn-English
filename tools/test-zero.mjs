@@ -77,6 +77,8 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
    1) سلامة البيانات
    ============================================================ */
 const Z = await load('assets/js/data/zero.js');
+const AUDIO = await load('assets/js/core/zero-audio.js');
+const soundPack = AUDIO.soundPack, resolveSound = AUDIO.resolveSound;
 const {
   LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
   NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS, ZERO_STAGES, ZERO_TOTALS,
@@ -785,22 +787,27 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
-  it('لكل حرف مركّب ملف صوتي مسجّل (مقطع واحد لا حروف منفصلة)', () => {
-    const dg = zeroItems('digraphs');
-    for (const it of dg) {
-      truthy(it.sayId, `الحرف المركّب ${it.en} بلا معرّف صوت`);
-      const f = join(ROOT, 'assets/audio/zero', `${it.sayId}.wav`);
-      assert(existsSync(f), `ملف الصوت مفقود: ${it.sayId}.wav`);
+  it('حزمة أصوات المرحلتين ١ و ٢: ١٠٢ ملفاً موجودة وسليمة', () => {
+    const pack = soundPack();
+    eq(pack.all.length, 102, 'عدد ملفات الحزمة');
+    eq(pack.names.length, 26, 'أسماء الحروف');
+    eq(pack.sounds.length, 38, 'الأصوات المفردة');
+    eq(pack.words.length, 38, 'كلمات الأمثلة');
+    let bytes = 0;
+    for (const key of pack.all) {
+      const src = resolveSound(key);
+      truthy(src, `لا مصدر صوت للمفتاح ${key}`);
+      const f = join(ROOT, src.replace(/^\.\//, ''));
+      assert(existsSync(f), `ملف الصوت مفقود: ${src}`);
       const size = statSync(f).size;
-      assert(size > 4000 && size < 60000, `حجم ملف الصوت غير معقول (${it.sayId}): ${size}`);
+      assert(size > 1500 && size < 90000, `حجم غير معقول (${src}): ${size}`);
+      bytes += size;
     }
-    assert(new Set(dg.map((x) => x.sayId)).size === dg.length, 'معرّفات الأصوات مكرّرة');
-    const bank = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
-    const speech = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
-    assert(/registerSoundBank/.test(speech) && /soundBank/.test(speech), 'محرّك النطق لا يدعم الأصوات المسجّلة');
-    assert(/registerZeroSounds/.test(bank), 'بنك أصوات A0 لا يسجّل نفسه');
+    assert(bytes > 600000, `الحزمة أصغر من المتوقع: ${bytes}`);
+    const audioJs = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
+    assert(/registerZeroSounds/.test(audioJs), 'بنك أصوات A0 لا يسجّل نفسه');
     assert(/registerZeroSounds\(\)/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8')), 'صفحة A0 لا تُفعّل بنك الأصوات');
-    assert(/soundFix|sayId/.test(stageJs), 'مشغّل المرحلة لا يستخدم الصوت المسجّل');
+    assert(/sayName/.test(stageJs) && /sayWord/.test(stageJs), 'المشغّل لا ينطق الاسم والصوت والكلمة');
   });  it('الحروف المركّبة تُنطق هي نفسها لا كلمة المثال', () => {
     const dg = zeroItems('digraphs');
     for (const it of dg) {
@@ -825,7 +832,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/zero\.html/.test(sw) && /fallback/.test(sw), 'لا رجوع خاص بصفحة A0 عند انقطاع الإنترنت');
   });
   it('نسخة الـ Service Worker رُفعت لتحديث الملفات المخزّنة', () => {
-    assert(/VERSION\s*=\s*'v1\.(?:[4-9]\d*)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
+    assert(/VERSION\s*=\s*'v(?:[2-9]|[1-9]\d)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
   });
 });
 

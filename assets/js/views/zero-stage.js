@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    قسم «من الصفر» (A0) — مشغّل المرحلة
    • الحروف والحروف المركّبة: عنصر واحد في البطاقة (تركيز) + شريط اختيار
    • بقية المراحل: مجموعات في .seg وقوائم .item-row
@@ -32,10 +32,26 @@ function say(text, slow = false) {
   if (!text) return;
   speak(text, slow ? { rate: 0.5 } : { rate: rate() });
 }
-/** نطق عنصر: الحروف المركّبة لها ملف صوتي مسجّل (مقطع واحد لا حروف منفصلة) */
+/** نطق الصوت المفرد المسجّل (حروف المركّبتين ١ و ٢) */
 function sayItem(it, slow = false) {
   if (!it) return;
   say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
+}
+/** نطق اسم الحرف المسجّل */
+function sayName(it, slow = false) {
+  if (!it) return;
+  say(it.nameId ? `name:${it.nameId}` : (it.say || it.en), slow);
+}
+/** نطق كلمة المثال المسجّلة */
+function sayWord(it, slow = false) {
+  if (!it || !it.word) return;
+  say(it.wordId ? `word:${it.wordId}` : it.word, slow);
+}
+/* اسم الحرف → ثم صوته، بتتابع واضح */
+function sayNameThenSound(it) {
+  if (!it) return;
+  sayName(it);
+  setTimeout(() => sayItem(it), 900);
 }
 
 /* ============================================================
@@ -59,9 +75,10 @@ export function openDetails(it) {
         <div class="stack" style="gap:10px">${rows.join('')}</div>
         ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
         <div class="row row--wrap" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🔊 اسمع</button>
+          ${it.nameId ? `<button class="btn btn--primary" type="button" data-play="name:${esc(it.nameId)}">🔊 اسم الحرف</button>` : ''}
+          <button class="btn ${it.nameId ? '' : 'btn--primary'}" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🔊 الصوت</button>
           <button class="btn" type="button" data-play-slow="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🐢 ببطء</button>
-          ${it.word && it.word !== it.en ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
+          ${it.word ? `<button class="btn" type="button" data-play="${esc(it.wordId ? `word:${it.wordId}` : it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
       </div>`,
     actions: [{ label: 'إغلاق', variant: 'ghost' }],
@@ -198,7 +215,8 @@ function renderFocusStage(host, stage) {
         </div>
 
         <div class="row row--wrap mt-4" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسمع الحرف' : 'اسمع الصوت'}</button>
+          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسم الحرف وصوته' : 'اسمع الصوت'}</button>
+          ${isLetters ? '<button class="btn" type="button" data-act="name">🔉 اسمه' : ''}
           ${it.word ? `<button class="btn" type="button" data-act="word">🔊 كلمة المثال</button>` : ''}
           <button class="btn" type="button" data-act="write">✍️ اكتبه</button>
           <button class="btn ${done ? 'btn--primary' : ''}" type="button" data-act="master">${done ? '✓ متقن' : '✅ أتقنت'}</button>
@@ -214,8 +232,9 @@ function renderFocusStage(host, stage) {
       </div>`;
 
     const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
-    act('say', () => sayItem(it));                     // الحرف/المقطع المركّب نفسه — لا كلمة المثال
-    act('word', () => say(it.word));
+    act('say', () => (isLetters ? sayNameThenSound(it) : sayItem(it)));  // الصوت المسجّل نفسه — لا كلمة المثال
+    act('name', () => sayName(it));
+    act('word', () => sayWord(it));
     act('write', () => openWritePad(it.word || it.en, it.ar));
     act('master', () => {
       const badges = isLetters

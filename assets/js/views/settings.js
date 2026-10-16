@@ -454,4 +454,5 @@ function confirmAction(title, body, onOk) {
 }
 
 /* المظهر واللغة: منطق مشترك بين الصفحتين (انظر core/theme.js) */
-export { SKINS, applyTheme, applySkin, applyLang } from '../core/theme.js';
+import { SKINS, applyTheme, applySkin, applyLang } from '../core/theme.js';
+export { SKINS, applyTheme, applySkin, applyLang };

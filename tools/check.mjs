@@ -423,23 +423,27 @@ try {
   }
   // حزمة أصوات المرحلتين ١ و ٢: ٢٦ حرفاً + ١٢ حرفاً مركّباً
   const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
-  const audioIds = [...zs.zeroItems('letters').map((x) => x.sayId), ...zs.zeroItems('digraphs').map((x) => x.sayId)];
-  if (audioIds.some((x) => !x)) bad('بعض عناصر المرحلتين ١ و ٢ بلا معرّف صوت');
-  if (new Set(audioIds).size !== audioIds.length) bad('معرّفات الأصوات غير فريدة');
-  if (audioIds.length !== 38) bad(`عدد أصوات المرحلتين ${audioIds.length} بدل 38 (26 حرفاً + 12 مركّباً)`);
+  const AUD = await import(pathToFileURL(join(ROOT, 'assets/js/core/zero-audio.js')).href);
+  const pack = AUD.soundPack();
+  if (pack.all.length !== 102) bad(`حزمة الأصوات ${pack.all.length} ملفاً بدل 102 (٢٦+٢٦+٢٦+١٢+١٢)`);
   let soundFiles = 0;
-  for (const raw of audioIds) {
-    const id = String(raw).startsWith('letter:') ? String(raw).slice(7) : raw;
-    const f = join(ROOT, 'assets/audio/zero', `${id}.wav`);
-    if (!existsSync(f)) { bad(`ملف صوت مفقود: ${id}.wav`); continue; }
+  for (const key of pack.all) {
+    const src = AUD.resolveSound(key);
+    const f = join(ROOT, String(src || '').replace(/^\.\//, ''));
+    if (!src || !existsSync(f)) { bad(`ملف صوت مفقود: ${key} → ${src}`); continue; }
     const size = statSync(f).size;
-    if (size < 4000 || size > 60000) bad(`حجم ملف الصوت غير معقول (${id}): ${size}`);
+    if (size < 1500 || size > 90000) bad(`حجم غير معقول (${src}): ${size}`);
     else soundFiles++;
   }
+  for (const it of zs.zeroItems('letters')) {
+    if (!it.nameId || !it.sayId || !it.wordId) bad(`عنصر حرف بلا معرّفات صوت: ${it.en}`);
+  }
+  for (const it of zs.zeroItems('digraphs')) {
+    if (!it.sayId || !it.wordId) bad(`حرف مركّب بلا معرّفات صوت: ${it.en}`);
+  }
   if (!/registerSoundBank/.test(readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8'))) bad('محرّك النطق لا يدعم الأصوات المسجّلة');
-  const audioJs = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
-  if (!/registerZeroSounds/.test(audioJs) || !/LETTER_IDS/.test(audioJs)) bad('بنك أصوات A0 ناقص');
-  ok(`حزمة أصوات المرحلتين ١ و ٢: ${soundFiles}/${audioIds.length} مقطعاً مسجّلاً (٢٦ حرفاً + ١٢ مركّباً)`);
+  if (!/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8'))) bad('بنك أصوات A0 ناقص');
+  ok(`حزمة أصوات المرحلتين ١ و ٢: ${soundFiles}/${pack.all.length} ملفاً (أسماء + أصوات + كلمات أمثلة)`);
 
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }
