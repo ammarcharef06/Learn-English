@@ -1,4 +1,4 @@
-/**
+﻿/**
  * فحص سلامة المشروع — يعمل بدون أي مكتبات خارجية
  * الاستخدام:  node tools/check.mjs
  */
@@ -447,7 +447,16 @@ try {
   if (!/sayDigraph/.test(stageSrc2)) bad('مشغّل المرحلة لا ينطق الحروف المركّبة من التسجيل');
   if (!/data-act="say"/.test(stageSrc2)) bad('زر النطق مفقود في بطاقة المرحلة');
   if (!/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('صفحة A0 لا تُسجّل الحزمة');
-  ok(`حزمة صوت نيرالية موحّدة: ${packFiles}/76 ملفاً (أسماء الحروف + كلمات الأمثلة + أصوات المركّبة)`);
+  // خريطة المراحل ٣-٨ (مولّدة آلياً)
+  const MAP = (await import(pathToFileURL(join(ROOT, 'assets/js/data/zero-audio-map.js')).href)).AUDIO_MAP;
+  let mapFiles = 0;
+  for (const [text, src] of Object.entries(MAP)) {
+    const f = join(ROOT, String(src).replace(/^\.\//, ''));
+    if (!existsSync(f)) { bad(`ملف صوت مفقود للنص: ${text}`); continue; }
+    mapFiles++;
+  }
+  if (Object.keys(MAP).length < 250) bad(`خريطة المراحل ٣-٨ صغيرة: ${Object.keys(MAP).length}`);
+  ok(`حزمة صوت نيرالية موحّدة: ${packFiles}/76 للمرحلتين ١-٢ + ${mapFiles} نصاً للمراحل ٣-٨`);
 
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }

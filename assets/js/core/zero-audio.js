@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    حزمة أصوات المرحلتين ١ و ٢ — صوت نيرالي واحد موحّد (en-US, Aria)
    • n/name-*.mp3  اسم كل حرف (٢٦)
    • n/word-*.mp3  كلمة مثال كل حرف + كل حرف مركّب (٣٨)
@@ -7,6 +7,7 @@
    ولمنع أي صمت: إن تعذّر الملف يرجع النطق إلى محرّك المتصفح المدمج.
    ============================================================ */
 import { registerSoundBank } from './speech.js';
+import { AUDIO_MAP } from '../data/zero-audio-map.js';
 
 const N = './assets/audio/zero/n/';
 const D = './assets/audio/zero/d/';
@@ -70,6 +71,8 @@ export function registerZeroSounds() {
   for (const [c, w] of Object.entries(LETTER_WORDS)) bank[w] = `${N}word-${c}.mp3`;
   for (const [text, id] of Object.entries(DIGRAPH_BY_TEXT)) bank[text] = `${D}${id}.mp3`;
   for (const [id, w] of Object.entries(DIGRAPH_WORDS)) bank[w] = `${N}word-${id}.mp3`;
+  /* خريطة نصوص المراحل ٣-٨ (مولّدة آلياً): أي نص إنجليزي له تسجيل */
+  for (const [text, src] of Object.entries(AUDIO_MAP)) bank[text] = src;
   registerSoundBank(bank);
   return Object.keys(bank).length;
 }
