@@ -1,4 +1,4 @@
-/* النطق الصوتي عبر Speech Synthesis */
+﻿/* النطق الصوتي عبر Speech Synthesis */
 import { settings } from './store.js';
 
 let voices = [];
@@ -46,54 +46,8 @@ function bestVoice() {
   return us || all[0];
 }
 
-/* ---------- بنك أصوات مسجّلة ----------
-   بعض الأصوات (مثل الحروف المركّبة sh · ch · th) لا يُنطقها محرّك الجهاز
-   كنطق واحد بل يتهجّأها، فنُشغّل لها ملفاً صوتياً مسجّلاً بدل النطق الآلي. */
-const soundBank = new Map();
-let audioEl = null;
-
-export function registerSound(key, src) {
-  const k = String(key || '').trim().toLowerCase();
-  if (k && src) soundBank.set(k, src);
-  return soundBank.size;
-}
-export function registerSoundBank(map = {}) {
-  for (const [k, v] of Object.entries(map)) registerSound(k, v);
-  return soundBank.size;
-}
-export function hasRecordedSound(text) {
-  return soundBank.has(String(text || '').trim().toLowerCase());
-}
-export function clearRecordedSounds() { soundBank.clear(); }
-
-function playRecorded(src, opts, onBlocked) {
-  try {
-    if (!audioEl) audioEl = new Audio();
-    audioEl.pause();
-    audioEl.src = src;
-    audioEl.currentTime = 0;
-    audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
-    audioEl.onerror = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
-    const p = audioEl.play();
-    if (p && typeof p.then === 'function') {
-      p.catch(() => { if (typeof onBlocked === 'function') onBlocked(); });
-    }
-    return true;
-  } catch { return false; }
-}
-
-export function speak(text, opts = {}) {
-  const src = soundBank.get(String(text || '').trim().toLowerCase());
-  if (src) {
-    // إن منع المتصفح التشغيل التلقائي (بلا لمسة مستخدم) نرجع للنطق الآلي
-    const ok = playRecorded(src, opts, () => speakSynth(text, opts));
-    if (ok) return true;
-  }
-  return speakSynth(text, opts);
-}
-
 /* النطق الآلي عبر Speech Synthesis */
-export function speakSynth(text, opts = {}) {
+export function speak(text, opts = {}) {
   if (!isSpeechSupported() || !text) return false;
   try { window.speechSynthesis.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(String(text));
@@ -108,7 +62,6 @@ export function speakSynth(text, opts = {}) {
 }
 
 export function stopSpeaking() {
-  if (audioEl) { try { audioEl.pause(); } catch { /* تجاهل */ } }
   if (!isSpeechSupported()) return;
   try { window.speechSynthesis.cancel(); } catch {}
 }

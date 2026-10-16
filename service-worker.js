@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v2.2.0';
+const VERSION = 'v2.3.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -42,7 +42,6 @@ const CORE = [
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
-  './assets/js/core/zero-audio.js',
   './assets/js/core/theme.js',
   './assets/js/data/reference.js',
   './assets/js/data/curriculum.js',
@@ -109,21 +108,7 @@ const isSameOrigin = (url) => url.origin === self.location.origin;
 const isCacheableAsset = (url) => /\.(?:css|js|mjs|json|webmanifest|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname);
 const isCodeAsset = (url) => /\.(?:js|mjs|css|json|webmanifest)$/i.test(url.pathname);
 
-/* نطق المرحلتين ١ و ٢: يُخزَّن عند الطلب (الحزمة ٢٫٥ميغا لا تُنزَّل إلا عند الاستخدام) */
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  if (event.request.method === 'GET' && /\/assets\/audio\/zero\//.test(url.pathname)) {
-    event.respondWith(
-      caches.match(event.request).then((hit) => hit || fetch(event.request).then((res) => {
-        if (res && res.ok) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(event.request, copy)).catch(() => {});
-        }
-        return res;
-      }))
-    );
-    return;
-  }
   const req = event.request;
   if (req.method !== 'GET') return;
 

@@ -32,26 +32,15 @@ function say(text, slow = false) {
   if (!text) return;
   speak(text, slow ? { rate: 0.5 } : { rate: rate() });
 }
-/** نطق الصوت المفرد المسجّل (حروف المركّبتين ١ و ٢) */
-function sayItem(it, slow = false) {
-  if (!it) return;
-  say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
-}
-/** نطق اسم الحرف المسجّل */
+/** نطق اسم الحرف (النطق المدمج في المتصفح) */
 function sayName(it, slow = false) {
   if (!it) return;
-  say(it.nameId ? `name:${it.nameId}` : (it.say || it.en), slow);
+  say(it.say || it.en, slow);
 }
-/** نطق كلمة المثال المسجّلة */
+/** نطق كلمة المثال */
 function sayWord(it, slow = false) {
   if (!it || !it.word) return;
-  say(it.wordId ? `word:${it.wordId}` : it.word, slow);
-}
-/* اسم الحرف → ثم صوته، بتتابع واضح */
-function sayNameThenSound(it) {
-  if (!it) return;
-  sayName(it);
-  setTimeout(() => sayItem(it), 900);
+  say(it.word, slow);
 }
 
 /* ============================================================
@@ -75,10 +64,9 @@ export function openDetails(it) {
         <div class="stack" style="gap:10px">${rows.join('')}</div>
         ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
         <div class="row row--wrap" style="gap:8px">
-          ${it.nameId ? `<button class="btn btn--primary" type="button" data-play="name:${esc(it.nameId)}">🔊 اسم الحرف</button>` : ''}
-          <button class="btn ${it.nameId ? '' : 'btn--primary'}" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🔊 الصوت</button>
-          <button class="btn" type="button" data-play-slow="${esc(it.sayId ? `sound:${it.sayId}` : it.en)}">🐢 ببطء</button>
-          ${it.word ? `<button class="btn" type="button" data-play="${esc(it.wordId ? `word:${it.wordId}` : it.word)}">🔊 كلمة المثال</button>` : ''}
+          <button class="btn btn--primary" type="button" data-play="${esc(it.say || it.en)}">${it.nameAr ? '🔊 اسمه' : '🔊 الصوت'}</button>
+          <button class="btn" type="button" data-play-slow="${esc(it.say || it.en)}">🐢 ببطء</button>
+          ${it.word ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
       </div>`,
     actions: [{ label: 'إغلاق', variant: 'ghost' }],
@@ -215,8 +203,7 @@ function renderFocusStage(host, stage) {
         </div>
 
         <div class="row row--wrap mt-4" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسم الحرف وصوته' : 'اسمع الصوت'}</button>
-          ${isLetters ? '<button class="btn" type="button" data-act="name">🔉 اسمه' : ''}
+          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسمه' : 'اسمع الصوت'}</button>
           ${it.word ? `<button class="btn" type="button" data-act="word">🔊 كلمة المثال</button>` : ''}
           <button class="btn" type="button" data-act="write">✍️ اكتبه</button>
           <button class="btn ${done ? 'btn--primary' : ''}" type="button" data-act="master">${done ? '✓ متقن' : '✅ أتقنت'}</button>
@@ -232,8 +219,7 @@ function renderFocusStage(host, stage) {
       </div>`;
 
     const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
-    act('say', () => (isLetters ? sayNameThenSound(it) : sayItem(it)));  // الصوت المسجّل نفسه — لا كلمة المثال
-    act('name', () => sayName(it));
+    act('say', () => sayName(it));                      // المرحلة ١: اسم الحرف فقط
     act('word', () => sayWord(it));
     act('write', () => openWritePad(it.word || it.en, it.ar));
     act('master', () => {
@@ -247,11 +233,11 @@ function renderFocusStage(host, stage) {
     });
     act('details', () => openDetails(it));
 
-    qs('[data-hear]', box)?.addEventListener('click', () => sayItem(it));
+    qs('[data-hear]', box)?.addEventListener('click', () => sayName(it));
     box.querySelector('[data-nav2="prev"]')?.addEventListener('click', () => { if (i > 0) { i -= 1; paint(); paintStrip(); } });
     box.querySelector('[data-nav2="next"]')?.addEventListener('click', () => { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } });
 
-    if (speakNow && zeroPrefs().autoSpeak) sayItem(it);
+    if (speakNow && zeroPrefs().autoSpeak) sayName(it);
   };
 
   /* شريط اختيار الحروف */
@@ -269,7 +255,7 @@ function renderFocusStage(host, stage) {
 
   paint(false);
   paintStrip();
-  if (zeroPrefs().autoSpeak) sayItem(items[0]);
+  if (zeroPrefs().autoSpeak) sayName(items[0]);
 
   document.onkeydown = (e) => {
     if (e.key === 'ArrowLeft') { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } }

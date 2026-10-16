@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    قسم «من الصفر» (A0) — الرئيسية + الإعدادات + لوح الكتابة الحر
    كل الواجهات بمكوّنات الموقع: .page-head · .card · .grid · .btn · .chip
    ============================================================ */
@@ -164,10 +164,6 @@ export function renderZeroSettings(host) {
       ${stat('الاختبار النهائي', `${arNum(snap.examBest)}٪`, '', snap.examBest >= 90 ? 'stat--ok' : '')}
     </div>
 
-    <div class="card card--brand mt-4">
-      <div class="card__title"><span class="ico" aria-hidden="true">🔊</span><h3>الحزمة الصوتية</h3></div>
-      <p class="small">المرحلتان ١ و ٢ تُنطقان بـ<strong>تسجيلات بشرية</strong> — ١٠٢ مقطعاً: اسم كل حرف وصوته وكلمة المثال — لتعمل بنفس الوضوح على كل الأجهزة وبلا إنترنت. المصدر: تسجيلات نطق بشرية على ويكيميديا كومنز (ملكية عامة / CC).</p>
-    </div>
 
     <div class="card mt-4" style="border-color:color-mix(in srgb, var(--bad) 40%, var(--line))">
       <div class="card__title"><span class="ico" aria-hidden="true">⚠️</span><h3>تصفير تقدّم قسم A0</h3></div>

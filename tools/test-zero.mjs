@@ -77,8 +77,6 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
    1) سلامة البيانات
    ============================================================ */
 const Z = await load('assets/js/data/zero.js');
-const AUDIO = await load('assets/js/core/zero-audio.js');
-const soundPack = AUDIO.soundPack, resolveSound = AUDIO.resolveSound;
 const {
   LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
   NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS, ZERO_STAGES, ZERO_TOTALS,
@@ -787,39 +785,17 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
-  it('حزمة أصوات المرحلتين ١ و ٢: ١٠٢ ملفاً موجودة وسليمة', () => {
-    const pack = soundPack();
-    eq(pack.all.length, 102, 'عدد ملفات الحزمة');
-    eq(pack.names.length, 26, 'أسماء الحروف');
-    eq(pack.sounds.length, 38, 'الأصوات المفردة');
-    eq(pack.words.length, 38, 'كلمات الأمثلة');
-    let bytes = 0;
-    for (const key of pack.all) {
-      const src = resolveSound(key);
-      truthy(src, `لا مصدر صوت للمفتاح ${key}`);
-      const f = join(ROOT, src.replace(/^\.\//, ''));
-      assert(existsSync(f), `ملف الصوت مفقود: ${src}`);
-      const size = statSync(f).size;
-      assert(size > 1500 && size < 90000, `حجم غير معقول (${src}): ${size}`);
-      bytes += size;
+  it('النطق مدمج في المتصفح بلا ملفات صوت منزّلة', () => {
+    assert(!existsSync(join(ROOT, 'assets/audio')), 'ما زالت هناك ملفات صوت منزّلة');
+    assert(!existsSync(join(ROOT, 'assets/js/core/zero-audio.js')), 'بنك الأصوات ما زال موجوداً');
+    const speech = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
+    assert(/SpeechSynthesisUtterance/.test(speech), 'محرّك النطق المدمج مفقود');
+    assert(!/soundBank|registerSoundBank/.test(speech), 'محرّك النطق ما زال يستخدم ملفات صوت');
+    for (const it of [...zeroItems('letters'), ...zeroItems('digraphs')]) {
+      assert(!it.sayId && !it.nameId && !it.wordId, `عنصر يشير إلى ملف صوت: ${it.en}`);
     }
-    assert(bytes > 600000, `الحزمة أصغر من المتوقع: ${bytes}`);
-    const audioJs = readFileSync(join(ROOT, 'assets/js/core/zero-audio.js'), 'utf8');
-    assert(/registerZeroSounds/.test(audioJs), 'بنك أصوات A0 لا يسجّل نفسه');
-    assert(/registerZeroSounds\(\)/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8')), 'صفحة A0 لا تُفعّل بنك الأصوات');
-    assert(/sayName/.test(stageJs) && /sayWord/.test(stageJs), 'المشغّل لا ينطق الاسم والصوت والكلمة');
-  });  it('الحروف المركّبة تُنطق هي نفسها لا كلمة المثال', () => {
-    const dg = zeroItems('digraphs');
-    for (const it of dg) {
-      eq(it.say, it.en, `نطق الحرف المركّب ${it.en} يجب أن يكون الحرف نفسه`);
-      assert(!/\s/.test(it.say), `نطق الحرف المركّب يجب أن يكون مقطعاً واحداً: ${it.say}`);
-      truthy(it.word, `الحرف المركّب ${it.en} بلا كلمة مثال`);
-      assert(it.word !== it.say, `كلمة المثال يجب ألا تكون هي النطق: ${it.say}`);
-    }
-    const lt = zeroItems('letters');
-    for (const it of lt) assert(!/\s/.test(it.say), `نطق الحرف يجب أن يكون حرفاً واحداً: ${it.say}`);
-  });
-  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
+    assert(!/zero-audio|registerZeroSounds/.test(zeroMain), 'نقطة دخول A0 تُسجّل بنك أصوات');
+  });  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
     for (const p of [
       './zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest',
       './assets/js/data/zero.js', './assets/js/data/zero-letters.js', './assets/js/data/zero-time.js',
