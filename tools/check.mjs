@@ -421,21 +421,32 @@ try {
   for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
     if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
   }
-  // النطق: مدمج في المتصفح (Speech Synthesis) — بلا ملفات صوت منزّلة
+  // النطق: مدمج في المتصفح + ١٢ تسجيلاً لأصوات الحروف المركّبة فقط
   const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
-  if (existsSync(join(ROOT, 'assets/audio'))) bad('ما زالت هناك ملفات صوت منزّلة (assets/audio)');
-  if (existsSync(join(ROOT, 'assets/js/core/zero-audio.js'))) bad('بنك الأصوات المنزّل ما زال موجوداً');
-  for (const it of [...zs.zeroItems('letters'), ...zs.zeroItems('digraphs')]) {
-    if (it.sayId || it.nameId || it.wordId) bad(`عنصر ما زال يشير إلى ملف صوت: ${it.en}`);
+  const AUD2 = await import(pathToFileURL(join(ROOT, 'assets/js/core/zero-audio.js')).href);
+  if (AUD2.DIGRAPH_SOUND_IDS.length !== 12) bad(`أصوات الحروف المركّبة ${AUD2.DIGRAPH_SOUND_IDS.length} بدل 12`);
+  let digFiles = 0;
+  for (const id of AUD2.DIGRAPH_SOUND_IDS) {
+    const f = join(ROOT, String(AUD2.digraphSound(id) || '').replace(/^\.\//, ''));
+    if (!existsSync(f)) { bad(`ملف صوت الحرف المركّب مفقود: ${id}.wav`); continue; }
+    const size = statSync(f).size;
+    if (size < 4000 || size > 60000) bad(`حجم غير معقول (${id}): ${size}`);
+    else digFiles++;
+  }
+  for (const it of zs.zeroItems('letters')) {
+    if (it.sayId || it.nameId || it.wordId) bad(`حرف مفرد يشير إلى ملف صوت: ${it.en}`);
+  }
+  for (const it of zs.zeroItems('digraphs')) {
+    if (!it.sayId) bad(`حرف مركّب بلا معرّف صوت: ${it.en}`);
   }
   const speechSrc2 = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
   if (!/SpeechSynthesisUtterance/.test(speechSrc2)) bad('محرّك النطق المدمج مفقود');
-  if (/soundBank/.test(speechSrc2)) bad('محرّك النطق ما زال يستخدم ملفات صوت');
   const stageSrc2 = readFileSync(join(ROOT, 'assets/js/views/zero-stage.js'), 'utf8');
+  if (!/sayDigraph/.test(stageSrc2)) bad('مشغّل المرحلة لا ينطق الحروف المركّبة من التسجيل');
   if (!/data-act="say"/.test(stageSrc2)) bad('زر النطق مفقود في بطاقة المرحلة');
-  if (/data-act="name"/.test(stageSrc2) || /sayNameThenSound|sayItem/.test(stageSrc2)) bad('ما زالت بقايا أزرار الصوت المحذوفة');
-  if (/zero-audio|registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('نقطة دخول A0 ما زالت تُسجّل بنك أصوات');
-  ok('النطق مدمج في المتصفح (Speech Synthesis) بلا أي ملفات صوت منزّلة');
+  if (/data-act="name"/.test(stageSrc2)) bad('زر صوت منفصل للحرف ما زال موجوداً');
+  if (!/registerDigraphSounds/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('صفحة A0 لا تُسجّل أصوات الحروف المركّبة');
+  ok(`النطق مدمج في المتصفح + ${digFiles}/12 تسجيلاً لأصوات الحروف المركّبة`);
 
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }

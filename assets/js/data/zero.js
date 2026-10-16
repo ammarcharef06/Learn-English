@@ -34,7 +34,7 @@ export function zeroItems(stageId) {
       }));
     case 'digraphs':
       return DIGRAPHS.map((d) => ({
-        key: `digraph:${d.id}`, en: d.combo, say: d.combo,
+        key: `digraph:${d.id}`, en: d.combo, say: d.combo, sayId: d.id,
         ar: d.soundAr, pron: d.soundAr,
         emoji: d.emoji, word: d.word, wordAr: d.wordAr, wordPronAr: d.wordPronAr, soundAr: d.soundAr, tipAr: d.tipAr,
       }));
@@ -127,12 +127,12 @@ export function zeroStageQuestions(stageId, count = 5) {
       qs.push(choiceQ({
         instruction: 'ما اسم هذا الحرف كما يُنطق؟', main: l.en, answer: l.ar,
         wrongs: pickWrongs(items, l.ar, 'ar'), key: `name:${l.key}`, stageId, stageTitle: stage.titleAr,
-        speak: l.say || l.en, explain: `${l.en} = ${l.ar} · صوتها: ${l.soundAr || ''}`,
+        speak: l.sayId ? `sound:${l.sayId}` : (l.say || l.en), explain: `${l.en} = ${l.ar} · صوتها: ${l.soundAr || ''}`,
       }));
       qs.push(choiceQ({
         instruction: 'أي كلمة تبدأ بهذا الحرف؟', main: l.en, answer: l.word,
         wrongs: pickWrongs(items, l.word, 'word'), key: `word:${l.key}`, stageId, stageTitle: stage.titleAr,
-        speak: l.word, explain: `${l.word} = ${l.wordAr} (${l.wordPronAr || ''})`,
+        speak: l.sayId ? `sound:${l.sayId}` : l.word, explain: `${l.word} = ${l.wordAr} (${l.wordPronAr || ''})`,
       }));
     }
   } else if (stageId === 'pronouns') {

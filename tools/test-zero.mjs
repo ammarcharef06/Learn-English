@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================================
  *  اختبارات قسم «من الصفر» (A0) — بلا أي مكتبات خارجية
  *  التشغيل:  node tools/test-zero.mjs
@@ -785,17 +785,26 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
-  it('النطق مدمج في المتصفح بلا ملفات صوت منزّلة', () => {
-    assert(!existsSync(join(ROOT, 'assets/audio')), 'ما زالت هناك ملفات صوت منزّلة');
-    assert(!existsSync(join(ROOT, 'assets/js/core/zero-audio.js')), 'بنك الأصوات ما زال موجوداً');
+  it('النطق: مدمج في المتصفح + ١٢ تسجيلاً لأصوات الحروف المركّبة فقط', () => {
     const speech = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
     assert(/SpeechSynthesisUtterance/.test(speech), 'محرّك النطق المدمج مفقود');
-    assert(!/soundBank|registerSoundBank/.test(speech), 'محرّك النطق ما زال يستخدم ملفات صوت');
-    for (const it of [...zeroItems('letters'), ...zeroItems('digraphs')]) {
-      assert(!it.sayId && !it.nameId && !it.wordId, `عنصر يشير إلى ملف صوت: ${it.en}`);
+    assert(/registerSoundBank/.test(speech), 'محرّك النطق لا يدعم التسجيلات الاختيارية');
+    // الحروف المفردة: بلا أي ملف صوت
+    for (const it of zeroItems('letters')) {
+      assert(!it.sayId && !it.nameId && !it.wordId, `حرف مفرد يشير إلى ملف صوت: ${it.en}`);
     }
-    assert(!/zero-audio|registerZeroSounds/.test(zeroMain), 'نقطة دخول A0 تُسجّل بنك أصوات');
-  });  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
+    // الحروف المركّبة: لها معرّف صوت وملف موجود
+    for (const it of zeroItems('digraphs')) {
+      assert(it.sayId, `حرف مركّب بلا معرّف صوت: ${it.en}`);
+      const f = join(ROOT, 'assets/audio/zero/d', `${it.sayId}.wav`);
+      assert(existsSync(f), `ملف صوت مفقود: ${it.sayId}.wav`);
+      const size = statSync(f).size;
+      assert(size > 4000 && size < 60000, `حجم غير معقول (${it.sayId}): ${size}`);
+    }
+    assert(/registerDigraphSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل أصوات الحروف المركّبة');
+    assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
+  });
+  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
     for (const p of [
       './zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest',
       './assets/js/data/zero.js', './assets/js/data/zero-letters.js', './assets/js/data/zero-time.js',

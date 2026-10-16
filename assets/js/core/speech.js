@@ -47,7 +47,42 @@ function bestVoice() {
 }
 
 /* النطق الآلي عبر Speech Synthesis */
+/* ---------- أصوات مسجّلة اختيارية ----------
+   تُستخدم لعدد محدود من الأصوات (الحروف المركّبة) التي يتهجّأها
+   محرّك الجهاز، وكل ما عداها يُنطق بالمحرّك المدمج. */
+const soundBank = new Map();
+let audioEl = null;
+
+export function registerSoundBank(map = {}) {
+  for (const [k, v] of Object.entries(map)) {
+    const key = String(k || '').trim().toLowerCase();
+    if (key && v) soundBank.set(key, v);
+  }
+  return soundBank.size;
+}
+export function hasRecordedSound(text) {
+  return soundBank.has(String(text || '').trim().toLowerCase());
+}
 export function speak(text, opts = {}) {
+  const src = soundBank.get(String(text || '').trim().toLowerCase());
+  if (src) {
+    try {
+      audioEl = audioEl || new Audio();
+      audioEl.pause();
+      audioEl.src = src;
+      audioEl.currentTime = 0;
+      audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
+      const pr = audioEl.play();
+      // إن منع المتصفح التشغيل التلقائي نرجع للنطق المدمج
+      if (pr && typeof pr.catch === 'function') pr.catch(() => speakBuiltIn(text, opts));
+      return true;
+    } catch { /* نكمل بالنطق المدمج */ }
+  }
+  return speakBuiltIn(text, opts);
+}
+
+/* النطق المدمج في المتصفح */
+export function speakBuiltIn(text, opts = {}) {
   if (!isSpeechSupported() || !text) return false;
   try { window.speechSynthesis.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(String(text));
@@ -62,6 +97,7 @@ export function speak(text, opts = {}) {
 }
 
 export function stopSpeaking() {
+  if (audioEl) { try { audioEl.pause(); } catch { /* تجاهل */ } }
   if (!isSpeechSupported()) return;
   try { window.speechSynthesis.cancel(); } catch {}
 }

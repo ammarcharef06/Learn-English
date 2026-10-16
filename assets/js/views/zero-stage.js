@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    قسم «من الصفر» (A0) — مشغّل المرحلة
    • الحروف والحروف المركّبة: عنصر واحد في البطاقة (تركيز) + شريط اختيار
    • بقية المراحل: مجموعات في .seg وقوائم .item-row
@@ -42,6 +42,11 @@ function sayWord(it, slow = false) {
   if (!it || !it.word) return;
   say(it.word, slow);
 }
+/** نطق الحرف المركّب: تسجيل بشري للاثني عشر (والباقي بالنطق المدمج) */
+function sayDigraph(it, slow = false) {
+  if (!it) return;
+  say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
+}
 
 /* ============================================================
    تفاصيل العنصر + لوح الكتابة
@@ -64,8 +69,8 @@ export function openDetails(it) {
         <div class="stack" style="gap:10px">${rows.join('')}</div>
         ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
         <div class="row row--wrap" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-play="${esc(it.say || it.en)}">${it.nameAr ? '🔊 اسمه' : '🔊 الصوت'}</button>
-          <button class="btn" type="button" data-play-slow="${esc(it.say || it.en)}">🐢 ببطء</button>
+          <button class="btn btn--primary" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : (it.say || it.en))}">${it.nameAr ? '🔊 اسمه' : '🔊 الصوت'}</button>
+          <button class="btn" type="button" data-play-slow="${esc(it.sayId ? `sound:${it.sayId}` : (it.say || it.en))}">🐢 ببطء</button>
           ${it.word ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
       </div>`,
@@ -219,7 +224,7 @@ function renderFocusStage(host, stage) {
       </div>`;
 
     const act = (name, fn) => qs(`[data-act="${name}"]`, box)?.addEventListener('click', fn);
-    act('say', () => sayName(it));                      // المرحلة ١: اسم الحرف فقط
+    act('say', () => (isLetters ? sayName(it) : sayDigraph(it)));  // ١: اسم الحرف · ٢: المقطع المسجّل
     act('word', () => sayWord(it));
     act('write', () => openWritePad(it.word || it.en, it.ar));
     act('master', () => {
@@ -233,11 +238,11 @@ function renderFocusStage(host, stage) {
     });
     act('details', () => openDetails(it));
 
-    qs('[data-hear]', box)?.addEventListener('click', () => sayName(it));
+    qs('[data-hear]', box)?.addEventListener('click', () => (isLetters ? sayName(it) : sayDigraph(it)));
     box.querySelector('[data-nav2="prev"]')?.addEventListener('click', () => { if (i > 0) { i -= 1; paint(); paintStrip(); } });
     box.querySelector('[data-nav2="next"]')?.addEventListener('click', () => { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } });
 
-    if (speakNow && zeroPrefs().autoSpeak) sayName(it);
+    if (speakNow && zeroPrefs().autoSpeak) (isLetters ? sayName(it) : sayDigraph(it));
   };
 
   /* شريط اختيار الحروف */
@@ -255,7 +260,7 @@ function renderFocusStage(host, stage) {
 
   paint(false);
   paintStrip();
-  if (zeroPrefs().autoSpeak) sayName(items[0]);
+  if (zeroPrefs().autoSpeak) (isLetters ? sayName(items[0]) : sayDigraph(items[0]));
 
   document.onkeydown = (e) => {
     if (e.key === 'ArrowLeft') { if (i < items.length - 1) { i += 1; paint(); paintStrip(); } }

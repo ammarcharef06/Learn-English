@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v2.3.0';
+const VERSION = 'v2.4.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -29,6 +29,18 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
+  './assets/audio/zero/d/sh.wav',
+  './assets/audio/zero/d/ch.wav',
+  './assets/audio/zero/d/th-voiceless.wav',
+  './assets/audio/zero/d/th-voiced.wav',
+  './assets/audio/zero/d/ph.wav',
+  './assets/audio/zero/d/ck.wav',
+  './assets/audio/zero/d/ng.wav',
+  './assets/audio/zero/d/oo-long.wav',
+  './assets/audio/zero/d/oo-short.wav',
+  './assets/audio/zero/d/ee.wav',
+  './assets/audio/zero/d/ea.wav',
+  './assets/audio/zero/d/ou.wav',
   './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
@@ -56,6 +68,7 @@ const CORE = [
   './assets/js/data/zero-words.js',
   './assets/js/views/shell.js',
   './assets/js/views/topbar.js',
+  './assets/js/core/zero-audio.js',
   './assets/js/views/auth.js',
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
