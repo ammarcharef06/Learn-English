@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    نقطة دخول قسم «من الصفر» (A0) — صفحة مستقلة تماماً (zero.html)
    لا تُحمّل هذه الصفحة نقطة دخول الموقع (app.js) ولا هيكله:
    لا شريط موقع، ولا قائمة جانبية، ولا شريط سفلي للمستويات.
@@ -72,6 +72,11 @@ async function main() {
 
   renderTopbar(qs('#topbar'), 'zero', { onRerender: () => applyZeroShell(location.hash) });
   qs('#scrim')?.addEventListener('click', closeDrawer);
+  /* التنقّل داخل الدرج يغلقه دائماً (نفس سلوك درج الموقع) */
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-nav]')) closeDrawer();
+  });
+  window.addEventListener('hashchange', closeDrawer);
 
   setupRoutes();
   if (!location.hash) location.replace('#/zero');
