@@ -146,14 +146,6 @@ function registerSW() {
       const swUrl = new URL('./service-worker.js', location.href);
       const scope = new URL('./', location.href).pathname;
       const reg = await navigator.serviceWorker.register(swUrl, { scope });
-      reg.addEventListener('updatefound', () => {
-        const nw = reg.installing;
-        nw?.addEventListener('statechange', () => {
-          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-            toast('يتوفر تحديث جديد — أعد تحميل الصفحة للاستفادة منه', 'info', 'تحديث');
-          }
-        });
-      });
       // ننتظر وصول العامل إلى حالة التنشيط (مهم قبل تهيئة OneSignal)
       const active = reg.active || (await waitForActive(reg));
       return active ? reg : null;
