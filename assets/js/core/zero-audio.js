@@ -2,20 +2,19 @@
    حزمة أصوات المرحلتين ١ و ٢ — صوت نيرالي واحد موحّد (en-US, Aria)
    • n/name-*.mp3  اسم كل حرف (٢٦)
    • n/word-*.mp3  كلمة مثال كل حرف + كل حرف مركّب (٣٨)
-   • d/*.mp3       صوت كل حرف مركّب (١٢) — نطق مقطع واحد بلا تهجئة
-   المجموع ٧٦ ملفاً. تعتمد هذه العناصر على التسجيلات المباشرة لتجنّب اختلاف
-   نطق محرّكات المتصفح بين الأجهزة.
+   • n/word-*.mp3 كلمات الأمثلة، وتُستخدم أيضاً لنطق الحرف المركّب داخل
+     كلمة حتى لا يتهجّاه محرّك التسجيل كحروف منفصلة.
+   تعتمد هذه العناصر على التسجيلات المباشرة لتجنّب اختلاف نطق محرّكات المتصفح.
    ============================================================ */
 import { registerSoundBank } from './speech.js';
 import { AUDIO_MAP } from '../data/zero-audio-map.js';
 
 const N = './assets/audio/zero/n/';
-const D = './assets/audio/zero/d/';
 
 /** أسماء الحروف الستة والعشرين */
 export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
-/** الحروف المركّبة الاثنا عشر (لها صوت مفرد مسجّل) */
+/** الحروف المركّبة الاثنا عشر (يُسمع كل صوت داخل كلمة المثال) */
 export const DIGRAPH_SOUND_IDS = [
   'sh', 'ch', 'th-voiceless', 'th-voiced', 'ph', 'ck', 'ng',
   'oo-long', 'oo-short', 'ee', 'ea', 'ou',
@@ -41,7 +40,7 @@ const DIGRAPH_BY_TEXT = {
   ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea', ou: 'ou',
 };
 
-/** كل مفاتيح الحزمة (٧٦ ملفاً) */
+/** مفاتيح الأصوات: ٢٦ اسماً، ٣٨ كلمة، و١٢ صوتاً داخل أمثلة الكلمات */
 export function soundPack() {
   const names = LETTER_IDS.map((c) => `name:letter:${c}`);
   const sounds = DIGRAPH_SOUND_IDS.map((id) => `sound:${id}`);
@@ -57,7 +56,8 @@ export function resolveSound(key) {
   const k = String(key || '').trim();
   if (k.startsWith('name:letter:')) return `${N}name-${k.slice(12)}.mp3`;
   if (k.startsWith('word:letter:')) return `${N}word-${k.slice(12)}.mp3`;
-  if (k.startsWith('sound:')) return `${D}${k.slice(6)}.mp3`;
+  if (DIGRAPH_BY_TEXT[k]) return `${N}word-${DIGRAPH_BY_TEXT[k]}.mp3`;
+  if (k.startsWith('sound:')) return `${N}word-${k.slice(6)}.mp3`;
   if (k.startsWith('word:')) return `${N}word-${k.slice(5)}.mp3`;
   return null;
 }
@@ -69,7 +69,7 @@ export function registerZeroSounds() {
   /* مفاتيح نصّ مباشرة: أي نطق لنفس النص يستخدم التسجيل تلقائياً */
   for (const c of LETTER_IDS) bank[c] = `${N}name-${c}.mp3`;
   for (const [c, w] of Object.entries(LETTER_WORDS)) bank[w] = `${N}word-${c}.mp3`;
-  for (const [text, id] of Object.entries(DIGRAPH_BY_TEXT)) bank[text] = `${D}${id}.mp3`;
+  for (const text of Object.keys(DIGRAPH_BY_TEXT)) bank[text] = resolveSound(text);
   for (const [id, w] of Object.entries(DIGRAPH_WORDS)) bank[w] = `${N}word-${id}.mp3`;
   /* خريطة نصوص المراحل ٣-٨ (مولّدة آلياً): أي نص إنجليزي له تسجيل */
   for (const [text, src] of Object.entries(AUDIO_MAP)) bank[text] = src;

@@ -77,6 +77,7 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
    1) سلامة البيانات
    ============================================================ */
 const Z = await load('assets/js/data/zero.js');
+const { resolveSound } = await load('assets/js/core/zero-audio.js');
 const {
   LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
   NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS, ZERO_STAGES, ZERO_TOTALS,
@@ -797,7 +798,12 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     // الحروف المركّبة: لها معرّف صوت وملف موجود
     for (const it of zeroItems('digraphs')) {
       assert(it.sayId, `حرف مركّب بلا معرّف صوت: ${it.en}`);
-      const audio = join(ROOT, 'assets/audio/zero/d', `${it.sayId}.mp3`);
+      const expectedSound = `./assets/audio/zero/n/word-${it.sayId}.mp3`;
+      eq(resolveSound(`sound:${it.sayId}`), expectedSound, `صوت ${it.en} يجب أن يُنطق داخل كلمة المثال`);
+      if (DIGRAPHS.filter((item) => item.combo === it.combo).length === 1) {
+        eq(resolveSound(it.combo), expectedSound, `الصوت النصّي ${it.combo} يجب أن يستخدم كلمة المثال`);
+      }
+      const audio = join(ROOT, expectedSound);
       assert(existsSync(audio), `ملف صوت مفقود: ${it.sayId}.mp3`);
       const size = statSync(audio).size;
       assert(size > 4000 && size < 40000, `حجم غير معقول (${it.sayId}): ${size}`);

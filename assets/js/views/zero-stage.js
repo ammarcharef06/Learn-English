@@ -42,7 +42,7 @@ function sayWord(it, slow = false) {
   if (!it || !it.word) return;
   say(it.wordId ? `word:${it.wordId}` : it.word, slow);
 }
-/** نطق الحرف المركّب: تسجيل بشري للاثني عشر (والباقي بالنطق المدمج) */
+/** نطق الحرف المركّب داخل كلمة المثال كي لا يُتهجّى منفصلاً */
 function sayDigraph(it, slow = false) {
   if (!it) return;
   say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
@@ -69,7 +69,7 @@ export function openDetails(it) {
         <div class="stack" style="gap:10px">${rows.join('')}</div>
         ${it.tipAr ? `<div class="tip-box tip-box--brand">${esc(it.tipAr)}</div>` : ''}
         <div class="row row--wrap" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : (it.say || it.en))}">${it.nameAr ? '🔊 اسمه' : '🔊 الصوت'}</button>
+          <button class="btn btn--primary" type="button" data-play="${esc(it.sayId ? `sound:${it.sayId}` : (it.say || it.en))}">${it.nameAr ? '🔊 اسمه' : (it.sayId ? '🔊 الصوت داخل مثال' : '🔊 الصوت')}</button>
           <button class="btn" type="button" data-play-slow="${esc(it.sayId ? `sound:${it.sayId}` : (it.say || it.en))}">🐢 ببطء</button>
           ${it.word ? `<button class="btn" type="button" data-play="${esc(it.word)}">🔊 كلمة المثال</button>` : ''}
         </div>
