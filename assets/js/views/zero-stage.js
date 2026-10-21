@@ -42,7 +42,7 @@ function sayWord(it, slow = false) {
   if (!it || !it.word) return;
   say(it.wordId ? `word:${it.wordId}` : it.word, slow);
 }
-/** نطق الحرف المركّب داخل كلمة المثال كي لا يُتهجّى منفصلاً */
+/** نطق صوت الحرف المركّب من تسجيله المستقل عن كلمة المثال */
 function sayDigraph(it, slow = false) {
   if (!it) return;
   say(it.sayId ? `sound:${it.sayId}` : (it.say || it.en), slow);
@@ -208,7 +208,7 @@ function renderFocusStage(host, stage) {
         </div>
 
         <div class="row row--wrap mt-4" style="gap:8px">
-          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسمه' : 'اسمع الصوت في المثال'}</button>
+          <button class="btn btn--primary" type="button" data-act="say">🔊 ${isLetters ? 'اسمه' : 'اسمع الصوت'}</button>
           ${it.word ? `<button class="btn" type="button" data-act="word">🔊 كلمة المثال</button>` : ''}
           <button class="btn" type="button" data-act="write">✍️ اكتبه</button>
           <button class="btn ${done ? 'btn--primary' : ''}" type="button" data-act="master">${done ? '✓ متقن' : '✅ أتقنت'}</button>

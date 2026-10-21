@@ -799,10 +799,11 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     // الحروف المركّبة: لها معرّف صوت وملف موجود
     for (const it of zeroItems('digraphs')) {
       assert(it.sayId, `حرف مركّب بلا معرّف صوت: ${it.en}`);
-      const expectedSound = `./assets/audio/zero/n/word-${it.sayId}.mp3`;
-      eq(resolveSound(`sound:${it.sayId}`), expectedSound, `صوت ${it.en} يجب أن يُنطق داخل كلمة المثال`);
+      const expectedSound = `./assets/audio/zero/d/${it.sayId}.mp3`;
+      eq(resolveSound(`sound:${it.sayId}`), expectedSound, `صوت ${it.en} يجب أن يستخدم التسجيل المستقل`);
+      assert(resolveSound(`sound:${it.sayId}`) !== resolveSound(`word:${it.wordId}`), `زر صوت ${it.en} يكرر كلمة المثال`);
       if (DIGRAPHS.filter((item) => item.combo === it.combo).length === 1) {
-        eq(resolveSound(it.combo), expectedSound, `الصوت النصّي ${it.combo} يجب أن يستخدم كلمة المثال`);
+        eq(resolveSound(it.combo), expectedSound, `الصوت النصّي ${it.combo} يجب أن يستخدم التسجيل المستقل`);
       }
       const audio = join(ROOT, expectedSound);
       assert(existsSync(audio), `ملف صوت مفقود: ${it.sayId}.mp3`);
@@ -817,7 +818,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     };
     for (const [combo, soundId] of Object.entries(directSounds)) {
       assert(hasRecordedSound(combo), `الحرف المركّب ${combo} غير مربوط بتسجيل وقد يُهجّى بواسطة المتصفح`);
-      eq(resolveSound(combo), `./assets/audio/zero/n/word-${soundId}.mp3`, `الصوت المباشر لـ ${combo}`);
+      eq(resolveSound(combo), `./assets/audio/zero/d/${soundId}.mp3`, `الصوت المباشر لـ ${combo}`);
     }
     assert(hasRecordedSound('sound:th-voiceless'), 'صوت th المهموس غير مربوط بتسجيله');
     assert(hasRecordedSound('sound:th-voiced'), 'صوت th المجهور غير مربوط بتسجيله');

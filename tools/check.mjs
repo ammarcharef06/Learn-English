@@ -421,10 +421,10 @@ try {
   for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
     if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
   }
-  // النطق: مدمج في المتصفح + تسجيلات أسماء الحروف والكلمات، وأصوات المركّبات داخل أمثلتها
+  // النطق: مدمج في المتصفح + تسجيلات أسماء الحروف والكلمات والأصوات المركّبة المستقلة
   const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
   const AUD2 = await import(pathToFileURL(join(ROOT, 'assets/js/core/zero-audio.js')).href);
-  // حزمة مفاتيح موحّدة: ٢٦ اسم حرف + ٣٨ كلمة مثال + ١٢ صوتاً داخل أمثلة الكلمات
+  // حزمة مفاتيح موحّدة: ٢٦ اسم حرف + ٣٨ كلمة مثال + ١٢ صوتاً مركّباً مستقلاً
   const pack = AUD2.soundPack();
   if (pack.all.length !== 76) bad(`حزمة الأصوات ${pack.all.length} ملفاً بدل 76`);
   let packFiles = 0;
@@ -442,7 +442,7 @@ try {
     if (!it.sayId || !it.wordId) bad(`حرف مركّب بلا تسجيل: ${it.en}`);
     const sound = AUD2.resolveSound(`sound:${it.sayId}`);
     const example = AUD2.resolveSound(`word:${it.wordId}`);
-    if (sound !== example) bad(`صوت الحرف المركّب ${it.en} لا يستخدم تسجيل كلمة المثال`);
+    if (sound === example) bad(`صوت الحرف المركّب ${it.en} يطابق تسجيل كلمة المثال بدلاً من صوته المستقل`);
   }
   const speechSrc2 = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
   if (!/SpeechSynthesisUtterance/.test(speechSrc2)) bad('محرّك النطق المدمج مفقود');

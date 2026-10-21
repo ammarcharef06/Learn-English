@@ -2,19 +2,20 @@
    حزمة أصوات المرحلتين ١ و ٢ — صوت نيرالي واحد موحّد (en-US, Aria)
    • n/name-*.mp3  اسم كل حرف (٢٦)
    • n/word-*.mp3  كلمة مثال كل حرف + كل حرف مركّب (٣٨)
-   • n/word-*.mp3 كلمات الأمثلة، وتُستخدم أيضاً لنطق الحرف المركّب داخل
-     كلمة حتى لا يتهجّاه محرّك التسجيل كحروف منفصلة.
+   • d/*.mp3       الصوت المفرد لكل حرف مركّب (١٢)
+   • n/word-*.mp3 كلمات الأمثلة كاملة (٣٨)
    تعتمد هذه العناصر على التسجيلات المباشرة لتجنّب اختلاف نطق محرّكات المتصفح.
    ============================================================ */
 import { registerSoundBank } from './speech.js';
 import { AUDIO_MAP } from '../data/zero-audio-map.js';
 
 const N = './assets/audio/zero/n/';
+const D = './assets/audio/zero/d/';
 
 /** أسماء الحروف الستة والعشرين */
 export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
-/** الحروف المركّبة الاثنا عشر (يُسمع كل صوت داخل كلمة المثال) */
+/** الحروف المركّبة الاثنا عشر (لكل منها تسجيل مستقل عن كلمة المثال) */
 export const DIGRAPH_SOUND_IDS = [
   'sh', 'ch', 'th-voiceless', 'th-voiced', 'ph', 'ck', 'ng',
   'oo-long', 'oo-short', 'ee', 'ea', 'ou',
@@ -40,7 +41,7 @@ const DIGRAPH_BY_TEXT = {
   ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea', ou: 'ou',
 };
 
-/** مفاتيح الأصوات: ٢٦ اسماً، ٣٨ كلمة، و١٢ صوتاً داخل أمثلة الكلمات */
+/** مفاتيح الأصوات: ٢٦ اسماً، ٣٨ كلمة مثال، و١٢ تسجيلاً مستقلاً للأصوات */
 export function soundPack() {
   const names = LETTER_IDS.map((c) => `name:letter:${c}`);
   const sounds = DIGRAPH_SOUND_IDS.map((id) => `sound:${id}`);
@@ -56,8 +57,8 @@ export function resolveSound(key) {
   const k = String(key || '').trim();
   if (k.startsWith('name:letter:')) return `${N}name-${k.slice(12)}.mp3`;
   if (k.startsWith('word:letter:')) return `${N}word-${k.slice(12)}.mp3`;
-  if (DIGRAPH_BY_TEXT[k]) return `${N}word-${DIGRAPH_BY_TEXT[k]}.mp3`;
-  if (k.startsWith('sound:')) return `${N}word-${k.slice(6)}.mp3`;
+  if (DIGRAPH_BY_TEXT[k]) return `${D}${DIGRAPH_BY_TEXT[k]}.mp3`;
+  if (k.startsWith('sound:')) return `${D}${k.slice(6)}.mp3`;
   if (k.startsWith('word:')) return `${N}word-${k.slice(5)}.mp3`;
   return null;
 }
