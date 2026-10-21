@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v3.1.0';
+const VERSION = 'v3.1.1';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -18,6 +18,7 @@ const CORE = [
   './manifest.webmanifest',
   './manifest-zero.webmanifest',
   './assets/css/main.css',
+  './assets/css/redesign.css',
   './assets/css/zero.css',
   './assets/css/zero-pad.css',
   './assets/css/skins/gnome.css',
@@ -201,4 +202,3 @@ self.addEventListener('notificationclick', (event) => {
     await self.clients.openWindow(target);
   })());
 });
-

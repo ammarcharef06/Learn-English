@@ -260,6 +260,11 @@ const DICT = {
 
   'auth.title': ['أكاديمية الإنجليزية', 'English Academy'],
   'auth.subtitle': ['موقعك الشخصي — أدخل كلمة المرور للمتابعة', 'Your personal site — enter your password to continue'],
+  'auth.eyebrow': ['مساحة تعلّمك الشخصية', 'YOUR PERSONAL LEARNING SPACE'],
+  'auth.headline': ['تعلّم الإنجليزية، خطوة بعد خطوة.', 'Make English part of your every day.'],
+  'auth.learning': ['دروس قصيرة، تدريب ذكي، ومراجعة تساعدك على التقدّم بثقة.', 'Short lessons, thoughtful practice, and steady progress—all in one place.'],
+  'auth.welcome': ['مرحباً بعودتك', 'WELCOME BACK'],
+  'auth.privacy': ['تُحفظ بياناتك على هذا الجهاز فقط', 'Your learning data stays on this device'],
   'auth.password': ['كلمة المرور', 'Password'],
   'auth.remember': ['تذكّرني على هذا الجهاز', 'Remember me on this device'],
   'auth.enter': ['دخول', 'Sign in'],
