@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v3.1.1';
+const VERSION = 'v3.1.2';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -111,7 +111,7 @@ const isSameOrigin = (url) => url.origin === self.location.origin;
 const isCacheableAsset = (url) => /\.(?:css|js|mjs|json|webmanifest|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname);
 const isCodeAsset = (url) => /\.(?:js|mjs|css|json|webmanifest)$/i.test(url.pathname);
 
-/* حزمة أصوات المرحلتين ١ و ٢ (٧٦ ملفاً ≈٨٤٠KB): تُخزَّن عند الطلب */
+/* تسجيلات النطق التعليمية: تُخزَّن عند الطلب وتُستخدم بلا استبدال بصوت مولّد */
 self.addEventListener('fetch', (event) => {
   const u0 = new URL(event.request.url);
   if (event.request.method === 'GET' && u0.pathname.includes('/assets/audio/zero/')) {

@@ -64,6 +64,43 @@ await auth.resetToDefaultPassword();
 check('إعادة التعيين تُرجع SAYPER', (await auth.login('SAYPER')).ok);
 check('بصمة SHA-256 للأولية مطابقة', (await auth.sha256Hex('SAYPER')) === auth.AUTH_INFO.DEFAULT_HASH);
 
+/* ================= 1b. النطق المسجّل ================= */
+section('النطق المسجّل والنطق المدمج');
+const speech = await mod('assets/js/core/speech.js');
+const savedAudio = globalThis.Audio;
+const savedSynthesis = window.speechSynthesis;
+const savedUtterance = window.SpeechSynthesisUtterance;
+const savedGlobalUtterance = globalThis.SpeechSynthesisUtterance;
+const savedWarn = console.warn;
+let synthesized = 0;
+globalThis.Audio = class {
+  pause() {}
+  play() { return Promise.reject(new Error('recording unavailable')); }
+};
+window.speechSynthesis = {
+  cancel() {},
+  getVoices: () => [],
+  addEventListener() {},
+  speak() { synthesized++; },
+};
+window.SpeechSynthesisUtterance = class {};
+globalThis.SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
+console.warn = () => {};
+speech.registerSoundBank({ 'test:recorded': './missing-recording.mp3' });
+check('التسجيل المسجّل يُختار للتشغيل', speech.speak('test:recorded') === true);
+await new Promise((resolve) => setTimeout(resolve, 0));
+check('فشل التسجيل لا يشغّل صوت المتصفح بديلاً', synthesized === 0);
+check('النص غير المسجّل يبقى قابلاً للنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+console.warn = savedWarn;
+if (savedAudio === undefined) delete globalThis.Audio;
+else globalThis.Audio = savedAudio;
+if (savedSynthesis === undefined) delete window.speechSynthesis;
+else window.speechSynthesis = savedSynthesis;
+if (savedUtterance === undefined) delete window.SpeechSynthesisUtterance;
+else window.SpeechSynthesisUtterance = savedUtterance;
+if (savedGlobalUtterance === undefined) delete globalThis.SpeechSynthesisUtterance;
+else globalThis.SpeechSynthesisUtterance = savedGlobalUtterance;
+
 /* ================= 2. توليد الأسئلة ================= */
 section('مولّد الأسئلة');
 const qg = await mod('assets/js/core/quizgen.js');

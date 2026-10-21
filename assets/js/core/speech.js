@@ -72,11 +72,16 @@ export function speak(text, opts = {}) {
       audioEl.src = src;
       audioEl.currentTime = 0;
       audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
+      audioEl.onerror = () => console.warn('Recorded pronunciation failed to load', src, audioEl.error || '');
       const pr = audioEl.play();
-      // إن منع المتصفح التشغيل التلقائي نرجع للنطق المدمج
-      if (pr && typeof pr.catch === 'function') pr.catch(() => speakBuiltIn(text, opts));
+      if (pr && typeof pr.catch === 'function') {
+        pr.catch((error) => console.warn('Recorded pronunciation could not be played', src, error));
+      }
       return true;
-    } catch { /* نكمل بالنطق المدمج */ }
+    } catch (error) {
+      console.warn('Recorded pronunciation could not be started', src, error);
+      return false;
+    }
   }
   return speakBuiltIn(text, opts);
 }
