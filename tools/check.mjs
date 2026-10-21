@@ -430,7 +430,7 @@ try {
   let packFiles = 0;
   for (const key of pack.all) {
     const f = join(ROOT, String(AUD2.resolveSound(key) || '').replace(/^\.\//, ''));
-    if (!existsSync(f)) { bad(`ملف صوت مفقود: ${key}`); continue; }
+    if (!existsSync(f)) continue;
     const size = statSync(f).size;
     if (size < 3000 || size > 40000) bad(`حجم غير معقول (${key}): ${size}`);
     else packFiles++;
@@ -443,6 +443,7 @@ try {
   }
   const speechSrc2 = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
   if (!/SpeechSynthesisUtterance/.test(speechSrc2)) bad('محرّك النطق المدمج مفقود');
+  if (!/pr\.catch\(\(\) => speakBuiltIn\(text, opts\)\)/.test(speechSrc2)) bad('النطق المسجّل لا يعود إلى محرّك المتصفح عند تعذّره');
   const stageSrc2 = readFileSync(join(ROOT, 'assets/js/views/zero-stage.js'), 'utf8');
   if (!/sayDigraph/.test(stageSrc2)) bad('مشغّل المرحلة لا ينطق الحروف المركّبة من التسجيل');
   if (!/data-act="say"/.test(stageSrc2)) bad('زر النطق مفقود في بطاقة المرحلة');
@@ -452,11 +453,11 @@ try {
   let mapFiles = 0;
   for (const [text, src] of Object.entries(MAP)) {
     const f = join(ROOT, String(src).replace(/^\.\//, ''));
-    if (!existsSync(f)) { bad(`ملف صوت مفقود للنص: ${text}`); continue; }
+    if (!existsSync(f)) continue;
     mapFiles++;
   }
   if (Object.keys(MAP).length < 250) bad(`خريطة المراحل ٣-٨ صغيرة: ${Object.keys(MAP).length}`);
-  ok(`حزمة صوت نيرالية موحّدة: ${packFiles}/76 للمرحلتين ١-٢ + ${mapFiles} نصاً للمراحل ٣-٨`);
+  ok(`أصوات اختيارية: ${packFiles}/76 تسجيلاً للمرحلتين ١-٢ + ${mapFiles}/${Object.keys(MAP).length} للمراحل ٣-٨؛ يُستخدم نطق المتصفح بديلاً عند غيابها`);
 
   ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
 } catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }

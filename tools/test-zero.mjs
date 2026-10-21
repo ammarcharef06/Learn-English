@@ -785,10 +785,11 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/groupsFor/.test(stageJs), 'لا تجميع للمراحل القائمة');
     assert(/SENT_GROUP_AR/.test(stageJs), 'لا تجميع للجمل');
   });
-  it('النطق: مدمج في المتصفح + ١٢ تسجيلاً لأصوات الحروف المركّبة فقط', () => {
+  it('النطق: محرّك المتصفح بديل آمن للتسجيلات الاختيارية', () => {
     const speech = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
     assert(/SpeechSynthesisUtterance/.test(speech), 'محرّك النطق المدمج مفقود');
     assert(/registerSoundBank/.test(speech), 'محرّك النطق لا يدعم التسجيلات الاختيارية');
+    assert(/pr\.catch\(\(\) => speakBuiltIn\(text, opts\)\)/.test(speech), 'تعذّر التسجيل لا يعود إلى محرّك النطق المدمج');
     // الحروف المفردة: بلا أي ملف صوت
     for (const it of zeroItems('letters')) {
       assert(it.nameId && it.wordId, `حرف بلا تسجيل: ${it.en}`);
@@ -796,10 +797,6 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     // الحروف المركّبة: لها معرّف صوت وملف موجود
     for (const it of zeroItems('digraphs')) {
       assert(it.sayId, `حرف مركّب بلا معرّف صوت: ${it.en}`);
-      const f = join(ROOT, 'assets/audio/zero/d', `${it.sayId}.mp3`);
-      assert(existsSync(f), `ملف صوت مفقود: ${it.sayId}.mp3`);
-      const size = statSync(f).size;
-      assert(size > 4000 && size < 40000, `حجم غير معقول (${it.sayId}): ${size}`);
     }
     assert(/registerZeroSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل الحزمة');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
