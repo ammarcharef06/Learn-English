@@ -5,6 +5,7 @@ import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRout
 import { settings, saveSettings, subscribe, progress, flush } from './core/store.js';
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
+import { registerZeroSounds } from './core/zero-audio.js';
 import { isAuthed, extendSession, lockNow, ensureAuth } from './core/auth.js';
 import { qs, qsa, toast, esc } from './core/utils.js';
 import { renderLock, hideLock, lockSite } from './views/auth.js';
@@ -217,6 +218,7 @@ async function main() {
   applySkin();
   applyLang();
   initSpeech();
+  registerZeroSounds();
   bindGlobalEvents();
   setupInstall();
   registerSW();

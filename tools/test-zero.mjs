@@ -77,7 +77,8 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
    1) سلامة البيانات
    ============================================================ */
 const Z = await load('assets/js/data/zero.js');
-const { resolveSound } = await load('assets/js/core/zero-audio.js');
+const { resolveSound, registerZeroSounds } = await load('assets/js/core/zero-audio.js');
+const { hasRecordedSound } = await load('assets/js/core/speech.js');
 const {
   LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
   NUMBERS_TIME, WORD_GROUPS, SENTENCES, READINGS, ZERO_STAGES, ZERO_TOTALS,
@@ -809,6 +810,17 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
       assert(size > 4000 && size < 40000, `حجم غير معقول (${it.sayId}): ${size}`);
     }
     assert(/registerZeroSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل الحزمة');
+    assert(/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8')), 'مدخل التطبيق الرئيسي لا يُسجّل أصوات A0');
+    registerZeroSounds();
+    const directSounds = {
+      th: 'th-voiceless', ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea',
+    };
+    for (const [combo, soundId] of Object.entries(directSounds)) {
+      assert(hasRecordedSound(combo), `الحرف المركّب ${combo} غير مربوط بتسجيل وقد يُهجّى بواسطة المتصفح`);
+      eq(resolveSound(combo), `./assets/audio/zero/n/word-${soundId}.mp3`, `الصوت المباشر لـ ${combo}`);
+    }
+    assert(hasRecordedSound('sound:th-voiceless'), 'صوت th المهموس غير مربوط بتسجيله');
+    assert(hasRecordedSound('sound:th-voiced'), 'صوت th المجهور غير مربوط بتسجيله');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
   });
   it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
