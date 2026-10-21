@@ -49,20 +49,28 @@ const section = (title) => console.log(`\n▶ ${title}`);
 /* ================= 1. المصادقة ================= */
 section('المصادقة وكلمة المرور');
 const auth = await mod('assets/js/core/auth.js');
-auth.ensureAuth();
-check('كلمة المرور الأولية SAYPER مُفعّلة', auth.usingDefaultPassword());
+const authStore = await mod('assets/js/core/store.js');
+authStore.writeAuth({ hash: await auth.sha256Hex('SAYPER'), algo: 'v1', isDefault: true });
+check('التطبيق مفتوح افتراضياً دون شاشة دخول', auth.isAuthed());
+check('كلمة المرور الافتراضية القديمة غير مفعلة', !auth.hasPassword());
+check('كلمة المرور الافتراضية القديمة لا تفتح القفل', !(await auth.login('SAYPER')).ok);
+const configured = await auth.setPassword('NewSecret99');
+check('إنشاء كلمة مرور يختارها المستخدم ينجح', configured.ok, configured.error || '');
+check('حفظ كلمة المرور لا يفعّل القفل تلقائياً', !auth.lockEnabled());
+const lockResult = auth.setLockEnabled(true);
+check('تفعيل القفل الاختياري ينجح', lockResult.ok && auth.lockEnabled());
+check('تفعيل القفل يفتح الجلسة الحالية', auth.isAuthed());
+auth.lockNow();
+check('القفل يُنهي الجلسة عند تفعيله', !auth.isAuthed());
 check('دخول بكلمة مرور خاطئة يفشل', !(await auth.login('WRONG')).ok);
-check('دخول صحيح بـ SAYPER ينجح', (await auth.login('SAYPER')).ok);
-check('الجلسة مفتوحة بعد الدخول', auth.isAuthed());
-const chg = await auth.changePassword('SAYPER', 'NewSecret99');
+check('كلمة المرور الجديدة تفتح القفل', (await auth.login('NewSecret99')).ok);
+const chg = await auth.changePassword('NewSecret99', 'AnotherSecret44');
 check('تغيير كلمة المرور ينجح', chg.ok, chg.error || '');
-check('كلمة المرور الجديدة تعمل', (await auth.login('NewSecret99')).ok);
-check('كلمة المرور القديمة لم تعد تعمل', !(await auth.login('SAYPER')).ok);
+check('كلمة المرور الجديدة تعمل', (await auth.login('AnotherSecret44')).ok);
+check('كلمة المرور السابقة لم تعد تعمل', !(await auth.login('NewSecret99')).ok);
 auth.lockNow();
 check('القفل يُنهي الجلسة', !auth.isAuthed());
-await auth.resetToDefaultPassword();
-check('إعادة التعيين تُرجع SAYPER', (await auth.login('SAYPER')).ok);
-check('بصمة SHA-256 للأولية مطابقة', (await auth.sha256Hex('SAYPER')) === auth.AUTH_INFO.DEFAULT_HASH);
+check('إيقاف القفل يعيد فتح التطبيق دون كلمة مرور', auth.setLockEnabled(false).ok && auth.isAuthed());
 
 /* ================= 1b. النطق المسجّل ================= */
 section('النطق المسجّل والنطق المدمج');
@@ -261,8 +269,11 @@ check('النسخة تحتوي الإعدادات والتقدم', !!parsed.sett
 const pointsBefore = store.progress.points;
 resetProgress();
 check('التصفير يمسح النقاط', store.progress.points === 0);
+store.saveSettings({ security: { lockEnabled: true } });
 importAll(exported);
 check('الاستيراد يستعيد التقدم', store.progress.points === pointsBefore, `${store.progress.points} مقابل ${pointsBefore}`);
+check('الاستيراد يحافظ على إعداد القفل المحلي', store.settings.security.lockEnabled);
+store.saveSettings({ security: { lockEnabled: false } });
 
 /* ================= 8. الترجمة ================= */
 section('الترجمة (عربي/إنجليزي)');

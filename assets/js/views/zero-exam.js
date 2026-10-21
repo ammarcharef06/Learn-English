@@ -125,7 +125,7 @@ export function renderZeroCertificate(host) {
     <div class="zcert-wrap mt-4 ${cert.earned ? '' : 'is-locked'}">
       <div class="zcert print-area" id="zeroCert">
         <div class="zcert__top">
-          <span class="zcert__mark">EN</span>
+          <img class="zcert__mark" src="./assets/img/favicon.svg" alt="" />
           <span class="zcert__brand">أكاديمية الإنجليزية<small dir="ltr">English Academy</small></span>
         </div>
         <h2 class="zcert__title">شهادة إتمام التأسيس</h2>

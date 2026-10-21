@@ -43,7 +43,6 @@ const ICON = {
   sun: '<svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
   moon: '<svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
   bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15.5V11a6 6 0 1 0-12 0v4.5L4.5 18h15L18 15.5Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M10 21h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
-  lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10" width="15" height="10.5" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 10V7.6a4 4 0 1 1 8 0V10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
 };
 
 /**
@@ -61,7 +60,7 @@ export function topbarHTML(mode = 'site') {
     </button>
 
     <a class="brand" href="${brandHref}" ${isZero ? '' : 'data-nav'}>
-      <span class="brand__mark">EN</span>
+      <img class="brand__mark" src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
       <span class="brand__text"><b>${esc(name)}</b><small>${esc(tag)}</small></span>
     </a>
 
@@ -74,8 +73,7 @@ export function topbarHTML(mode = 'site') {
         <span class="icon-btn__text" id="langLabel">${settings.uiLang === 'en' ? 'ع' : 'EN'}</span>
       </button>
       <button class="icon-btn" id="btnTheme" type="button" title="تبديل المظهر" aria-label="تبديل المظهر">${ICON.sun}${ICON.moon}</button>
-      ${isZero ? '' : `<button class="icon-btn topbar-opt" id="btnBell" type="button" title="التذكيرات والإشعارات" aria-label="التذكيرات والإشعارات">${ICON.bell}</button>
-      <button class="icon-btn" id="btnLock" type="button" title="قفل الموقع" aria-label="قفل الموقع">${ICON.lock}</button>`}
+      ${isZero ? '' : `<button class="icon-btn topbar-opt" id="btnBell" type="button" title="التذكيرات والإشعارات" aria-label="التذكيرات والإشعارات">${ICON.bell}</button>`}
     </div>`;
 }
 

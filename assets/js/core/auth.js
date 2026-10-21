@@ -1,9 +1,6 @@
-/* بوابة الدخول: كلمة مرور أولية SAYPER مخزّنة كبصمة SHA-256 داخل المتصفح */
+/* قفل اختياري محلي؛ كلمة المرور لا تُرسل إلى خادم. */
 
 const ITER = 12000;                 // تكرار التجزئة لتقليل جدوى التخمين
-const DEFAULT_PASSWORD = 'SAYPER';
-// بصمة كلمة المرور: SHA-256( "SAYPER" ) — تُستخدم عند أول تشغيل فقط
-const DEFAULT_HASH = '7df03c724a0d24cde80726ddb9bf4bc895fd83322dcd0f47663ca5a36d998468';
 
 /* ---------- SHA-256 (WebCrypto مع بديل JS خالص) ---------- */
 const K = [
@@ -77,22 +74,18 @@ export async function hashPassword(password, salt = '') {
 /* ---------- حالة المصادقة ---------- */
 import { readAuth, writeAuth, readSession, writeSession, settings, saveSettings } from './store.js';
 
-export function ensureAuth() {
-  let a = readAuth();
-  if (!a || !a.hash) {
-    a = { hash: DEFAULT_HASH, algo: 'v1', isDefault: true, createdAt: Date.now(), changedAt: 0 };
-    writeAuth(a);
-  }
-  return a;
+export function hasPassword() {
+  const a = readAuth();
+  return !!a?.hash && !a.isDefault;
 }
 
-export function usingDefaultPassword() {
-  const a = ensureAuth();
-  return !!a.isDefault;
+export function lockEnabled() {
+  return !!settings?.security?.lockEnabled;
 }
 
 async function verify(password) {
-  const a = ensureAuth();
+  const a = readAuth();
+  if (!a?.hash || a.isDefault) return false;
   if (a.algo === 'v2') {
     const h = await hashPassword(password, a.salt || '');
     return h === a.hash;
@@ -114,6 +107,7 @@ export function lockRemainingMs() {
 }
 
 export async function login(password, remember = true) {
+  if (!hasPassword()) return { ok: false, error: 'أنشئ كلمة مرور من الإعدادات أولاً.' };
   const wait = lockRemainingMs();
   if (wait > 0) return { ok: false, error: `محاولات كثيرة. انتظر ${Math.ceil(wait / 1000)} ثانية.` };
   const ok = await verify(password);
@@ -131,6 +125,7 @@ export async function login(password, remember = true) {
 }
 
 export function isAuthed() {
+  if (!lockEnabled()) return true;
   const s = readSession();
   if (!s || !s.exp) return false;
   if (Date.now() > s.exp) { writeSession(null); return false; }
@@ -140,25 +135,36 @@ export function isAuthed() {
 export function lockNow() { writeSession(null); }
 
 export function extendSession() {
+  if (!lockEnabled()) return;
   const s = readSession();
   if (!s) return;
   const days = settings?.session?.rememberDays || 30;
   writeSession({ at: Date.now(), exp: Date.now() + days * 86400000 });
 }
 
-export async function changePassword(current, next) {
+export async function setPassword(next, current = '') {
   if (String(next || '').length < 4) return { ok: false, error: 'كلمة المرور الجديدة قصيرة جداً (4 أحرف على الأقل).' };
-  const ok = await verify(current);
-  if (!ok) return { ok: false, error: 'كلمة المرور الحالية غير صحيحة.' };
+  if (lockEnabled() && hasPassword() && !(await verify(current))) {
+    return { ok: false, error: 'كلمة المرور الحالية غير صحيحة.' };
+  }
   const salt = Math.random().toString(36).slice(2, 10);
   const hash = await hashPassword(next, salt);
   writeAuth({ hash, algo: 'v2', salt, isDefault: false, createdAt: readAuth()?.createdAt || Date.now(), changedAt: Date.now() });
   return { ok: true };
 }
 
-export async function resetToDefaultPassword() {
-  writeAuth({ hash: DEFAULT_HASH, algo: 'v1', isDefault: true, createdAt: Date.now(), changedAt: 0 });
-  return { ok: true, note: `تمت إعادة التعيين إلى كلمة المرور الأولية ${DEFAULT_PASSWORD}` };
+export async function changePassword(current, next) {
+  return setPassword(next, current);
 }
 
-export const AUTH_INFO = { DEFAULT_PASSWORD, DEFAULT_HASH };
+export function setLockEnabled(enabled) {
+  if (enabled && !hasPassword()) return { ok: false, error: 'أنشئ كلمة مرور خاصة بك قبل تفعيل القفل.' };
+  saveSettings({ security: { lockEnabled: !!enabled } });
+  if (enabled) {
+    const days = settings?.session?.rememberDays || 30;
+    writeSession({ at: Date.now(), exp: Date.now() + days * 86400000 });
+  } else {
+    lockNow();
+  }
+  return { ok: true };
+}

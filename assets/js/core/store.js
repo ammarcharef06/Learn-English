@@ -26,6 +26,7 @@ export const DEFAULT_SETTINGS = {
     lastFired: '',
   },
   push: { enabled: false, appId: '', lastSync: '' },
+  security: { lockEnabled: false },
   session: { rememberDays: 30 },
   showTranslation: true,
   reduceAnimations: false,
@@ -170,7 +171,11 @@ export function exportAll() {
 export function importAll(json) {
   const data = JSON.parse(json);
   if (!data || typeof data !== 'object') throw new Error('ملف غير صالح');
-  if (data.settings) { settings = deepMerge(DEFAULT_SETTINGS, data.settings); localStorage.setItem(K_SETTINGS, JSON.stringify(settings)); }
+  if (data.settings) {
+    const importedSettings = { ...data.settings, security: settings.security };
+    settings = deepMerge(DEFAULT_SETTINGS, importedSettings);
+    localStorage.setItem(K_SETTINGS, JSON.stringify(settings));
+  }
   if (data.progress) { progress = deepMerge(DEFAULT_PROGRESS, data.progress); localStorage.setItem(K_PROGRESS, JSON.stringify(progress)); }
   emit('settings'); emit('progress');
   return true;

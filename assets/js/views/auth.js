@@ -13,7 +13,7 @@ export function renderLock(onSuccess) {
     <div class="lock-layout">
       <aside class="lock-aside" aria-label="${esc(t('auth.title'))}">
         <a class="lock-brand" href="#/" aria-label="${esc(t('auth.title'))}">
-          <span class="brand__mark" aria-hidden="true">EN</span>
+          <img class="brand__mark" src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
           <span>${esc(t('auth.title'))}</span>
         </a>
         <div class="lock-aside__copy">

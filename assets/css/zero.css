@@ -69,9 +69,8 @@ html[data-zero="a0"] .layout { padding-block-start: var(--sp-4); }
 }
 .zcert__top { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .zcert__mark {
-  inline-size: 42px; block-size: 42px; display: grid; place-content: center; border-radius: 13px;
-  background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff;
-  font-family: var(--font-en); font-weight: 800; font-size: .88rem;
+  inline-size: 42px; block-size: 42px; display: block; border-radius: 13px;
+  object-fit: contain;
 }
 .zcert__brand { display: flex; flex-direction: column; text-align: start; font-weight: 800; font-size: .98rem; }
 .zcert__brand small { color: var(--text-3); font-size: .73rem; font-weight: 400; }

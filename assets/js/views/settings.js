@@ -2,7 +2,7 @@
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
 import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr, copyText, confetti } from '../core/utils.js';
 import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
-import { changePassword, lockNow, usingDefaultPassword, resetToDefaultPassword } from '../core/auth.js';
+import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId, autoResubscribe, diagnostics } from '../core/notify.js';
 import { pageHead } from './shell.js';
@@ -12,6 +12,8 @@ const DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربع�
 export function renderSettings(host) {
   const s = settings;
   const voices = englishVoices();
+  const passwordConfigured = hasPassword();
+  const passwordLockEnabled = lockEnabled();
 
   host.innerHTML = `
     ${pageHead({ icon: '⚙️', title: t('set.title'), subtitle: t('set.subtitle') })}
@@ -158,18 +160,24 @@ export function renderSettings(host) {
 
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔒</span><h2>${t('set.security')}</h2></div>
-      ${usingDefaultPassword() ? `<div class="tip-box" style="margin-bottom:12px"><b>تنبيه أمني</b>${esc(t('set.stillDefault'))}</div>` : `<div class="tip-box tip-box--ok" style="margin-bottom:12px"><b>جيد</b>تستخدم كلمة مرور خاصة بك ✅</div>`}
-      <div class="grid grid--3">
-        <div class="field"><label for="pwCur">${t('set.currentPassword')}</label><input class="input" type="password" id="pwCur" autocomplete="current-password" /></div>
-        <div class="field"><label for="pwNew">${t('set.newPassword')}</label><input class="input" type="password" id="pwNew" autocomplete="new-password" /></div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.passwordLock')}</b><span>${t('set.passwordLockDesc')}</span></div>
+        <label class="switch"><input type="checkbox" id="lockEnabled" ${passwordLockEnabled ? 'checked' : ''} aria-label="${t('set.passwordLock')}" /><span class="switch__track"></span></label>
+      </div>
+      <div class="tip-box ${passwordLockEnabled ? 'tip-box--ok' : ''}" style="margin-bottom:12px">
+        <b>${passwordLockEnabled ? t('set.lockActive') : t('set.appOpen')}</b>
+        ${passwordLockEnabled ? t('set.lockActiveDesc') : t('set.appOpenDesc')}
+      </div>
+      <div class="grid ${passwordLockEnabled && passwordConfigured ? 'grid--3' : 'grid--2'}">
+        ${passwordLockEnabled && passwordConfigured ? `<div class="field"><label for="pwCur">${t('set.currentPassword')}</label><input class="input" type="password" id="pwCur" autocomplete="current-password" /></div>` : ''}
+        <div class="field"><label for="pwNew">${passwordConfigured ? t('set.newPassword') : t('set.createPassword')}</label><input class="input" type="password" id="pwNew" autocomplete="new-password" /></div>
         <div class="field"><label for="pwConf">${t('set.confirmPassword')}</label><input class="input" type="password" id="pwConf" autocomplete="new-password" /></div>
       </div>
       <div class="row row--wrap" style="gap:8px">
-        <button class="btn btn--primary" type="button" id="pwSave">${t('set.changePassword')}</button>
-        <button class="btn" type="button" id="lockNowBtn">🔒 ${t('set.lockNow')}</button>
-        <button class="btn btn--ghost" type="button" id="pwReset">إعادة كلمة المرور الأولية</button>
+        <button class="btn btn--primary" type="button" id="pwSave">${passwordConfigured ? t('set.changePassword') : t('set.createAndEnable')}</button>
+        ${passwordLockEnabled ? `<button class="btn" type="button" id="lockNowBtn">🔒 ${t('set.lockNow')}</button>` : ''}
       </div>
-      <p class="hint" style="margin-top:8px">كلمة المرور تُخزَّن داخل متصفحك كبصمة مشفّرة (SHA-256) ولا تُرسل لأي خادم. إن نسيتها، استخدم «إعادة كلمة المرور الأولية» ثم غيّرها.</p>
+      <p class="hint" style="margin-top:8px">${t('set.passwordLocalHint')}</p>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -390,14 +398,25 @@ export function renderSettings(host) {
   });
 
   /* ---------- الأمان ---------- */
+  qs('#lockEnabled', host)?.addEventListener('change', (e) => {
+    const result = setLockEnabled(e.target.checked);
+    if (!result.ok) {
+      e.target.checked = false;
+      toast(result.error, 'warn');
+      return;
+    }
+    toast(e.target.checked ? 'تم تفعيل القفل بكلمة مرور' : 'تم إيقاف القفل بكلمة مرور', 'ok');
+    renderSettings(host);
+  });
   qs('#pwSave', host)?.addEventListener('click', async () => {
-    const cur = qs('#pwCur', host).value;
-    const nw = qs('#pwNew', host).value;
-    const cf = qs('#pwConf', host).value;
+    const cur = qs('#pwCur', host)?.value || '';
+    const nw = qs('#pwNew', host)?.value || '';
+    const cf = qs('#pwConf', host)?.value || '';
     if (nw !== cf) { toast('كلمتا المرور الجديدتان غير متطابقتين', 'bad'); return; }
-    const res = await changePassword(cur, nw);
+    const res = await setPassword(nw, cur);
     if (!res.ok) { toast(res.error, 'bad'); return; }
-    qs('#pwCur', host).value = qs('#pwNew', host).value = qs('#pwConf', host).value = '';
+    if (!passwordConfigured) setLockEnabled(true);
+    qs('#pwNew', host).value = qs('#pwConf', host).value = '';
     toast(t('auth.changeOk'), 'ok');
     renderSettings(host);
   });
@@ -405,17 +424,6 @@ export function renderSettings(host) {
     lockNow();
     window.__leaLockNow?.();
   });
-  qs('#pwReset', host)?.addEventListener('click', () => {
-    openModal({
-      title: 'إعادة كلمة المرور الأولية',
-      body: '<p>ستُعاد كلمة المرور إلى <b class="en">SAYPER</b>. استخدمها للدخول ثم غيّرها فوراً.</p>',
-      actions: [
-        { label: t('common.cancel'), variant: 'ghost' },
-        { label: t('common.confirm'), variant: 'primary', onClick: async () => { await resetToDefaultPassword(); toast('أُعيدت كلمة المرور إلى SAYPER', 'ok'); renderSettings(host); } },
-      ],
-    });
-  });
-
   /* ---------- البيانات ---------- */
   qs('#exportBtn', host)?.addEventListener('click', () => {
     download(`learn-english-backup-${new Date().toISOString().slice(0, 10)}.json`, exportAll());
@@ -437,7 +445,7 @@ export function renderSettings(host) {
   });
   qs('#resetProgBtn', host)?.addEventListener('click', () => confirmAction('تصفير التقدّم', 'سيُحذف كل التقدم والنقاط والشارات، وتبقى الإعدادات وكلمة المرور.', () => { resetProgress(); toast('صُفِّر التقدّم', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
   qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', () => { resetSettings(); applySkin(); applyLang(); toast('أُعيدت الإعدادات', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
-  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور (ستعود SAYPER). لا يمكن التراجع!', () => { wipeEverything(); location.reload(); }));
+  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور. لا يمكن التراجع!', () => { wipeEverything(); location.reload(); }));
 
   qs('#installBtn', host)?.addEventListener('click', () => window.__leaInstall?.());
 }

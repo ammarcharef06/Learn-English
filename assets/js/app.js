@@ -6,9 +6,9 @@ import { settings, saveSettings, subscribe, progress, flush } from './core/store
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { registerZeroSounds } from './core/zero-audio.js';
-import { isAuthed, extendSession, lockNow, ensureAuth } from './core/auth.js';
+import { isAuthed, extendSession } from './core/auth.js';
 import { qs, qsa, toast, esc } from './core/utils.js';
-import { renderLock, hideLock, lockSite } from './views/auth.js';
+import { renderLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderTopbar } from './views/topbar.js';
 import { renderDashboard } from './views/dashboard.js';
@@ -81,7 +81,6 @@ function bindGlobalEvents() {
   qs('#scrim')?.addEventListener('click', closeDrawer);
 
   /* أزرار خاصة بموقع المستويات فقط */
-  qs('#btnLock')?.addEventListener('click', () => { lockNow(); lockSite(); });
   qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
 
   document.addEventListener('keydown', (e) => {
@@ -214,7 +213,6 @@ function boot() {
 }
 
 async function main() {
-  ensureAuth();
   applySkin();
   applyLang();
   initSpeech();

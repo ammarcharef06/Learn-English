@@ -87,6 +87,9 @@ globalThis.localStorage = {
   removeItem: (k) => mem.delete(k),
   clear: () => mem.clear(),
 };
+// Keep the app behind its optional lock while importing modules in this DOM-free harness.
+localStorage.setItem('lea.settings.v1', JSON.stringify({ security: { lockEnabled: true } }));
+localStorage.setItem('lea.auth.v1', JSON.stringify({ hash: 'test-hash', algo: 'v2', salt: 'test', isDefault: false }));
 globalThis.document = {
   documentElement: { dataset: {}, style: { setProperty() {} }, classList: { add() {}, remove() {}, toggle() {} } },
   body: elStub(), hidden: false,
@@ -416,6 +419,27 @@ try {
   const man = JSON.parse(readFileSync(join(ROOT, 'manifest-zero.webmanifest'), 'utf8'));
   if (man.start_url !== './zero.html') bad(`start_url لبيان A0 غير صحيح: ${man.start_url}`);
   if (!man.name || !man.icons?.length) bad('بيان A0 ناقص الاسم أو الأيقونات');
+  const iconFiles = [
+    ['assets/img/favicon.svg', null],
+    ['assets/img/icon-192.png', 192],
+    ['assets/img/icon-512.png', 512],
+    ['assets/img/icon-maskable-512.png', 512],
+    ['assets/img/apple-touch-icon.png', 180],
+  ];
+  for (const [path, size] of iconFiles) {
+    const full = join(ROOT, path);
+    if (!existsSync(full)) { bad(`ملف شعار مفقود: ${path}`); continue; }
+    if (size) {
+      const png = readFileSync(full);
+      if (png.toString('hex', 0, 8) !== '89504e470d0a1a0a') bad(`صيغة PNG غير سليمة: ${path}`);
+      else if (png.readUInt32BE(16) !== size || png.readUInt32BE(20) !== size) bad(`أبعاد الشعار غير سليمة: ${path}`);
+    }
+  }
+  const topbarBrand = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+  const authBrand = readFileSync(join(ROOT, 'assets/js/views/auth.js'), 'utf8');
+  if (!topbarBrand.includes('assets/img/favicon.svg') || !authBrand.includes('assets/img/favicon.svg')) {
+    bad('الشعار الجديد غير موحّد في الشريط العلوي وشاشة الدخول');
+  }
 
   const swSrc = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
   for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
