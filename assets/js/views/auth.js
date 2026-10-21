@@ -2,34 +2,61 @@
 import { qs, esc, toast } from '../core/utils.js';
 import { t } from '../core/i18n.js';
 import { login, lockRemainingMs } from '../core/auth.js';
+import { settings, saveSettings } from '../core/store.js';
+import { applyLang } from '../core/theme.js';
 
 export function renderLock(onSuccess) {
   const host = qs('#lockScreen');
   if (!host) return;
   host.hidden = false;
   host.innerHTML = `
-    <div class="lock-card">
-      <div class="brand__mark">EN</div>
-      <h1>${esc(t('auth.title'))}</h1>
-      <p class="sub">${esc(t('auth.subtitle'))}</p>
-      <form id="lockForm" autocomplete="on">
-        <div class="field">
-          <label for="lockPass">${esc(t('auth.password'))}</label>
-          <div class="row" style="gap:8px">
-            <input class="input pin-input" id="lockPass" type="password" name="password" autocomplete="current-password"
-                   placeholder="••••••" required aria-describedby="lockError" />
-            <button class="btn btn--icon" type="button" id="togglePass" aria-label="${esc(t('auth.show'))}">👁</button>
-          </div>
+    <div class="lock-layout">
+      <aside class="lock-aside" aria-label="${esc(t('auth.title'))}">
+        <a class="lock-brand" href="#/" aria-label="${esc(t('auth.title'))}">
+          <span class="brand__mark" aria-hidden="true">EN</span>
+          <span>${esc(t('auth.title'))}</span>
+        </a>
+        <div class="lock-aside__copy">
+          <span class="lock-kicker">${esc(t('auth.eyebrow'))}</span>
+          <h2>${esc(t('auth.headline'))}</h2>
+          <p>${esc(t('auth.learning'))}</p>
         </div>
-        <label class="switch" style="justify-content:center;margin:6px 0 14px">
-          <input type="checkbox" id="lockRemember" checked />
-          <span class="switch__track"></span>
-          <span class="small">${esc(t('auth.remember'))}</span>
-        </label>
-        <button class="btn btn--primary btn--block btn--lg" type="submit" id="lockSubmit">🔓 ${esc(t('auth.enter'))}</button>
-        <p class="lock-error" id="lockError" role="alert" aria-live="assertive"></p>
-      </form>
-      <p class="tiny muted" style="margin-top:14px">بياناتك محفوظة على جهازك فقط 🔒</p>
+        <div class="lock-aside__foot"><span aria-hidden="true">✦</span> ${esc(t('auth.privacy'))}</div>
+      </aside>
+
+      <section class="lock-card" aria-labelledby="lockTitle">
+        <div class="lock-card__top">
+          <span class="lock-card__eyebrow">${esc(t('auth.welcome'))}</span>
+          <button class="lock-language" id="lockLang" type="button" aria-label="${settings.uiLang === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية'}">
+            ${settings.uiLang === 'en' ? 'عربي' : 'EN'}
+          </button>
+        </div>
+        <div class="lock-card__heading">
+          <span class="lock-card__icon" aria-hidden="true">↗</span>
+          <h1 id="lockTitle">${esc(t('auth.title'))}</h1>
+          <p class="sub">${esc(t('auth.subtitle'))}</p>
+        </div>
+        <form id="lockForm" autocomplete="on">
+          <div class="field">
+            <label for="lockPass">${esc(t('auth.password'))}</label>
+            <div class="lock-password">
+              <input class="input pin-input" id="lockPass" type="password" name="password" autocomplete="current-password"
+                     placeholder="••••••" required aria-describedby="lockError" />
+              <button class="lock-show" type="button" id="togglePass" aria-label="${esc(t('auth.show'))}" aria-pressed="false">◉</button>
+            </div>
+          </div>
+          <label class="lock-remember">
+            <input type="checkbox" id="lockRemember" checked />
+            <span class="lock-check" aria-hidden="true"></span>
+            <span>${esc(t('auth.remember'))}</span>
+          </label>
+          <button class="btn btn--primary btn--block btn--lg lock-submit" type="submit" id="lockSubmit">
+            <span>${esc(t('auth.enter'))}</span><span aria-hidden="true">↗</span>
+          </button>
+          <p class="lock-error" id="lockError" role="alert" aria-live="assertive"></p>
+        </form>
+        <p class="lock-privacy"><span aria-hidden="true">♧</span> ${esc(t('auth.privacy'))}</p>
+      </section>
     </div>`;
 
   const form = qs('#lockForm', host);
@@ -37,8 +64,21 @@ export function renderLock(onSuccess) {
   const errorEl = qs('#lockError', host);
   const submitBtn = qs('#lockSubmit', host);
 
+  qs('#lockLang', host)?.addEventListener('click', () => {
+    const password = input.value;
+    const remember = qs('#lockRemember', host).checked;
+    saveSettings({ uiLang: settings.uiLang === 'en' ? 'ar' : 'en' });
+    applyLang();
+    renderLock(onSuccess);
+    const nextInput = qs('#lockPass', host);
+    nextInput.value = password;
+    qs('#lockRemember', host).checked = remember;
+    nextInput.focus();
+  });
+
   qs('#togglePass', host)?.addEventListener('click', () => {
     input.type = input.type === 'password' ? 'text' : 'password';
+    qs('#togglePass', host).setAttribute('aria-pressed', String(input.type === 'text'));
     input.focus();
   });
 
@@ -50,10 +90,10 @@ export function renderLock(onSuccess) {
       return;
     }
     submitBtn.disabled = true;
-    submitBtn.textContent = '…';
+    submitBtn.querySelector('span').textContent = '…';
     const res = await login(input.value, qs('#lockRemember', host).checked);
     submitBtn.disabled = false;
-    submitBtn.textContent = `🔓 ${t('auth.enter')}`;
+    submitBtn.querySelector('span').textContent = t('auth.enter');
     if (!res.ok) {
       errorEl.textContent = res.error;
       qs('.lock-card', host)?.classList.add('shake');
