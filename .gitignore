@@ -11,6 +11,15 @@ _livetest.*
 _examtest.*
 _setuptest.*
 .tmp-check/
+www/
+dist/
+release-assets/
+node_modules/
+*.keystore
+*.jks
+android/.gradle/
+android/build/
+android/app/build/
 
 # نظام
 Thumbs.db

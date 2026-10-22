@@ -1,0 +1,166 @@
+name: Build and publish installers
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run checks and tests
+        run: npm test
+
+  build:
+    needs: checks
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: android
+            runner: ubuntu-latest
+          - platform: windows
+            runner: windows-latest
+          - platform: linux
+            runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    env:
+      ANDROID_SIGNING_ENABLED: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_STORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set build version from release tag
+        run: node tools/set-build-version.mjs
+
+      - name: Prepare Android SDK
+        if: matrix.platform == 'android'
+        uses: android-actions/setup-android@v3
+
+      - name: Set up JDK 21
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Restore Android release signing key
+        if: matrix.platform == 'android' && env.ANDROID_SIGNING_ENABLED == 'true'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        shell: bash
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release-key.jks"
+          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release-key.jks" >> "$GITHUB_ENV"
+
+      - name: Build signed Android APK
+        if: matrix.platform == 'android' && env.ANDROID_SIGNING_ENABLED == 'true'
+        env:
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          npm run cap:sync:android
+          chmod +x android/gradlew
+          cd android
+          ./gradlew assembleRelease -PappVersion="$APP_VERSION" -PandroidVersionCode="$ANDROID_VERSION_CODE"
+          mkdir -p ../release-assets
+          cp app/build/outputs/apk/release/app-release.apk ../release-assets/Learn-English-Android.apk
+
+      - name: Build debug-signed Android APK
+        if: matrix.platform == 'android' && env.ANDROID_SIGNING_ENABLED != 'true'
+        shell: bash
+        run: |
+          npm run cap:sync:android
+          chmod +x android/gradlew
+          cd android
+          ./gradlew assembleDebug -PappVersion="$APP_VERSION" -PandroidVersionCode="$ANDROID_VERSION_CODE"
+          mkdir -p ../release-assets
+          cp app/build/outputs/apk/debug/app-debug.apk ../release-assets/Learn-English-Android.apk
+
+      - name: Build Windows installer
+        if: matrix.platform == 'windows'
+        run: npm run desktop:dist -- --win nsis portable
+
+      - name: Build Linux packages
+        if: matrix.platform == 'linux'
+        run: npm run desktop:dist -- --linux AppImage deb
+
+      - name: Upload release files
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v4
+        with:
+          name: learn-english-android
+          path: release-assets/*
+          if-no-files-found: error
+
+      - name: Upload release files
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: learn-english-windows
+          path: dist/*.exe
+          if-no-files-found: error
+
+      - name: Upload release files
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: learn-english-linux
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download installers
+        uses: actions/download-artifact@v4
+        with:
+          pattern: learn-english-*
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create checksums
+        run: |
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" release-assets/* --title "English Academy $TAG" --generate-notes
