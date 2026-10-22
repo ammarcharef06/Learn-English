@@ -3,6 +3,8 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { createStaticServer } = require('./server.cjs');
 
+app.setName('English Academy');
+
 const WEB_ROOT = app.isPackaged ? app.getAppPath() : path.resolve(__dirname, '..');
 const REMINDER_PATH = () => path.join(app.getPath('userData'), 'reminder.json');
 const TRAY_ICON = path.join(WEB_ROOT, 'assets', 'img', 'icon-512.png');

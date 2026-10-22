@@ -9,10 +9,25 @@ const { createStaticServer } = require('../desktop/server.cjs');
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const server = createStaticServer(root);
 const desktopMain = await readFile(resolve(root, 'desktop', 'main.cjs'), 'utf8');
+const packageJson = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'));
+const androidBuild = await readFile(resolve(root, 'android', 'app', 'build.gradle'), 'utf8');
+const releaseWorkflow = await readFile(resolve(root, '.github', 'workflows', 'release.yml'), 'utf8');
+const storeModule = await readFile(resolve(root, 'assets', 'js', 'core', 'store.js'), 'utf8');
 const trustedHandlerHelper = desktopMain.match(/function registerTrustedHandler\(channel, handler\) \{[\s\S]*?\n\}/)?.[0];
 assert.ok(trustedHandlerHelper, 'trusted IPC handler helper exists');
 assert.doesNotMatch(trustedHandlerHelper, /\n {2}registerTrustedHandler\(/, 'handler registrations must not be nested inside the helper');
 assert.equal((desktopMain.match(/registerTrustedHandler\('updates:runtime'/g) || []).length, 1);
+assert.equal(packageJson.build.appId, 'com.ammarcharef06.learnenglish');
+assert.match(androidBuild, /applicationId\s+"com\.ammarcharef06\.learnenglish"/);
+assert.match(releaseWorkflow, /secrets\.ANDROID_KEYSTORE_BASE64/);
+assert.equal(packageJson.build.productName, 'English Academy');
+assert.equal(packageJson.build.nsis.deleteAppDataOnUninstall, false);
+assert.match(desktopMain, /app\.setName\('English Academy'\);/);
+assert.ok(desktopMain.indexOf("app.setName('English Academy')") < desktopMain.indexOf("app.getPath('userData')"));
+assert.match(storeModule, /const K_SETTINGS = 'lea\.settings\.v1'/);
+assert.match(storeModule, /const K_PROGRESS = 'lea\.progress\.v1'/);
+assert.match(storeModule, /const K_AUTH = 'lea\.auth\.v1'/);
+assert.match(storeModule, /const K_SESSION = 'lea\.session\.v1'/);
 
 async function findAudio(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
