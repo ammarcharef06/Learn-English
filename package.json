@@ -1,6 +1,6 @@
 {
   "name": "learn-english",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
@@ -24,8 +24,10 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "8.4.3",
     "@capacitor/core": "^8.5.3",
+    "@capacitor/local-notifications": "^8.3.1",
     "electron": "^45.0.0",
-    "electron-builder": "26.15.3"
+    "electron-builder": "26.15.3",
+    "esbuild": "^0.28.2"
   },
   "build": {
     "appId": "com.ammarcharef06.learnenglish",
@@ -38,7 +40,6 @@
       "zero.html",
       "manifest.webmanifest",
       "manifest-zero.webmanifest",
-      "OneSignalSDKWorker.js",
       "service-worker.js"
     ],
     "directories": {

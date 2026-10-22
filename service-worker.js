@@ -1,15 +1,8 @@
-﻿/* ============================================================
-   Service Worker — عمل بلا إنترنت + دعم OneSignal Push
+/* ============================================================
+   Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-/* دمج عامل OneSignal (يلزم لإشعارات Push الحقيقية) */
-try {
-  importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
-} catch (e) {
-  console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
-}
-
-const VERSION = 'v3.2.0';
+const VERSION = 'v4.0.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -30,7 +23,6 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
-  './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
   './assets/js/core/i18n.js',
@@ -129,9 +121,8 @@ self.addEventListener('fetch', (event) => {
   let url2;
   try { url2 = new URL(req.url); } catch { return; }
 
-  // لا نتدخّل في الطلبات الخارجية (OneSignal، خطوط جوجل…)
+  // Leave cross-origin requests (such as Google Fonts) to the browser.
   if (!isSameOrigin(url2)) return;
-  if (url2.pathname.endsWith('OneSignalSDKWorker.js')) return;
 
   // التنقل: الشبكة أولاً ثم النسخة المخزّنة (ولكل صفحة نسختها: الموقع أو قسم A0)
   if (req.mode === 'navigate') {

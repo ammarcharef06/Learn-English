@@ -4,8 +4,8 @@ def hasReleaseSigning = System.getenv("ANDROID_KEYSTORE_PATH")
     && System.getenv("ANDROID_STORE_PASSWORD")
     && System.getenv("ANDROID_KEY_ALIAS")
     && System.getenv("ANDROID_KEY_PASSWORD")
-def appVersionCode = (project.findProperty('androidVersionCode') ?: '1').toString().toInteger()
-def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.0"
+def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000003').toString().toInteger()
+def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.3"
 
 android {
     namespace = "com.ammarcharef06.learnenglish"
@@ -68,5 +68,5 @@ try {
         apply plugin: 'com.google.gms.google-services'
     }
 } catch(Exception e) {
-    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+    logger.info("google-services.json not found, google-services plugin not applied.")
 }

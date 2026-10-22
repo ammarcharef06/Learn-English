@@ -53,9 +53,9 @@ export function renderAbout(host) {
         <tbody>
           <tr><td>الاستضافة</td><td class="en-cell">GitHub Pages</td></tr>
           <tr><td>المستودع</td><td class="en-cell">github.com/ammarcharef06/Learn-English</td></tr>
-          <tr><td>التقنيات</td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Service Worker · OneSignal</td></tr>
+          <tr><td>التقنيات</td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Capacitor Local Notifications · Electron</td></tr>
           <tr><td>التخزين</td><td class="en-cell">LocalStorage (محلي بالكامل)</td></tr>
-          <tr><td>الإصدار</td><td class="en-cell">1.0.0</td></tr>
+          <tr><td>الإصدار</td><td class="en-cell">1.0.3</td></tr>
         </tbody>
       </table></div>
       <div class="tip-box tip-box--brand" style="margin-top:14px">

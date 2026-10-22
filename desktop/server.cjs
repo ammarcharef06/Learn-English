@@ -21,7 +21,6 @@ const ROOT_FILES = new Set([
   'zero.html',
   'manifest.webmanifest',
   'manifest-zero.webmanifest',
-  'OneSignalSDKWorker.js',
   'service-worker.js',
 ]);
 

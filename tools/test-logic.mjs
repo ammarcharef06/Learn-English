@@ -4,6 +4,7 @@
  */
 import { pathToFileURL } from 'node:url';
 import { join, dirname, resolve } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -228,36 +229,60 @@ check('نص التذكير يحتوي المتبقي من الهدف', /باقي
 const wod = notify.wordOfTheDay();
 check('كلمة اليوم تُختار من المنهج', !!wod && !!wod.en && !!wod.ar, JSON.stringify(wod));
 check('نص التذكير يحتوي كلمة اليوم', notify.reminderBody().includes(wod.en));
-check('حالة Push غير مهيأة بدون App ID', notify.oneSignalConfigured() === false);
-saveSettings({ push: { appId: 'abc-123' } });
-check('Push يُعتبر مهيأً بعد إدخال App ID', notify.oneSignalConfigured() === true);
 check('وقت التذكير القادم نص عربي', typeof notify.nextReminderText() === 'string' && notify.nextReminderText().length > 3);
 
-/* تهيئة OneSignal لا تتكرر (المسار الذي يفشل عادة عند التهيئة التلقائية) */
-globalThis.window.OneSignal = {
-  initialized: true,
-  User: { PushSubscription: { id: 'sub-test-123', optedIn: false, optIn: async () => {} } },
-  Notifications: { permission: true, requestPermission: async () => {} },
+/* جدولة Android محلياً واستخدام إذن الإشعارات الأصلي */
+const nativeCalls = [];
+const localNotifications = {
+  async checkPermissions() { return { display: 'prompt' }; },
+  async requestPermissions() { nativeCalls.push('permission'); return { display: 'granted' }; },
+  async createChannel(channel) { nativeCalls.push(['channel', channel]); },
+  async cancel(options) { nativeCalls.push(['cancel', options]); },
+  async schedule(options) { nativeCalls.push(['schedule', options]); },
 };
-globalThis.Notification = { permission: 'granted', requestPermission: async () => 'granted' };
-const initAgain = await notify.initOneSignal();
-check('تهيئة OneSignal لا تتكرر عند وجود SDK مهيّأ', initAgain.ok === true && initAgain.alreadyInitialized === true, JSON.stringify(initAgain));
-check('تُعاد حالة الاشتراك الحالية', initAgain.id === 'sub-test-123');
-const enabled = await notify.enablePush();
-check('زر «تفعيل Push» يعمل بعد التهيئة التلقائية', enabled.ok === true, JSON.stringify(enabled));
-check('معرّف الاشتراك يُحفظ في الإعدادات', (await notify.pushStatus()).id === 'sub-test-123');
-check('مصدر معرّف Push يُصنَّف صحيحاً', (await notify.pushStatus()).source === 'settings');
-check('إعادة الاشتراك التلقائي تعمل عند منح الإذن', (await notify.autoResubscribe()).ok === true);
+globalThis.window.Capacitor = {
+  isNativePlatform: () => true,
+  Plugins: { LocalNotifications: localNotifications },
+};
+delete globalThis.Notification;
+saveSettings({ reminder: { enabled: true, time: '09:30', days: [1, 4] } });
+const androidSchedule = await notify.syncReminderSchedule({ requestPermission: true });
+const androidRequest = nativeCalls.find(([kind]) => kind === 'schedule')?.[1];
+const reminderChannel = nativeCalls.find(([kind]) => kind === 'channel')?.[1];
+check('Android notifications request permission and schedule locally', androidSchedule.ok && nativeCalls.includes('permission'));
+check('Android reminders repeat on selected weekdays', androidRequest?.notifications?.length === 2
+  && androidRequest.notifications[0].schedule.on.weekday === 2
+  && androidRequest.notifications[1].schedule.on.weekday === 5);
+check('Android reminder channel enables sound and vibration', reminderChannel?.sound === 'notification'
+  && reminderChannel.vibration === true && reminderChannel.importance === 4);
+const androidTest = await notify.fireReminder({ test: true });
+check('Android test uses a native notification', androidTest.ok
+  && nativeCalls.some(([kind, payload]) => kind === 'schedule' && payload.notifications?.[0]?.id === 399));
+saveSettings({ reminder: { enabled: false } });
+await notify.syncReminderSchedule();
+check('Disabling reminders cancels Android schedules', nativeCalls.some(([kind, payload]) => kind === 'cancel' && payload.notifications?.length === 7));
 
-/* اختبار انحدار: SDK محمّل لكن غير مهيّأ (OneSignal.User موجود) — يجب ألا يُعتبر مهيّأً */
-delete globalThis.window.OneSignal;
-globalThis.window.OneSignal = {
-  User: { PushSubscription: { id: null, optedIn: false, optIn: async () => {} } },
-  Notifications: { permission: false, requestPermission: async () => {} },
+/* جدولة سطح المكتب عبر الجسر المحدود في preload */
+let desktopSchedule;
+globalThis.window.Capacitor = undefined;
+globalThis.window.leaNotifications = {
+  async requestPermission() { return { permission: 'granted' }; },
+  async show() { return true; },
+  async schedule(options) { desktopSchedule = options; return { ok: true, mode: 'desktop' }; },
+  async cancel() { return true; },
 };
-const notInited = await notify.initOneSignal();
-check('SDK محمّل بلا اشتراك لا يُعتبر مهيّأً (الخلل السابق)', notInited.alreadyInitialized !== true, JSON.stringify(notInited));
-delete globalThis.window.OneSignal;
+saveSettings({ reminder: { enabled: true, launchAtLogin: true, time: '20:00', days: [0, 6] } });
+const desktopResult = await notify.syncReminderSchedule();
+check('Desktop schedule reaches the native adapter', desktopResult.ok
+  && desktopSchedule?.time === '20:00' && desktopSchedule?.launchAtLogin === true);
+check('Notification adapter detects desktop', notify.notificationPlatform() === 'desktop');
+globalThis.window.leaNotifications = undefined;
+saveSettings({ reminder: { enabled: false } });
+const settingsSource = await readFile(join(ROOT, 'assets/js/views/settings.js'), 'utf8');
+check('Settings UI has no legacy Push or install controls', !/OneSignal|pushOn|installBtn|appIdInput/.test(settingsSource));
+check('Settings UI keeps one notification switch and a test action', /id="remEnabled"/.test(settingsSource)
+  && /id="testReminder"/.test(settingsSource));
+
 delete globalThis.Notification;
 
 /* ================= 7. التخزين والنسخ الاحتياطي ================= */
@@ -270,9 +295,11 @@ const pointsBefore = store.progress.points;
 resetProgress();
 check('التصفير يمسح النقاط', store.progress.points === 0);
 store.saveSettings({ security: { lockEnabled: true } });
-importAll(exported);
+parsed.settings.push = { enabled: true, appId: 'legacy-app-id' };
+importAll(JSON.stringify(parsed));
 check('الاستيراد يستعيد التقدم', store.progress.points === pointsBefore, `${store.progress.points} مقابل ${pointsBefore}`);
 check('الاستيراد يحافظ على إعداد القفل المحلي', store.settings.security.lockEnabled);
+check('استيراد النسخة الاحتياطية لا يعيد إعدادات Push القديمة', !Object.hasOwn(store.settings, 'push'));
 store.saveSettings({ security: { lockEnabled: false } });
 
 /* ================= 8. الترجمة ================= */

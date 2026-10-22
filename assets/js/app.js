@@ -26,7 +26,7 @@ import { renderSettings, applyTheme, applySkin, applyLang, SKINS } from './views
 import { renderAbout } from './views/about.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
-import { startReminderLoop, initOneSignal, oneSignalConfigured } from './core/notify.js';
+import { startReminderLoop, syncReminderSchedule } from './core/notify.js';
 
 const view = () => qs('#view');
 
@@ -136,7 +136,7 @@ function setupInstall() {
 }
 
 /* ---------------- Service Worker ---------------- */
-/* وعد بجاهزية Service Worker — تستخدمه تهيئة الإشعارات */
+/* وعد بجاهزية Service Worker */
 let swReadyPromise = null;
 
 function registerSW() {
@@ -146,7 +146,7 @@ function registerSW() {
       const swUrl = new URL('./service-worker.js', location.href);
       const scope = new URL('./', location.href).pathname;
       const reg = await navigator.serviceWorker.register(swUrl, { scope });
-      // ننتظر وصول العامل إلى حالة التنشيط (مهم قبل تهيئة OneSignal)
+      // Wait for activation so offline navigation and browser notifications are ready.
       const active = reg.active || (await waitForActive(reg));
       return active ? reg : null;
     } catch (err) {
@@ -246,11 +246,9 @@ async function main() {
     /* شاشة الاختيار عند الدخول — مرة واحدة فقط (A0 أم A1) */
     if (shouldShowZeroChoice()) setTimeout(() => showZeroChoice(), 420);
     startReminderLoop();
-    if (oneSignalConfigured()) {
-      Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {
-        if (res.ok) console.info('OneSignal ready', res.id || '');
-      });
-    }
+    syncReminderSchedule().then((result) => {
+      if (!result.ok && settings.reminder.enabled) console.warn('Reminder schedule is not active.', result.error);
+    }).catch((error) => console.error('Could not restore reminder schedule.', error));
   };
 
   if (!isAuthed()) {

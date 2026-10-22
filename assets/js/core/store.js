@@ -18,14 +18,14 @@ export const DEFAULT_SETTINGS = {
   tts: { voice: '', rate: 0.92, pitch: 1, lang: 'en-US' },
   dailyGoal: 20,            // عدد الأسئلة اليومية
   reminder: {
-    enabled: true,
+    enabled: false,
     time: '19:00',
     days: [0, 1, 2, 3, 4, 5, 6],
     title: 'حان وقت الإنجليزية 🇬🇧',
     body: 'جلسة قصيرة اليوم تحافظ على سلسلتك! افتح الأكاديمية وتدرّب 10 دقائق.',
     lastFired: '',
+    launchAtLogin: false,
   },
-  push: { enabled: false, appId: '', lastSync: '' },
   security: { lockEnabled: false },
   session: { rememberDays: 30 },
   showTranslation: true,
@@ -85,7 +85,14 @@ function deepMerge(base, extra) {
   return out;
 }
 
-export let settings = deepMerge(DEFAULT_SETTINGS, safeParse(localStorage.getItem(K_SETTINGS), {}));
+const persistedSettings = safeParse(localStorage.getItem(K_SETTINGS), {});
+const hadLegacyPushSettings = Object.hasOwn(persistedSettings, 'push');
+delete persistedSettings.push;
+export let settings = deepMerge(DEFAULT_SETTINGS, persistedSettings);
+if (hadLegacyPushSettings) {
+  try { localStorage.setItem(K_SETTINGS, JSON.stringify(settings)); }
+  catch (error) { console.warn('Could not remove legacy push settings', error); }
+}
 export let progress = deepMerge(DEFAULT_PROGRESS, safeParse(localStorage.getItem(K_PROGRESS), {}));
 
 const listeners = new Set();
@@ -173,6 +180,7 @@ export function importAll(json) {
   if (!data || typeof data !== 'object') throw new Error('ملف غير صالح');
   if (data.settings) {
     const importedSettings = { ...data.settings, security: settings.security };
+    delete importedSettings.push;
     settings = deepMerge(DEFAULT_SETTINGS, importedSettings);
     localStorage.setItem(K_SETTINGS, JSON.stringify(settings));
   }
