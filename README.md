@@ -23,8 +23,34 @@
 | **التحفيز** | نقاط · سلسلة أيام Streak · ٣٩ شارة (٢٦ عامة + ١٣ للتأسيس) · أهداف يومية · إحصائيات ورسوم بيانية لآخر ١٤ يوماً |
 | **التخصيص** | ٣ ستايلات واجهة: **Kali GNOME** (الافتراضي · داكن بلون كالي) · **GNOME Adwaita** (فاتح/داكن) · **الكلاسيكي** — مع زر تبديل سريع 🎨 في الشريط العلوي ومبدّل كامل في الإعدادات · عربي/إنجليزي · حجم الخط · سرعة النطق واختيار الصوت · هدف يومي · اسمك في الشهادة |
 | **الإشعارات** | تذكير يومي في الوقت والأيام التي تختارها + كلمة اليوم + إشعارات Push حقيقية (OneSignal) |
-| **الأمان** | بوابة دخول بكلمة مرور مخزّنة كبصمة SHA-256 مع Salt داخل جهازك فقط |
+| **الأمان** | التطبيق مفتوح افتراضياً، مع قفل اختياري بكلمة مرور مخزّنة محلياً |
 | **بلا إنترنت** | Service Worker يخزّن كل الموقع **بما فيه ٣٦٠+ ملف صوتي**، ويعمل كتطبيق مثبَّت بعد أول زيارة |
+
+---
+
+## 📦 تثبيت التطبيق على أجهزتك
+
+التطبيق مجاني بالكامل، بلا إعلانات أو مشتريات، ولا يحتاج إلى متجر Play أو حساب Apple مدفوع. تبقى صفحة GitHub Pages النسخة المشتركة المتاحة لكل الأجهزة، وتُبنى معها تطبيقات سطح مكتب وملف Android قابل للتثبيت:
+
+| الجهاز | طريقة التثبيت |
+|---|---|
+| **Android** | نزّل `Learn-English-Android.apk` من صفحة [الإصدارات](https://github.com/ammarcharef06/Learn-English/releases)، وافتحه على الجهاز واسمح بالتثبيت من هذا المصدر عند طلب النظام. |
+| **Windows** | نزّل مثبّت `.exe` أو النسخة المحمولة `.exe` من صفحة الإصدارات. |
+| **Linux** | نزّل `.AppImage` أو حزمة `.deb` المناسبة من صفحة الإصدارات. |
+| **iPhone / iPad** | افتح [التطبيق على GitHub Pages](https://ammarcharef06.github.io/Learn-English/) في Safari، ثم «مشاركة» ← «إضافة إلى الشاشة الرئيسية». هذه نسخة PWA قابلة للتثبيت والعمل دون اتصال بعد التحميل الأول؛ لا نوزّع IPA لأن تثبيته خارج App Store يتطلب توقيع Apple وحساب توزيع. |
+
+تُبنى نسخة Android محلياً باستخدام JDK 21 وAndroid SDK API 36:
+
+```bash
+npm ci
+npm run cap:sync:android
+cd android
+./gradlew assembleDebug
+```
+
+في Windows استخدم `.\gradlew.bat assembleDebug` من مجلد `android`. يبني GitHub Actions حزم Android وWindows وLinux ويرفعها تلقائياً إلى صفحة GitHub Releases عند دفع وسم إصدار رقمي بصيغة `vMAJOR.MINOR.PATCH`، مثل `v1.2.3` (يجب أن يكون الرقمان الفرعيان أقل من 1000)، ويرفق ملف SHA-256 للتحقق من الملفات. لتمكين تحديث APK فوق الإصدار السابق، أنشئ مفتاح Android خاصاً واحتفظ بنسخة احتياطية منه؛ حوّله إلى نص Base64 مثلاً في PowerShell باستخدام `[Convert]::ToBase64String([IO.File]::ReadAllBytes("PATH_TO_KEYSTORE"))`، ثم أضف أسراره في إعدادات المستودع ← **Settings → Secrets and variables → Actions** بالأسماء `ANDROID_KEYSTORE_BASE64` و`ANDROID_STORE_PASSWORD` و`ANDROID_KEY_ALIAS` و`ANDROID_KEY_PASSWORD`. لا ترفع ملف المفتاح إلى Git أو تشاركه علناً. من دون هذه الأسرار ينتج سير العمل APK بتوقيع debug مؤقت من عامل البناء؛ يجب إزالة هذا الإصدار قبل تثبيت إصدار لاحق. افتح مشروع Android في Android Studio بواسطة `npm run android:open`. معرّف التطبيق هو `com.ammarcharef06.learnenglish`.
+
+تطبيقات Windows وLinux تغلّف الموقع نفسه بعارض محلي، لذلك تعمل موادها الأساسية دون اتصال. إصدار iPhone هو تطبيق ويب تقدمي (PWA) وليس ملف IPA أصلياً؛ طريقة إضافته إلى الشاشة الرئيسية لا تتطلب اشتراكاً في المتجر. قد يعرض Windows تحذير SmartScreen لأن ملف التثبيت غير موقّع بشهادة ناشر تجارية.
 
 ---
 
@@ -71,9 +97,9 @@ python -m http.server 5173
 
 ```bash
 node tools/check.mjs        # سلامة الملفات والاستيرادات والبيانات + فحوصات قسم A0
-node tools/test-logic.mjs   # ٩٢ اختباراً منطقياً: المصادقة، الأسئلة، SRS، الإشعارات، النسخ الاحتياطي
-node tools/test-zero.mjs    # ٦٦ اختباراً لقسم «من الصفر»: المحتوى، الأسئلة، التقدّم، الشارات، الشهادة، اللوح
-npm test                    # يشغّل الثلاثة معاً (check ثم test-zero)
+node tools/test-logic.mjs   # اختبارات منطقية: المصادقة، الأسئلة، SRS، الإشعارات، النسخ الاحتياطي
+node tools/test-zero.mjs    # ٧٢ اختباراً لقسم «من الصفر»: المحتوى، الأسئلة، التقدّم، الشارات، الشهادة، اللوح
+npm test                    # يشغّل فحوصات المشروع والمنطق وA0 واختبار خادم تطبيق سطح المكتب
 ```
 
 > بوابة النشر في `.github/workflows/deploy.yml` تُشغّل `check.mjs` و`test-zero.mjs` تلقائياً قبل كل نشر،
@@ -273,8 +299,13 @@ English/
 ├─ .gitignore
 ├─ tools/
 │  ├─ check.mjs                فحص سلامة المشروع + فحوصات بيانات قسم A0
-│  ├─ test-logic.mjs           اختبارات منطقية شاملة (٩٢)
-│  └─ test-zero.mjs            اختبارات قسم «من الصفر» (٦٦)
+│  ├─ test-logic.mjs           اختبارات منطقية شاملة
+│  └─ test-zero.mjs            اختبارات قسم «من الصفر» (٧٢)
+├─ desktop/main.cjs            مشغّل تطبيق Windows/Linux المحلي
+├─ capacitor.config.json       إعداد تطبيق Android
+├─ android/                    مشروع Android الأصلي
+├─ .github/workflows/release.yml بناء ونشر حزم الإصدارات على GitHub Releases
+├─ tools/set-build-version.mjs  مزامنة إصدار الوسم مع Android وسطح المكتب
 └─ assets/
    ├─ css/
    │  ├─ main.css              نظام تصميم كامل (RTL/LTR · داكن/فاتح · متجاوب)

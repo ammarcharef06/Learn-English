@@ -9,7 +9,7 @@ try {
   console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
 }
 
-const VERSION = 'v3.1.8';
+const VERSION = 'v3.2.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',

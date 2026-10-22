@@ -3,10 +3,65 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "أكاديمية تعلّم الإنجليزية - موقع تعليمي تفاعلي (عربي/إنجليزي) يعمل على GitHub Pages",
+  "main": "desktop/main.cjs",
+  "description": "English learning application for Arabic speakers",
+  "author": "Ammar Charef",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ammarcharef06/Learn-English.git"
+  },
   "scripts": {
     "serve": "python -m http.server 5173",
+    "build:web": "node tools/build-web.mjs",
+    "desktop:start": "electron .",
+    "desktop:dist": "electron-builder",
     "check": "node tools/check.mjs",
-    "test": "node tools/check.mjs && node tools/test-zero.mjs"
+    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
+    "cap:sync:android": "npm run build:web && cap sync android",
+    "android:open": "cap open android"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "8.4.3",
+    "@capacitor/core": "^8.5.3",
+    "electron": "^45.0.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.ammarcharef06.learnenglish",
+    "productName": "English Academy",
+    "asar": true,
+    "files": [
+      "assets/**/*",
+      "desktop/**/*",
+      "index.html",
+      "zero.html",
+      "manifest.webmanifest",
+      "manifest-zero.webmanifest",
+      "OneSignalSDKWorker.js",
+      "service-worker.js"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/img/icon-512.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "icon": "assets/img/icon-512.png",
+      "category": "Education",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
   }
 }
