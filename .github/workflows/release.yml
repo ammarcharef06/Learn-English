@@ -62,6 +62,8 @@ jobs:
       - name: Prepare Android SDK
         if: matrix.platform == 'android'
         uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
 
       - name: Set up JDK 21
         if: matrix.platform == 'android'
@@ -107,11 +109,11 @@ jobs:
 
       - name: Build Windows installer
         if: matrix.platform == 'windows'
-        run: npm run desktop:dist -- --win nsis portable
+        run: npm run desktop:dist -- --win nsis portable --publish never
 
       - name: Build Linux packages
         if: matrix.platform == 'linux'
-        run: npm run desktop:dist -- --linux AppImage deb
+        run: npm run desktop:dist -- --linux AppImage deb --publish never
 
       - name: Upload release files
         if: matrix.platform == 'android'
