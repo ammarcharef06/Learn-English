@@ -51,6 +51,7 @@ export function renderNav() {
     });
     html += `<div class="sidenav__group">${t('nav.group.me')}</div>`;
     html += `<a href="#/about" data-nav data-route="#/about" title="${t('nav.about')}"><span class="ico" aria-hidden="true">ℹ️</span><span class="lbl">${t('nav.about')}</span></a>`;
+    html += `<a href="#/support" data-nav data-route="#/support" title="${t('nav.support')}"><span class="ico" aria-hidden="true">💛</span><span class="lbl">${t('nav.support')}</span></a>`;
     side.innerHTML = html;
   }
 
@@ -66,7 +67,7 @@ const SECTION_MAP = {
   '': '#/',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
-  exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',
+  exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',
 };
 
 export function activeHrefFor(path) {

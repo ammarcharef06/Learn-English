@@ -12,6 +12,7 @@ let reminderTimer;
 let reminder = { enabled: false, days: [], time: '19:00', title: '', body: '' };
 let quitting = false;
 let trustedOrigin = '';
+let downloadedInstaller = '';
 
 function validReminder(value) {
   return value && typeof value === 'object'
@@ -52,10 +53,15 @@ async function setStartup(enabled) {
   ].join('\n'), { mode: 0o755 });
 }
 
-function showSystemNotification(title, body) {
+function showSystemNotification(title, body, url = '') {
   if (!Notification.isSupported()) throw new Error('System notifications are not supported.');
   const notification = new Notification({ title, body, icon: TRAY_ICON, silent: false });
-  notification.on('click', showWindow);
+  notification.on('click', () => {
+    showWindow();
+    if (url.includes('#/settings?section=updates')) {
+      BrowserWindow.getAllWindows()[0]?.webContents.send('updates:open');
+    }
+  });
   notification.show();
 }
 
@@ -135,10 +141,41 @@ function showWindow() {
 
 function registerTrustedHandler(channel, handler) {
   ipcMain.handle(channel, (event, ...args) => {
-    if (!trustedOrigin || !event.senderFrame?.url?.startsWith(trustedOrigin)) {
+    let senderOrigin = '';
+    try { senderOrigin = new URL(event.senderFrame?.url || '').origin; } catch {}
+    if (!trustedOrigin || senderOrigin !== trustedOrigin) {
       throw new Error('Rejected notification request from an untrusted renderer.');
     }
     return handler(event, ...args);
+  });
+  registerTrustedHandler('updates:runtime', async () => ({
+    platform: process.platform,
+    isAppImage: process.platform === 'linux' && !!process.env.APPIMAGE,
+  }));
+  registerTrustedHandler('updates:save-installer', async (_event, options) => {
+    const filename = options?.filename;
+    const bytes = options?.bytes;
+    if (typeof filename !== 'string' || path.basename(filename) !== filename
+      || !/^[A-Za-z0-9._ -]+\.(exe|AppImage|deb)$/i.test(filename)) {
+      throw new Error('Rejected an invalid installer filename.');
+    }
+    const data = Buffer.isBuffer(bytes) ? bytes : ArrayBuffer.isView(bytes)
+      ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+      : bytes instanceof ArrayBuffer ? Buffer.from(bytes) : null;
+    if (!data?.length || data.length > 700 * 1024 * 1024) throw new Error('Rejected invalid installer data.');
+    const destination = path.join(app.getPath('downloads'), `Learn-English-${Date.now()}-${filename}`);
+    await fs.writeFile(destination, data, { flag: 'wx' });
+    downloadedInstaller = destination;
+    return { filename: path.basename(destination) };
+  });
+  registerTrustedHandler('updates:open-installer', async () => {
+    const downloads = path.resolve(app.getPath('downloads'));
+    if (!downloadedInstaller || path.dirname(path.resolve(downloadedInstaller)) !== downloads) {
+      throw new Error('No verified installer is ready to open.');
+    }
+    const error = await shell.openPath(downloadedInstaller);
+    if (error) throw new Error(`Could not open the installer: ${error}`);
+    return true;
   });
 }
 
@@ -182,7 +219,7 @@ registerTrustedHandler('notifications:show', async (_event, options) => {
   if (!options || typeof options.title !== 'string' || typeof options.body !== 'string') {
     throw new Error('Invalid notification content.');
   }
-  showSystemNotification(options.title.slice(0, 120), options.body.slice(0, 500));
+  showSystemNotification(options.title.slice(0, 120), options.body.slice(0, 500), String(options.url || '').slice(0, 300));
   return true;
 });
 registerTrustedHandler('notifications:schedule', (_event, options) => saveReminder(options));

@@ -2,7 +2,7 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.0.0';
+const VERSION = 'v4.1.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -32,6 +32,9 @@ const CORE = [
   './assets/js/core/srs.js',
   './assets/js/core/gamify.js',
   './assets/js/core/notify.js',
+  './assets/js/core/ads.js',
+  './assets/js/core/updater.js',
+  './assets/js/core/app-version.js',
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
@@ -70,6 +73,7 @@ const CORE = [
   './assets/js/views/notebook.js',
   './assets/js/views/settings.js',
   './assets/js/views/about.js',
+  './assets/js/views/support.js',
 ];
 
 self.addEventListener('install', (event) => {

@@ -47,6 +47,52 @@ function check(name, cond, extra = '') {
 }
 const section = (title) => console.log(`\n▶ ${title}`);
 
+/* ================= 0. تحديثات وإصدارات التطبيق ================= */
+section('اختيار تحديثات التطبيق');
+const updater = await mod('assets/js/core/updater.js');
+check('مقارنة إصدارات الإصدار مستقرة', updater.compareVersions('1.0.10', '1.0.9') > 0
+  && updater.compareVersions('1.0.4', '1.0.4') === 0);
+const updateAssets = [
+  { name: 'Learn-English-Android.apk', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/Learn-English-Android.apk' },
+  { name: 'English.Academy.Setup.1.0.4.exe', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/English.Academy.Setup.1.0.4.exe' },
+  { name: 'english-academy_1.0.4_amd64.deb', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/english-academy_1.0.4_amd64.deb' },
+  { name: 'English.Academy-1.0.4.AppImage', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/English.Academy-1.0.4.AppImage' },
+];
+check('اختيار APK Android من أصول الإصدار الموثوقة', updater.selectReleaseAsset(updateAssets, 'android') === updateAssets[0]);
+check('اختيار مثبت Windows من أصول الإصدار الموثوقة', updater.selectReleaseAsset(updateAssets, 'win32') === updateAssets[1]);
+check('اختيار حزمة Linux من أصول الإصدار الموثوقة', updater.selectReleaseAsset(updateAssets, 'linux') === updateAssets[2]);
+check('اختيار AppImage عند تشغيل نسخة AppImage', updater.selectReleaseAsset(updateAssets, 'linux', true) === updateAssets[3]);
+check('رفض أصل تنزيل خارج المستودع المحدد', (() => {
+  try {
+    updater.selectReleaseAsset([{ name: 'malware.exe', browser_download_url: 'https://evil.example/malware.exe' }], 'win32');
+    return false;
+  } catch { return true; }
+})());
+const oldFetch = globalThis.fetch;
+const oldCapacitor = window.Capacitor;
+window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' };
+globalThis.fetch = async () => ({
+  ok: true,
+  json: async () => ({
+    tag_name: 'v1.0.5',
+    name: 'English Academy v1.0.5',
+    body: 'Release notes',
+    assets: [
+      { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.5/SHA256SUMS.txt' },
+    ],
+  }),
+});
+try {
+  const releaseCheck = await updater.checkForUpdate({ force: true });
+  check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
+    && releaseCheck.latestVersion === '1.0.5' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+} finally {
+  globalThis.fetch = oldFetch;
+  if (oldCapacitor === undefined) delete window.Capacitor;
+  else window.Capacitor = oldCapacitor;
+}
+
 /* ================= 1. المصادقة ================= */
 section('المصادقة وكلمة المرور');
 const auth = await mod('assets/js/core/auth.js');
@@ -233,6 +279,7 @@ check('وقت التذكير القادم نص عربي', typeof notify.nextRemi
 
 /* جدولة Android محلياً واستخدام إذن الإشعارات الأصلي */
 const nativeCalls = [];
+const updateWorkerCalls = [];
 const localNotifications = {
   async checkPermissions() { return { display: 'prompt' }; },
   async requestPermissions() { nativeCalls.push('permission'); return { display: 'granted' }; },
@@ -242,7 +289,11 @@ const localNotifications = {
 };
 globalThis.window.Capacitor = {
   isNativePlatform: () => true,
-  Plugins: { LocalNotifications: localNotifications },
+  getPlatform: () => 'android',
+  Plugins: {
+    LocalNotifications: localNotifications,
+    UpdateChecker: { async setEnabled(options) { updateWorkerCalls.push(options.enabled); } },
+  },
 };
 delete globalThis.Notification;
 saveSettings({ reminder: { enabled: true, time: '09:30', days: [1, 4] } });
@@ -250,6 +301,7 @@ const androidSchedule = await notify.syncReminderSchedule({ requestPermission: t
 const androidRequest = nativeCalls.find(([kind]) => kind === 'schedule')?.[1];
 const reminderChannel = nativeCalls.find(([kind]) => kind === 'channel')?.[1];
 check('Android notifications request permission and schedule locally', androidSchedule.ok && nativeCalls.includes('permission'));
+check('Android background update checks follow the notification master switch', updateWorkerCalls.at(-1) === true);
 check('Android reminders repeat on selected weekdays', androidRequest?.notifications?.length === 2
   && androidRequest.notifications[0].schedule.on.weekday === 2
   && androidRequest.notifications[1].schedule.on.weekday === 5);
@@ -261,6 +313,7 @@ check('Android test uses a native notification', androidTest.ok
 saveSettings({ reminder: { enabled: false } });
 await notify.syncReminderSchedule();
 check('Disabling reminders cancels Android schedules', nativeCalls.some(([kind, payload]) => kind === 'cancel' && payload.notifications?.length === 7));
+check('Disabling notifications cancels Android background update checks', updateWorkerCalls.at(-1) === false);
 
 /* جدولة سطح المكتب عبر الجسر المحدود في preload */
 let desktopSchedule;

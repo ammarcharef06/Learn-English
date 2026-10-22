@@ -806,3 +806,49 @@ body.drawer-open { overflow: hidden; }
   .topbar .icon-btn { inline-size: 38px; block-size: 38px; border-radius: 10px; }
   .topbar .icon-btn svg { inline-size: 19px; block-size: 19px; }
 }
+@layer components {
+  .support-hero {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--sp-5);
+    padding: clamp(20px, 4vw, 40px);
+    background:
+      radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--brand-1) 16%, transparent), transparent 36%),
+      var(--surface-1);
+  }
+  .support-hero__icon {
+    display: grid;
+    width: 68px;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 22px;
+    background: var(--brand-soft);
+    font-size: 2rem;
+  }
+  .support-hero h2 { margin-bottom: 6px; }
+  .support-hero p { max-width: 62ch; color: var(--text-muted); }
+  .support-ad { margin-top: 16px; }
+  .support-ad .hint { display: block; margin-top: 10px; }
+  .update-status { margin-top: 14px; }
+  .update-release { border-top: 1px solid var(--border); margin-top: 14px; padding-top: 14px; }
+  .update-release h4 { margin-top: 14px; }
+  .update-release__notes {
+    max-height: 240px;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    font: inherit;
+    font-size: .88em;
+  }
+  .update-progress { margin: 14px 0; }
+  .update-progress progress { display: block; width: 100%; height: 12px; margin-top: 8px; accent-color: var(--brand-1); }
+  @media (max-width: 680px) {
+    .support-hero { grid-template-columns: auto 1fr; }
+    .support-hero > .btn { grid-column: 1 / -1; justify-self: stretch; text-align: center; }
+  }
+}

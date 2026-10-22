@@ -6,3 +6,13 @@ contextBridge.exposeInMainWorld('leaNotifications', {
   schedule: (options) => ipcRenderer.invoke('notifications:schedule', options),
   cancel: () => ipcRenderer.invoke('notifications:cancel'),
 });
+
+contextBridge.exposeInMainWorld('leaUpdates', {
+  getRuntime: () => ipcRenderer.invoke('updates:runtime'),
+  saveInstaller: (filename, bytes) => ipcRenderer.invoke('updates:save-installer', { filename, bytes }),
+  openInstaller: () => ipcRenderer.invoke('updates:open-installer'),
+  onUpdateClick: (callback) => {
+    if (typeof callback !== 'function') return;
+    ipcRenderer.on('updates:open', callback);
+  },
+});

@@ -6,8 +6,10 @@ import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '
 import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
 import { pageHead } from './shell.js';
+import { APP_VERSION } from '../core/app-version.js';
+import { checkForUpdate, downloadAndOpenUpdate } from '../core/updater.js';
 
-export function renderSettings(host) {
+export function renderSettings(host, query = {}) {
   const s = settings;
   const days = s.uiLang === 'en'
     ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -129,6 +131,22 @@ export function renderSettings(host) {
       </div>
     </div>
 
+    <div class="card" style="margin-top:16px" id="updateCard">
+      <div class="card__title"><span class="ico">⬆️</span><h2>${t('update.title')}</h2></div>
+      <p class="small muted">${t('update.desc')}</p>
+      <div class="row row--wrap" style="gap:10px;margin-top:12px">
+        <span class="chip">${esc(APP_VERSION)}</span>
+        <button class="btn btn--primary" type="button" id="checkUpdates">${t('update.check')}</button>
+      </div>
+      <div id="updateStatus" class="update-status" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card__title"><span class="ico">📣</span><h2>${t('nav.support')}</h2></div>
+      <p class="small muted">${s.uiLang === 'en' ? 'Support the continued development of the academy.' : 'ساهم في استمرار تطوير الأكاديمية.'}</p>
+      <a class="btn btn--primary btn--sm" href="#/support">${s.uiLang === 'en' ? 'Support us' : 'دعم التطبيق'} →</a>
+    </div>
+
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔒</span><h2>${t('set.security')}</h2></div>
       <div class="setting-row">
@@ -163,6 +181,10 @@ export function renderSettings(host) {
       </div>
       <p class="hint" style="margin-top:8px">عدد الكلمات في دفترك: ${(progress.notebook || []).length} · أيام الدراسة: ${(progress.studyDays || []).length}</p>
     </div>`;
+
+    if (query.section === 'updates') {
+      requestAnimationFrame(() => qs('#updateCard', host)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
 
   /* ---------- المظهر ---------- */
   qsa('#skinSeg button', host).forEach((b) => b.addEventListener('click', () => {
@@ -287,6 +309,77 @@ export function renderSettings(host) {
     const res = await fireReminder({ test: true });
     toast(res.ok ? t('set.testNotificationSent') : (res.error || t('set.notificationScheduleFailed')), res.ok ? 'ok' : 'bad');
   });
+
+  const updateStatus = qs('#updateStatus', host);
+  const checkButton = qs('#checkUpdates', host);
+  const showUpdateStatus = (result) => {
+    if (!updateStatus) return;
+    if (!result.supported) {
+      updateStatus.innerHTML = `<p class="small muted">${t('update.webUnsupported')}</p>`;
+      return;
+    }
+    if (!result.update) {
+      updateStatus.innerHTML = `<p class="small muted">${t('update.current', { version: esc(result.currentVersion) })}</p>`;
+      return;
+    }
+    const notes = result.release.notes || (s.uiLang === 'en' ? 'No release notes provided.' : 'لا توجد ملاحظات لهذا الإصدار.');
+    updateStatus.innerHTML = `
+      <section class="update-release">
+        <h3>${t('update.available', { version: esc(result.latestVersion) })}</h3>
+        <p class="small muted">${esc(result.release.name)} · ${esc(result.release.asset.name)}</p>
+        <h4>${t('update.notes')}</h4>
+        <pre class="update-release__notes">${esc(notes)}</pre>
+        <div class="update-progress" hidden>
+          <div class="row row--between"><span>${t('update.progress')}</span><span data-progress-label>0%</span></div>
+          <progress max="100" value="0" aria-label="${t('update.progress')}"></progress>
+        </div>
+        <button class="btn btn--primary" type="button" data-download-update>${t('update.download')}</button>
+      </section>`;
+    updateStatus.querySelector('[data-download-update]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      const progress = updateStatus.querySelector('.update-progress');
+      const bar = progress?.querySelector('progress');
+      const label = progress?.querySelector('[data-progress-label]');
+      button.disabled = true;
+      progress.hidden = false;
+      try {
+        const downloaded = await downloadAndOpenUpdate(result.release, (state) => {
+          const percentage = Number.isFinite(state.percent) ? state.percent : 0;
+          if (bar) bar.value = percentage;
+          if (label) label.textContent = `${percentage}%`;
+        });
+        const completeMessage = downloaded.manualInstall
+          ? t('update.appimage', { filename: esc(downloaded.filename) })
+          : t('update.done');
+        updateStatus.querySelector('.update-release')?.insertAdjacentHTML('beforeend', `<p class="tip-box tip-box--ok" role="status">${completeMessage}</p>`);
+        button.textContent = downloaded.manualInstall
+          ? (s.uiLang === 'en' ? 'Download complete' : 'اكتمل التنزيل')
+          : (s.uiLang === 'en' ? 'Installer opened' : 'فُتح مثبت النظام');
+      } catch (error) {
+        console.error('Could not download or open the update.', error);
+        const message = t('update.error', { error: esc(error.message || String(error)) });
+        updateStatus.querySelector('.update-release')?.insertAdjacentHTML('beforeend', `<p class="tip-box" role="alert">${message}</p>`);
+        button.disabled = false;
+      }
+    });
+  };
+  const runUpdateCheck = async () => {
+    if (!checkButton) return;
+    checkButton.disabled = true;
+    checkButton.textContent = t('update.checking');
+    if (updateStatus) updateStatus.textContent = t('update.checking');
+    try {
+      showUpdateStatus(await checkForUpdate({ force: true }));
+    } catch (error) {
+      console.error('Could not check for app updates.', error);
+      if (updateStatus) updateStatus.innerHTML = `<p class="tip-box" role="alert">${t('update.error', { error: esc(error.message || String(error)) })}</p>`;
+    } finally {
+      checkButton.disabled = false;
+      checkButton.textContent = t('update.check');
+    }
+  };
+  checkButton?.addEventListener('click', runUpdateCheck);
+  if (query.section === 'updates') void runUpdateCheck();
 
   /* ---------- الأمان ---------- */
   qs('#lockEnabled', host)?.addEventListener('change', (e) => {

@@ -20,6 +20,14 @@ function desktopNotifications() {
   return window.leaNotifications || null;
 }
 
+async function syncBackgroundUpdateChecks(enabled) {
+  if (!window.Capacitor?.isNativePlatform?.() || window.Capacitor.getPlatform?.() !== 'android') return;
+  const plugin = window.Capacitor?.Plugins?.UpdateChecker
+    || window.CapacitorUpdateBundle?.UpdateChecker;
+  if (!plugin) throw new Error('The Android background update checker is unavailable.');
+  await plugin.setEnabled({ enabled });
+}
+
 export function notificationPlatform() {
   if (nativeNotifications()) return 'android';
   if (desktopNotifications()) return 'desktop';
@@ -105,7 +113,7 @@ export async function showNotification(title, body, opts = {}) {
     return true;
   }
   const desktop = desktopNotifications();
-  if (desktop) return desktop.show({ title, body });
+  if (desktop) return desktop.show({ title, body, url: opts.url || '' });
   return showWebNotification(title, body, opts);
 }
 
@@ -179,6 +187,7 @@ export async function syncReminderSchedule({ requestPermission = false } = {}) {
   if (!reminder.enabled) {
     if (native) await native.cancel({ notifications: REMINDER_IDS.map((id) => ({ id })) });
     if (desktop) await desktop.cancel();
+    await syncBackgroundUpdateChecks(false);
     return { ok: true, mode: notificationPlatform(), disabled: true };
   }
 
@@ -213,6 +222,7 @@ export async function syncReminderSchedule({ requestPermission = false } = {}) {
         })),
       });
     }
+    await syncBackgroundUpdateChecks(true);
     return { ok: true, mode: 'android' };
   }
 

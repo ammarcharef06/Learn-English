@@ -7,6 +7,7 @@ import { buildQuestions, buildRelationQuestions } from '../core/quizgen.js';
 import { recordExam, levelStats } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats, statCard } from './shell.js';
 import { runQuiz } from './quiz-runner.js';
+import { maybeShowInterstitial } from '../core/ads.js';
 
 const EXAMS = [
   { id: 'placement', icon: '🧭', title: 'اختبار تحديد المستوى', desc: '٣٠ سؤالاً متدرّجاً من A1 حتى B1 لمعرفة مستواك الحقيقي الآن.', count: 30, minutes: 20, source: 'all', types: ['mcq', 'fill', 'translate'] },
@@ -157,6 +158,7 @@ function runTimedExam(examHost, { questions, def, examId }) {
         recordExam({ level: examId, score: res.correct, total: res.total, seconds: res.seconds });
         renderSidebarStats();
         renderExamResult(runner, res, def, examId);
+        maybeShowInterstitial(`exam:${examId}:${Date.now()}`).catch((error) => console.warn('Interstitial ad unavailable.', error));
       },
     });
   });
