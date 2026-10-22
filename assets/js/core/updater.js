@@ -110,17 +110,16 @@ export async function downloadAndOpenUpdate(release, onProgress = () => {}) {
     throw new Error('The installer has an invalid or unsupported file size.');
   }
   const platform = release.platform || (await runtimeInfo()).platform;
-  const expectedHash = parseAssetDigest(release.asset.digest) || findChecksum(
-    platform === 'android'
-      ? await downloadAndroidText(release.checksumAsset)
-      : await fetchTrustedText(release.checksumAsset.browser_download_url),
-    release.asset.name,
-  );
+  const expectedHash = parseAssetDigest(release.asset.digest);
 
   if (platform === 'android') {
+    const verifiedHash = expectedHash || findChecksum(
+      await downloadAndroidText(release.checksumAsset),
+      release.asset.name,
+    );
     const update = await downloadAndroidAsset(release.asset, onProgress);
     const actualHash = await hashAndroidFile(update.filePath);
-    if (actualHash !== expectedHash) {
+    if (actualHash !== verifiedHash) {
       await update.filesystem.deleteFile({ path: update.filePath });
       throw new Error('The downloaded APK failed its SHA-256 verification.');
     }
@@ -132,12 +131,21 @@ export async function downloadAndOpenUpdate(release, onProgress = () => {}) {
     return { opened: true, platform };
   }
 
-  const bytes = await downloadWebAsset(release.asset.browser_download_url, onProgress, release.asset.size);
-  const actualHash = await hashBytes(bytes);
-  if (actualHash !== expectedHash) throw new Error('The downloaded installer failed its SHA-256 verification.');
   const desktop = window.leaUpdates;
   if (!desktop) throw new Error('The desktop installer bridge is unavailable.');
-  const saved = await desktop.saveInstaller(release.asset.name, bytes);
+  const removeProgressListener = desktop.onDownloadProgress?.(onProgress) || (() => {});
+  let saved;
+  try {
+    saved = await desktop.downloadInstaller({
+      url: release.asset.browser_download_url,
+      filename: release.asset.name,
+      expectedSize: release.asset.size,
+      expectedSha256: expectedHash,
+      checksumUrl: release.checksumAsset?.browser_download_url,
+    });
+  } finally {
+    removeProgressListener();
+  }
   if (platform === 'linux' && release.isAppImage) {
     return { opened: false, manualInstall: true, platform, filename: saved.filename };
   }
@@ -202,39 +210,6 @@ function findChecksum(text, filename) {
 function parseAssetDigest(value) {
   const match = typeof value === 'string' ? value.match(/^sha256:([a-f0-9]{64})$/i) : null;
   return match ? match[1].toLowerCase() : '';
-}
-
-async function fetchTrustedText(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Could not download checksum file (${response.status}).`);
-  const text = await response.text();
-  if (text.length > 1024 * 1024) throw new Error('The release checksum file is too large.');
-  return text;
-}
-
-async function downloadWebAsset(url, onProgress, expectedSize = 0) {
-  const response = await fetch(url);
-  if (!response.ok || !response.body) throw new Error(`Installer download failed (${response.status}).`);
-  const total = Number(response.headers.get('content-length') || expectedSize || 0);
-  if (total > MAX_DOWNLOAD_BYTES) throw new Error('The installer is larger than the supported download limit.');
-  const reader = response.body.getReader();
-  const chunks = [];
-  let bytesRead = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    bytesRead += value.byteLength;
-    if (bytesRead > MAX_DOWNLOAD_BYTES) throw new Error('The installer is larger than the supported download limit.');
-    chunks.push(value);
-    onProgress({ bytes: bytesRead, total, percent: total ? Math.min(100, Math.round(bytesRead / total * 100)) : 0 });
-  }
-  const result = new Uint8Array(bytesRead);
-  let offset = 0;
-  for (const chunk of chunks) {
-    result.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return result;
 }
 
 async function hashBytes(bytes) {

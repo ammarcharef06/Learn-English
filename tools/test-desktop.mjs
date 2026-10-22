@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const { createStaticServer } = require('../desktop/server.cjs');
+const { validateReleaseUrl } = require('../desktop/update-download.cjs');
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const server = createStaticServer(root);
 const desktopMain = await readFile(resolve(root, 'desktop', 'main.cjs'), 'utf8');
@@ -13,6 +14,9 @@ const packageJson = JSON.parse(await readFile(resolve(root, 'package.json'), 'ut
 const androidBuild = await readFile(resolve(root, 'android', 'app', 'build.gradle'), 'utf8');
 const releaseWorkflow = await readFile(resolve(root, '.github', 'workflows', 'release.yml'), 'utf8');
 const storeModule = await readFile(resolve(root, 'assets', 'js', 'core', 'store.js'), 'utf8');
+const preload = await readFile(resolve(root, 'desktop', 'preload.cjs'), 'utf8');
+const updater = await readFile(resolve(root, 'assets', 'js', 'core', 'updater.js'), 'utf8');
+const updateDownload = await readFile(resolve(root, 'desktop', 'update-download.cjs'), 'utf8');
 const trustedHandlerHelper = desktopMain.match(/function registerTrustedHandler\(channel, handler\) \{[\s\S]*?\n\}/)?.[0];
 assert.ok(trustedHandlerHelper, 'trusted IPC handler helper exists');
 assert.doesNotMatch(trustedHandlerHelper, /\n {2}registerTrustedHandler\(/, 'handler registrations must not be nested inside the helper');
@@ -28,6 +32,18 @@ assert.match(storeModule, /const K_SETTINGS = 'lea\.settings\.v1'/);
 assert.match(storeModule, /const K_PROGRESS = 'lea\.progress\.v1'/);
 assert.match(storeModule, /const K_AUTH = 'lea\.auth\.v1'/);
 assert.match(storeModule, /const K_SESSION = 'lea\.session\.v1'/);
+assert.match(preload, /downloadInstaller: \(options\) => ipcRenderer\.invoke\('updates:download-installer'/);
+assert.match(preload, /onDownloadProgress/);
+assert.match(updater, /desktop\.downloadInstaller\(/);
+assert.doesNotMatch(updater, /fetch\(url\)/);
+assert.match(updateDownload, /release-assets\.githubusercontent\.com/);
+assert.match(updateDownload, /downloaded\.sha256 !== digest/);
+assert.match(updateDownload, /updates:download-progress/);
+assert.equal(validateReleaseUrl('https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.8/installer.exe').hostname, 'github.com');
+assert.equal(validateReleaseUrl('https://release-assets.githubusercontent.com/asset', true).hostname, 'release-assets.githubusercontent.com');
+assert.throws(() => validateReleaseUrl('https://example.com/installer.exe'), /untrusted/i);
+assert.throws(() => validateReleaseUrl('https://github.com/other/repo/releases/download/v1/installer.exe'), /untrusted/i);
+assert.throws(() => validateReleaseUrl('https://example.com/asset', true), /untrusted/i);
 
 async function findAudio(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {

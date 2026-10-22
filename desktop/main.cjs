@@ -2,6 +2,7 @@ const { app, BrowserWindow, Notification, Tray, Menu, ipcMain, shell } = require
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { createStaticServer } = require('./server.cjs');
+const { downloadInstaller } = require('./update-download.cjs');
 
 app.setName('English Academy');
 
@@ -171,6 +172,15 @@ registerTrustedHandler('updates:save-installer', async (_event, options) => {
   await fs.writeFile(destination, data, { flag: 'wx' });
   downloadedInstaller = destination;
   return { filename: path.basename(destination) };
+});
+registerTrustedHandler('updates:download-installer', async (event, options) => {
+  const result = await downloadInstaller({
+    ...options,
+    sender: event.sender,
+    downloadsPath: app.getPath('downloads'),
+  });
+  downloadedInstaller = path.join(app.getPath('downloads'), result.filename);
+  return result;
 });
 registerTrustedHandler('updates:open-installer', async () => {
   const downloads = path.resolve(app.getPath('downloads'));

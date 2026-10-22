@@ -74,19 +74,19 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.9',
-    name: 'English Academy v1.0.9',
+    tag_name: 'v1.0.10',
+    name: 'English Academy v1.0.10',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.9/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.10/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.9' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.10' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
