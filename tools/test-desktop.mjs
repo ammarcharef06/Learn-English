@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { readdir } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,6 +8,11 @@ const require = createRequire(import.meta.url);
 const { createStaticServer } = require('../desktop/server.cjs');
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const server = createStaticServer(root);
+const desktopMain = await readFile(resolve(root, 'desktop', 'main.cjs'), 'utf8');
+const trustedHandlerHelper = desktopMain.match(/function registerTrustedHandler\(channel, handler\) \{[\s\S]*?\n\}/)?.[0];
+assert.ok(trustedHandlerHelper, 'trusted IPC handler helper exists');
+assert.doesNotMatch(trustedHandlerHelper, /\n {2}registerTrustedHandler\(/, 'handler registrations must not be nested inside the helper');
+assert.equal((desktopMain.match(/registerTrustedHandler\('updates:runtime'/g) || []).length, 1);
 
 async function findAudio(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
