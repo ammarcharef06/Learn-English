@@ -53,10 +53,10 @@ const updater = await mod('assets/js/core/updater.js');
 check('مقارنة إصدارات الإصدار مستقرة', updater.compareVersions('1.0.10', '1.0.9') > 0
   && updater.compareVersions('1.0.4', '1.0.4') === 0);
 const updateAssets = [
-  { name: 'Learn-English-Android.apk', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/Learn-English-Android.apk' },
-  { name: 'English.Academy.Setup.1.0.4.exe', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/English.Academy.Setup.1.0.4.exe' },
-  { name: 'english-academy_1.0.4_amd64.deb', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/english-academy_1.0.4_amd64.deb' },
-  { name: 'English.Academy-1.0.4.AppImage', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.4/English.Academy-1.0.4.AppImage' },
+  { name: 'Learn-English-Android.apk', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.6/Learn-English-Android.apk' },
+  { name: 'English.Academy.Setup.1.0.6.exe', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.6/English.Academy.Setup.1.0.6.exe' },
+  { name: 'english-academy_1.0.6_amd64.deb', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.6/english-academy_1.0.6_amd64.deb' },
+  { name: 'English.Academy-1.0.6.AppImage', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.6/English.Academy-1.0.6.AppImage' },
 ];
 check('اختيار APK Android من أصول الإصدار الموثوقة', updater.selectReleaseAsset(updateAssets, 'android') === updateAssets[0]);
 check('اختيار مثبت Windows من أصول الإصدار الموثوقة', updater.selectReleaseAsset(updateAssets, 'win32') === updateAssets[1]);
@@ -74,19 +74,19 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.5',
-    name: 'English Academy v1.0.5',
+    tag_name: 'v1.0.6',
+    name: 'English Academy v1.0.6',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.5/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.6/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.5' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.6' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;

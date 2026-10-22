@@ -4,12 +4,15 @@ def hasReleaseSigning = System.getenv("ANDROID_KEYSTORE_PATH")
     && System.getenv("ANDROID_STORE_PASSWORD")
     && System.getenv("ANDROID_KEY_ALIAS")
     && System.getenv("ANDROID_KEY_PASSWORD")
-def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000004').toString().toInteger()
-def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.4"
+def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000005').toString().toInteger()
+def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.5"
 
 android {
     namespace = "com.ammarcharef06.learnenglish"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId "com.ammarcharef06.learnenglish"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -54,6 +57,7 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation "androidx.work:work-runtime:2.10.1"
+    implementation "com.google.guava:listenablefuture:1.0"
     implementation project(':capacitor-android')
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
