@@ -2,5 +2,12 @@
   "appId": "com.ammarcharef06.learnenglish",
   "appName": "أكاديمية الإنجليزية",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_notification",
+      "iconColor": "#2563eb",
+      "sound": "notification"
+    }
+  }
 }

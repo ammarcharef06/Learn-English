@@ -1,16 +1,19 @@
-/* الإعدادات: المظهر، الصوت، الإشعارات، Push، الأمان، البيانات */
+/* الإعدادات: المظهر، الصوت، الإشعارات، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
-import { esc, qs, qsa, toast, openModal, closeModal, download, readFileText, prettyTimeAr, copyText, confetti } from '../core/utils.js';
+import { esc, qs, qsa, toast, openModal, download, readFileText, prettyTimeAr } from '../core/utils.js';
 import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
 import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
-import { ensurePermission, fireReminder, enablePush, disablePush, pushStatus, nextReminderText, permissionState, initOneSignal, appId as currentAppId, autoResubscribe, diagnostics } from '../core/notify.js';
+import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
 import { pageHead } from './shell.js';
+import { APP_VERSION } from '../core/app-version.js';
+import { checkForUpdate, checkForUpdateInBackground, downloadAndOpenUpdate } from '../core/updater.js';
 
-const DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-
-export function renderSettings(host) {
+export function renderSettings(host, query = {}) {
   const s = settings;
+  const days = s.uiLang === 'en'
+    ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    : ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   const voices = englishVoices();
   const passwordConfigured = hasPassword();
   const passwordLockEnabled = lockEnabled();
@@ -99,63 +102,49 @@ export function renderSettings(host) {
 
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔔</span><h2>${t('set.notifications')}</h2></div>
+      <p class="small muted">${t('set.notificationsDesc')}</p>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.reminderOn')}</b><span>${t('set.reminderDesc')}</span></div>
-        <label class="switch"><input type="checkbox" id="remEnabled" ${s.reminder.enabled ? 'checked' : ''} /><span class="switch__track"></span></label>
+        <div class="setting-row__text"><b>${t('set.notificationsEnabled')}</b><span>${t('set.reminderDesc')}</span></div>
+        <label class="switch"><input type="checkbox" id="remEnabled" aria-label="${t('set.notificationsEnabled')}" ${s.reminder.enabled ? 'checked' : ''} /><span class="switch__track"></span></label>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.reminderTime')}</b><span>التذكير القادم: ${esc(nextReminderText())} · إذن المتصفح: <b id="permState">${esc(permissionState())}</b></span></div>
+        <div class="setting-row__text"><b>${t('set.reminderTime')}</b><span>${t('set.nextReminder')}: ${esc(nextReminderText())}</span></div>
         <div class="setting-row__control">
-          <input class="input" type="time" id="remTime" value="${esc(s.reminder.time)}" style="width:140px" />
+          <input class="input" type="time" id="remTime" aria-label="${t('set.reminderTime')}" value="${esc(s.reminder.time)}" style="width:140px" />
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.reminderDays')}</b><span>اختر الأيام التي تريد أن يصلك فيها التذكير.</span></div>
+        <div class="setting-row__text"><b>${t('set.reminderDays')}</b><span>${t('set.reminderDaysDesc')}</span></div>
         <div class="setting-row__control row row--wrap" style="gap:6px">
-          ${DAYS.map((d, i) => `<button class="btn btn--sm ${s.reminder.days.includes(i) ? 'btn--primary' : ''}" type="button" data-day="${i}">${d}</button>`).join('')}
+          ${days.map((d, i) => `<button class="btn btn--sm ${s.reminder.days.includes(i) ? 'btn--primary' : ''}" type="button" data-day="${i}" aria-pressed="${s.reminder.days.includes(i)}">${d}</button>`).join('')}
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>نص التذكير</b><span>العنوان والجملة التي تظهر في الإشعار.</span></div>
+        <div class="setting-row__text"><b>${t('set.reminderText')}</b><span>${t('set.reminderTextDesc')}</span></div>
         <div class="setting-row__control" style="flex-direction:column;align-items:stretch;gap:6px;min-width:280px">
-          <input class="input" type="text" id="remTitle" value="${esc(s.reminder.title)}" />
-          <input class="input" type="text" id="remBody" value="${esc(s.reminder.body)}" />
+          <input class="input" type="text" id="remTitle" aria-label="${t('set.reminderTitle')}" value="${esc(s.reminder.title)}" />
+          <input class="input" type="text" id="remBody" aria-label="${t('set.reminderMessage')}" value="${esc(s.reminder.body)}" />
         </div>
       </div>
       <div class="row row--wrap" style="gap:8px;margin-top:10px">
-        <button class="btn btn--primary btn--sm" type="button" id="testReminder">🔔 ${t('set.pushTest')}</button>
-        <button class="btn btn--sm" type="button" id="askPerm">${t('set.pushEnable')}</button>
+        <button class="btn btn--primary btn--sm" type="button" id="testReminder">🔔 ${t('set.testNotification')}</button>
       </div>
     </div>
 
+    <div class="card" style="margin-top:16px" id="updateCard">
+      <div class="card__title"><span class="ico">⬆️</span><h2>${t('update.title')}</h2></div>
+      <p class="small muted">${t('update.desc')}</p>
+      <div class="row row--wrap" style="gap:10px;margin-top:12px">
+        <span class="chip">${esc(APP_VERSION)}</span>
+        <button class="btn btn--primary" type="button" id="checkUpdates">${t('update.check')}</button>
+      </div>
+      <div id="updateStatus" class="update-status" role="status" aria-live="polite"></div>
+    </div>
+
     <div class="card" style="margin-top:16px">
-      <div class="card__title"><span class="ico">📲</span><h2>${t('set.pushOn')}</h2></div>
-      <p class="small muted">${t('set.pushDesc')}</p>
-      <div class="tip-box" style="margin-bottom:12px">
-        <b>كيف تحصل على App ID؟</b>
-        ١) ادخل إلى onesignal.com وأنشئ تطبيقاً من نوع <span class="en">Web</span>.
-        ٢) اختر <span class="en">Typical Site</span> وأدخل رابط موقعك:
-        <span class="en">https://ammarcharef06.github.io/Learn-English/</span>
-        ٣) انسخ <span class="en">App ID</span> والصقه في الحقل أدناه ثم اضغط «تفعيل إشعارات Push».
-      </div>
-      <div class="field">
-        <label for="appIdInput">${t('set.appId')}</label>
-        <div class="row" style="gap:8px">
-          <input class="input en" type="text" id="appIdInput" dir="ltr" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" value="${esc(currentAppId())}" />
-          <button class="btn" type="button" id="saveAppId">${t('common.save')}</button>
-        </div>
-        <span class="hint">${t('set.pushStatus')}: <b id="pushState">…</b></span>
-      </div>
-      <div class="tip-box" id="pushHint" style="margin-bottom:12px">جارٍ قراءة حالة الاشتراك…</div>
-      <div class="row row--wrap" style="gap:8px">
-        <button class="btn btn--primary" type="button" id="pushOn">🔔 ${t('set.pushEnable')}</button>
-        <button class="btn" type="button" id="pushOff">🔕 إيقاف</button>
-        <button class="btn" type="button" id="pushTest">${t('set.pushTest')}</button>
-        <button class="btn btn--ghost btn--sm" type="button" id="refreshPush">🔄 تحديث الحالة</button>
-        <button class="btn btn--ghost btn--sm" type="button" id="diagPush">🔍 تشخيص الإشعارات</button>
-        <button class="btn btn--ghost btn--sm" type="button" id="copySubId">📋 نسخ معرّف اشتراكي</button>
-      </div>
-      <p class="hint" id="pushConfigNote" style="margin-top:8px"></p>
+      <div class="card__title"><span class="ico">📣</span><h2>${t('nav.support')}</h2></div>
+      <p class="small muted">${s.uiLang === 'en' ? 'Support the continued development of the academy.' : 'ساهم في استمرار تطوير الأكاديمية.'}</p>
+      <a class="btn btn--primary btn--sm" href="#/support">${s.uiLang === 'en' ? 'Support us' : 'دعم التطبيق'} →</a>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -191,19 +180,11 @@ export function renderSettings(host) {
         <button class="btn btn--bad" type="button" id="wipeBtn">🗑 ${t('set.wipe')}</button>
       </div>
       <p class="hint" style="margin-top:8px">عدد الكلمات في دفترك: ${(progress.notebook || []).length} · أيام الدراسة: ${(progress.studyDays || []).length}</p>
-    </div>
-
-    <div class="card" style="margin-top:16px">
-      <div class="card__title"><span class="ico">📱</span><h2>${t('set.install')}</h2></div>
-      <p class="small muted">${t('set.installDesc')}</p>
-      <button class="btn btn--primary" type="button" id="installBtn">⬇ ${t('common.install')}</button>
-      <div class="divider"></div>
-      <p class="small muted">
-        <b>على الهاتف (أندرويد/كروم):</b> افتح قائمة المتصفح ← «إضافة إلى الشاشة الرئيسية».
-        <br><b>على الآيفون (سفاري):</b> زر المشاركة ← «إضافة إلى الشاشة الرئيسية».
-        <br><b>على الكمبيوتر (كروم/إيدج):</b> أيقونة التثبيت في شريط العنوان أو زر التثبيت أعلى الصفحة.
-      </p>
     </div>`;
+
+    if (query.section === 'updates') {
+      requestAnimationFrame(() => qs('#updateCard', host)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
 
   /* ---------- المظهر ---------- */
   qsa('#skinSeg button', host).forEach((b) => b.addEventListener('click', () => {
@@ -267,12 +248,50 @@ export function renderSettings(host) {
   qs('#nameInput', host)?.addEventListener('change', (e) => { saveSettings({ learnerName: e.target.value.trim() }); toast(t('set.saved'), 'ok'); });
 
   /* ---------- الإشعارات ---------- */
-  qs('#remEnabled', host)?.addEventListener('change', (e) => {
-    saveSettings({ reminder: { enabled: e.target.checked } });
-    if (e.target.checked) ensurePermission().then((p) => { const el = qs('#permState', host); if (el) el.textContent = p; });
+  qs('#remEnabled', host)?.addEventListener('change', async (e) => {
+    const enabled = e.target.checked;
+    if (enabled) {
+      const permission = await ensurePermission();
+      if (!['granted', 'available', 'native'].includes(permission)) {
+        e.target.checked = false;
+        toast(permission === 'denied'
+          ? t('set.notificationPermissionBlocked')
+          : t('set.notificationPermissionRequired'), 'warn');
+        return;
+      }
+    }
+    saveSettings({ reminder: { enabled, launchAtLogin: enabled } });
+    try {
+      const result = await syncReminderSchedule({ requestPermission: enabled });
+      if (!result.ok) {
+        saveSettings({ reminder: { enabled: false, launchAtLogin: false } });
+        e.target.checked = false;
+        toast(result.error === 'notification-permission-required'
+          ? t('set.notificationPermissionRequired')
+          : t('set.notificationScheduleFailed'), 'bad');
+        return;
+      }
+      toast(enabled ? t('set.notificationsEnabledToast') : t('set.notificationsDisabledToast'), 'ok');
+      if (enabled) await checkForUpdateInBackground();
+    } catch (error) {
+      console.error('Could not update reminder schedule', error);
+      saveSettings({ reminder: { enabled: !enabled, launchAtLogin: !enabled } });
+      e.target.checked = !enabled;
+      toast(t('set.notificationScheduleFailed'), 'bad');
+    }
   });
-  qs('#remTime', host)?.addEventListener('change', (e) => {
-    saveSettings({ reminder: { time: e.target.value } });
+  const saveReminderSchedule = async (patch) => {
+    saveSettings({ reminder: patch });
+    try {
+      const result = await syncReminderSchedule();
+      if (!result.ok) toast(t('set.notificationScheduleFailed'), 'bad');
+    } catch (error) {
+      console.error('Could not update reminder schedule', error);
+      toast(t('set.notificationScheduleFailed'), 'bad');
+    }
+  };
+  qs('#remTime', host)?.addEventListener('change', async (e) => {
+    await saveReminderSchedule({ time: e.target.value });
     toast(`التذكير اليومي: ${prettyTimeAr(e.target.value)}`, 'ok');
   });
   qsa('[data-day]', host).forEach((b) => b.addEventListener('click', () => {
@@ -280,122 +299,88 @@ export function renderSettings(host) {
     const days = new Set(settings.reminder.days);
     if (days.has(d)) days.delete(d); else days.add(d);
     const arr = [...days].sort((x, y) => x - y);
-    saveSettings({ reminder: { days: arr.length ? arr : [d] } });
-    b.classList.toggle('btn--primary');
+    if (!arr.length) arr.push(d);
+    saveReminderSchedule({ days: arr });
+    b.classList.toggle('btn--primary', arr.includes(d));
+    b.setAttribute('aria-pressed', String(arr.includes(d)));
   }));
-  qs('#remTitle', host)?.addEventListener('change', (e) => saveSettings({ reminder: { title: e.target.value } }));
-  qs('#remBody', host)?.addEventListener('change', (e) => saveSettings({ reminder: { body: e.target.value } }));
-  qs('#askPerm', host)?.addEventListener('click', async () => {
-    const p = await ensurePermission();
-    qs('#permState', host).textContent = p;
-    toast(p === 'granted' ? 'تم منح إذن الإشعارات ✅' : 'لم يُمنح الإذن — فعّله من إعدادات المتصفح', p === 'granted' ? 'ok' : 'warn');
-  });
+  qs('#remTitle', host)?.addEventListener('change', (e) => saveReminderSchedule({ title: e.target.value }));
+  qs('#remBody', host)?.addEventListener('change', (e) => saveReminderSchedule({ body: e.target.value }));
   qs('#testReminder', host)?.addEventListener('click', async () => {
     const res = await fireReminder({ test: true });
-    toast(res.ok ? 'أُرسل الإشعار التجريبي ✅' : (res.error || 'تعذّر الإرسال'), res.ok ? 'ok' : 'bad');
+    toast(res.ok ? t('set.testNotificationSent') : (res.error || t('set.notificationScheduleFailed')), res.ok ? 'ok' : 'bad');
   });
 
-  /* ---------- Push ---------- */
-  const guidanceFor = (st) => {
-    if (!st.configured) return 'لم يُضبط App ID بعد.';
-    if (st.permission === 'unsupported') return 'متصفحك لا يدعم الإشعارات — جرّب Chrome أو Edge على الكمبيوتر، أو ثبّت الموقع كتطبيق على الهاتف.';
-    if (st.permission === 'denied') return 'الإشعارات محظورة في المتصفح. افتح رمز القفل 🔒 بجانب العنوان ← الإشعارات ← «سماح»، ثم اضغط الزر من جديد.';
-    if (st.permission === 'granted' && (st.id || st.optedIn)) return 'الاشتراك مكتمل ✅ سيصلك الإشعار عند إرساله من لوحة OneSignal.';
-    if (st.permission === 'granted') return 'الإذن ممنوح لكن الاشتراك لم يكتمل — اضغط «🔔 تفعيل إشعارات Push» مرة أخرى.';
-    return 'لم يُطلب الإذن بعد: اضغط «🔔 تفعيل إشعارات Push» ثم اختر «السماح» في نافذة المتصفح.';
-  };
-
-  const refreshPushState = async () => {
-    const st = await pushStatus();
-    const el = qs('#pushState', host);
-    const hint = qs('#pushHint', host);
-    if (!el) return;
-    const sourceText = st.source === 'config' ? 'مضبوط في ملف الإعدادات (كل الأجهزة)'
-      : st.source === 'settings' ? 'مضبوط على هذا الجهاز'
-        : t('set.pushNotConfigured');
-    el.textContent = !st.configured
-      ? sourceText
-      : `${sourceText} · ${st.permission === 'granted' && (st.id || st.optedIn) ? 'مُفعّل ✅' : 'غير مُفعّل'} · ${st.id ? `ID: ${st.id.slice(0, 14)}…` : 'لا مشترك'} · الإذن: ${st.permission}`;
-    if (hint) {
-      hint.textContent = guidanceFor(st);
-      hint.className = `tip-box ${st.permission === 'granted' && (st.id || st.optedIn) ? 'tip-box--ok' : ''}`;
+  const updateStatus = qs('#updateStatus', host);
+  const checkButton = qs('#checkUpdates', host);
+  const showUpdateStatus = (result) => {
+    if (!updateStatus) return;
+    if (!result.supported) {
+      updateStatus.innerHTML = `<p class="small muted">${t('update.webUnsupported')}</p>`;
+      return;
     }
-    const note = qs('#pushConfigNote', host);
-    if (note) {
-      note.innerHTML = st.source === 'config'
-        ? 'المعرّف مضبوط في ملف <span class="en">assets/js/config.js</span>، لذا تعمل الإشعارات على كل أجهزتك تلقائياً — لا حاجة لإدخاله في كل جهاز.'
-        : 'لتشغيل الإشعارات تلقائياً على كل أجهزتك، ضع نفس المعرّف في الملف <span class="en">assets/js/config.js</span> في السطر <span class="en" dir="ltr">window.LEA_ONESIGNAL_APP_ID = \'…\';</span>';
+    if (!result.update) {
+      updateStatus.innerHTML = `<p class="small muted">${t('update.current', { version: esc(result.currentVersion) })}</p>`;
+      return;
     }
-    return st;
-  };
-  refreshPushState();
-
-  // إن كان الإذن ممنوحاً والاشتراك مفقوداً، نحاول إكماله بصمت
-  autoResubscribe().then((r) => { if (r && r.ok) refreshPushState(); });
-
-  qs('#refreshPush', host)?.addEventListener('click', async () => {
-    await refreshPushState();
-    toast('حُدّثت حالة الاشتراك', 'info');
-  });
-
-  qs('#diagPush', host)?.addEventListener('click', async () => {
-    const d = await diagnostics();
-    const pretty = JSON.stringify(d, null, 2);
-    openModal({
-      title: '🔍 تشخيص الإشعارات',
-      wide: true,
-      body: `<p class="small muted">هذه معلومات تقنية عن حالة الإشعارات وجهازك. انسخها إن طلبت المساعدة.</p>
-        <pre dir="ltr" style="max-height:46vh;overflow:auto;background:var(--surface-3);padding:12px;border-radius:12px;font-size:.8rem;white-space:pre-wrap">${esc(pretty)}</pre>`,
-      actions: [
-        { label: '📋 نسخ', variant: 'primary', onClick: async () => { await copyText(pretty); toast('نُسخت نتيجة التشخيص ✅', 'ok'); return false; } },
-        { label: t('common.close'), variant: 'ghost' },
-      ],
+    const notes = result.release.notes || (s.uiLang === 'en' ? 'No release notes provided.' : 'لا توجد ملاحظات لهذا الإصدار.');
+    updateStatus.innerHTML = `
+      <section class="update-release">
+        <h3>${t('update.available', { version: esc(result.latestVersion) })}</h3>
+        <p class="small muted">${esc(result.release.name)} · ${esc(result.release.asset.name)}</p>
+        <h4>${t('update.notes')}</h4>
+        <pre class="update-release__notes">${esc(notes)}</pre>
+        <div class="update-progress" hidden>
+          <div class="row row--between"><span>${t('update.progress')}</span><span data-progress-label>0%</span></div>
+          <progress max="100" value="0" aria-label="${t('update.progress')}"></progress>
+        </div>
+        <button class="btn btn--primary" type="button" data-download-update>${t('update.download')}</button>
+      </section>`;
+    updateStatus.querySelector('[data-download-update]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      const progress = updateStatus.querySelector('.update-progress');
+      const bar = progress?.querySelector('progress');
+      const label = progress?.querySelector('[data-progress-label]');
+      button.disabled = true;
+      progress.hidden = false;
+      try {
+        const downloaded = await downloadAndOpenUpdate(result.release, (state) => {
+          const percentage = Number.isFinite(state.percent) ? state.percent : 0;
+          if (bar) bar.value = percentage;
+          if (label) label.textContent = `${percentage}%`;
+        });
+        const completeMessage = downloaded.manualInstall
+          ? t('update.appimage', { filename: esc(downloaded.filename) })
+          : t('update.done');
+        updateStatus.querySelector('.update-release')?.insertAdjacentHTML('beforeend', `<p class="tip-box tip-box--ok" role="status">${completeMessage}</p>`);
+        button.textContent = downloaded.manualInstall
+          ? (s.uiLang === 'en' ? 'Download complete' : 'اكتمل التنزيل')
+          : (s.uiLang === 'en' ? 'Installer opened' : 'فُتح مثبت النظام');
+      } catch (error) {
+        console.error('Could not download or open the update.', error);
+        const message = t('update.error', { error: esc(error.message || String(error)) });
+        updateStatus.querySelector('.update-release')?.insertAdjacentHTML('beforeend', `<p class="tip-box" role="alert">${message}</p>`);
+        button.disabled = false;
+      }
     });
-  });
-
-  qs('#saveAppId', host)?.addEventListener('click', async () => {
-    const id = qs('#appIdInput', host).value.trim();
-    saveSettings({ push: { appId: id } });
-    toast(id ? 'حُفظ App ID — اضغط «تفعيل إشعارات Push»' : 'أُفرغ الحقل', id ? 'ok' : 'info');
-    refreshPushState();
-  });
-  qs('#pushOn', host)?.addEventListener('click', async () => {
-    const id = qs('#appIdInput', host).value.trim();
-    if (id) saveSettings({ push: { appId: id } });
-    const res = await enablePush();
-    if (res.ok) {
-      toast(res.id ? `تم تفعيل الإشعارات ✅ معرّف اشتراكك: ${res.id}` : 'تم تفعيل الإشعارات ✅', 'ok', 'OneSignal');
-      confetti(40);
-    } else {
-      toast(res.error || 'فشل التفعيل', 'bad', 'تعذّر تفعيل الإشعارات');
+  };
+  const runUpdateCheck = async () => {
+    if (!checkButton) return;
+    checkButton.disabled = true;
+    checkButton.textContent = t('update.checking');
+    if (updateStatus) updateStatus.textContent = t('update.checking');
+    try {
+      showUpdateStatus(await checkForUpdate({ force: true }));
+    } catch (error) {
+      console.error('Could not check for app updates.', error);
+      if (updateStatus) updateStatus.innerHTML = `<p class="tip-box" role="alert">${t('update.error', { error: esc(error.message || String(error)) })}</p>`;
+    } finally {
+      checkButton.disabled = false;
+      checkButton.textContent = t('update.check');
     }
-    refreshPushState();
-  });
-  qs('#pushOff', host)?.addEventListener('click', async () => {
-    await disablePush();
-    toast('أُوقفت إشعارات Push', 'info');
-    refreshPushState();
-  });
-  qs('#pushTest', host)?.addEventListener('click', async () => {
-    let st = await pushStatus();
-    if (!st.configured) { toast('أضف OneSignal App ID أولاً', 'warn'); return; }
-    if (!st.id) {
-      toast('نجرّب تفعيل الاشتراك أولاً…', 'info');
-      const res = await enablePush();
-      if (!res.ok) { toast(res.error || 'تعذّر الاشتراك', 'bad'); refreshPushState(); return; }
-      st = await pushStatus();
-    }
-    toast(`معرّف اشتراكك: ${st.id}`, 'info', 'انسخه لتستهدف هذا الجهاز من لوحة OneSignal');
-    const sent = await fireReminder({ test: true });
-    toast(sent.ok ? 'أُرسل إشعار تجريبي محلي — وستصلك إشعارات لوحة OneSignal أيضاً ✅' : (sent.error || 'تعذّر الإرسال'), sent.ok ? 'ok' : 'warn');
-    refreshPushState();
-  });
-  qs('#copySubId', host)?.addEventListener('click', async () => {
-    const st = await pushStatus();
-    if (!st.id) { toast('لا يوجد اشتراك بعد — فعّل الإشعارات أولاً', 'warn'); return; }
-    const ok = await copyText(st.id);
-    toast(ok ? `نُسخ المعرّف: ${st.id}` : `معرّفك: ${st.id}`, ok ? 'ok' : 'info');
-  });
+  };
+  checkButton?.addEventListener('click', runUpdateCheck);
+  if (query.section === 'updates') void runUpdateCheck();
 
   /* ---------- الأمان ---------- */
   qs('#lockEnabled', host)?.addEventListener('change', (e) => {
@@ -436,6 +421,13 @@ export function renderSettings(host) {
     try {
       const text = await readFileText(file);
       importAll(text);
+      try {
+        const notificationResult = await syncReminderSchedule();
+        if (!notificationResult.ok) toast(t('set.notificationScheduleFailed'), 'warn');
+      } catch (error) {
+        console.error('Could not restore imported notification schedule', error);
+        toast(t('set.notificationScheduleFailed'), 'warn');
+      }
       toast('تم الاستيراد بنجاح ✅', 'ok');
       window.__leaRenderAll?.();
       renderSettings(host);
@@ -444,10 +436,26 @@ export function renderSettings(host) {
     }
   });
   qs('#resetProgBtn', host)?.addEventListener('click', () => confirmAction('تصفير التقدّم', 'سيُحذف كل التقدم والنقاط والشارات، وتبقى الإعدادات وكلمة المرور.', () => { resetProgress(); toast('صُفِّر التقدّم', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
-  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', () => { resetSettings(); applySkin(); applyLang(); toast('أُعيدت الإعدادات', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
-  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور. لا يمكن التراجع!', () => { wipeEverything(); location.reload(); }));
+  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', async () => {
+    resetSettings();
+    try { await syncReminderSchedule(); }
+    catch (error) {
+      console.error('Could not cancel reminders after settings reset', error);
+      toast(t('set.notificationScheduleFailed'), 'warn');
+    }
+    applySkin();
+    applyLang();
+    toast('أُعيدت الإعدادات', 'ok');
+    window.__leaRenderAll?.();
+    renderSettings(host);
+  }));
+  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور. لا يمكن التراجع!', async () => {
+    wipeEverything();
+    try { await syncReminderSchedule(); }
+    catch (error) { console.error('Could not cancel reminders after clearing app data', error); }
+    finally { location.reload(); }
+  }));
 
-  qs('#installBtn', host)?.addEventListener('click', () => window.__leaInstall?.());
 }
 
 function confirmAction(title, body, onOk) {

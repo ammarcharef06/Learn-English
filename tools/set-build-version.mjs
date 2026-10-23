@@ -1,4 +1,4 @@
-import { appendFileSync, readFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
 const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
@@ -25,4 +25,5 @@ if (result.status !== 0) throw new Error(`npm version failed with status ${resul
 if (process.env.GITHUB_ENV) {
   appendFileSync(process.env.GITHUB_ENV, `APP_VERSION=${version}\nANDROID_VERSION_CODE=${androidVersionCode}\n`);
 }
+writeFileSync(new URL('../assets/js/core/app-version.js', import.meta.url), `export const APP_VERSION = '${version}';\n`);
 console.log(`Using application version ${version} (Android code ${androidVersionCode}).`);

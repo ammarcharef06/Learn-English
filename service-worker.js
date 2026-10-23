@@ -1,15 +1,8 @@
-﻿/* ============================================================
-   Service Worker — عمل بلا إنترنت + دعم OneSignal Push
+/* ============================================================
+   Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-/* دمج عامل OneSignal (يلزم لإشعارات Push الحقيقية) */
-try {
-  importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
-} catch (e) {
-  console.warn('[SW] OneSignal SDK not loaded (offline install?)', e);
-}
-
-const VERSION = 'v3.2.0';
+const VERSION = 'v4.2.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -30,7 +23,6 @@ const CORE = [
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
   './assets/js/zero-main.js',
-  './assets/js/config.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
   './assets/js/core/i18n.js',
@@ -39,7 +31,12 @@ const CORE = [
   './assets/js/core/speech.js',
   './assets/js/core/srs.js',
   './assets/js/core/gamify.js',
+  './assets/js/core/journey.js',
+  './assets/js/core/conversation-practice.js',
   './assets/js/core/notify.js',
+  './assets/js/core/ads.js',
+  './assets/js/core/updater.js',
+  './assets/js/core/app-version.js',
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
@@ -51,6 +48,7 @@ const CORE = [
   './assets/js/data/curriculum-b1.js',
   './assets/js/data/readings.js',
   './assets/js/data/badges.js',
+  './assets/js/data/conversations.js',
   './assets/js/data/zero.js',
   './assets/js/data/zero-letters.js',
   './assets/js/data/zero-time.js',
@@ -62,6 +60,8 @@ const CORE = [
   './assets/js/views/auth.js',
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
+  './assets/js/views/journey.js',
+  './assets/js/views/conversations.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
   './assets/js/views/zero-shell.js',
@@ -78,6 +78,7 @@ const CORE = [
   './assets/js/views/notebook.js',
   './assets/js/views/settings.js',
   './assets/js/views/about.js',
+  './assets/js/views/support.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -129,9 +130,8 @@ self.addEventListener('fetch', (event) => {
   let url2;
   try { url2 = new URL(req.url); } catch { return; }
 
-  // لا نتدخّل في الطلبات الخارجية (OneSignal، خطوط جوجل…)
+  // Leave cross-origin requests (such as Google Fonts) to the browser.
   if (!isSameOrigin(url2)) return;
-  if (url2.pathname.endsWith('OneSignalSDKWorker.js')) return;
 
   // التنقل: الشبكة أولاً ثم النسخة المخزّنة (ولكل صفحة نسختها: الموقع أو قسم A0)
   if (req.mode === 'navigate') {

@@ -4,6 +4,7 @@ import { esc } from '../core/utils.js';
 import { curriculumStats, LEVELS } from '../data/curriculum.js';
 import { PRONOUN_GROUPS, CONNECTORS, QUESTION_WORDS, KEY_EXAMPLES } from '../data/reference.js';
 import { pageHead } from './shell.js';
+import { APP_VERSION } from '../core/app-version.js';
 
 export function renderAbout(host) {
   const cs = curriculumStats();
@@ -31,6 +32,9 @@ export function renderAbout(host) {
           <li>بطاقات حفظ بنظام المراجعة المتباعدة (SRS).</li>
           <li>اختبارات مؤقتة وشهادة نتيجة قابلة للطباعة.</li>
           <li>نقاط وسلاسل أيام وشارات وأهداف يومية وإحصائيات بيانية.</li>
+          <li>مهمة يومية شخصية وخريطة تُظهر تقدمك في كل وحدة.</li>
+          <li>محادثات قصيرة من مواقف الحياة اليومية مع نطق وتصحيح وتقدم محفوظ محلياً.</li>
+          <li>ملخص أسبوعي يقارن نشاطك بالأسبوع السابق، دون إرسال بياناتك.</li>
           <li>نطق صوتي لكل كلمة وجملة (Speech Synthesis).</li>
         </ul>
       </div>
@@ -53,9 +57,9 @@ export function renderAbout(host) {
         <tbody>
           <tr><td>الاستضافة</td><td class="en-cell">GitHub Pages</td></tr>
           <tr><td>المستودع</td><td class="en-cell">github.com/ammarcharef06/Learn-English</td></tr>
-          <tr><td>التقنيات</td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Service Worker · OneSignal</td></tr>
+          <tr><td>التقنيات</td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Capacitor Local Notifications · Electron</td></tr>
           <tr><td>التخزين</td><td class="en-cell">LocalStorage (محلي بالكامل)</td></tr>
-          <tr><td>الإصدار</td><td class="en-cell">1.0.0</td></tr>
+          <tr><td>${t('common.version')}</td><td class="en-cell">${esc(APP_VERSION)}</td></tr>
         </tbody>
       </table></div>
       <div class="tip-box tip-box--brand" style="margin-top:14px">

@@ -14,7 +14,9 @@ export const NAV_ITEMS = [
   { href: '#/flashcards', key: 'nav.flashcards', icon: '🃏', group: 'nav.group.practice' },
   { href: '#/reading', key: 'nav.reading', icon: '📖', group: 'nav.group.practice', bottom: true },
   { href: '#/exams', key: 'nav.exams', icon: '🧪', group: 'nav.group.practice' },
+  { href: '#/conversations', key: 'nav.conversations', icon: '💬', group: 'nav.group.practice' },
   { href: '#/stats', key: 'nav.stats', icon: '📊', group: 'nav.group.me' },
+  { href: '#/journey', key: 'nav.journey', icon: '🧭', group: 'nav.group.me' },
   { href: '#/notebook', key: 'nav.notebook', icon: '📒', group: 'nav.group.me' },
   { href: '#/settings', key: 'nav.settings', icon: '⚙️', group: 'nav.group.me', bottom: true },
 ];
@@ -27,6 +29,10 @@ export function renderNav() {
   if (side) {
     /* الخيار الوحيد للدخول إلى قسم «من الصفر» (A0) — صفحة zero.html المستقلة */
     let html = `
+      <div class="sidenav__brand">
+        <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
+        <span><b>English Academy</b><small>رحلتك نحو إتقان الإنجليزية</small></span>
+      </div>
       <a class="zero-nav" href="./zero.html" title="من الصفر — تأسيس A0 (صفحة مستقلة)">
         <span class="zero-nav__badge" aria-hidden="true">A0</span>
         <span class="zero-nav__txt">
@@ -51,6 +57,7 @@ export function renderNav() {
     });
     html += `<div class="sidenav__group">${t('nav.group.me')}</div>`;
     html += `<a href="#/about" data-nav data-route="#/about" title="${t('nav.about')}"><span class="ico" aria-hidden="true">ℹ️</span><span class="lbl">${t('nav.about')}</span></a>`;
+    html += `<a href="#/support" data-nav data-route="#/support" title="${t('nav.support')}"><span class="ico" aria-hidden="true">💛</span><span class="lbl">${t('nav.support')}</span></a>`;
     side.innerHTML = html;
   }
 
@@ -66,7 +73,8 @@ const SECTION_MAP = {
   '': '#/',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
-  exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', about: '#/about',
+  exams: '#/exams', stats: '#/stats', journey: '#/journey', conversations: '#/conversations',
+  notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',
 };
 
 export function activeHrefFor(path) {

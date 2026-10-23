@@ -6,6 +6,7 @@ import { LEVELS, getLevel, getUnit, unitsOfLevel, unitPercent, levelPercent, isL
 import { markLessonRead, completeUnit, levelStats } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
 import { navigate } from '../core/router.js';
+import { maybeShowInterstitial } from '../core/ads.js';
 
 /* ---------- قائمة المستويات ---------- */
 export function renderLessons(host) {
@@ -190,6 +191,7 @@ export function renderUnit(host, unitId) {
     if (res.first) import('../core/utils.js').then(({ toast, confetti }) => {
       confetti(70); toast(`أكملت وحدة «${u.title}» — +60 نقطة 🎉`, 'ok', 'وحدة مكتملة');
     });
+    if (res.first) maybeShowInterstitial(`unit:${u.id}`).catch((error) => console.warn('Interstitial ad unavailable.', error));
   });
 
   qs('#unitQuiz', host)?.addEventListener('click', () => {
@@ -250,5 +252,4 @@ export function renderLesson(host, unitId, index) {
     });
   });
 }
-
 

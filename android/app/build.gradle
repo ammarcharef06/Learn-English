@@ -4,12 +4,15 @@ def hasReleaseSigning = System.getenv("ANDROID_KEYSTORE_PATH")
     && System.getenv("ANDROID_STORE_PASSWORD")
     && System.getenv("ANDROID_KEY_ALIAS")
     && System.getenv("ANDROID_KEY_PASSWORD")
-def appVersionCode = (project.findProperty('androidVersionCode') ?: '1').toString().toInteger()
-def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.0"
+def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000013').toString().toInteger()
+def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.13"
 
 android {
     namespace = "com.ammarcharef06.learnenglish"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId "com.ammarcharef06.learnenglish"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -53,6 +56,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation "androidx.work:work-runtime:2.10.1"
+    implementation "com.google.guava:guava:33.3.1-android"
     implementation project(':capacitor-android')
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
@@ -68,5 +73,5 @@ try {
         apply plugin: 'com.google.gms.google-services'
     }
 } catch(Exception e) {
-    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+    logger.info("google-services.json not found, google-services plugin not applied.")
 }

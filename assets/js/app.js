@@ -26,7 +26,13 @@ import { renderSettings, applyTheme, applySkin, applyLang, SKINS } from './views
 import { renderAbout } from './views/about.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
-import { startReminderLoop, initOneSignal, oneSignalConfigured } from './core/notify.js';
+import { startReminderLoop, syncReminderSchedule } from './core/notify.js';
+import { scheduleBackgroundUpdateChecks } from './core/updater.js';
+import { updateBannerForRoute, showQueuedInterstitial } from './core/ads.js';
+import { renderSupport } from './views/support.js';
+import { renderJourney } from './views/journey.js';
+import { renderConversations } from './views/conversations.js';
+import { APP_VERSION } from './core/app-version.js';
 
 const view = () => qs('#view');
 
@@ -48,7 +54,10 @@ function setupRoutes() {
   route('/exams/:id', (p) => renderExams(view(), p.id));
   route('/stats', () => renderStats(view()));
   route('/notebook', () => renderNotebook(view()));
-  route('/settings', () => renderSettings(view()));
+  route('/settings', (p, q) => renderSettings(view(), q || {}));
+  route('/support', () => renderSupport(view()));
+  route('/journey', () => renderJourney(view()));
+  route('/conversations', () => renderConversations(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
     view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
@@ -75,13 +84,10 @@ function bindGlobalEvents() {
     if (e.target.closest('[data-nav]')) closeDrawer();
   });
 
-  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة · الستايل · اللغة · المظهر · التثبيت */
+  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة واللغة */
   renderTopbar(qs('#topbar'), 'site', { onRerender: renderAll });
 
   qs('#scrim')?.addEventListener('click', closeDrawer);
-
-  /* أزرار خاصة بموقع المستويات فقط */
-  qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDrawer();
@@ -96,6 +102,28 @@ function bindGlobalEvents() {
   });
 
   document.addEventListener('lea:answered', () => { renderSidebarStats(); });
+  window.leaUpdates?.onUpdateClick?.(() => navigate('/settings', { section: 'updates' }));
+  const localNotifications = window.Capacitor?.Plugins?.LocalNotifications
+    || window.CapacitorLocalNotificationsBundle?.LocalNotifications;
+  localNotifications?.addListener?.('localNotificationActionPerformed', (event) => {
+    const url = event.notification?.extra?.url;
+    if (url) location.hash = String(url).replace(/^.*#/, '#');
+  });
+  const capacitorApp = window.Capacitor?.Plugins?.App || window.CapacitorUpdateBundle?.App;
+  const handleAppLink = (url) => {
+    try {
+      const deepLink = new URL(url);
+      if (deepLink.protocol === 'com.ammarcharef06.learnenglish:'
+        && deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
+    } catch (error) {
+      console.warn('Ignored an invalid app link.', error);
+    }
+  };
+  Promise.resolve(capacitorApp?.addListener?.('appUrlOpen', ({ url } = {}) => handleAppLink(url)))
+    .catch((error) => console.warn('Could not subscribe to app update links.', error));
+  Promise.resolve(capacitorApp?.getLaunchUrl?.())
+    .then((launch) => { if (launch?.url) handleAppLink(launch.url); })
+    .catch((error) => console.warn('Could not read the app launch link.', error));
 
   // فتح الرابط المرسل في الإشعار
   if ('serviceWorker' in navigator) {
@@ -136,7 +164,7 @@ function setupInstall() {
 }
 
 /* ---------------- Service Worker ---------------- */
-/* وعد بجاهزية Service Worker — تستخدمه تهيئة الإشعارات */
+/* وعد بجاهزية Service Worker */
 let swReadyPromise = null;
 
 function registerSW() {
@@ -146,7 +174,7 @@ function registerSW() {
       const swUrl = new URL('./service-worker.js', location.href);
       const scope = new URL('./', location.href).pathname;
       const reg = await navigator.serviceWorker.register(swUrl, { scope });
-      // ننتظر وصول العامل إلى حالة التنشيط (مهم قبل تهيئة OneSignal)
+      // Wait for activation so offline navigation and browser notifications are ready.
       const active = reg.active || (await waitForActive(reg));
       return active ? reg : null;
     } catch (err) {
@@ -181,6 +209,9 @@ function waitForActive(reg, timeout = 8000) {
 function renderAll() {
   renderNav();
   applyI18n(document);
+  document.querySelectorAll('[data-app-version]').forEach((element) => {
+    element.textContent = `${t('common.version')} ${APP_VERSION}`;
+  });
   renderSidebarStats();
   resolve();
 }
@@ -222,11 +253,13 @@ async function main() {
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
+    updateBannerForRoute(route.path).catch((error) => console.warn('Could not update the banner ad.', error));
     /* شبكة أمان: لا تبقَ شاشة الاختيار مقفلة للتمرير إن أُزيلت بلا إغلاق */
     if (!qs('#zeroChoice')) document.body.classList.remove('zero-choice-open');
     document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة
     stopActiveQuizzes();            // لا مؤقّتات أسئلة تعمل في الخلفية
     stopSpeaking();                 // لا نطق يستمر بعد مغادرة الصفحة
+    showQueuedInterstitial().catch((error) => console.warn('Interstitial ad unavailable.', error));
     try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
   });
 
@@ -246,11 +279,10 @@ async function main() {
     /* شاشة الاختيار عند الدخول — مرة واحدة فقط (A0 أم A1) */
     if (shouldShowZeroChoice()) setTimeout(() => showZeroChoice(), 420);
     startReminderLoop();
-    if (oneSignalConfigured()) {
-      Promise.resolve(swReadyPromise).then(() => initOneSignal()).then((res) => {
-        if (res.ok) console.info('OneSignal ready', res.id || '');
-      });
-    }
+    scheduleBackgroundUpdateChecks();
+    syncReminderSchedule().then((result) => {
+      if (!result.ok && settings.reminder.enabled) console.warn('Reminder schedule is not active.', result.error);
+    }).catch((error) => console.error('Could not restore reminder schedule.', error));
   };
 
   if (!isAuthed()) {

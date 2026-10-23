@@ -1,6 +1,6 @@
 {
   "name": "learn-english",
-  "version": "1.0.0",
+  "version": "1.0.13",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
@@ -16,16 +16,23 @@
     "desktop:start": "electron .",
     "desktop:dist": "electron-builder",
     "check": "node tools/check.mjs",
-    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
+    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android"
   },
   "devDependencies": {
+    "@capacitor-community/admob": "^8.2.1",
+    "@capacitor-community/file-opener": "^8.0.1",
     "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/cli": "8.4.3",
     "@capacitor/core": "^8.5.3",
+    "@capacitor/file-transfer": "^2.0.6",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/local-notifications": "^8.3.1",
     "electron": "^45.0.0",
-    "electron-builder": "26.15.3"
+    "electron-builder": "26.15.3",
+    "esbuild": "^0.28.2"
   },
   "build": {
     "appId": "com.ammarcharef06.learnenglish",
@@ -38,7 +45,6 @@
       "zero.html",
       "manifest.webmanifest",
       "manifest-zero.webmanifest",
-      "OneSignalSDKWorker.js",
       "service-worker.js"
     ],
     "directories": {
@@ -53,7 +59,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
     },
     "linux": {
       "icon": "assets/img/icon-512.png",
