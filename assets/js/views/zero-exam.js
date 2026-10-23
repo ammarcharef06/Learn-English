@@ -132,10 +132,10 @@ export function renderZeroCertificate(host) {
         <p class="zcert__sub" dir="ltr">Foundation Certificate — Level A0</p>
 
         <div class="zcert__field">
-          <span>الاسم على الشهادة</span>
-          <input class="input" id="certName" type="text" maxlength="60" placeholder="اكتب اسمك هنا" value="${esc(cert.name || '')}" />
+          <label for="certName">الاسم على الشهادة</label>
+          <input class="input" id="certName" type="text" maxlength="60" autocomplete="name" placeholder="اكتب اسمك هنا" value="${esc(cert.name || '')}" />
         </div>
-        <div class="zcert__name" id="certNameOut">${esc(cert.name || '................................')}</div>
+        <div class="zcert__name" id="certNameOut" aria-live="polite">${esc(cert.name || '................................')}</div>
 
         <p class="zcert__body">
           أتمّ المتعلّم المراحل الثمانية لقسم «من الصفر»: الحروف الستة والعشرين، والحروف المركّبة، والأرقام،
@@ -161,7 +161,8 @@ export function renderZeroCertificate(host) {
     </div>
 
     <div class="row row--wrap mt-4" style="gap:10px">
-      <button class="btn btn--primary" type="button" id="certPrint" ${cert.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>
+      <button class="btn btn--primary" type="button" id="certPrint" aria-describedby="certPrintHint" ${cert.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>
+      <span class="sr-only" id="certPrintHint">تُطبع الشهادة وحدها على صفحة أفقية؛ اختر حفظ كملف PDF إذا أردت نسخة رقمية.</span>
       <a class="btn" href="./index.html">📚 ابدأ المستوى A1</a>
     </div>`;
 

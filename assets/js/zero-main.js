@@ -3,14 +3,15 @@
    لا تُحمّل هذه الصفحة نقطة دخول الموقع (app.js) ولا هيكله:
    لا شريط موقع، ولا قائمة جانبية، ولا شريط سفلي للمستويات.
    ============================================================ */
-import { initRouter, route, setNotFound, resolve } from './core/router.js';
+import { initRouter, route, setNotFound, resolve, onRouteRendered } from './core/router.js';
 import { setUiLang } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { isAuthed, extendSession } from './core/auth.js';
 import { flush } from './core/store.js';
-import { qs, toast } from './core/utils.js';
+import { qs, toast, focusMainHeading } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
+import { applyAccessibility } from './core/theme.js';
 import { renderTopbar, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
 import { registerZeroSounds } from './core/zero-audio.js';
@@ -59,6 +60,7 @@ function bindGlobalEvents() {
 /* ---------------- الإقلاع ---------------- */
 async function main() {
   setUiLang('ar');
+  applyAccessibility();
   initSpeech();
   registerZeroSounds();
   bindGlobalEvents();
@@ -79,6 +81,7 @@ async function main() {
   window.addEventListener('hashchange', closeDrawer);
 
   setupRoutes();
+  onRouteRendered(() => requestAnimationFrame(() => focusMainHeading(view())));
   if (!location.hash) location.replace('#/zero');
   await initRouter();
   applyZeroShell(location.hash);

@@ -584,7 +584,7 @@
 
   .fc-stage { perspective: 1400px; max-inline-size: 640px; margin-inline: auto; }
   /* الوجهان في نفس الخلية الشبكية: الارتفاع = الأطول (لا فيض ولا فائض) */
-  .fc { display: grid; min-block-size: clamp(260px, 40vh, 320px); transform-style: preserve-3d; transition: transform var(--dur-4) var(--ease); cursor: pointer; }
+  .fc { display: grid; min-block-size: clamp(260px, 40vh, 320px); transform-style: preserve-3d; transition: transform var(--dur-4) var(--ease); }
   .fc.is-flipped { transform: rotateY(180deg); }
   .fc__face {
     grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden;
@@ -801,11 +801,130 @@ body.drawer-open { overflow: hidden; }
     gap: var(--sp-1);
     padding-inline: max(var(--sp-2), env(safe-area-inset-left), env(safe-area-inset-right));
   }
+
+  html[data-contrast="high"] {
+    --text: #050505;
+    --text-2: #161616;
+    --text-3: #303030;
+    --line: #595959;
+    --line-strong: #252525;
+    --brand-text: #003c9e;
+  }
+  html[data-contrast="high"][data-theme="dark"] {
+    --bg: #000;
+    --bg-2: #000;
+    --surface: #050505;
+    --surface-2: #101010;
+    --surface-3: #1c1c1c;
+    --text: #fff;
+    --text-2: #f2f2f2;
+    --text-3: #dedede;
+    --line: #a6a6a6;
+    --line-strong: #fff;
+    --brand-soft: #172a48;
+    --brand-text: #b8d3ff;
+  }
+  html[data-contrast="high"] :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--surface);
+  }
+  html[data-contrast="high"] a:not(.btn) {
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+  html[data-reduce-motion="true"] {
+    scroll-behavior: auto !important;
+  }
+  html[data-reduce-motion="true"] *,
+  html[data-reduce-motion="true"] *::before,
+  html[data-reduce-motion="true"] *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sr-only {
+    position: absolute !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
   .topbar .brand { gap: var(--sp-1); }
   .topbar .brand__mark { inline-size: 34px; block-size: 34px; border-radius: 10px; }
   .topbar .icon-btn { inline-size: 38px; block-size: 38px; border-radius: 10px; }
   .topbar .icon-btn svg { inline-size: 19px; block-size: 19px; }
 }
+
+.community-root { display: grid; gap: var(--sp-3); min-inline-size: 0; }
+.community-setup, .community-auth { max-inline-size: 760px; margin-inline: auto; padding: clamp(20px, 4vw, 36px); }
+.community-setup > span { font-size: 2rem; }
+.community-setup ol { padding-inline-start: 1.5rem; line-height: 1.8; }
+.community-auth { display: grid; gap: var(--sp-2); inline-size: 100%; }
+.community-auth form { display: grid; gap: var(--sp-2); }
+.community-kicker { color: var(--brand-text); font-size: .8rem; font-weight: 700; }
+.community-profile { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--sp-2); }
+.community-profile > div { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.community-xp { color: var(--brand-text); font-weight: 700; }
+.community-profile__form { grid-column: 1 / -1; display: flex; align-items: end; gap: var(--sp-2); flex-wrap: wrap; }
+.community-profile__form .field { min-inline-size: 140px; margin: 0; }
+.community-profile > small { grid-column: 1 / -1; color: var(--text-3); }
+.community-layout { display: grid; grid-template-columns: minmax(230px, 310px) minmax(0, 1fr); align-items: start; gap: var(--sp-3); }
+.community-sidebar { display: grid; gap: var(--sp-2); min-inline-size: 0; }
+.community-sidebar .card { padding: var(--sp-2); }
+.community-sidebar h2 { margin-block: 0 var(--sp-2); font-size: 1rem; }
+.community-list-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-1); }
+.community-list-heading h2 { margin: 0; }
+.community-room-list { display: grid; gap: 6px; max-block-size: 310px; overflow: auto; list-style: none; margin: 0; padding: 0; }
+.community-room { display: grid; inline-size: 100%; gap: 3px; padding: 10px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); color: var(--text); text-align: start; cursor: pointer; }
+.community-room:hover, .community-room.is-active { border-color: var(--brand); background: var(--brand-soft); }
+.community-room > span, .community-room > small { color: var(--text-3); }
+.community-chat { display: grid; grid-template-rows: auto minmax(220px, 1fr) auto auto auto; min-inline-size: 0; min-block-size: min(70vh, 720px); padding: 0; overflow: hidden; }
+.community-chat__head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-2); border-block-end: 1px solid var(--line); }
+.community-chat__head h2 { margin: 0; font-size: 1.1rem; }
+.community-chat__head span { color: var(--text-3); font-size: .85rem; }
+.community-messages { display: flex; flex-direction: column; gap: var(--sp-2); overflow: auto; overscroll-behavior: contain; padding: var(--sp-2); }
+.community-message { max-inline-size: min(92%, 700px); align-self: start; padding: 12px; border: 1px solid var(--line); border-radius: 16px 16px 16px 4px; background: var(--surface-2); overflow-wrap: anywhere; }
+[dir="rtl"] .community-message { border-radius: 16px 16px 4px 16px; }
+.community-message.is-own { align-self: end; border-color: var(--brand); background: var(--brand-soft); }
+.community-message header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .83rem; }
+.community-message time { color: var(--text-3); margin-inline-start: auto; }
+.community-message p { white-space: pre-wrap; margin-block: 8px; }
+.community-message audio { display: block; inline-size: min(100%, 340px); margin-block: 8px; }
+.community-message blockquote { margin: 8px 0; padding-inline-start: 10px; border-inline-start: 3px solid var(--brand); color: var(--text-3); }
+.community-message__actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.community-message__actions .btn { min-block-size: 32px; }
+.community-translation { padding: 8px; border-radius: var(--r-sm); background: var(--surface); }
+.community-assistant { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 var(--sp-2) var(--sp-1); }
+.community-starters { display: flex; flex-wrap: wrap; gap: 6px; inline-size: 100%; list-style: none; margin: 0; padding: 0; }
+.community-correction, .community-replying { margin: 0 var(--sp-2) var(--sp-1); padding: 8px 12px; border-radius: var(--r-sm); background: var(--surface-2); }
+.community-compose { display: grid; gap: 8px; padding: var(--sp-2); border-block-start: 1px solid var(--line); }
+.community-compose textarea { min-inline-size: 0; resize: vertical; }
+.community-compose__actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.community-counter { color: var(--text-3); margin-inline-end: auto; font-size: .8rem; }
+.community-empty { display: grid; place-content: center; justify-items: center; min-block-size: 180px; padding: 20px; color: var(--text-3); text-align: center; }
+.community-empty span { font-size: 2rem; }
+.community-status { min-block-size: 1.4em; margin: 0; color: var(--text-3); }
+.community-status.is-error { color: var(--bad-text, #a11); }
+.community-disclosure { margin: 0; }
+@media (max-width: 800px) {
+  .community-layout { grid-template-columns: 1fr; }
+  .community-sidebar { grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+  .community-chat { min-block-size: min(68vh, 680px); }
+}
+@media (max-width: 520px) {
+  .community-profile { grid-template-columns: 1fr; }
+  .community-profile__form { align-items: stretch; }
+  .community-profile__form .field { flex: 1 1 100%; }
+  .community-compose__actions > .btn { flex: 1 1 auto; }
+  .community-message { max-inline-size: 100%; }
+}
+
 @layer components {
   .support-hero {
     display: grid;

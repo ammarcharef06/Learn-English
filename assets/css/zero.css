@@ -164,13 +164,22 @@ body.zero-choice-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .zchoice, .zchoice__panel { animation: none; } }
 
 @media print {
+  @page { size: A4 landscape; margin: 12mm; }
   body.printing-cert * { visibility: hidden !important; box-shadow: none !important; }
   body.printing-cert #zeroCert,
   body.printing-cert #zeroCert * { visibility: visible !important; color: #000 !important; }
   body.printing-cert #zeroCert {
-    position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: 100%;
-    background: #fff !important; border: 2px solid #000 !important; border-radius: 0 !important;
+    position: fixed; inset: 0; inline-size: auto; max-inline-size: none; min-block-size: 180mm;
+    justify-content: center; padding: 14mm; gap: 7mm;
+    background: #fff !important; border: 3px double #000 !important; border-radius: 0 !important;
   }
+  body.printing-cert #zeroCert .zcert__field,
+  body.printing-cert #zeroCert .zcert__note { display: none !important; }
+  body.printing-cert #zeroCert .zcert__title { font-size: 30pt; }
+  body.printing-cert #zeroCert .zcert__name { font-size: 27pt; padding-block: 5mm; }
+  body.printing-cert #zeroCert .zcert__body { font-size: 12pt; }
+  body.printing-cert #zeroCert .zcert__foot { margin-block-start: auto; }
+  body.printing-cert #zeroCert .stat { break-inside: avoid; }
   body.printing-cert #zeroCert .zcert__mark,
   body.printing-cert #zeroCert .zcert__seal,
   body.printing-cert #zeroCert .zcert__name,

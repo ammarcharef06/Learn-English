@@ -45,13 +45,25 @@ export function renderSettings(host, query = {}) {
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.fontSize')}</b><span>كبّر الخط إن كنت تقرأ على شاشة صغيرة.</span></div>
+        <div class="setting-row__text"><b>${t('set.fontSize')}</b><span id="fontSizeHint">${t('set.fontSizeDesc')}</span></div>
         <div class="setting-row__control" style="min-width:220px">
-          <input type="range" min="85" max="135" step="5" value="${s.fontSize}" id="fontRange" style="width:150px" />
+          <input type="range" min="85" max="135" step="5" value="${s.fontSize}" id="fontRange" aria-describedby="fontSizeHint fontValue" style="width:150px" />
           <span class="chip" id="fontValue">${s.fontSize}%</span>
         </div>
       </div>
     </div>
+
+    <section class="card" style="margin-top:16px" aria-labelledby="accessibilityTitle">
+      <div class="card__title"><span class="ico" aria-hidden="true">♿</span><h2 id="accessibilityTitle">${t('set.accessibility')}</h2></div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.highContrast')}</b><span id="highContrastHint">${t('set.highContrastDesc')}</span></div>
+        <label class="switch"><input type="checkbox" id="highContrast" aria-label="${t('set.highContrast')}" aria-describedby="highContrastHint" ${s.highContrast ? 'checked' : ''} /><span class="switch__track"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.reduceMotion')}</b><span id="reduceMotionHint">${t('set.reduceMotionDesc')}</span></div>
+        <label class="switch"><input type="checkbox" id="reduceMotion" aria-label="${t('set.reduceMotion')}" aria-describedby="reduceMotionHint" ${s.reduceAnimations ? 'checked' : ''} /><span class="switch__track"></span></label>
+      </div>
+    </section>
 
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔊</span><h2>الصوت والنطق</h2></div>
@@ -219,6 +231,16 @@ export function renderSettings(host, query = {}) {
     qs('#fontValue', host).textContent = `${v}%`;
     document.documentElement.style.setProperty('--font-scale', String(v / 100));
     saveSettings({ fontSize: v });
+  });
+  qs('#highContrast', host)?.addEventListener('change', (e) => {
+    saveSettings({ highContrast: e.target.checked });
+    applyAccessibility();
+    toast(t('set.saved'), 'ok');
+  });
+  qs('#reduceMotion', host)?.addEventListener('change', (e) => {
+    saveSettings({ reduceAnimations: e.target.checked });
+    applyAccessibility();
+    toast(t('set.saved'), 'ok');
   });
 
   /* ---------- الصوت ---------- */
@@ -470,5 +492,5 @@ function confirmAction(title, body, onOk) {
 }
 
 /* المظهر واللغة: منطق مشترك بين الصفحتين (انظر core/theme.js) */
-import { SKINS, applyTheme, applySkin, applyLang } from '../core/theme.js';
-export { SKINS, applyTheme, applySkin, applyLang };
+import { SKINS, applyTheme, applySkin, applyLang, applyAccessibility } from '../core/theme.js';
+export { SKINS, applyTheme, applySkin, applyLang, applyAccessibility };

@@ -81,6 +81,8 @@
         document.documentElement.dataset.uiLang = s.uiLang === 'en' ? 'en' : 'ar';
         document.documentElement.dir = s.uiLang === 'en' ? 'ltr' : 'rtl';
         document.documentElement.lang = s.uiLang === 'en' ? 'en' : 'ar';
+        document.documentElement.dataset.contrast = s.highContrast ? 'high' : 'normal';
+        document.documentElement.dataset.reduceMotion = s.reduceAnimations ? 'true' : 'false';
         if (s.fontSize) document.documentElement.style.setProperty('--font-scale', String(s.fontSize / 100));
       } catch (e) { document.documentElement.dataset.theme = 'light'; }
     })();

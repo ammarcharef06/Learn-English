@@ -29,6 +29,11 @@ export function applySkin() {
   return skin;
 }
 
+export function applyAccessibility() {
+  document.documentElement.dataset.contrast = settings.highContrast ? 'high' : 'normal';
+  document.documentElement.dataset.reduceMotion = settings.reduceAnimations ? 'true' : 'false';
+}
+
 export function applyLang() {
   const lang = settings.uiLang === 'en' ? 'en' : 'ar';
   document.documentElement.lang = lang;
