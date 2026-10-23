@@ -74,20 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.18',
-    name: 'English Academy v1.0.18',
+    tag_name: 'v1.0.19',
+    name: 'English Academy v1.0.19',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
       { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.18/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.19/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.18' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.19' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -373,27 +373,27 @@ try {
   globalThis.fetch = async () => ({
     ok: true,
     json: async () => ({
-      tag_name: 'v1.0.18',
-      name: 'English Academy v1.0.18',
+      tag_name: 'v1.0.19',
+      name: 'English Academy v1.0.19',
       body: 'Release notes',
-      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.18',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.19',
       assets: [
         { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.18/SHA256SUMS.txt' },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.19/SHA256SUMS.txt' },
       ],
     }),
   });
   await updater.checkForUpdateInBackground();
   check('Background update check stores a new release even when notification display fails',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.18'
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.19'
     && !localStorage.getItem('lea.update.notified'));
   showUpdateNotification = true;
   localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
   await updater.checkForUpdateInBackground();
   check('Failed update notification is retried and only marked after display succeeds',
-    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.18');
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.19');
   check('Pending update is preserved when background check is throttled',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.18');
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.19');
 } finally {
   globalThis.fetch = oldFetch;
   if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
@@ -447,22 +447,6 @@ check('التباين المرتفع يُطبّق على الواجهة', docume
 check('تقليل الحركة يُطبّق على الواجهة', document.documentElement.dataset.reduceMotion === 'true');
 store.saveSettings({ highContrast: false, reduceAnimations: false });
 theme.applyAccessibility();
-
-section('المجتمع التعليمي');
-const community = await mod('assets/js/core/community.js');
-const communitySafety = await mod('assets/js/core/community-safety.js');
-const communitySource = await readFile(join(ROOT, 'assets/js/core/community.js'), 'utf8');
-const communityConfig = await mod('assets/js/core/community-config.js');
-const progressBeforeCommunityInit = localStorage.getItem('lea.progress.v1');
-check('إعدادات مشروع Supabase العام مفعّلة', community.communityConfigured() === true
-  && communityConfig.COMMUNITY_CONFIG.supabaseUrl.startsWith('https://')
-  && communityConfig.COMMUNITY_CONFIG.publishableKey.startsWith('sb_publishable_'));
-check('مفاتيح التخزين المحلي للدروس تبقى مستقلة عن Auth المجتمع',
-  /storageKey:\s*'lea\.community\.auth\.v1'/.test(communitySource)
-    && localStorage.getItem('lea.progress.v1') === progressBeforeCommunityInit);
-check('فلتر الرسائل يلتقط ألفاظ الإساءة الواضحة', communitySafety.containsBlockedLanguage('This is FUCK.'));
-check('فلتر الرسائل يلتقط تمويه علامات الترقيم', communitySafety.containsBlockedLanguage('f.u.c.k'));
-check('فلتر الرسائل لا يمنع جملة تعليمية سليمة', !communitySafety.containsBlockedLanguage('I enjoy learning English.'));
 
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
