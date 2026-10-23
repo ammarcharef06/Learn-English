@@ -53,7 +53,7 @@ let importCount = 0;
 for (const file of jsFiles) {
   if (rel(file) === 'service-worker.js') continue;
   const src = readFileSync(file, 'utf8');
-  for (const m of src.matchAll(/import\s+(?:([\s\S]*?)\s+from\s+)?['"]([^'"]+)['"]/g)) {
+  for (const m of src.matchAll(/^\s*import\s+(?:([\s\S]*?)\s+from\s+)?['"]([^'"]+)['"]/gm)) {
     const clause = (m[1] || '').trim();
     const spec = m[2];
     if (!spec.startsWith('.')) continue;
