@@ -38,6 +38,10 @@ export function renderZeroDrawer(hash = null) {
   const key = activeKey(hash || location.hash);
 
   nav.innerHTML = `
+    <div class="sidenav__brand">
+      <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
+      <span><b>من الصفر</b><small>تأسيس الإنجليزية خطوة بخطوة</small></span>
+    </div>
     <div class="sidenav__group">من الصفر — تأسيس A0</div>
     <div class="mini-progress" style="margin:0 0 10px">
       <div class="progress"><i style="width:${zs.percent}%"></i></div>

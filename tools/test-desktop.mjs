@@ -23,6 +23,11 @@ const updater = await readFile(resolve(root, 'assets', 'js', 'core', 'updater.js
 const updateDownload = await readFile(resolve(root, 'desktop', 'update-download.cjs'), 'utf8');
 const updateCheckerPlugin = await readFile(resolve(root, 'android', 'app', 'src', 'main', 'java', 'com', 'ammarcharef06', 'learnenglish', 'UpdateCheckerPlugin.java'), 'utf8');
 const updateWorker = await readFile(resolve(root, 'android', 'app', 'src', 'main', 'java', 'com', 'ammarcharef06', 'learnenglish', 'UpdateCheckWorker.java'), 'utf8');
+const topbar = await readFile(resolve(root, 'assets', 'js', 'views', 'topbar.js'), 'utf8');
+const shellView = await readFile(resolve(root, 'assets', 'js', 'views', 'shell.js'), 'utf8');
+const zeroShell = await readFile(resolve(root, 'assets', 'js', 'views', 'zero-shell.js'), 'utf8');
+const navigationStyles = await readFile(resolve(root, 'assets', 'css', 'redesign.css'), 'utf8');
+const settingsView = await readFile(resolve(root, 'assets', 'js', 'views', 'settings.js'), 'utf8');
 const trustedHandlerHelper = desktopMain.match(/function registerTrustedHandler\(channel, handler\) \{[\s\S]*?\n\}/)?.[0];
 assert.ok(trustedHandlerHelper, 'trusted IPC handler helper exists');
 assert.doesNotMatch(trustedHandlerHelper, /\n {2}registerTrustedHandler\(/, 'handler registrations must not be nested inside the helper');
@@ -53,6 +58,13 @@ assert.throws(() => validateReleaseUrl('https://example.com/asset', true), /untr
 assert.match(updateCheckerPlugin, /enqueueUniqueWork\(IMMEDIATE_WORK_NAME/);
 assert.match(updateCheckerPlugin, /cancelUniqueWork\(IMMEDIATE_WORK_NAME\)/);
 assert.match(updateWorker, /catch \(IOException error\)[\s\S]*?return Result\.retry\(\)/);
+assert.doesNotMatch(topbar, /id="btn(?:Bell|Theme|Style)"/);
+assert.match(shellView, /class="sidenav__brand"/);
+assert.match(zeroShell, /class="sidenav__brand"/);
+assert.match(navigationStyles, /\.sidebar\.is-open \.sidenav__brand/);
+assert.match(settingsView, /id="remEnabled"/);
+assert.match(settingsView, /id="themeSeg"/);
+assert.match(settingsView, /id="skinSeg"/);
 assert.match(desktopMain, /listenWithStableOrigin\(server, app\.getPath\('userData'\)\)/);
 assert.doesNotMatch(desktopMain, /server\.listen\(0,/);
 

@@ -79,13 +79,10 @@ function bindGlobalEvents() {
     if (e.target.closest('[data-nav]')) closeDrawer();
   });
 
-  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة · الستايل · اللغة · المظهر · التثبيت */
+  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة واللغة */
   renderTopbar(qs('#topbar'), 'site', { onRerender: renderAll });
 
   qs('#scrim')?.addEventListener('click', closeDrawer);
-
-  /* أزرار خاصة بموقع المستويات فقط */
-  qs('#btnBell')?.addEventListener('click', () => navigate('/settings'));
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDrawer();
