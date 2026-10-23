@@ -259,6 +259,7 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
+    document.body.classList.toggle('community-messenger-mode', route.path === '/community');
     if (route.path !== '/community') disposeCommunity();
     setActiveNav(route.path);
     closeDrawer();
