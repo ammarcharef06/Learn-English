@@ -6,7 +6,7 @@
   "plugins": {
     "LocalNotifications": {
       "smallIcon": "ic_stat_notification",
-      "iconColor": "#2563eb",
+      "iconColor": "#34775b",
       "sound": "notification"
     }
   }

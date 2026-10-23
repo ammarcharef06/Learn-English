@@ -2,14 +2,13 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.9.0';
+const VERSION = 'v4.12.3';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
   './zero.html',
   './manifest.webmanifest',
-  './manifest-zero.webmanifest',
   './assets/css/main.css',
   './assets/css/redesign.css',
   './assets/css/zero.css',
@@ -37,6 +36,7 @@ const CORE = [
   './assets/js/core/ads.js',
   './assets/js/core/updater.js',
   './assets/js/core/app-version.js',
+  './assets/js/core/pwa-install.js',
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
@@ -61,9 +61,11 @@ const CORE = [
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
   './assets/js/views/journey.js',
+  './assets/js/views/session.js',
   './assets/js/views/conversations.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
+  './assets/js/views/zero-head.js',
   './assets/js/views/zero-shell.js',
   './assets/js/views/zero-stage.js',
   './assets/js/views/zero-exam.js',

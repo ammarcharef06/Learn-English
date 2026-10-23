@@ -16,9 +16,9 @@ export function applyTheme() {
 
 /* الستايلات: kali (داكن دائماً) | gnome | classic */
 export const SKINS = [
-  { id: 'kali', ar: 'Kali GNOME', desc: 'داكن بلون كالي الأزرق' },
-  { id: 'gnome', ar: 'GNOME', desc: 'Adwaita فاتح/داكن' },
-  { id: 'classic', ar: 'الكلاسيكي', desc: 'الأزرق الأكاديمي السابق' },
+  { id: 'kali', ar: 'Kali GNOME', desc: 'داكن بلمسات خضراء ونحاسية' },
+  { id: 'gnome', ar: 'GNOME', desc: 'ألوان مدينة التعلّم بوضع فاتح أو داكن' },
+  { id: 'classic', ar: 'الكلاسيكي', desc: 'ألوان هادئة بلمسات المدينة' },
 ];
 
 export function applySkin() {
@@ -48,7 +48,7 @@ export function applyLang() {
 /** يُزامن لون شريط حالة النظام مع المظهر الحالي (يعمل عند التثبيت على الجوال) */
 export function syncThemeColor() {
   const dark = document.documentElement.dataset.theme === 'dark';
-  const color = dark ? '#23272f' : '#2777ff';
+  const color = dark ? '#171d1a' : '#34775b';
   document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
     m.setAttribute('content', color);
   });

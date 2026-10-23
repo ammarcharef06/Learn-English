@@ -6,6 +6,8 @@ import { esc, qs, qsa, toast, arNum, ringHTML } from '../core/utils.js';
 import { ZERO_TOTALS, zeroStageSize } from '../data/zero.js';
 import { zeroSnapshot, certificate, setZeroPrefs, zeroPrefs, resetZeroProgress, markPadUsed } from '../core/zeroflow.js';
 import { writingPadHTML, initWritingPad } from '../core/zero-pad.js';
+import { zeroPageHead } from './zero-head.js';
+import { t } from '../core/i18n.js';
 
 /* ---------- مساعدات صغيرة بمكوّنات الموقع ---------- */
 export function bar(percent, variant = '') {
@@ -47,16 +49,15 @@ export function renderZero(host) {
   };
 
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🌱</span><h1>من الصفر — تأسيس A0</h1></div>
-        <p>ثماني مراحل مرتّبة: الحروف، ثم الحروف المركّبة، ثم الأرقام والوقت، ثم الضمائر، ثم ١٢٠ كلمة و٤٠ جملة وأربع قراءات.</p>
-      </div>
-      <div class="row row--wrap">
+    ${zeroPageHead({
+      icon: '🌱',
+      title: 'من الصفر — تأسيس A0',
+      subtitle: 'ثماني مراحل مرتّبة: الحروف، ثم الحروف المركّبة، ثم الأرقام والوقت، ثم الضمائر، ثم ١٢٠ كلمة و٤٠ جملة وأربع قراءات.',
+      actionsHtml: `
         <a class="btn btn--primary" href="#/zero/stage/${next.id}">${started ? `متابعة: ${esc(next.titleAr)}` : 'ابدأ بالحروف'} ←</a>
         <a class="btn" href="#/zero/pad">✍️ لوح الكتابة</a>
-      </div>
-    </div>
+      `,
+    })}
 
     <div class="card card--brand mt-4">
       <div class="row row--between row--wrap" style="gap:16px">
@@ -117,76 +118,74 @@ export function renderZeroSettings(host) {
   const snap = zeroSnapshot();
 
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">⚙️</span><h1>إعدادات التأسيس</h1></div>
-        <p>ثلاثة خيارات فقط — البقية في إعدادات الموقع العامة.</p>
-      </div>
-      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← المراحل</a></div>
-    </div>
+    ${zeroPageHead({
+      icon: '⚙️', title: t('zeroSettings.title'),
+      subtitle: t('zeroSettings.subtitle'),
+      actionsHtml: `<a class="btn btn--sm" href="#/zero">← ${t('zeroSettings.stages')}</a><a class="btn btn--sm" href="./index.html#/settings" data-exit-zero>${t('zeroSettings.general')}</a>`,
+    })}
 
     <div class="card mt-4">
       <label class="row row--between row--wrap" style="gap:12px;padding:10px 0">
         <span class="zero-info">
-          <b>النطق التلقائي</b>
-          <span class="tiny muted">يُنطق العنصر تلقائياً عند الانتقال إليه</span>
+          <b>${t('zeroSettings.autoSpeak')}</b>
+          <span class="tiny muted">${t('zeroSettings.autoSpeakDesc')}</span>
         </span>
         <span class="switch"><input type="checkbox" id="zAuto" ${pr.autoSpeak ? 'checked' : ''} /><span class="switch__track"></span></span>
       </label>
       <div class="divider"></div>
       <div class="row row--between row--wrap" style="gap:12px">
         <span class="zero-info">
-          <b>سرعة النطق</b>
-          <span class="tiny muted">البطيء يساعد على تمييز مخارج الحروف</span>
+          <b>${t('zeroSettings.rate')}</b>
+          <span class="tiny muted">${t('zeroSettings.rateDesc')}</span>
         </span>
         <select class="select" id="zRate" style="inline-size:140px">
-          <option value="slow" ${pr.slowRate <= 0.6 ? 'selected' : ''}>بطيء</option>
-          <option value="normal" ${pr.slowRate > 0.6 ? 'selected' : ''}>عادي</option>
+          <option value="slow" ${pr.slowRate <= 0.6 ? 'selected' : ''}>${t('zeroSettings.slow')}</option>
+          <option value="normal" ${pr.slowRate > 0.6 ? 'selected' : ''}>${t('zeroSettings.normal')}</option>
         </select>
       </div>
       <div class="divider"></div>
       <div class="row row--between row--wrap" style="gap:12px">
         <span class="zero-info">
-          <b>شكل الحروف على اللوح</b>
-          <span class="tiny muted">الوضع الافتراضي عند فتح لوح الكتابة</span>
+          <b>${t('zeroSettings.letterStyle')}</b>
+          <span class="tiny muted">${t('zeroSettings.letterStyleDesc')}</span>
         </span>
         <select class="select" id="zPad" style="inline-size:140px">
-          <option value="print" ${pr.padMode === 'print' ? 'selected' : ''}>مطبوع</option>
-          <option value="cursive" ${pr.padMode === 'cursive' ? 'selected' : ''}>متصل</option>
+          <option value="print" ${pr.padMode === 'print' ? 'selected' : ''}>${t('zeroSettings.print')}</option>
+          <option value="cursive" ${pr.padMode === 'cursive' ? 'selected' : ''}>${t('zeroSettings.cursive')}</option>
         </select>
       </div>
     </div>
 
     <div class="grid grid--4 mt-4">
-      ${stat('نسبة الإتقان', `${arNum(snap.percent)}٪`, '', 'stat--brand')}
-      ${stat('المراحل', `${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}`)}
-      ${stat('الحروف المتقنة', `${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}`)}
-      ${stat('الاختبار النهائي', `${arNum(snap.examBest)}٪`, '', snap.examBest >= 90 ? 'stat--ok' : '')}
+      ${stat(t('zeroSettings.mastery'), `${arNum(snap.percent)}٪`, '', 'stat--brand')}
+      ${stat(t('zeroSettings.stages'), `${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}`)}
+      ${stat(t('zeroSettings.masteredLetters'), `${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}`)}
+      ${stat(t('zeroSettings.finalExam'), `${arNum(snap.examBest)}٪`, '', snap.examBest >= 90 ? 'stat--ok' : '')}
     </div>
 
 
     <div class="card mt-4" style="border-color:color-mix(in srgb, var(--bad) 40%, var(--line))">
-      <div class="card__title"><span class="ico" aria-hidden="true">⚠️</span><h3>تصفير تقدّم قسم A0</h3></div>
-      <p class="small muted">لا يمسّ تقدّمك في A1 و A2 و B1 ولا نقاطك.</p>
-      <button class="btn" type="button" id="zReset">تصفير تقدّم التأسيس</button>
+      <div class="card__title"><span class="ico" aria-hidden="true">⚠️</span><h3>${t('zeroSettings.resetTitle')}</h3></div>
+      <p class="small muted">${t('zeroSettings.resetScope')}</p>
+      <button class="btn" type="button" id="zReset">${t('zeroSettings.resetButton')}</button>
     </div>`;
 
   qs('#zAuto', host)?.addEventListener('change', (e) => {
     setZeroPrefs({ autoSpeak: e.target.checked });
-    toast(e.target.checked ? 'النطق التلقائي مفعّل 🔊' : 'النطق التلقائي مطفأ 🔇', 'info');
+    toast(e.target.checked ? t('zeroSettings.autoSpeakOn') : t('zeroSettings.autoSpeakOff'), 'info');
   });
   qs('#zRate', host)?.addEventListener('change', (e) => {
     setZeroPrefs({ slowRate: e.target.value === 'slow' ? 0.55 : 1 });
-    toast(e.target.value === 'slow' ? 'سرعة النطق: بطيء 🐢' : 'سرعة النطق: عادي', 'info');
+    toast(e.target.value === 'slow' ? t('zeroSettings.rateSlowToast') : t('zeroSettings.rateNormalToast'), 'info');
   });
   qs('#zPad', host)?.addEventListener('change', (e) => {
     setZeroPrefs({ padMode: e.target.value === 'cursive' ? 'cursive' : 'print' });
-    toast(e.target.value === 'cursive' ? 'شكل الحروف: متصل' : 'شكل الحروف: مطبوع', 'info');
+    toast(e.target.value === 'cursive' ? t('zeroSettings.cursiveToast') : t('zeroSettings.printToast'), 'info');
   });
   qs('#zReset', host)?.addEventListener('click', () => {
-    if (!window.confirm('تصفير تقدّم قسم «من الصفر» (A0) فقط؟ لن يتأثر A1/A2/B1.')) return;
+    if (!window.confirm(t('zeroSettings.resetConfirm'))) return;
     resetZeroProgress();
-    toast('تم تصفير تقدّم التأسيس', 'ok');
+    toast(t('zeroSettings.resetDone'), 'ok');
     window.__leaRenderAll?.();
   });
 }
@@ -199,13 +198,11 @@ const PAD_PRESETS = ['A a', 'B b', 'C c', 'cat', 'dog', 'sun', 'book', 'Hello!',
 export function renderZeroPad(host) {
   const pr = zeroPrefs();
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">✍️</span><h1>لوح الكتابة</h1></div>
-        <p>اكتب بإصبعك أو القلم أو الفأرة فوق الشبح الرمادي، وبدّل بين المطبوع والمتصل.</p>
-      </div>
-      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← المراحل</a></div>
-    </div>
+    ${zeroPageHead({
+      icon: '✍️', title: 'لوح الكتابة',
+      subtitle: 'اكتب بإصبعك أو القلم أو الفأرة فوق الشبح الرمادي، وبدّل بين المطبوع والمتصل.',
+      actionsHtml: '<a class="btn btn--sm" href="#/zero">← المراحل</a>',
+    })}
 
     <div class="card mt-4">
       <div class="row row--wrap" id="padPresets" style="gap:8px">

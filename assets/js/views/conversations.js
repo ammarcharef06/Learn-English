@@ -2,14 +2,16 @@ import { t } from '../core/i18n.js';
 import { esc, speakBtn } from '../core/utils.js';
 import { settings, progress } from '../core/store.js';
 import { CONVERSATIONS } from '../data/conversations.js';
-import { advanceConversation, answerConversation, getActiveConversation, startConversation } from '../core/conversation-practice.js';
+import { advanceConversation, answerConversation, getActiveConversation, pauseConversation, startConversation } from '../core/conversation-practice.js';
 import { pageHead, progressBar, statCard } from './shell.js';
 
 const text = (item, key) => settings.uiLang === 'en' ? item[key] : item[`${key}Ar`] || item[key];
 
-export function renderConversations(host) {
+export function renderConversations(host, query = {}) {
   const totals = progress.conversations || { completed: {}, sessions: 0, turns: 0, correct: 0 };
   let active = getActiveConversation();
+  const requestedScene = CONVERSATIONS.find((scene) => scene.id === query.scene);
+  if (!active && requestedScene) active = startConversation(requestedScene.id);
 
   function renderPicker() {
     active = null;
@@ -22,10 +24,11 @@ export function renderConversations(host) {
       <div class="grid grid--3 conversation-scenes">
         ${CONVERSATIONS.map((scene) => {
           const completed = totals.completed?.[scene.id];
-          return `<button class="conversation-scene card" type="button" data-scene="${scene.id}">
+          const paused = totals.paused?.[scene.id];
+          return `<button class="conversation-scene card ${paused ? 'is-paused' : ''}" type="button" data-scene="${scene.id}">
             <span class="conversation-scene__top"><span aria-hidden="true">${scene.icon}</span><span class="chip">${esc(scene.level)}</span></span>
             <b>${esc(text(scene, 'title'))}</b><small>${esc(text(scene, 'context'))}</small>
-            <span class="conversation-scene__foot">${scene.turns.length} ${esc(t('conversation.turns'))} · ${completed ? `${esc(t('conversation.best'))}: ${completed.best}/${scene.turns.length}` : esc(t('conversation.new'))}</span>
+            <span class="conversation-scene__foot">${paused ? `${esc(t('conversation.pausedAt'))} ${paused.turn + 1}/${scene.turns.length}` : `${scene.turns.length} ${esc(t('conversation.turns'))} · ${completed ? `${esc(t('conversation.best'))}: ${completed.best}/${scene.turns.length}` : esc(t('conversation.new'))}`}</span>
           </button>`;
         }).join('')}
       </div>
@@ -51,7 +54,7 @@ export function renderConversations(host) {
     host.innerHTML = `
       ${pageHead({
         icon: scene.icon, title: text(scene, 'title'), subtitle: text(scene, 'context'),
-        actionsHtml: `<button class="btn btn--sm" type="button" id="conversationExit">${esc(t('common.back'))}</button>`,
+        actionsHtml: `<button class="btn btn--sm" type="button" id="conversationExit">${esc(t('conversation.pauseAndLeave'))}</button>`,
       })}
       <section class="conversation-play card" aria-labelledby="conversationPrompt">
         <div class="conversation-play__meta"><span class="chip chip--brand">${esc(scene.level)}</span><span>${active.turn + 1}/${scene.turns.length} ${esc(t('conversation.turns'))}</span><span>${active.correct} ⭐</span></div>
@@ -89,7 +92,7 @@ export function renderConversations(host) {
       else renderActive();
     });
     host.querySelector('#conversationDone')?.addEventListener('click', renderPicker);
-    host.querySelector('#conversationExit')?.addEventListener('click', renderPicker);
+    host.querySelector('#conversationExit')?.addEventListener('click', () => { pauseConversation(); renderPicker(); });
   }
 
   function renderCompleted(scene, result) {

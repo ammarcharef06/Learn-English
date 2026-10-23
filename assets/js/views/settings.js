@@ -1,15 +1,111 @@
 /* الإعدادات: المظهر، الصوت، الإشعارات، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
 import { esc, qs, qsa, toast, openModal, download, readFileText, prettyTimeAr } from '../core/utils.js';
-import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
-import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '../core/auth.js';
+import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, inspectImport, importAll, progress } from '../core/store.js';
+import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow, touchSession } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
 import { pageHead } from './shell.js';
 import { APP_VERSION } from '../core/app-version.js';
 import { checkForUpdate, checkForUpdateInBackground, downloadAndOpenUpdate } from '../core/updater.js';
+import { navigate } from '../core/router.js';
 
-export function renderSettings(host, query = {}) {
+const SETTINGS_PAGES = [
+  { id: 'appearance', target: 'settingsLook', icon: '🎨', title: 'set.appearance', desc: 'set.pageAppearanceDesc', group: 'experience', keywords: 'theme skin color language font size' },
+  { id: 'accessibility', target: 'settingsAccess', icon: '♿', title: 'set.accessibility', desc: 'set.pageAccessDesc', group: 'experience', keywords: 'contrast motion accessibility' },
+  { id: 'audio', target: 'settingsAudio', icon: '🔊', title: 'set.audioTitle', desc: 'set.pageAudioDesc', group: 'experience', keywords: 'sound voice speak pronunciation rate' },
+  { id: 'learning', target: 'settingsLearning', icon: '📚', title: 'set.learning', desc: 'set.pageLearningDesc', group: 'experience', keywords: 'goal translation certificate questions' },
+  { id: 'reminders', target: 'settingsReminders', icon: '🔔', title: 'set.notifications', desc: 'set.pageRemindersDesc', group: 'experience', keywords: 'notification reminder days time' },
+  { id: 'updates', target: 'updateCard', icon: '⬆️', title: 'update.title', desc: 'set.pageUpdatesDesc', group: 'more', keywords: 'version update download' },
+  { id: 'security', target: 'settingsSecurity', icon: '🔒', title: 'set.security', desc: 'set.pageSecurityDesc', group: 'privacy', keywords: 'password lock privacy idle' },
+  { id: 'data', target: 'settingsData', icon: '💾', title: 'set.data', desc: 'set.pageDataDesc', group: 'privacy', keywords: 'backup export import reset progress restore' },
+  { id: 'support', target: 'settingsSupport', icon: '📣', title: 'nav.support', desc: 'set.pageSupportDesc', group: 'more', keywords: 'help support donate' },
+];
+
+function resolveSettingsPage(value) {
+  return SETTINGS_PAGES.find((page) => page.id === value || page.target === value) || null;
+}
+
+function pageSummary(page) {
+  if (page.id === 'appearance') {
+    const skin = settings.skin === 'gnome' ? 'GNOME' : settings.skin === 'classic' ? (settings.uiLang === 'en' ? 'Classic' : 'الكلاسيكي') : 'Kali GNOME';
+    return `${skin} · ${t(settings.theme === 'light' ? 'set.themeLight' : settings.theme === 'dark' || settings.skin === 'kali' ? 'set.themeDark' : 'set.themeAuto')}`;
+  }
+  if (page.id === 'audio') return settings.autoSpeak ? t('set.summaryOn') : t('set.summaryOff');
+  if (page.id === 'learning') return t('set.summaryGoal', { count: Number(settings.dailyGoal || 0).toLocaleString(settings.uiLang === 'en' ? 'en' : 'ar') });
+  if (page.id === 'reminders') return settings.reminder?.enabled ? t('set.summaryOn') : t('set.summaryOff');
+  if (page.id === 'updates') return APP_VERSION;
+  if (page.id === 'security') return settings.security?.lockEnabled ? t('set.summaryOn') : t('set.summaryOff');
+  if (page.id === 'data') return t('set.summaryBackup');
+  return '';
+}
+
+function renderSettingsHome(host) {
+  const groups = [
+    { id: 'experience', title: 'set.groupExperience' },
+    { id: 'privacy', title: 'set.groupPrivacy' },
+    { id: 'more', title: 'set.groupMore' },
+  ];
+  host.innerHTML = `
+    ${pageHead({ icon: '⚙️', title: t('set.title'), subtitle: t('set.subtitle') })}
+    <label class="settings-search">
+      <span aria-hidden="true">⌕</span>
+      <input id="settingsSearch" type="search" autocomplete="off" placeholder="${t('set.searchPlaceholder')}" aria-label="${t('set.searchLabel')}" />
+      <kbd>Ctrl K</kbd>
+    </label>
+    <p class="settings-search__empty" id="settingsSearchEmpty" hidden>${t('set.searchNoResults')}</p>
+    <div class="settings-home">
+      ${groups.map((group) => `
+        <section class="settings-group" data-settings-group="${group.id}">
+          <h2>${t(group.title)}</h2>
+          <div class="settings-list">
+            ${SETTINGS_PAGES.filter((page) => page.group === group.id).map((page) => `
+              <a class="settings-option" href="#/settings/${page.id}" data-settings-page="${page.id}" data-search-terms="${esc(page.keywords)}">
+                <span class="settings-option__icon" aria-hidden="true">${page.icon}</span>
+                <span class="settings-option__copy"><b>${t(page.title)}</b><small>${t(page.desc)}</small></span>
+                ${pageSummary(page) ? `<span class="settings-option__summary">${esc(pageSummary(page))}</span>` : ''}
+                <span class="settings-option__arrow" aria-hidden="true">›</span>
+              </a>`).join('')}
+          </div>
+        </section>`).join('')}
+    </div>`;
+
+  const search = qs('#settingsSearch', host);
+  const empty = qs('#settingsSearchEmpty', host);
+  const filter = () => {
+    const term = search.value.trim().toLocaleLowerCase();
+    let count = 0;
+    host.querySelectorAll('.settings-option').forEach((item) => {
+      const visible = !term || `${item.textContent} ${item.dataset.searchTerms}`.toLocaleLowerCase().includes(term);
+      item.hidden = !visible;
+      if (visible) count += 1;
+    });
+    host.querySelectorAll('[data-settings-group]').forEach((group) => {
+      group.hidden = !group.querySelector('.settings-option:not([hidden])');
+    });
+    empty.hidden = !term || count > 0;
+  };
+  search.addEventListener('input', filter);
+  host.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      search.focus();
+    } else if (event.key === 'Enter' && document.activeElement === search && search.value.trim()) {
+      const first = host.querySelector('.settings-option:not([hidden])');
+      if (first) { event.preventDefault(); navigate(`/settings/${first.dataset.settingsPage}`); }
+    } else if (event.key === 'Escape' && document.activeElement === search && search.value) {
+      search.value = '';
+      filter();
+    }
+  });
+}
+
+export function renderSettings(host, query = {}, section = '') {
+  const selectedPage = resolveSettingsPage(section || query.section);
+  if (!selectedPage) {
+    renderSettingsHome(host);
+    return;
+  }
   const s = settings;
   const days = s.uiLang === 'en'
     ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -19,18 +115,23 @@ export function renderSettings(host, query = {}) {
   const passwordLockEnabled = lockEnabled();
 
   host.innerHTML = `
-    ${pageHead({ icon: '⚙️', title: t('set.title'), subtitle: t('set.subtitle') })}
+    ${pageHead({
+      icon: selectedPage.icon,
+      title: t(selectedPage.title),
+      subtitle: t(selectedPage.desc),
+      actionsHtml: `<a class="btn btn--sm settings-back" href="#/settings"><span aria-hidden="true">←</span>${t('set.back')}</a>`,
+    })}
 
-    <div class="card">
+    <div class="card" id="settingsLook">
       <div class="card__title"><span class="ico">🎨</span><h2>${t('set.appearance')}</h2></div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>ستايل الواجهة</b><span>شكل الموقع العام: كالي GNOME (الافتراضي)، GNOME (فاتح/داكن)، أو الكلاسيكي.</span></div>
+        <div class="setting-row__text"><b>${t('set.skin')}</b><span>${t('set.skinDesc')}</span></div>
         <div class="setting-row__control seg" id="skinSeg">
-          ${SKINS.map((s) => `<button type="button" data-skin="${s.id}" class="${settings.skin === s.id ? 'is-active' : ''}" title="${esc(s.desc)}">${esc(s.ar)}</button>`).join('')}
+          ${SKINS.map((skin) => `<button type="button" data-skin="${skin.id}" class="${settings.skin === skin.id ? 'is-active' : ''}" title="${esc(t(`set.skin${skin.id[0].toUpperCase()}${skin.id.slice(1)}`))}">${skin.id === 'classic' ? (s.uiLang === 'en' ? 'Classic' : 'الكلاسيكي') : esc(skin.ar)}</button>`).join('')}
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.theme')}</b><span id="themeHint">فاتح، داكن، أو تلقائي حسب نظام جهازك.</span></div>
+        <div class="setting-row__text"><b>${t('set.theme')}</b><span id="themeHint">${t('set.themeDesc')}</span></div>
         <div class="setting-row__control seg" id="themeSeg">
           <button type="button" data-theme="auto" class="${s.theme === 'auto' ? 'is-active' : ''}">${t('set.themeAuto')}</button>
           <button type="button" data-theme="light" class="${s.theme === 'light' ? 'is-active' : ''}">${t('set.themeLight')}</button>
@@ -38,7 +139,7 @@ export function renderSettings(host, query = {}) {
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.uiLang')}</b><span>لغة أزرار الموقع وقوائمه (المحتوى التعليمي يبقى كما هو).</span></div>
+        <div class="setting-row__text"><b>${t('set.uiLang')}</b><span>${t('set.uiLangDesc')}</span></div>
         <div class="setting-row__control seg" id="langSeg">
           <button type="button" data-lang="ar" class="${s.uiLang !== 'en' ? 'is-active' : ''}">العربية</button>
           <button type="button" data-lang="en" class="${s.uiLang === 'en' ? 'is-active' : ''}">English</button>
@@ -53,7 +154,7 @@ export function renderSettings(host, query = {}) {
       </div>
     </div>
 
-    <section class="card" style="margin-top:16px" aria-labelledby="accessibilityTitle">
+    <section class="card" id="settingsAccess" style="margin-top:16px" aria-labelledby="accessibilityTitle">
       <div class="card__title"><span class="ico" aria-hidden="true">♿</span><h2 id="accessibilityTitle">${t('set.accessibility')}</h2></div>
       <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.highContrast')}</b><span id="highContrastHint">${t('set.highContrastDesc')}</span></div>
@@ -65,8 +166,8 @@ export function renderSettings(host, query = {}) {
       </div>
     </section>
 
-    <div class="card" style="margin-top:16px">
-      <div class="card__title"><span class="ico">🔊</span><h2>الصوت والنطق</h2></div>
+    <div class="card" id="settingsAudio" style="margin-top:16px">
+      <div class="card__title"><span class="ico">🔊</span><h2>${t('set.audioTitle')}</h2></div>
       <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.sound')}</b><span>${t('set.soundDesc')}</span></div>
         <label class="switch"><input type="checkbox" id="setSound" ${s.sound ? 'checked' : ''} /><span class="switch__track"></span></label>
@@ -76,17 +177,17 @@ export function renderSettings(host, query = {}) {
         <label class="switch"><input type="checkbox" id="setAutoSpeak" ${s.autoSpeak ? 'checked' : ''} /><span class="switch__track"></span></label>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.voice')}</b><span>أصوات القراءة المتاحة في متصفحك (${voices.length}).</span></div>
+        <div class="setting-row__text"><b>${t('set.voice')}</b><span>${t('set.voiceDesc', { count: voices.length })}</span></div>
         <div class="setting-row__control">
           <select class="select" id="voiceSelect" style="max-width:260px">
-            <option value="">تلقائي (الأفضل المتاح)</option>
+            <option value="">${t('set.voiceAuto')}</option>
             ${voices.map((v) => `<option value="${esc(v.name)}" ${s.tts.voice === v.name ? 'selected' : ''}>${esc(v.name)} — ${esc(v.lang)}</option>`).join('')}
           </select>
-          <button class="btn btn--sm" type="button" id="testVoice">🔊 تجربة</button>
+          <button class="btn btn--sm" type="button" id="testVoice">🔊 ${t('set.testVoice')}</button>
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.rate')}</b><span>سرعة القراءة: أبطأ أنسب للمبتدئ.</span></div>
+        <div class="setting-row__text"><b>${t('set.rate')}</b><span>${t('set.rateDesc')}</span></div>
         <div class="setting-row__control" style="min-width:220px">
           <input type="range" min="0.5" max="1.3" step="0.02" value="${s.tts.rate}" id="rateRange" style="width:150px" />
           <span class="chip" id="rateValue">${Number(s.tts.rate).toFixed(2)}×</span>
@@ -94,25 +195,25 @@ export function renderSettings(host, query = {}) {
       </div>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" id="settingsLearning" style="margin-top:16px">
       <div class="card__title"><span class="ico">📚</span><h2>${t('set.learning')}</h2></div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.dailyGoal')}</b><span>عدد الأسئلة التي تريد إنجازها يومياً.</span></div>
+        <div class="setting-row__text"><b>${t('set.dailyGoal')}</b><span>${t('set.dailyGoalDesc')}</span></div>
         <div class="setting-row__control">
           <input class="input" type="number" min="5" max="200" step="5" value="${s.dailyGoal}" id="goalInput" style="width:110px" />
         </div>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>${t('set.showTranslation')}</b><span>إظهار الترجمة العربية بجانب الأمثلة الإنجليزية.</span></div>
+        <div class="setting-row__text"><b>${t('set.showTranslation')}</b><span>${t('set.showTranslationDesc')}</span></div>
         <label class="switch"><input type="checkbox" id="setShowTranslation" ${s.showTranslation ? 'checked' : ''} /><span class="switch__track"></span></label>
       </div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>اسمك في الشهادة</b><span>يظهر في شهادة نتيجة الاختبار.</span></div>
-        <div class="setting-row__control"><input class="input" type="text" id="nameInput" value="${esc(s.learnerName || '')}" placeholder="اكتب اسمك" style="width:220px" /></div>
+        <div class="setting-row__text"><b>${t('set.learnerName')}</b><span>${t('set.learnerNameDesc')}</span></div>
+        <div class="setting-row__control"><input class="input" type="text" id="nameInput" value="${esc(s.learnerName || '')}" placeholder="${t('set.learnerNamePlaceholder')}" style="width:220px" /></div>
       </div>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" id="settingsReminders" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔔</span><h2>${t('set.notifications')}</h2></div>
       <p class="small muted">${t('set.notificationsDesc')}</p>
       <div class="setting-row">
@@ -153,17 +254,26 @@ export function renderSettings(host, query = {}) {
       <div id="updateStatus" class="update-status" role="status" aria-live="polite"></div>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" style="margin-top:16px" id="settingsSupport">
       <div class="card__title"><span class="ico">📣</span><h2>${t('nav.support')}</h2></div>
       <p class="small muted">${s.uiLang === 'en' ? 'Support the continued development of the academy.' : 'ساهم في استمرار تطوير الأكاديمية.'}</p>
       <a class="btn btn--primary btn--sm" href="#/support">${s.uiLang === 'en' ? 'Support us' : 'دعم التطبيق'} →</a>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" id="settingsSecurity" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔒</span><h2>${t('set.security')}</h2></div>
       <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.passwordLock')}</b><span>${t('set.passwordLockDesc')}</span></div>
         <label class="switch"><input type="checkbox" id="lockEnabled" ${passwordLockEnabled ? 'checked' : ''} aria-label="${t('set.passwordLock')}" /><span class="switch__track"></span></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.idleLock')}</b><span>${t('set.idleLockDesc')}</span></div>
+        <select class="select" id="idleLockTime" aria-label="${t('set.idleLock')}" style="max-width:190px">
+          <option value="0" ${Number(s.security?.idleMinutes) === 0 ? 'selected' : ''}>${t('set.idleNever')}</option>
+          <option value="15" ${Number(s.security?.idleMinutes) === 15 ? 'selected' : ''}>${t('set.idle15')}</option>
+          <option value="30" ${Number(s.security?.idleMinutes) === 30 ? 'selected' : ''}>${t('set.idle30')}</option>
+          <option value="60" ${Number(s.security?.idleMinutes) === 60 ? 'selected' : ''}>${t('set.idle60')}</option>
+        </select>
       </div>
       <div class="tip-box ${passwordLockEnabled ? 'tip-box--ok' : ''}" style="margin-bottom:12px">
         <b>${passwordLockEnabled ? t('set.lockActive') : t('set.appOpen')}</b>
@@ -181,7 +291,7 @@ export function renderSettings(host, query = {}) {
       <p class="hint" style="margin-top:8px">${t('set.passwordLocalHint')}</p>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" id="settingsData" style="margin-top:16px">
       <div class="card__title"><span class="ico">💾</span><h2>${t('set.data')}</h2></div>
       <div class="row row--wrap" style="gap:8px">
         <button class="btn" type="button" id="exportBtn">⬇ ${t('set.export')}</button>
@@ -191,12 +301,22 @@ export function renderSettings(host, query = {}) {
         <button class="btn" type="button" id="resetSetBtn">↩️ ${t('set.resetSettings')}</button>
         <button class="btn btn--bad" type="button" id="wipeBtn">🗑 ${t('set.wipe')}</button>
       </div>
-      <p class="hint" style="margin-top:8px">عدد الكلمات في دفترك: ${(progress.notebook || []).length} · أيام الدراسة: ${(progress.studyDays || []).length}</p>
+      <p class="hint" style="margin-top:8px">${t('set.dataCounts', {
+        words: (progress.notebook || []).length.toLocaleString(s.uiLang === 'en' ? 'en' : 'ar'),
+        days: (progress.studyDays || []).length.toLocaleString(s.uiLang === 'en' ? 'en' : 'ar'),
+      })}</p>
     </div>`;
 
-    if (query.section === 'updates') {
-      requestAnimationFrame(() => qs('#updateCard', host)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    }
+  const selectedCard = qs(`#${selectedPage.target}`, host);
+  if (!selectedCard) {
+    renderSettingsHome(host);
+    return;
+  }
+  host.querySelectorAll('.card[id]').forEach((card) => {
+    if (card !== selectedCard) card.remove();
+  });
+  selectedCard.classList.add('settings-detail-card');
+  selectedCard.querySelector(':scope > .card__title')?.remove();
 
   /* ---------- المظهر ---------- */
   qsa('#skinSeg button', host).forEach((b) => b.addEventListener('click', () => {
@@ -204,8 +324,8 @@ export function renderSettings(host, query = {}) {
     applySkin();
     qsa('#skinSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
     const label = SKINS.find((s) => s.id === b.dataset.skin);
-    toast(`الستايل: ${label ? label.ar : b.dataset.skin}`, 'ok');
-    renderSettings(host);
+    toast(`${t('set.skin')}: ${label ? (b.dataset.skin === 'classic' && s.uiLang === 'en' ? 'Classic' : label.ar) : b.dataset.skin}`, 'ok');
+    renderSettings(host, query, selectedPage.id);
   }));
   qsa('#themeSeg button', host).forEach((b) => b.addEventListener('click', () => {
     saveSettings({ theme: b.dataset.theme });
@@ -215,7 +335,7 @@ export function renderSettings(host, query = {}) {
   }));
   if ((settings.skin || 'kali') === 'kali') {
     const themeHint = qs('#themeHint', host);
-    if (themeHint) themeHint.textContent = 'ستايل كالي داكن دائماً — اختر «GNOME» لتتمكن من التبديل بين الفاتح والداكن.';
+    if (themeHint) themeHint.textContent = t('set.themeKaliHint');
     qsa('#themeSeg button', host).forEach((b) => { b.disabled = true; b.style.opacity = '.45'; });
   }
   qsa('#langSeg button', host).forEach((b) => b.addEventListener('click', () => {
@@ -265,7 +385,7 @@ export function renderSettings(host, query = {}) {
     const v = Math.max(5, Math.min(200, Number(e.target.value) || 20));
     saveSettings({ dailyGoal: v });
     e.target.value = v;
-    toast(`هدفك اليومي: ${v} سؤال`, 'ok');
+    toast(t('set.goalToast', { count: v }), 'ok');
   });
   qs('#nameInput', host)?.addEventListener('change', (e) => { saveSettings({ learnerName: e.target.value.trim() }); toast(t('set.saved'), 'ok'); });
 
@@ -314,7 +434,7 @@ export function renderSettings(host, query = {}) {
   };
   qs('#remTime', host)?.addEventListener('change', async (e) => {
     await saveReminderSchedule({ time: e.target.value });
-    toast(`التذكير اليومي: ${prettyTimeAr(e.target.value)}`, 'ok');
+    toast(t('set.reminderTimeToast', { time: s.uiLang === 'en' ? e.target.value : prettyTimeAr(e.target.value) }), 'ok');
   });
   qsa('[data-day]', host).forEach((b) => b.addEventListener('click', () => {
     const d = Number(b.dataset.day);
@@ -402,30 +522,41 @@ export function renderSettings(host, query = {}) {
     }
   };
   checkButton?.addEventListener('click', runUpdateCheck);
-  if (query.section === 'updates') void runUpdateCheck();
+  if (selectedPage.id === 'updates') void runUpdateCheck();
 
   /* ---------- الأمان ---------- */
+  qs('#idleLockTime', host)?.addEventListener('change', (e) => {
+    saveSettings({ security: { idleMinutes: Math.max(0, Number(e.target.value) || 0) } });
+    touchSession();
+    toast(t('set.saved'), 'ok');
+  });
   qs('#lockEnabled', host)?.addEventListener('change', (e) => {
     const result = setLockEnabled(e.target.checked);
     if (!result.ok) {
       e.target.checked = false;
-      toast(result.error, 'warn');
+      toast(result.error === 'أنشئ كلمة مرور خاصة بك قبل تفعيل القفل.' ? t('set.createPasswordFirst') : result.error, 'warn');
       return;
     }
-    toast(e.target.checked ? 'تم تفعيل القفل بكلمة مرور' : 'تم إيقاف القفل بكلمة مرور', 'ok');
-    renderSettings(host);
+    toast(e.target.checked ? t('set.lockEnabledToast') : t('set.lockDisabledToast'), 'ok');
+    renderSettings(host, query, selectedPage.id);
   });
   qs('#pwSave', host)?.addEventListener('click', async () => {
     const cur = qs('#pwCur', host)?.value || '';
     const nw = qs('#pwNew', host)?.value || '';
     const cf = qs('#pwConf', host)?.value || '';
-    if (nw !== cf) { toast('كلمتا المرور الجديدتان غير متطابقتين', 'bad'); return; }
+    if (nw !== cf) { toast(t('set.passwordMismatch'), 'bad'); return; }
     const res = await setPassword(nw, cur);
-    if (!res.ok) { toast(res.error, 'bad'); return; }
+    if (!res.ok) {
+      const message = res.error === 'كلمة المرور الجديدة قصيرة جداً (4 أحرف على الأقل).' ? t('set.passwordTooShort')
+        : res.error === 'كلمة المرور الحالية غير صحيحة.' ? t('set.currentPasswordWrong')
+          : res.error;
+      toast(message, 'bad');
+      return;
+    }
     if (!passwordConfigured) setLockEnabled(true);
     qs('#pwNew', host).value = qs('#pwConf', host).value = '';
     toast(t('auth.changeOk'), 'ok');
-    renderSettings(host);
+    renderSettings(host, query, selectedPage.id);
   });
   qs('#lockNowBtn', host)?.addEventListener('click', () => {
     lockNow();
@@ -434,31 +565,85 @@ export function renderSettings(host, query = {}) {
   /* ---------- البيانات ---------- */
   qs('#exportBtn', host)?.addEventListener('click', () => {
     download(`learn-english-backup-${new Date().toISOString().slice(0, 10)}.json`, exportAll());
-    toast('تم تنزيل النسخة الاحتياطية ⬇', 'ok');
+    toast(t('set.exportDownloaded'), 'ok');
   });
   qs('#importBtn', host)?.addEventListener('click', () => qs('#importFile', host).click());
   qs('#importFile', host)?.addEventListener('change', async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const text = await readFileText(file);
-      importAll(text);
-      try {
-        const notificationResult = await syncReminderSchedule();
-        if (!notificationResult.ok) toast(t('set.notificationScheduleFailed'), 'warn');
-      } catch (error) {
-        console.error('Could not restore imported notification schedule', error);
-        toast(t('set.notificationScheduleFailed'), 'warn');
-      }
-      toast('تم الاستيراد بنجاح ✅', 'ok');
-      window.__leaRenderAll?.();
-      renderSettings(host);
+      const backupText = await readFileText(file);
+      const preview = inspectImport(backupText);
+      const exportedDate = preview.exportedAt ? new Date(preview.exportedAt) : null;
+      const date = exportedDate && !Number.isNaN(exportedDate.getTime())
+        ? exportedDate.toLocaleString(s.uiLang === 'en' ? 'en' : 'ar')
+        : t('set.importUnknownDate');
+      const included = [
+        preview.hasSettings ? t('set.importSettingsCount', { count: preview.settingsCount }) : '',
+        preview.hasProgress ? t('set.importProgressCount', { count: preview.progressCount }) : '',
+        preview.hasProgress ? t('set.importWords', { count: preview.words }) : '',
+        preview.hasProgress ? t('set.importDays', { count: preview.studyDays }) : '',
+      ].filter(Boolean);
+      const modalBody = `
+        <p>${t('set.importMeta', { date: esc(date) })}</p>
+        <b>${t('set.importIncludes')}</b>
+        <ul>${included.map((item) => `<li>${item}</li>`).join('')}</ul>
+        <p class="hint">${t('set.importLockNote')}</p>
+        <hr />
+        <b>${t('set.importChoose')}</b>
+        <p class="small muted">${t('set.importMergeDesc')}</p>
+        <p class="small muted">${t('set.importReplaceDesc')}</p>`;
+      const commitImport = async (mode) => {
+        try {
+          if (mode === 'replace') {
+            download(`learn-english-safety-${new Date().toISOString().slice(0, 10)}.json`, exportAll());
+          }
+          importAll(backupText, { mode });
+          try {
+            const notificationResult = await syncReminderSchedule();
+            if (!notificationResult.ok) toast(t('set.notificationScheduleFailed'), 'warn');
+          } catch (error) {
+            console.error('Could not restore imported notification schedule', error);
+            toast(t('set.notificationScheduleFailed'), 'warn');
+          }
+          toast(mode === 'merge' ? t('set.importMerged') : t('set.importReplaced'), 'ok');
+          window.__leaRenderAll?.();
+          renderSettings(host, query, selectedPage.id);
+          return true;
+        } catch (error) {
+          console.error('Could not import backup', error);
+          toast(t('set.importInvalid'), 'bad');
+          return false;
+        }
+      };
+      openModal({
+        title: t('set.importTitle'),
+        body: modalBody,
+        actions: [
+          { label: t('common.cancel'), variant: 'ghost' },
+          { label: t('set.importMerge'), variant: 'primary', onClick: () => commitImport('merge') },
+          { label: t('set.importReplace'), variant: 'bad', onClick: (root) => {
+            openModal({
+              title: t('set.importReplace'),
+              body: `<p>${t('set.importReplaceDesc')}</p><p class="hint">${t('set.importLockNote')}</p>`,
+              actions: [
+                { label: t('common.cancel'), variant: 'ghost' },
+                { label: t('set.importReplace'), variant: 'bad', onClick: () => commitImport('replace') },
+              ],
+            });
+            return false;
+          } },
+        ],
+      });
     } catch (err) {
-      toast('ملف غير صالح', 'bad');
+      console.error('Invalid backup file', err);
+      toast(t('set.importInvalid'), 'bad');
+    } finally {
+      e.target.value = '';
     }
   });
-  qs('#resetProgBtn', host)?.addEventListener('click', () => confirmAction('تصفير التقدّم', 'سيُحذف كل التقدم والنقاط والشارات، وتبقى الإعدادات وكلمة المرور.', () => { resetProgress(); toast('صُفِّر التقدّم', 'ok'); window.__leaRenderAll?.(); renderSettings(host); }));
-  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction('إعادة الإعدادات', 'ستعود كل الإعدادات للقيم الافتراضية.', async () => {
+  qs('#resetProgBtn', host)?.addEventListener('click', () => confirmAction(t('set.resetProgressTitle'), t('set.resetProgressConfirm'), () => { resetProgress(); toast(t('set.resetProgressDone'), 'ok'); window.__leaRenderAll?.(); renderSettings(host, query, selectedPage.id); }));
+  qs('#resetSetBtn', host)?.addEventListener('click', () => confirmAction(t('set.resetSettingsTitle'), t('set.resetSettingsConfirm'), async () => {
     resetSettings();
     try { await syncReminderSchedule(); }
     catch (error) {
@@ -467,11 +652,11 @@ export function renderSettings(host, query = {}) {
     }
     applySkin();
     applyLang();
-    toast('أُعيدت الإعدادات', 'ok');
+    toast(t('set.resetSettingsDone'), 'ok');
     window.__leaRenderAll?.();
-    renderSettings(host);
+    renderSettings(host, query, selectedPage.id);
   }));
-  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction('حذف كل شيء', 'سيُحذف كل شيء: الإعدادات، التقدم، وكلمة المرور. لا يمكن التراجع!', async () => {
+  qs('#wipeBtn', host)?.addEventListener('click', () => confirmAction(t('set.wipeTitle'), t('set.wipeConfirm'), async () => {
     wipeEverything();
     try { await syncReminderSchedule(); }
     catch (error) { console.error('Could not cancel reminders after clearing app data', error); }

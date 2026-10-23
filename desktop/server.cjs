@@ -20,7 +20,6 @@ const ROOT_FILES = new Set([
   'index.html',
   'zero.html',
   'manifest.webmanifest',
-  'manifest-zero.webmanifest',
   'service-worker.js',
 ]);
 

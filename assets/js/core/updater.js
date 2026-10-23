@@ -199,7 +199,7 @@ async function announcePendingUpdate() {
     const shown = await showNotification(
       'تحديث جديد لأكاديمية الإنجليزية',
       `الإصدار ${pending.version} متاح الآن. اضغط لعرض التفاصيل والتحديث.`,
-      { tag: 'lea-update', url: './index.html#/settings?section=updates' },
+      { tag: 'lea-update', url: './index.html#/settings/updates' },
     );
     if (!shown) return false;
     localStorage.setItem('lea.update.notified', pending.version);

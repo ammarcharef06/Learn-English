@@ -1,24 +1,22 @@
 ﻿/* ============================================================
-   نقطة دخول قسم «من الصفر» (A0) — صفحة مستقلة تماماً (zero.html)
-   لا تُحمّل هذه الصفحة نقطة دخول الموقع (app.js) ولا هيكله:
-   لا شريط موقع، ولا قائمة جانبية، ولا شريط سفلي للمستويات.
+   نقطة دخول محتوى A0 بموجّه مستقل وغلاف الأكاديمية المشترك.
    ============================================================ */
 import { initRouter, route, setNotFound, resolve, onRouteRendered } from './core/router.js';
-import { setUiLang } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
-import { isAuthed, extendSession } from './core/auth.js';
+import { isAuthed, extendSession, startIdleSessionGuard } from './core/auth.js';
 import { flush } from './core/store.js';
 import { qs, toast, focusMainHeading } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
 import { applyAccessibility } from './core/theme.js';
-import { renderTopbar, closeDrawer } from './views/topbar.js';
+import { renderTopbar, openDrawer, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
 import { registerZeroSounds } from './core/zero-audio.js';
 import { renderZero, renderZeroPad, renderZeroSettings } from './views/zero.js';
 import { renderZeroStage, renderZeroDrill } from './views/zero-stage.js';
 import { renderZeroExam, renderZeroCertificate } from './views/zero-exam.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
+import { setupPwaInstall } from './core/pwa-install.js';
 
 const view = () => qs('#view');
 
@@ -32,14 +30,24 @@ function setupRoutes() {
   route('/zero/exam', () => renderZeroExam(view()));
   route('/zero/certificate', () => renderZeroCertificate(view()));
   setNotFound(() => {
-    view().innerHTML = `<div class="zpage"><div class="znotice">هذا الرابط غير موجود في قسم «من الصفر».</div>
-      <a class="zbtn zbtn--primary" href="#/zero">← المراحل</a></div>`;
+    view().innerHTML = `<section class="card"><div class="empty"><span class="ico" aria-hidden="true">⌖</span>
+      <h2>هذا المسار غير موجود</h2><p>اختر محطة من رحلة التأسيس وتابع من هناك.</p>
+      <a class="btn btn--primary" href="#/zero">خريطة المراحل</a></div></section>`;
   });
 }
 
 /* ---------------- أحداث عامة (نفس سلوك الموقع) ---------------- */
 function bindGlobalEvents() {
   document.addEventListener('click', (e) => {
+    const exitLink = e.target.closest('[data-exit-zero]');
+    if (exitLink) {
+      e.preventDefault();
+      closeDrawer();
+      exitZeroMode(exitLink.getAttribute('href') || './index.html#/');
+      return;
+    }
+    if (e.target.closest('[data-nav]')) closeDrawer();
+
     /* النطق من أي زر [data-say] في الصفحة (نفس .speak-btn المستخدم في الموقع) */
     const sayBtn = e.target.closest('[data-say]');
     if (sayBtn && !e.target.closest('.quiz-shell')) {
@@ -59,7 +67,6 @@ function bindGlobalEvents() {
 
 /* ---------------- الإقلاع ---------------- */
 async function main() {
-  setUiLang('ar');
   applyAccessibility();
   initSpeech();
   registerZeroSounds();
@@ -73,20 +80,21 @@ async function main() {
   setZeroFocus('a0');
 
   renderTopbar(qs('#topbar'), 'zero', { onRerender: () => applyZeroShell(location.hash) });
+  setupPwaInstall();
   qs('#scrim')?.addEventListener('click', closeDrawer);
-  /* التنقّل داخل الدرج يغلقه دائماً (نفس سلوك درج الموقع) */
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-nav]')) closeDrawer();
-  });
   window.addEventListener('hashchange', closeDrawer);
 
   setupRoutes();
-  onRouteRendered(() => requestAnimationFrame(() => focusMainHeading(view())));
+  onRouteRendered(() => {
+    applyZeroShell(location.hash);
+    requestAnimationFrame(() => focusMainHeading(view()));
+  });
   if (!location.hash) location.replace('#/zero');
   await initRouter();
   applyZeroShell(location.hash);
 
   document.addEventListener('lea:answered', () => applyZeroShell(location.hash));
+  startIdleSessionGuard(() => location.replace('./index.html'));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) extendSession(); });
   window.addEventListener('beforeunload', flush);
 
@@ -98,14 +106,14 @@ main().catch((err) => {
   console.error('zero boot failed', err);
   const v = view();
   if (v) {
-    v.innerHTML = `<div class="zpage"><div class="znotice">تعذّر تشغيل قسم «من الصفر». افتح وحدة تحكم المتصفح لمعرفة الخطأ.</div>
-      <a class="zbtn zbtn--primary" href="./index.html">← العودة إلى الموقع</a></div>`;
+    v.innerHTML = `<section class="card"><div class="empty"><span class="ico" aria-hidden="true">!</span>
+      <h2>تعذّر فتح قسم التأسيس</h2><p>أعد تحميل الصفحة. إذا استمرت المشكلة، أعد تشغيل الأكاديمية.</p>
+      <a class="btn btn--primary" href="./index.html#/">العودة إلى الأكاديمية</a></div></section>`;
   }
 });
 
 /* أدوات متاحة للواجهات (نفس ما يستخدمه الموقع) */
 window.__leaRenderAll = () => { applyZeroShell(location.hash); resolve(); };
 window.__leaRefreshChrome = () => applyZeroShell(location.hash);
-window.__leaExitZero = () => exitZeroMode();
 window.__leaToast = toast;
 export { stopSpeaking, stopActiveQuizzes };

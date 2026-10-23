@@ -16,6 +16,7 @@ import {
 } from '../core/zeroflow.js';
 import { runQuiz } from './quiz-runner.js';
 import { writingPadHTML, initWritingPad } from '../core/zero-pad.js';
+import { zeroPageHead } from './zero-head.js';
 import { bar, stat, itemsLabel } from './zero.js';
 
 /* مراحل تُعرَض عنصراً واحداً في البطاقة */
@@ -108,26 +109,23 @@ function stageHead(stage) {
   const idx = ZERO_STAGES.findIndex((s) => s.id === stage.id);
   const next = ZERO_STAGES[idx + 1];
   const state = zeroSnapshot().raw.stages?.[stage.id] || {};
-  return `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">${stage.icon}</span><h1>${esc(stage.titleAr)}</h1></div>
-        <p>${esc(stage.subAr)}</p>
-        <div class="row row--wrap mt-3" style="gap:8px">
-          <span class="chip chip--brand">${esc(itemsLabel(zeroItems(stage.id).length))}</span>
-          <span class="chip chip--line">⏱ ${arNum(stage.minutes)} دقيقة</span>
-          ${state.done ? `<span class="chip chip--ok">✅ مكتملة · ${arNum(state.best)}٪</span>` : (state.seen ? '<span class="chip chip--warn">بدأت ولم تُكمل</span>' : '')}
-        </div>
-      </div>
-      <div class="row row--wrap">
+  return zeroPageHead({
+    icon: stage.icon,
+    title: stage.titleAr,
+    subtitle: stage.subAr,
+    metaHtml: `
+      <span class="chip chip--brand">${esc(itemsLabel(zeroItems(stage.id).length))}</span>
+      <span class="chip chip--line">⏱ ${arNum(stage.minutes)} دقيقة</span>
+      ${state.done ? `<span class="chip chip--ok">✅ مكتملة · ${arNum(state.best)}٪</span>` : (state.seen ? '<span class="chip chip--warn">بدأت ولم تُكمل</span>' : '')}`,
+    actionsHtml: `
         <a class="btn btn--sm" href="#/zero">← المراحل</a>
         <button class="btn btn--sm" type="button" id="zAutoBtn">${zeroPrefs().autoSpeak ? '🔊 النطق التلقائي: مفعّل' : '🔇 النطق التلقائي: مطفأ'}</button>
         <a class="btn btn--sm" href="#/zero/drill/${stage.id}">🧪 تدريب المرحلة</a>
         ${next
           ? `<a class="btn btn--sm" href="#/zero/stage/${next.id}">${esc(next.titleAr)} ←</a>`
           : '<a class="btn btn--sm" href="#/zero/exam">الاختبار النهائي ←</a>'}
-      </div>
-    </div>`;
+      `,
+  });
 }
 
 function bindAutoBtn(host) {
@@ -451,13 +449,11 @@ export function renderZeroDrill(host, stageId) {
   const next = ZERO_STAGES[idx + 1];
 
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>تدريب: ${esc(stage.titleAr)}</h1></div>
-        <p>خمسة أسئلة قصيرة. النجاح من ٨٠٪ يُكمل المرحلة.</p>
-      </div>
-      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero/stage/${stage.id}">← ${esc(stage.titleAr)}</a></div>
-    </div>
+    ${zeroPageHead({
+      icon: '🧪', title: `تدريب: ${stage.titleAr}`,
+      subtitle: 'خمسة أسئلة قصيرة. النجاح من ٨٠٪ يُكمل المرحلة.',
+      actionsHtml: `<a class="btn btn--sm" href="#/zero/stage/${stage.id}">← ${esc(stage.titleAr)}</a>`,
+    })}
     <div id="zRun" class="mt-4"></div>`;
 
   runQuiz(qs('#zRun', host), {

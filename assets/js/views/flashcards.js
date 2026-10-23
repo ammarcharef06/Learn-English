@@ -38,8 +38,8 @@ function allEntries() {
   return [...vocabularyEntries(), ...readingWordEntries(), ...pronounEntries(), ...connectorEntries(), ...questionEntries(), ...notebookEntries()];
 }
 
-export function renderFlashcards(host) {
-  const state = { deck: 'all', size: 15, session: [], mode: 'deck', index: 0, flipped: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
+export function renderFlashcards(host, query = {}) {
+  const state = { deck: query.deck || 'all', size: Number(query.size) || 15, session: [], mode: 'deck', index: 0, flipped: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now(), autoStarted: false };
 
   function setup() {
     state.session = [];
@@ -71,7 +71,7 @@ export function renderFlashcards(host) {
           <div class="field">
             <label for="fcSize">${t('drills.count')}</label>
             <select class="select" id="fcSize">
-              ${[10, 15, 20, 30, 50].map((n) => `<option value="${n}" ${n === state.size ? 'selected' : ''}>${n}</option>`).join('')}
+              ${[5, 10, 15, 20, 30, 50].map((n) => `<option value="${n}" ${n === state.size ? 'selected' : ''}>${n}</option>`).join('')}
             </select>
           </div>
           <div class="field">
@@ -89,6 +89,10 @@ export function renderFlashcards(host) {
     qs('#fcSmart', host)?.addEventListener('click', () => startSession(smartPlan.entries, 'smart'));
     qs('#fcSize', host)?.addEventListener('change', (e) => { state.size = Number(e.target.value); setup(); });
     qs('#fcStart', host)?.addEventListener('click', () => startSession(dueSession, 'deck'));
+    if (query.mode === 'smart' && !state.autoStarted) {
+      state.autoStarted = true;
+      if (smartPlan.entries.length) startSession(smartPlan.entries, 'smart');
+    }
   }
 
   function startSession(entries, mode = 'deck') {

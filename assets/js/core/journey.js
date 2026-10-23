@@ -1,14 +1,16 @@
 import { progress } from './store.js';
 import { addDays, dateKey, todayKey } from './utils.js';
+import { nextLessonSuggestion } from '../data/curriculum.js';
 
 export const DAILY_REVIEW_TARGET = 5;
 
 export function dailyMission(day = todayKey()) {
   const activity = progress.missionActivity?.[day] || {};
   const reviewed = Math.min(DAILY_REVIEW_TARGET, (activity.reviewedItems || []).length);
+  const lessonDone = !!activity.lesson || !nextLessonSuggestion();
   const tasks = [
     { id: 'review', done: reviewed >= DAILY_REVIEW_TARGET, count: reviewed, target: DAILY_REVIEW_TARGET, href: '#/flashcards' },
-    { id: 'lesson', done: !!activity.lesson, count: activity.lesson ? 1 : 0, target: 1, href: '#/journey' },
+    { id: 'lesson', done: lessonDone, count: lessonDone ? 1 : 0, target: 1, href: '#/journey' },
     { id: 'conversation', done: !!activity.conversation, count: activity.conversation ? 1 : 0, target: 1, href: '#/conversations' },
   ];
   return { day, tasks, done: tasks.filter((task) => task.done).length, total: tasks.length };

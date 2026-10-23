@@ -9,6 +9,7 @@ export function renderJourney(host) {
   const mission = dailyMission();
   const week = weeklySummary().current;
   const next = nextLessonSuggestion();
+  const nextTaskId = mission.tasks.find((task) => !task.done)?.id;
   const convo = progress.conversations || { sessions: 0, turns: 0, correct: 0 };
   const lessonHref = next ? `#/lesson/${next.unit.id}/${next.lessonIndex}` : '#/drills?mode=smart';
   const days = Array.from({ length: 7 }, (_, index) => {
@@ -43,10 +44,10 @@ export function renderJourney(host) {
             lesson: { icon: '📘', title: t('journey.lesson'), detail: task.done ? t('journey.completed') : t('journey.lessonHint'), href: lessonHref },
             conversation: { icon: '💬', title: t('journey.conversation'), detail: task.done ? t('journey.completed') : t('journey.conversationHint'), href: '#/conversations' },
           }[task.id];
-          return `<a class="journey-task ${task.done ? 'is-done' : ''}" href="${content.href}">
+          return `<a class="journey-task ${task.done ? 'is-done' : ''} ${task.id === nextTaskId ? 'is-next' : ''}" href="${content.href}" ${task.id === nextTaskId ? 'aria-current="step"' : ''}>
             <span class="journey-task__icon" aria-hidden="true">${task.done ? '✓' : content.icon}</span>
             <span class="journey-task__body"><b>${esc(content.title)}</b><small>${esc(content.detail)}</small></span>
-            <span class="journey-task__state">${task.done ? esc(t('journey.completed')) : esc(t('journey.startTask'))}</span>
+            <span class="journey-task__state">${task.done ? esc(t('journey.completed')) : esc(task.id === nextTaskId ? t('journey.next') : t('journey.startTask'))}</span>
           </a>`;
         }).join('')}
       </div>
@@ -75,7 +76,8 @@ export function renderJourney(host) {
                 const unitProgress = unitPercent(unit.id);
                 const index = unit.grammar.findIndex((_, i) => !progress.lessons?.[`${unit.id}:${i}`]);
                 const lessonIndex = index < 0 ? 0 : index;
-                return `<a class="journey-unit ${done ? 'is-done' : ''}" href="#/lesson/${unit.id}/${lessonIndex}" aria-label="${esc(unit.title)} · ${unitProgress}%">
+                const isNext = unit.id === next?.unit.id;
+                return `<a class="journey-unit ${done ? 'is-done' : ''} ${isNext ? 'is-next' : ''}" href="#/lesson/${unit.id}/${lessonIndex}" aria-label="${esc(unit.title)} · ${unitProgress}%" ${isNext ? 'aria-current="step"' : ''}>
                   <span aria-hidden="true">${done ? '✓' : unit.icon}</span><span>${esc(unit.title)}</span><b>${unitProgress}%</b>
                 </a>`;
               }).join('')}

@@ -27,7 +27,7 @@ export const DEFAULT_SETTINGS = {
     lastFired: '',
     launchAtLogin: false,
   },
-  security: { lockEnabled: false },
+  security: { lockEnabled: false, idleMinutes: 0 },
   session: { rememberDays: 30 },
   showTranslation: true,
   reduceAnimations: false,
@@ -62,7 +62,7 @@ export const DEFAULT_PROGRESS = {
   notebook: [],      // { en, ar, note, at, itemId }
   activity: {},      // "YYYY-MM-DD": { q, c, points, minutes }
   missionActivity: {}, // "YYYY-MM-DD": { reviewedItems, lesson, conversation }
-  conversations: { completed: {}, sessions: 0, turns: 0, correct: 0, active: null },
+  conversations: { completed: {}, sessions: 0, turns: 0, correct: 0, active: null, paused: {} },
   exams: [],         // { id, at, level, score, total, seconds }
   goals: {},         // "YYYY-MM-DD": { target, done }
   settingsTouched: false,
@@ -79,6 +79,7 @@ function deepMerge(base, extra) {
   const out = Array.isArray(base) ? base.slice() : { ...base };
   if (!extra || typeof extra !== 'object') return out;
   for (const [k, v] of Object.entries(extra)) {
+    if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
     if (v && typeof v === 'object' && !Array.isArray(v) && base && typeof base[k] === 'object' && !Array.isArray(base[k])) {
       out[k] = deepMerge(base[k], v);
     } else if (v !== undefined) {
@@ -175,20 +176,67 @@ export function goalForToday() {
 export function exportAll() {
   return JSON.stringify({
     app: 'learn-english', version: 1, exportedAt: new Date().toISOString(),
-    settings, progress, auth: readAuth(),
+    settings, progress,
   }, null, 2);
 }
-export function importAll(json) {
+function isRecord(value) {
+  return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
+export function inspectImport(json) {
   const data = JSON.parse(json);
-  if (!data || typeof data !== 'object') throw new Error('ملف غير صالح');
-  if (data.settings) {
+  if (!isRecord(data) || (!isRecord(data.settings) && !isRecord(data.progress))) throw new Error('ملف غير صالح');
+  return {
+    exportedAt: typeof data.exportedAt === 'string' ? data.exportedAt : '',
+    hasSettings: isRecord(data.settings),
+    hasProgress: isRecord(data.progress),
+    settingsCount: isRecord(data.settings) ? Object.keys(data.settings).length : 0,
+    progressCount: isRecord(data.progress) ? Object.keys(data.progress).length : 0,
+    words: Array.isArray(data.progress?.notebook) ? data.progress.notebook.length : 0,
+    studyDays: Array.isArray(data.progress?.studyDays) ? data.progress.studyDays.length : 0,
+    hasAuth: Object.hasOwn(data, 'auth'),
+  };
+}
+
+export function importAll(json, { mode = 'replace' } = {}) {
+  const data = JSON.parse(json);
+  if (!isRecord(data) || (!isRecord(data.settings) && !isRecord(data.progress))) throw new Error('ملف غير صالح');
+  if (!['merge', 'replace'].includes(mode)) throw new Error('وضع الاستيراد غير صالح');
+
+  let nextSettings = settings;
+  let nextProgress = progress;
+  const importsSettings = isRecord(data.settings);
+  const importsProgress = isRecord(data.progress);
+  if (importsSettings) {
     const importedSettings = { ...data.settings, security: settings.security };
     delete importedSettings.push;
-    settings = deepMerge(DEFAULT_SETTINGS, importedSettings);
-    localStorage.setItem(K_SETTINGS, JSON.stringify(settings));
+    nextSettings = mode === 'merge'
+      ? deepMerge(settings, importedSettings)
+      : deepMerge(DEFAULT_SETTINGS, importedSettings);
+    // Keep this device's lock configuration even if the backup predates it.
+    nextSettings.security = settings.security;
   }
-  if (data.progress) { progress = deepMerge(DEFAULT_PROGRESS, data.progress); localStorage.setItem(K_PROGRESS, JSON.stringify(progress)); }
-  emit('settings'); emit('progress');
+  if (importsProgress) {
+    nextProgress = mode === 'merge'
+      ? deepMerge(progress, data.progress)
+      : deepMerge(DEFAULT_PROGRESS, data.progress);
+  }
+
+  // Persist as one logical operation; restore the original values if either write fails.
+  const oldSettings = localStorage.getItem(K_SETTINGS);
+  const oldProgress = localStorage.getItem(K_PROGRESS);
+  try {
+    if (importsSettings) localStorage.setItem(K_SETTINGS, JSON.stringify(nextSettings));
+    if (importsProgress) localStorage.setItem(K_PROGRESS, JSON.stringify(nextProgress));
+  } catch (error) {
+    try { oldSettings == null ? localStorage.removeItem(K_SETTINGS) : localStorage.setItem(K_SETTINGS, oldSettings); } catch {}
+    try { oldProgress == null ? localStorage.removeItem(K_PROGRESS) : localStorage.setItem(K_PROGRESS, oldProgress); } catch {}
+    throw error;
+  }
+  if (importsSettings) settings = nextSettings;
+  if (importsProgress) progress = nextProgress;
+  if (importsSettings) emit('settings');
+  if (importsProgress) emit('progress');
   return true;
 }
 export function resetProgress() {

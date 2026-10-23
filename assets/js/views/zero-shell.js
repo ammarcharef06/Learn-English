@@ -1,78 +1,71 @@
-/* ============================================================
-   قسم «من الصفر» (A0) — هيكل صفحة zero.html
-   نفس شريط الموقع ونفس الدرج (views/topbar.js) — تنقّل واحد لكل الأجهزة.
-   ============================================================ */
+/* غلاف A0: القائمة الجانبية على الشاشات الواسعة ودرج من الرأس على الهاتف. */
 import { esc, qs, arNum } from '../core/utils.js';
 import { progress } from '../core/store.js';
-import { zeroStats, ZERO_TOTALS, ZERO_STAGES } from '../data/zero.js';
+import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 import { zeroFocus, setZeroFocus, certificate } from '../core/zeroflow.js';
+
+const NAV = [
+  { hash: '#/zero', icon: '⌖', label: 'خريطة المراحل', key: 'stages' },
+  { hash: '#/zero/pad', icon: '✎', label: 'لوح الكتابة', key: 'pad' },
+  { hash: '#/zero/exam', icon: '◷', label: 'الاختبار النهائي', key: 'exam' },
+  { hash: '#/zero/certificate', icon: '🎓', label: 'شهادة التأسيس', key: 'cert' },
+  { hash: '#/zero/settings', icon: '⚙', label: 'إعدادات التأسيس', key: 'settings' },
+];
+
+function activeKey(hash) {
+  const route = String(hash || '').replace(/^#/, '').split('?')[0];
+  if (route.startsWith('/zero/exam')) return 'exam';
+  if (route.startsWith('/zero/certificate')) return 'cert';
+  if (route.startsWith('/zero/pad')) return 'pad';
+  if (route.startsWith('/zero/settings')) return 'settings';
+  return 'stages';
+}
+
+function link(item, currentKey) {
+  const active = item.key === currentKey;
+  return `<a href="${item.hash}" data-nav data-route="${item.hash}" class="${active ? 'is-active' : ''}"${active ? ' aria-current="page"' : ''} aria-label="${esc(item.label)}" title="${esc(item.label)}">
+    <span class="ico" aria-hidden="true">${item.icon}</span><span class="lbl">${esc(item.label)}</span>
+  </a>`;
+}
 
 export function zeroModeOn() {
   return zeroFocus() === 'a0';
 }
 
-/* أقسام قسم A0 في الدرج (بنفس شكل قائمة الموقع) */
-const NAV = [
-  { hash: '#/zero', icon: '🗺️', label: 'المراحل الثمانية', key: 'stages' },
-  { hash: '#/zero/exam', icon: '🧪', label: 'الاختبار النهائي', key: 'exam' },
-  { hash: '#/zero/certificate', icon: '🎓', label: 'شهادة التأسيس', key: 'cert' },
-  { hash: '#/zero/pad', icon: '✍️', label: 'لوح الكتابة', key: 'pad' },
-  { hash: '#/zero/settings', icon: '⚙️', label: 'إعدادات التأسيس', key: 'settings' },
-];
-
-function activeKey(hash) {
-  const h = String(hash || '').replace(/^#/, '');
-  if (h.startsWith('/zero/exam')) return 'exam';
-  if (h.startsWith('/zero/certificate')) return 'cert';
-  if (h.startsWith('/zero/pad')) return 'pad';
-  if (h.startsWith('/zero/settings')) return 'settings';
-  return 'stages';
-}
-
-/** يرسم درج قسم A0 (نفس درج الموقع) */
+/** يرسم القائمة الجانبية لقسم A0 ويحدّث وجهاتها وحالتها النشطة. */
 export function renderZeroDrawer(hash = null) {
-  const nav = qs('#sidenav');
-  if (!nav) return;
-  const zs = zeroStats(progress);
+  const side = qs('#sidenav');
+  const stats = zeroStats(progress);
   const cert = certificate();
-  const key = activeKey(hash || location.hash);
+  const currentKey = activeKey(hash || location.hash);
 
-  nav.innerHTML = `
-    <div class="sidenav__brand">
-      <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
-      <span><b>من الصفر</b><small>تأسيس الإنجليزية خطوة بخطوة</small></span>
-    </div>
-    <div class="sidenav__group">من الصفر — تأسيس A0</div>
-    <div class="mini-progress" style="margin:0 0 10px">
-      <div class="progress"><i style="width:${zs.percent}%"></i></div>
-      <div class="small muted" style="margin-top:6px">${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل · ${arNum(zs.lettersMastered)}/${arNum(ZERO_TOTALS.letters)} حرفاً${cert.earned ? ' · الشهادة مُستلَمة ✓' : ''}</div>
-    </div>
-    ${NAV.map((n) => `<a href="${n.hash}" data-nav data-route="${n.hash}" class="${n.key === key ? 'is-active' : ''}" ${n.key === key ? 'aria-current="page"' : ''}><span class="ico" aria-hidden="true">${n.icon}</span><span class="lbl">${esc(n.label)}</span></a>`).join('')}
-    <div class="sidenav__group">الموقع</div>
-    <a href="./index.html" title="العودة إلى موقع المستويات"><span class="ico" aria-hidden="true">📚</span><span class="lbl">المستويات A1–B1</span></a>`;
-
-  /* وسم المراحل المكتملة داخل الدرج */
-  const done = progress.zero?.stages || {};
-  ZERO_STAGES.forEach((s) => {
-    const a = nav.querySelector(`[data-route="#/zero/stage/${s.id}"]`);
-    if (a && done[s.id]?.done) a.classList.add('is-done');
-  });
+  if (side) {
+    side.innerHTML = `
+      <div class="sidenav__brand">
+        <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
+        <span><b>أكاديمية الإنجليزية</b><small>تأسيس A0 · خطوتك الأولى</small></span>
+      </div>
+      <div class="sidenav__group">رحلة التأسيس</div>
+      <div class="mini-progress" style="margin:0 0 10px">
+        <div class="progress"><i style="width:${stats.percent}%"></i></div>
+        <div class="small muted" style="margin-top:6px">${arNum(stats.percent)}٪ · ${arNum(stats.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل · ${arNum(stats.lettersMastered)}/${arNum(ZERO_TOTALS.letters)} حرفاً${cert.earned ? ' · الشهادة مكتملة ✓' : ''}</div>
+      </div>
+      ${NAV.slice(0, 4).map((item) => link(item, currentKey)).join('')}
+      <div class="sidenav__group">تفضيلاتك</div>
+      ${link(NAV[4], currentKey)}`;
+  }
 }
 
-/** يُستدعى عند كل رسم/تنقّل: يثبّت وضع A0 ويرسم الدرج */
+/** يثبّت سمة A0 ويزامن عناصر التنقّل بعد كل مسار أو تحديث للتقدّم. */
 export function applyZeroShell(hash = null) {
-  const on = zeroModeOn();
   const root = document.documentElement;
-  if (on) root.dataset.zero = 'a0';
+  if (zeroModeOn()) root.dataset.zero = 'a0';
   else delete root.dataset.zero;
-  if (on) renderZeroDrawer(hash);
+  renderZeroDrawer(hash);
 }
 
-/** الخروج إلى موقع المستويات (A1–B1) — انتقال حقيقي إلى صفحة أخرى */
-export function exitZeroMode() {
+/** Records a deliberate in-content jump from the foundation into the levels app. */
+export function exitZeroMode(target = './index.html#/') {
   setZeroFocus('levels');
-  location.href = './index.html';
+  location.href = target;
 }
-
-/** رابط صفحة A0 المستقلة (يستخدمه موقع المستويات) */
-export const ZERO_PAGE = './zero.html';

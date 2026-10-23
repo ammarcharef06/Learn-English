@@ -56,7 +56,6 @@
     --z-content: 1;
     --z-sticky: 20;
     --z-offline: 45;
-    --z-bottomnav: 55;
     --z-topbar: 60;
     --z-scrim: 70;
     --z-drawer: 80;
@@ -67,7 +66,7 @@
     --z-skip: 300;
 
     /* ألوان أساسية */
-    --brand-1: #2563eb; --brand-2: #7c3aed; --brand-3: #06b6d4;
+    --brand-1: #34775b; --brand-2: #d99a58; --brand-3: #72cfab;
     --ok: #16a34a; --ok-soft: #dcfce7;
     --warn: #f59e0b; --warn-soft: #fef3c7;
     --bad: #dc2626; --bad-soft: #fee2e2;
@@ -254,25 +253,6 @@
   @media (min-width: 1900px) {
     :root { --content-max: 1280px; --page-max: 1720px; }
   }
-
-  .bottomnav {
-    position: sticky; inset-block-end: 0; z-index: var(--z-bottomnav);
-    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
-    padding: 6px max(6px, env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-right));
-    background: color-mix(in srgb, var(--bg-2) 94%, transparent);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border-block-start: 1px solid var(--line);
-  }
-  .bottomnav a {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-    padding: 6px 2px; border-radius: var(--radius-sm); color: var(--text-3);
-    font-size: .68rem; font-weight: 700; min-block-size: 46px;
-    transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
-  }
-  .bottomnav a .ico { font-size: 1.22rem; line-height: 1; transition: transform var(--dur-2) var(--ease-spring); }
-  .bottomnav a.is-active { color: var(--brand-text); }
-  .bottomnav a.is-active .ico { transform: translateY(-2px) scale(1.06); }
-  @media (min-width: 768px) { .bottomnav { display: none; } }
 
   .footer {
     display: flex; gap: var(--sp-2); justify-content: center; flex-wrap: wrap;
@@ -666,14 +646,14 @@
   /* لوحة الترحيب */
   .hero {
     position: relative; overflow: hidden; border-radius: var(--radius-lg); padding: var(--sp-6); color: #fff;
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #06b6d4 100%); box-shadow: var(--shadow-2);
+    background: linear-gradient(135deg, #34775b 0%, #477d5e 55%, #ad784b 100%); box-shadow: var(--shadow-2);
   }
   .hero::after { content: ""; position: absolute; inset-block-start: -60px; inset-inline-end: -40px; inline-size: 260px; block-size: 260px; border-radius: 50%; background: rgba(255, 255, 255, .14); pointer-events: none; }
   .hero h1 { color: #fff; margin-block-end: var(--sp-2); }
   .hero p { color: rgba(255, 255, 255, .92); max-inline-size: 60ch; }
   .hero .btn { background: rgba(255, 255, 255, .18); color: #fff; border-color: rgba(255, 255, 255, .35); }
   .hero .btn:hover { background: rgba(255, 255, 255, .3); }
-  .hero .btn--solid { background: #fff; color: #1d4ed8; border-color: #fff; }
+  .hero .btn--solid { background: #fff; color: #28563f; border-color: #fff; }
   .hero-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-block-start: var(--sp-4); }
 }
 
@@ -726,7 +706,6 @@ html[dir="ltr"] .sidebar.is-open { --drawer-from: -14px; }
    تنقّل واحد لكل الأجهزة: درج يُفتح بزر ☰
    (أُلغي الشريط السفلي والقائمة الجانبية الثابتة في التابلت/سطح المكتب)
    ============================================================ */
-.bottomnav { display: none !important; }
 .layout { grid-template-columns: minmax(0, 1fr) !important; }
 .sidebar { display: none !important; inline-size: auto !important; }
 .sidebar.is-open {
@@ -780,7 +759,7 @@ body.drawer-open { overflow: hidden; }
     --bg: #fff; --bg-2: #fff; --line: #999; --line-strong: #666;
     --brand-soft: #fff; --brand-text: #000; --ok-soft: #fff; --warn-soft: #fff; --bad-soft: #fff;
   }
-  .topbar, .bottomnav, .sidebar, .footer, .toasts, .scrim, .lock, .icon-btn { display: none !important; }
+  .topbar, .sidebar, .footer, .toasts, .scrim, .lock, .icon-btn { display: none !important; }
   body { background: #fff; color: #000; }
   .card, .stat, .cert { box-shadow: none; border-color: #999; }
   .print-area { position: absolute; inset: 0; }

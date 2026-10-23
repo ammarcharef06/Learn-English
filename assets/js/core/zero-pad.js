@@ -173,7 +173,7 @@ export function initWritingPad(root, opts = {}) {
 
   /* ---------- الرسم ---------- */
   function style(scale) {
-    const cfg = { scale, ink: cssVar(canvas, '--zpad-ink', '#2563eb'), ghost: cssVar(canvas, '--zpad-ghost', 'rgba(15,23,42,.30)'), line: cssVar(canvas, '--zpad-guide', '#cbd5e1'), mid: cssVar(canvas, '--zpad-mid', '#2563eb'), baseline: cssVar(canvas, '--zpad-base', '#64748b') };
+    const cfg = { scale, ink: cssVar(canvas, '--zpad-ink', '#34775b'), ghost: cssVar(canvas, '--zpad-ghost', 'rgba(15,23,42,.30)'), line: cssVar(canvas, '--zpad-guide', '#cbd5e1'), mid: cssVar(canvas, '--zpad-mid', '#34775b'), baseline: cssVar(canvas, '--zpad-base', '#64748b') };
     cfg.top = h01(0.16);
     cfg.mid = h01(0.46);
     cfg.base = h01(0.72);
@@ -304,7 +304,7 @@ export function initWritingPad(root, opts = {}) {
   /* طبقة الرسم الحرّ */
   function drawStroke(pts, scale) {
     if (!pts || pts.length === 0) return;
-    const ink = cssVar(canvas, '--zpad-ink', '#2563eb');
+    const ink = cssVar(canvas, '--zpad-ink', '#34775b');
     ctx.save();
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';

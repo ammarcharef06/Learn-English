@@ -9,7 +9,6 @@ const rootFiles = [
   'index.html',
   'zero.html',
   'manifest.webmanifest',
-  'manifest-zero.webmanifest',
   'service-worker.js',
 ];
 const nativeScripts = [

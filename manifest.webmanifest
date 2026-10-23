@@ -2,7 +2,7 @@
   "name": "أكاديمية الإنجليزية — Learn English",
   "short_name": "English Academy",
   "id": "learn-english-academy",
-  "description": "موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1→B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات.",
+  "description": "أكاديمية عربية لتعلّم الإنجليزية من التأسيس A0 حتى المستوى المتوسط B1، بدروس وتمارين ومحادثات ومراجعة تعمل دون اتصال.",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./index.html#/",
@@ -10,15 +10,16 @@
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "any",
-  "background_color": "#1c1f26",
-  "theme_color": "#2777ff",
-  "categories": ["education", "productivity"],
+  "background_color": "#111815",
+  "theme_color": "#34775b",
+  "categories": ["education", "language"],
   "icons": [
     { "src": "./assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "./assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "./assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "التأسيس من الصفر (A0)", "short_name": "التأسيس", "url": "./zero.html#/zero" },
     { "name": "تدريب سريع", "short_name": "تدريب", "url": "./index.html#/drills" },
     { "name": "بطاقات الحفظ", "short_name": "بطاقات", "url": "./index.html#/flashcards" },
     { "name": "المطالعات", "short_name": "مطالعة", "url": "./index.html#/reading" }

@@ -695,14 +695,14 @@ describe('لوح الكتابة التفاعلي', () => {
 });
 
 /* ============================================================
-   6) ملفات القسم وربطها بالموقع
+   6) محتوى A0 وغلاف الأكاديمية المشترك
    ============================================================ */
-describe('صفحة A0 المستقلة وربطها بالموقع', () => {
+describe('مسارات A0 المتكاملة مع غلاف الأكاديمية', () => {
   const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
   const zeroHtml = readFileSync(join(ROOT, 'zero.html'), 'utf8');
   const zeroMain = readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8');
-  const manZero = JSON.parse(readFileSync(join(ROOT, 'manifest-zero.webmanifest'), 'utf8'));
+  const academyManifest = JSON.parse(readFileSync(join(ROOT, 'manifest.webmanifest'), 'utf8'));
   const sw = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
   const shellJs = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
   const shellSrc = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
@@ -712,7 +712,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
   const entryJs = readFileSync(join(ROOT, 'assets/js/views/zero-entry.js'), 'utf8');
 
-  it('كل مسارات A0 مسجّلة في نقطة دخول الصفحة المستقلة', () => {
+  it('كل مسارات A0 مسجّلة في نقطة دخول محتوى التأسيس', () => {
     for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
       assert(zeroMain.includes(`route('${r}'`), `المسار ${r} غير مسجّل في zero-main.js`);
     }
@@ -724,35 +724,39 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
     assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
   });
-  it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
+  it('صفحة محتوى A0 تستخدم هيكل التنقّل وهوية التثبيت المشتركة', () => {
     for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
       assert(zeroHtml.includes(id), `zero.html ينقصه ${id}`);
     }
     assert(/class="topbar" id="topbar"/.test(zeroHtml), 'شريط A0 لا يستخدم شريط الموقع نفسه');
     assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
     assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
-    assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
-    for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
-      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
-    }
+    assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يشغّل موجّه التطبيق العام وموجّه A0 معاً');
+    assert(!zeroHtml.includes('id="bottomnav"'), 'A0 ما زال يعرض شريط التنقّل السفلي المحذوف');
     for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
       assert(zeroHtml.includes(need), `zero.html ينقصه ${need} — الدرج المشترك`);
     }
-    assert(/manifest-zero\.webmanifest/.test(zeroHtml), 'zero.html بلا بيان تثبيت خاص');
-    assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
+    assert(/rel="manifest" href="\.\/manifest\.webmanifest"/.test(zeroHtml), 'صفحة A0 لا تستخدم بيان الأكاديمية المشترك');
+    assert(academyManifest.start_url === './index.html#/', 'start_url لبيان الأكاديمية غير صحيح');
+    assert(!existsSync(join(ROOT, 'manifest-zero.webmanifest')), 'ما زال لقسم A0 بيان تثبيت منفصل');
     assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
   });
-  it('تنقّل A0 = نفس درج الموقع (تنقّل واحد لكل الأجهزة)', () => {
+  it('قائمتا الواجهتين جانبيتان والتبديل بينهما بزر علوي مع طيّ الصفحة', () => {
     assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
     assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
-    for (const l of ['المراحل الثمانية', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
+    for (const l of ['خريطة المراحل', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس']) {
       assert(shellSrc.includes(l), `درج A0 ينقصه: ${l}`);
     }
+    assert(!/bottomnav|data-exit-zero|href=["']\.\/index\.html|إعدادات الأكاديمية|ابدأ المستوى A1/.test(shellSrc), 'درج A0 يحتوي تنقّلاً مكرراً بين الواجهتين');
+    assert(!zeroHtml.includes('id="bottomnav"') && !html.includes('id="bottomnav"'), 'إحدى الواجهتين ما زالت تعرض شريطاً سفلياً');
     const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
     assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');
+    assert(/id="btnMenu"/.test(topbarJs) && /toggleDrawer/.test(topbarJs), 'القائمة الجانبية لا تُفتح من الرأس');
+    assert(/id="btnChapterSwitch"/.test(topbarJs) && /data-destination-mode/.test(topbarJs), 'زر التبديل بين عالمي التعلّم غير موجود في الرأس');
+    assert(/is-page-folding/.test(topbarJs) && /page-fold__crease/.test(topbarJs), 'الانتقال بين الواجهتين لا يطوي الصفحة');
+    assert(!/data-chapter-range|chapter-slider/.test(topbarJs), 'ما زال شريط السحب السابق موجوداً في الرأس');
     assert(/renderTopbar/.test(zeroMain), 'صفحة A0 لا ترسم الشريط المشترك');
     assert(/renderTopbar/.test(app), 'صفحة الموقع لا ترسم الشريط المشترك');
-    assert(!/id="bottomnav"/.test(html) && !/class="bottomnav" id="bottomnav"/.test(html), 'الشريط السفلي ما زال في صفحة الموقع');
   });
   it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
     for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {
@@ -762,21 +766,26 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
       assert(!(homeJs + stageJs).includes(old), `ما زالت هناك مكوّنات A0 القديمة: ${old}`);
     }
   });
-  it('خيار واحد فقط للدخول إلى A0 (بطاقة القائمة الجانبية)', () => {
+  it('الدخول إلى A0 عبر زر الرأس دون تكرار في القائمة الجانبية', () => {
     assert(!/id="btnZero"/.test(html), 'index.html ما زال فيه زر A0 (خيار دخول ثانٍ)');
     assert(!/id="zbar"|id="znav"/.test(html), 'index.html يحتوي عناصر واجهة A0');
     const links = (shellJs.match(/href="\.\/zero\.html"/g) || []).length;
-    eq(links, 1, 'عدد روابط الدخول إلى A0 في القائمة الجانبية');
+    eq(links, 0, 'القائمة الجانبية يجب أن تترك التبديل للشريط العلوي');
     assert(!/zero\.html/.test(dash), 'لوحة التحكم فيها خيار دخول ثانٍ إلى A0');
-    const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
-    assert(!/zero\.html/.test(bottomBlock), 'الشريط السفلي فيه خيار دخول ثانٍ إلى A0');
+    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+    assert(/\.\/zero\.html#\/zero/.test(topbarJs) && /\.\/index\.html#\/lessons/.test(topbarJs), 'زر التبديل لا يصل إلى الوجهتين');
+    assert(!html.includes('id="bottomnav"'), 'index.html ما زال يحتوي شريطاً سفلياً');
     assert(!/zero-pad\.css/.test(html), 'index.html يُحمّل أنماط لوح الكتابة');
     assert(html.includes('./assets/css/zero.css'), 'أنماط شاشة الدخول غير مربوطة في index.html');
     assert(/zero\.html/.test(entryJs), 'اختيار «من الصفر» لا ينقل إلى صفحة A0');
   });
-  it('زر الخروج من صفحة A0 يعيد إلى الموقع', () => {
+  it('تبديل الوجهة يحفظ وضع التطبيق المقصود قبل فتحه', () => {
     assert(/exitZeroMode/.test(shellSrc), 'لا زر خروج من صفحة A0');
-    assert(/location\.href = '\.\/index\.html'/.test(shellSrc), 'الخروج لا ينقل إلى صفحة الموقع');
+    assert(/setZeroFocus\('levels'\)/.test(shellSrc), 'الخروج لا يحفظ اختيار المستويات');
+    assert(/location\.href = target/.test(shellSrc), 'الخروج لا يفتح وجهة التطبيق المحددة');
+    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+    assert(/setZeroFocus\(targetMode === 'zero' \? 'a0' : 'levels'\)/.test(topbarJs), 'زر التبديل لا يحفظ الوجهة قبل الانتقال');
+    assert(/href="\.\/index\.html#\/lessons" data-exit-zero/.test(readFileSync(join(ROOT, 'assets/js/views/zero-exam.js'), 'utf8')), 'شهادة A0 لا تنتقل مباشرة إلى دروس A1');
   });
   it('مشغّل الحروف: عنصر واحد واضح + شريط اختيار', () => {
     assert(/FOCUS_KINDS/.test(stageJs), 'لا وضع تركيز للحروف');
@@ -824,9 +833,9 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(hasRecordedSound('sound:th-voiced'), 'صوت th المجهور غير مربوط بتسجيله');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
   });
-  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
+  it('أصول صفحة محتوى A0 مخزّنة في Service Worker', () => {
     for (const p of [
-      './zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest',
+      './zero.html', './assets/js/zero-main.js', './manifest.webmanifest', './assets/js/core/pwa-install.js',
       './assets/js/data/zero.js', './assets/js/data/zero-letters.js', './assets/js/data/zero-time.js',
       './assets/js/data/zero-words.js', './assets/js/core/zeroflow.js', './assets/js/core/zero-pad.js',
       './assets/js/views/zero.js', './assets/js/views/zero-shell.js', './assets/js/views/zero-stage.js',

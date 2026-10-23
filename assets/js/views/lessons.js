@@ -217,24 +217,24 @@ export function renderLesson(host, unitId, index) {
       icon: u.icon, title: g.title, subtitle: `${u.title} · ${u.levelLabel} · ${t('common.lesson')} ${i + 1} ${t('common.of')} ${u.grammar.length}`,
       actionsHtml: `<a class="btn btn--sm" href="#/unit/${u.id}">← ${esc(u.title)}</a>`,
     })}
-    <div class="card">
+    <div class="card lesson-card">
       <div class="lesson-explain">${g.explain || ''}</div>
-      ${g.table ? `<div class="table-wrap" style="margin-top:14px"><table class="tbl">
+      ${g.table ? `<div class="table-wrap lesson-table-wrap"><table class="tbl">
         <thead><tr>${g.table.headers.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead>
         <tbody>${g.table.rows.map((r) => `<tr>${r.map((cell, ci) => `<td class="${ci === 0 ? '' : 'en-cell'}">${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
       </table></div>` : ''}
 
-      <h3 style="margin-top:18px">${t('common.examples')}</h3>
+      <h3 class="lesson-examples-title">${t('common.examples')}</h3>
       ${(g.examples || []).map((e) => `<div class="example-line">
         <div class="grow"><div class="en">${esc(e.en)}</div><div class="ar">${esc(e.ar)}</div></div>
         ${speakBtn(e.en)}
         <button class="btn btn--ghost btn--sm" type="button" data-nb data-en="${esc(e.en)}" data-ar="${esc(e.ar)}">📒</button>
       </div>`).join('')}
 
-      ${(g.tips || []).length ? `<div class="tip-box tip-box--brand" style="margin-top:16px"><b>${t('common.tips')}</b>
+      ${(g.tips || []).length ? `<div class="tip-box tip-box--brand lesson-tips"><b>${t('common.tips')}</b>
         <ul style="margin:0;padding-inline-start:1.1rem">${g.tips.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
 
-      <div class="row row--between row--wrap" style="margin-top:20px;gap:8px">
+      <div class="row row--between row--wrap lesson-nav">
         ${i > 0 ? `<a class="btn btn--sm" href="#/lesson/${u.id}/${i - 1}">→ ${t('common.prev')}</a>` : '<span></span>'}
         <div class="row" style="gap:8px">
           <button class="btn btn--sm btn--primary" type="button" id="lessonQuiz">🎯 تمرين سريع</button>

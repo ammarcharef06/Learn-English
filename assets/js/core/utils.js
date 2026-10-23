@@ -170,7 +170,7 @@ export function closeModal() {
 export function confetti(count = 60) {
   const host = qs('#confetti');
   if (!host) return;
-  const colors = ['#2563eb', '#7c3aed', '#06b6d4', '#f59e0b', '#16a34a', '#ef4444', '#ec4899'];
+  const colors = ['#34775b', '#e6b16c', '#72cfab', '#d99a58', '#93bd71', '#b89be8', '#e78269'];
   for (let i = 0; i < count; i++) {
     const p = document.createElement('i');
     p.style.left = Math.random() * 100 + 'vw';

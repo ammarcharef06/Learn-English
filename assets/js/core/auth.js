@@ -120,7 +120,8 @@ export async function login(password, remember = true) {
   }
   setAttempts({ n: 0, until: 0 });
   const days = remember ? (settings?.session?.rememberDays || 30) : 1 / 24; // ساعة واحدة
-  writeSession({ at: Date.now(), exp: Date.now() + days * 86400000 });
+  const now = Date.now();
+  writeSession({ at: now, lastActivity: now, exp: now + days * 86400000 });
   return { ok: true };
 }
 
@@ -128,7 +129,13 @@ export function isAuthed() {
   if (!lockEnabled()) return true;
   const s = readSession();
   if (!s || !s.exp) return false;
-  if (Date.now() > s.exp) { writeSession(null); return false; }
+  const now = Date.now();
+  const idleMinutes = Math.max(0, Number(settings?.security?.idleMinutes) || 0);
+  const lastActivity = Number(s.lastActivity || s.at || 0);
+  if (now > s.exp || (idleMinutes > 0 && now - lastActivity >= idleMinutes * 60000)) {
+    writeSession(null);
+    return false;
+  }
   return true;
 }
 
@@ -139,7 +146,52 @@ export function extendSession() {
   const s = readSession();
   if (!s) return;
   const days = settings?.session?.rememberDays || 30;
-  writeSession({ at: Date.now(), exp: Date.now() + days * 86400000 });
+  const now = Date.now();
+  writeSession({ ...s, at: now, lastActivity: now, exp: now + days * 86400000 });
+}
+
+export function touchSession() {
+  if (!lockEnabled() || !isAuthed()) return false;
+  const s = readSession();
+  if (!s) return false;
+  writeSession({ ...s, lastActivity: Date.now() });
+  return true;
+}
+
+export function startIdleSessionGuard(onExpired) {
+  let triggered = false;
+  let lastRecordedAt = 0;
+  const markActivity = () => {
+    if (!lockEnabled()) {
+      triggered = false;
+      return;
+    }
+    if (!isAuthed()) return;
+    triggered = false;
+    const now = Date.now();
+    if (now - lastRecordedAt >= 10000) {
+      touchSession();
+      lastRecordedAt = now;
+    }
+  };
+  const checkIdle = () => {
+    const minutes = Number(settings?.security?.idleMinutes) || 0;
+    if (!lockEnabled() || minutes <= 0) { triggered = false; return; }
+    if (isAuthed()) { triggered = false; return; }
+    if (!triggered) {
+      triggered = true;
+      onExpired?.();
+    }
+  };
+  const events = ['pointerdown', 'keydown', 'touchstart', 'wheel'];
+  events.forEach((name) => document.addEventListener(name, markActivity, { passive: true, capture: true }));
+  const timer = setInterval(checkIdle, 5000);
+  document.addEventListener('visibilitychange', checkIdle);
+  return () => {
+    clearInterval(timer);
+    document.removeEventListener('visibilitychange', checkIdle);
+    events.forEach((name) => document.removeEventListener(name, markActivity, true));
+  };
 }
 
 export async function setPassword(next, current = '') {
@@ -162,7 +214,8 @@ export function setLockEnabled(enabled) {
   saveSettings({ security: { lockEnabled: !!enabled } });
   if (enabled) {
     const days = settings?.session?.rememberDays || 30;
-    writeSession({ at: Date.now(), exp: Date.now() + days * 86400000 });
+    const now = Date.now();
+    writeSession({ at: now, lastActivity: now, exp: now + days * 86400000 });
   } else {
     lockNow();
   }

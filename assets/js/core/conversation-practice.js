@@ -10,12 +10,33 @@ export function getActiveConversation() {
 export function startConversation(sceneId) {
   const scene = CONVERSATIONS.find((item) => item.id === sceneId);
   if (!scene) throw new Error(`Unknown conversation: ${sceneId}`);
+  const active = getActiveConversation();
+  if (active?.id === scene.id) return active;
   saveProgress((p) => {
-    p.conversations = p.conversations || { completed: {}, sessions: 0, turns: 0, correct: 0, active: null };
+    p.conversations = p.conversations || { completed: {}, sessions: 0, turns: 0, correct: 0, active: null, paused: {} };
     p.conversations.completed = p.conversations.completed || {};
-    p.conversations.active = { id: scene.id, turn: 0, correct: 0, answers: [] };
+    p.conversations.paused = p.conversations.paused || {};
+    if (active) p.conversations.paused[active.id] = { ...active, answers: [...(active.answers || [])] };
+    const paused = p.conversations.paused[scene.id];
+    if (paused) {
+      p.conversations.active = { ...paused, answers: [...(paused.answers || [])] };
+      delete p.conversations.paused[scene.id];
+    } else {
+      p.conversations.active = { id: scene.id, turn: 0, correct: 0, answers: [] };
+    }
   });
   return getActiveConversation();
+}
+
+export function pauseConversation() {
+  const active = getActiveConversation();
+  if (!active) return false;
+  saveProgress((p) => {
+    p.conversations.paused = p.conversations.paused || {};
+    p.conversations.paused[active.id] = { ...active, answers: [...(active.answers || [])] };
+    p.conversations.active = null;
+  });
+  return true;
 }
 
 export function answerConversation(optionIndex) {

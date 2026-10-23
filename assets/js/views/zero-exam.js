@@ -10,6 +10,7 @@ import {
 } from '../core/zeroflow.js';
 import { runQuiz } from './quiz-runner.js';
 import { stat } from './zero.js';
+import { zeroPageHead } from './zero-head.js';
 
 const EXAM_SIZE = 30;
 const PASS = 90;
@@ -35,13 +36,11 @@ export function renderZeroExam(host) {
   const ready = certificateReady();
 
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>الاختبار النهائي</h1></div>
-        <p>${arNum(EXAM_SIZE)} سؤالاً من المراحل الثمانية. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.</p>
-      </div>
-      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← المراحل</a></div>
-    </div>
+    ${zeroPageHead({
+      icon: '🧪', title: 'الاختبار النهائي',
+      subtitle: `${arNum(EXAM_SIZE)} سؤالاً من المراحل الثمانية. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.`,
+      actionsHtml: '<a class="btn btn--sm" href="#/zero">← المراحل</a>',
+    })}
 
     <div class="grid grid--3 mt-4">
       ${stat('أفضل نتيجة', `${arNum(snap.examBest)}٪`, '', snap.examBest >= PASS ? 'stat--ok' : 'stat--brand')}
@@ -103,16 +102,14 @@ export function renderZeroCertificate(host) {
   const ready = certificateReady();
 
   host.innerHTML = `
-    <div class="page-head">
-      <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🎓</span><h1>شهادة التأسيس</h1></div>
-        <p>${cert.earned ? 'مُستلَمة. اكتب اسمك ثم اطبعها أو احفظها PDF.' : 'أكمل الشروط الثلاثة ثم ستُمنح تلقائياً.'}</p>
-      </div>
-      <div class="row row--wrap">
+    ${zeroPageHead({
+      icon: '🎓', title: 'شهادة التأسيس',
+      subtitle: cert.earned ? 'مُستلَمة. اكتب اسمك ثم اطبعها أو احفظها PDF.' : 'أكمل الشروط الثلاثة ثم ستُمنح تلقائياً.',
+      actionsHtml: `
         <a class="btn btn--sm" href="#/zero">← المراحل</a>
         <button class="btn btn--sm" type="button" id="certCopy">📋 انسخ ملخّص تقدّمي</button>
-      </div>
-    </div>
+      `,
+    })}
 
     <div class="card mt-4">
       <div class="card__title">
@@ -163,7 +160,7 @@ export function renderZeroCertificate(host) {
     <div class="row row--wrap mt-4" style="gap:10px">
       <button class="btn btn--primary" type="button" id="certPrint" aria-describedby="certPrintHint" ${cert.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>
       <span class="sr-only" id="certPrintHint">تُطبع الشهادة وحدها على صفحة أفقية؛ اختر حفظ كملف PDF إذا أردت نسخة رقمية.</span>
-      <a class="btn" href="./index.html">📚 ابدأ المستوى A1</a>
+      <a class="btn" href="./index.html#/lessons" data-exit-zero>📚 تابع إلى دروس A1</a>
     </div>`;
 
   const nameInput = qs('#certName', host);
