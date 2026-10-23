@@ -3,6 +3,7 @@ import { settings } from '../core/store.js';
 import { containsBlockedLanguage } from '../core/community-safety.js';
 import { esc } from '../core/utils.js';
 import { pageHead } from './shell.js';
+import { navigate } from '../core/router.js';
 
 const startersFallback = [
   'What do you enjoy learning in English?',
@@ -18,6 +19,11 @@ const ui = {
     displayName: 'الاسم الظاهر', submit: 'متابعة', noAccount: 'جديد في المجتمع؟', hasAccount: 'لديك حساب بالفعل؟',
     verifyEmail: 'تحقق من بريدك الإلكتروني لتأكيد الحساب ثم سجّل الدخول.', welcome: 'مرحباً',
     signOut: 'تسجيل الخروج', rooms: 'الغرف الموضوعية', direct: 'شركاء الدراسة', find: 'اعثر على شريك',
+    settings: 'الإعدادات', settingsTitle: 'إعدادات المجتمع', backToChats: 'العودة إلى المحادثات',
+    searchChats: 'ابحث عن محادثة أو موضوع…', startConversation: 'اختر محادثة لبدء التعلّم',
+    profileSettings: 'الملف الشخصي والخصوصية', account: 'الحساب', communityProfile: 'ملف المجتمع',
+    chatTitle: 'المحادثات', appHome: 'العودة إلى الأكاديمية', details: 'معلومات المحادثة',
+    learnerDetails: 'ملف المتعلّم', roomDetails: 'تفاصيل الغرفة', directMessage: 'محادثة خاصة',
     noDirect: 'ابدأ بالتعرّف إلى شريك دراسة.', noRoom: 'اختر غرفة أو ابدأ محادثة مع شريك.',
     join: 'انضم', joined: 'منضم', level: 'المستوى', xp: 'نقطة XP', messages: 'الرسائل',
     send: 'إرسال', placeholder: 'اكتب رسالة تعليمية محترمة…', filtered: 'عدّل العبارة قبل الإرسال حتى تبقى المحادثة محترمة.',
@@ -35,7 +41,7 @@ const ui = {
     reportReasons: { spam: 'رسائل مزعجة', harassment: 'مضايقة', inappropriate: 'محتوى غير مناسب', other: 'سبب آخر' },
     userBlocked: 'لا يمكن إرسال هذه الرسالة؛ راجعها وفق إرشادات الاحترام.',
     blockedList: 'المستخدمون المحظورون', noBuddies: 'لا يوجد متعلمون متاحون حالياً.',
-    topic: 'الموضوع', online: 'محادثة مباشرة', reply: 'ردّ على رسالة', audio: 'ملاحظة صوتية',
+    topic: 'الموضوع', online: 'محادثة خاصة', reply: 'ردّ على رسالة', audio: 'ملاحظة صوتية',
     assistantError: 'تعذّر استخدام المساعد الآن. تحقق من إعداد Gemini في Supabase.',
     badges: 'شارات المجتمع', badgeFirst: 'أول مساهمة', badgeHelper: 'متعلّم نشيط', badgeEncourager: 'مشجّع المجتمع',
     correctFriend: 'اقترح تصحيحاً لطيفاً',
@@ -48,6 +54,11 @@ const ui = {
     displayName: 'Display name', submit: 'Continue', noAccount: 'New to the community?', hasAccount: 'Already have an account?',
     verifyEmail: 'Check your email to confirm your account, then sign in.', welcome: 'Welcome',
     signOut: 'Sign out', rooms: 'Topic rooms', direct: 'Study buddies', find: 'Find a buddy',
+    settings: 'Settings', settingsTitle: 'Community settings', backToChats: 'Back to chats',
+    searchChats: 'Search chats or topics…', startConversation: 'Choose a chat to start learning',
+    profileSettings: 'Profile & privacy', account: 'Account', communityProfile: 'Community profile',
+    chatTitle: 'Chats', appHome: 'Back to academy', details: 'Chat information',
+    learnerDetails: 'Learner profile', roomDetails: 'Room details', directMessage: 'Direct message',
     noDirect: 'Start by finding a study buddy.', noRoom: 'Choose a room or start a buddy chat.',
     join: 'Join', joined: 'Joined', level: 'Level', xp: 'XP', messages: 'Messages',
     send: 'Send', placeholder: 'Write a kind, learning-focused message…', filtered: 'Please rephrase that before sending so the conversation stays respectful.',
@@ -65,7 +76,7 @@ const ui = {
     reportReasons: { spam: 'Spam', harassment: 'Harassment', inappropriate: 'Inappropriate content', other: 'Other' },
     userBlocked: 'This message could not be sent. Please follow the community guidelines.',
     blockedList: 'Blocked learners', noBuddies: 'No learners are available right now.',
-    topic: 'Topic', online: 'Live chat', reply: 'Reply to a message', audio: 'Voice note',
+    topic: 'Topic', online: 'Direct message', reply: 'Reply to a message', audio: 'Voice note',
     assistantError: 'The assistant is unavailable. Check Gemini configuration in Supabase.',
     badges: 'Community badges', badgeFirst: 'First contribution', badgeHelper: 'Active learner', badgeEncourager: 'Community encourager',
     correctFriend: 'Suggest a kind correction',
@@ -148,6 +159,7 @@ export function renderCommunity(host) {
     joinedTopicIds: new Set(), blockedIds: [], selectedRoom: null,
     messages: [], translations: new Map(), reactions: new Map(),
     showBuddies: false, buddies: [], busy: false, stream: null, recorder: null,
+    screen: 'chats', searchQuery: '', detailsOpen: false,
     unsubscribe: null, disposed: false, liveSeconds: 0, liveTimer: null,
     subscriptionGeneration: 0,
   };
@@ -214,66 +226,114 @@ export function renderCommunity(host) {
   }
 
   function renderMain() {
-    const isRoomSelected = !!state.selectedRoom;
+    const settingsScreen = state.screen === 'settings';
     host.innerHTML = `
-      ${pageHead({ icon: '🌐', title: bilingual('Learning community', 'المجتمع التعليمي'), subtitle: copy().subtitle })}
-      <div class="community-root">
-        <section class="community-profile card" aria-label="${esc(copy().welcome)}">
-          <div><b>${esc(state.profile.display_name)}</b><span class="chip">${esc(state.profile.level)}</span><span class="community-xp">⭐ ${state.profile.xp} ${esc(copy().xp)}</span></div>
-          <div class="community-badges" aria-label="${esc(copy().badges)}"><b>${esc(copy().badges)}:</b>
-            ${earnedBadges(state.profile.xp).map((badge) => `<span class="chip">${esc(badge)}</span>`).join('') || `<span class="small muted">${esc(bilingual('Keep contributing to earn your first badge.', 'شارك بمساهمة مفيدة لتحصل على أول شارة.'))}</span>`}
-          </div>
-          <button class="btn btn--sm" type="button" data-action="sign-out">${esc(copy().signOut)}</button>
-          <form class="community-profile__form" id="communityProfileForm">
-            <label class="field"><span>${esc(copy().displayName)}</span><input class="input" name="displayName" minlength="2" maxlength="40" value="${esc(state.profile.display_name)}" required /></label>
-            <label class="switch"><input type="checkbox" name="discoverable" ${state.profile.discoverable ? 'checked' : ''} /><span>${esc(copy().discoverable)}</span></label>
-            <label class="field"><span>${esc(copy().level)}</span><select class="input" name="level">
-              ${['A0', 'A1', 'A2', 'B1'].map((level) => `<option value="${level}" ${state.profile.level === level ? 'selected' : ''}>${level}</option>`).join('')}
-            </select></label>
-            <button class="btn btn--sm" type="submit">${esc(copy().saveProfile)}</button>
-          </form>
-          <small>${esc(copy().buddyPrivacy)}</small>
-        </section>
-        <div class="community-layout">
-          <aside class="community-sidebar" aria-label="${esc(copy().rooms)}">
-            <section class="card">
-              <h2>${esc(copy().rooms)}</h2>
-              <ul class="community-room-list">
-                ${state.topics.map((room) => {
-                  const selected = state.selectedRoom?.id === room.id;
-                  const name = lang() === 'en' ? room.title_en : room.title_ar;
-                  return `<li><button type="button" class="community-room ${selected ? 'is-active' : ''}" data-action="topic" data-id="${esc(room.id)}" aria-current="${selected ? 'page' : 'false'}">
-                    <b>${esc(name)}</b><span>${esc(room.level || copy().topic)}</span>${state.joinedTopicIds.has(room.id) ? `<small>${esc(copy().joined)}</small>` : `<small>${esc(copy().join)}</small>`}
-                  </button></li>`;
-                }).join('')}
-              </ul>
-            </section>
-            <section class="card">
-              <div class="community-list-heading"><h2>${esc(copy().direct)}</h2><button class="btn btn--sm" type="button" data-action="find-buddies">${esc(copy().find)}</button></div>
-              ${state.directRooms.length ? `<ul class="community-room-list">${state.directRooms.map((room) => `<li>
-                <button type="button" class="community-room ${state.selectedRoom?.id === room.id ? 'is-active' : ''}" data-action="direct" data-id="${esc(room.id)}">
-                  <b>${esc(room.peer.display_name)}</b><span>${esc(room.peer.level)} · ⭐ ${room.peer.xp}</span>
-                </button></li>`).join('')}</ul>` : `<p class="small muted">${esc(copy().noDirect)}</p>`}
-            </section>
-            ${state.showBuddies ? `<section class="card">
-              <h2>${esc(copy().find)}</h2>
-              ${state.buddies.length ? `<ul class="community-room-list">${state.buddies.map((person) => `<li>
-                <button type="button" class="community-room" data-action="start-direct" data-id="${esc(person.id)}">
-                  <b>${esc(person.display_name)}</b><span>${esc(person.level)} · ⭐ ${person.xp}</span>
-                </button></li>`).join('')}</ul>` : `<p class="small muted">${esc(copy().noBuddies)}</p>`}
-            </section>` : ''}
-            ${state.blockedIds.length ? `<section class="card"><h2>${esc(copy().blockedList)}</h2>
-              ${state.blockedIds.map((id) => `<button type="button" class="btn btn--sm" data-action="unblock" data-id="${esc(id)}">${esc(copy().unblock)} · ${esc(id.slice(0, 8))}</button>`).join(' ')}
-            </section>` : ''}
-          </aside>
-          <section class="community-chat card" aria-label="${esc(copy().messages)}">
-            ${isRoomSelected ? renderRoomPanel() : `<div class="community-empty"><span aria-hidden="true">💬</span><p>${esc(copy().noRoom)}</p></div>`}
-          </section>
-        </div>
-        <p class="small muted community-disclosure">${esc(copy().aiDisclosure)}</p>
+      <div class="community-messenger ${state.selectedRoom && !settingsScreen ? 'has-selected-room' : ''}">
+        <nav class="community-rail" aria-label="${esc(copy().chatTitle)}">
+          <a class="community-rail__brand" href="#/" aria-label="${esc(copy().appHome)}" title="${esc(copy().appHome)}">📖</a>
+          <button class="community-rail__button ${!settingsScreen ? 'is-active' : ''}" type="button" data-action="chats-home" aria-label="${esc(copy().chatTitle)}" aria-current="${!settingsScreen ? 'page' : 'false'}"><span aria-hidden="true">☏</span><small>${esc(copy().chatTitle)}</small></button>
+          <button class="community-rail__button" type="button" data-action="find-buddies" aria-label="${esc(copy().find)}" title="${esc(copy().find)}"><span aria-hidden="true">＋</span><small>${esc(copy().find)}</small></button>
+          <span class="community-rail__spacer"></span>
+          <button class="community-rail__button ${settingsScreen ? 'is-active' : ''}" type="button" data-action="settings" aria-label="${esc(copy().settings)}" aria-current="${settingsScreen ? 'page' : 'false'}"><span aria-hidden="true">⚙</span><small>${esc(copy().settings)}</small></button>
+          <span class="community-avatar community-avatar--rail" aria-label="${esc(state.profile.display_name)}">${esc([...state.profile.display_name][0] || 'L')}</span>
+        </nav>
+        <main class="community-messenger__main">
+          ${settingsScreen ? renderSettingsScreen() : renderChatScreen()}
+        </main>
         <p class="community-status" data-community-status role="status" aria-live="polite"></p>
       </div>`;
-    attachRoomSubscription();
+    if (!settingsScreen) attachRoomSubscription();
+  }
+
+  function renderSettingsScreen() {
+    return `<section class="community-settings card" aria-labelledby="communitySettingsTitle">
+      <header class="community-settings__head">
+        <div><span class="community-kicker">${esc(copy().communityProfile)}</span><h2 id="communitySettingsTitle">${esc(copy().settingsTitle)}</h2></div>
+        <button class="btn btn--sm" type="button" data-action="back-to-chats">${lang() === 'en' ? '←' : '→'} ${esc(copy().backToChats)}</button>
+      </header>
+      <div class="community-settings__summary">
+        <span class="community-avatar community-avatar--large" aria-hidden="true">${esc([...state.profile.display_name][0] || 'L')}</span>
+        <div><b>${esc(state.profile.display_name)}</b><span>${esc(state.profile.level)} · ⭐ ${state.profile.xp} ${esc(copy().xp)}</span></div>
+      </div>
+      <div class="community-badges" aria-label="${esc(copy().badges)}"><b>${esc(copy().badges)}:</b>
+        ${earnedBadges(state.profile.xp).map((badge) => `<span class="chip">${esc(badge)}</span>`).join('') || `<span class="small muted">${esc(bilingual('Keep contributing to earn your first badge.', 'شارك بمساهمة مفيدة لتحصل على أول شارة.'))}</span>`}
+      </div>
+      <form class="community-profile__form" id="communityProfileForm">
+        <label class="field"><span>${esc(copy().displayName)}</span><input class="input" name="displayName" autocomplete="nickname" minlength="2" maxlength="40" value="${esc(state.profile.display_name)}" required /></label>
+        <label class="field"><span>${esc(copy().level)}</span><select class="input" name="level">
+          ${['A0', 'A1', 'A2', 'B1'].map((level) => `<option value="${level}" ${state.profile.level === level ? 'selected' : ''}>${level}</option>`).join('')}
+        </select></label>
+        <label class="switch"><input type="checkbox" name="discoverable" ${state.profile.discoverable ? 'checked' : ''} /><span>${esc(copy().discoverable)}</span></label>
+        <small>${esc(copy().buddyPrivacy)}</small>
+        <button class="btn btn--primary" type="submit">${esc(copy().saveProfile)}</button>
+      </form>
+      ${state.blockedIds.length ? `<section class="community-settings__blocked"><h3>${esc(copy().blockedList)}</h3>
+        ${state.blockedIds.map((id) => `<div class="community-blocked-row"><span>${esc(id.slice(0, 8))}…</span><button type="button" class="btn btn--sm" data-action="unblock" data-id="${esc(id)}">${esc(copy().unblock)}</button></div>`).join('')}
+      </section>` : ''}
+      <footer class="community-settings__foot"><span>${esc(copy().account)}</span><button class="btn btn--sm btn--bad" type="button" data-action="sign-out">${esc(copy().signOut)}</button></footer>
+    </section>`;
+  }
+
+  function renderChatScreen() {
+    const search = state.searchQuery.trim().toLocaleLowerCase();
+    const matchesSearch = (value) => !search || String(value).toLocaleLowerCase().includes(search);
+    const topicRows = state.topics.map((room) => {
+      const name = lang() === 'en' ? room.title_en : room.title_ar;
+      return `<li data-room-search="${esc(`${name} ${room.level || ''}`.toLocaleLowerCase())}" ${matchesSearch(`${name} ${room.level || ''}`) ? '' : 'hidden'}>
+        <button type="button" class="community-room ${state.selectedRoom?.id === room.id ? 'is-active' : ''}" data-action="topic" data-id="${esc(room.id)}" aria-current="${state.selectedRoom?.id === room.id ? 'page' : 'false'}">
+          <span class="community-avatar community-avatar--topic" aria-hidden="true">#</span><span class="community-room__copy"><b>${esc(name)}</b><small>${esc(room.level || copy().topic)} · ${esc(state.joinedTopicIds.has(room.id) ? copy().joined : copy().join)}</small></span>
+        </button></li>`;
+    }).join('');
+    const directRows = state.directRooms.map((room) => `<li data-room-search="${esc(`${room.peer.display_name} ${room.peer.level}`.toLocaleLowerCase())}" ${matchesSearch(`${room.peer.display_name} ${room.peer.level}`) ? '' : 'hidden'}>
+      <button type="button" class="community-room ${state.selectedRoom?.id === room.id ? 'is-active' : ''}" data-action="direct" data-id="${esc(room.id)}" aria-current="${state.selectedRoom?.id === room.id ? 'page' : 'false'}">
+        <span class="community-avatar" aria-hidden="true">${esc([...room.peer.display_name][0] || 'L')}</span><span class="community-room__copy"><b>${esc(room.peer.display_name)}</b><small>${esc(room.peer.level)} · ⭐ ${room.peer.xp} ${esc(copy().xp)}</small></span>
+      </button></li>`).join('');
+    const buddyRows = state.buddies.map((person) => `<li data-room-search="${esc(`${person.display_name} ${person.level}`.toLocaleLowerCase())}" ${matchesSearch(`${person.display_name} ${person.level}`) ? '' : 'hidden'}>
+      <button type="button" class="community-room" data-action="start-direct" data-id="${esc(person.id)}">
+        <span class="community-avatar" aria-hidden="true">${esc([...person.display_name][0] || 'L')}</span><span class="community-room__copy"><b>${esc(person.display_name)}</b><small>${esc(person.level)} · ⭐ ${person.xp} ${esc(copy().xp)}</small></span>
+      </button></li>`).join('');
+    return `<div class="community-workspace ${state.selectedRoom ? 'has-selected-room' : ''} ${state.selectedRoom && state.detailsOpen ? 'has-details' : ''}">
+      <aside class="community-inbox" aria-label="${esc(copy().messages)}">
+        <header class="community-inbox__head">
+          <div class="community-inbox__title"><h1>${esc(copy().chatTitle)}</h1><span>${esc(copy().subtitle)}</span></div>
+          <div class="community-inbox__tools"><span class="community-avatar" aria-label="${esc(state.profile.display_name)}">${esc([...state.profile.display_name][0] || 'L')}</span>
+            <button class="community-icon-button" type="button" data-action="settings" aria-label="${esc(copy().settings)}" title="${esc(copy().settings)}">⚙</button></div>
+        </header>
+        <label class="community-search"><span aria-hidden="true">⌕</span><input type="search" data-chat-search aria-label="${esc(copy().searchChats)}" value="${esc(state.searchQuery)}" placeholder="${esc(copy().searchChats)}" /></label>
+        <div class="community-inbox__scroll">
+          <section class="community-inbox__section" data-list-section>
+            <h2>${esc(copy().direct)}</h2>
+            ${directRows ? `<ul class="community-room-list">${directRows}</ul>` : `<p class="community-inbox__hint">${esc(copy().noDirect)}</p>`}
+          </section>
+          <section class="community-inbox__section" data-list-section>
+            <h2>${esc(copy().rooms)}</h2>
+            <ul class="community-room-list">${topicRows || `<li class="community-inbox__hint">${esc(copy().noRoom)}</li>`}</ul>
+          </section>
+          <section class="community-inbox__section">
+            <button class="community-find-buddy" type="button" data-action="find-buddies">${esc(copy().find)} <span aria-hidden="true">＋</span></button>
+            ${state.showBuddies ? (buddyRows ? `<ul class="community-room-list">${buddyRows}</ul>` : `<p class="community-inbox__hint">${esc(copy().noBuddies)}</p>`) : ''}
+          </section>
+        </div>
+        <footer class="community-inbox__foot">${esc(copy().aiDisclosure)}</footer>
+      </aside>
+      <section class="community-chat ${state.selectedRoom ? 'has-room' : ''}" aria-label="${esc(copy().messages)}">
+        ${state.selectedRoom ? renderRoomPanel() : `<div class="community-empty community-empty--welcome"><span aria-hidden="true">💬</span><h2>${esc(copy().startConversation)}</h2><p>${esc(copy().noRoom)}</p></div>`}
+      </section>
+      ${state.selectedRoom && state.detailsOpen ? renderChatDetails() : ''}
+    </div>`;
+  }
+
+  function renderChatDetails() {
+    const room = state.selectedRoom;
+    return `<aside class="community-details" aria-label="${esc(copy().details)}">
+      <header class="community-details__head"><h2>${esc(copy().details)}</h2><button class="community-icon-button" type="button" data-action="toggle-details" aria-label="${esc(copy().details)}">×</button></header>
+      <span class="community-avatar community-avatar--details" aria-hidden="true">${esc(room.kind === 'topic' ? '#' : [...roomName(room)][0] || 'L')}</span>
+      <h3>${esc(roomName(room))}</h3>
+      <p>${esc(room.kind === 'topic' ? `${copy().roomDetails} · ${room.level || copy().topic}` : copy().directMessage)}</p>
+      ${room.kind === 'direct' ? `<div class="community-details__stats"><b>${esc(room.peer.level)}</b><span>${esc(copy().level)}</span><b>⭐ ${room.peer.xp}</b><span>${esc(copy().xp)}</span></div>
+        <button type="button" class="btn btn--bad community-details__block" data-action="block" data-id="${esc(room.peerId)}">${esc(copy().block)}</button>` : `<div class="community-details__stats"><b>${esc(room.level || copy().topic)}</b><span>${esc(copy().level)}</span></div>`}
+      <p class="community-details__disclosure">${esc(copy().aiDisclosure)}</p>
+    </aside>`;
   }
 
   function roomName(room) {
@@ -284,7 +344,10 @@ export function renderCommunity(host) {
   function renderRoomPanel() {
     const room = state.selectedRoom;
     return `<header class="community-chat__head">
-      <div><h2>${esc(roomName(room))}</h2><span>${room.kind === 'direct' ? esc(copy().online) : esc(room.level || copy().topic)}</span></div>
+      <button type="button" class="community-icon-button community-back-button" data-action="back-to-inbox" aria-label="${esc(copy().backToChats)}">${lang() === 'en' ? '←' : '→'}</button>
+      <span class="community-avatar" aria-hidden="true">${esc(room.kind === 'topic' ? '#' : [...roomName(room)][0] || 'L')}</span>
+      <div class="community-chat__identity"><h2>${esc(roomName(room))}</h2><span>${room.kind === 'direct' ? esc(copy().online) : esc(room.level || copy().topic)}</span></div>
+      <button type="button" class="community-icon-button community-details-toggle" data-action="toggle-details" aria-label="${esc(copy().details)}" title="${esc(copy().details)}">ⓘ</button>
       ${room.kind === 'direct' ? `<button type="button" class="btn btn--sm btn--bad" data-action="block" data-id="${esc(room.peerId)}">${esc(copy().block)}</button>` : ''}
     </header>
     <div class="community-messages" id="communityMessages" aria-live="polite" aria-relevant="additions text">
@@ -375,6 +438,32 @@ export function renderCommunity(host) {
       disposeInstance();
       await communitySignOut();
       return renderCommunity(host);
+    }
+    if (action === 'settings') {
+      state.screen = 'settings';
+      return renderMain();
+    }
+    if (action === 'chats-home') {
+      state.screen = 'chats';
+      state.selectedRoom = null;
+      state.detailsOpen = false;
+      state.showBuddies = false;
+      return renderMain();
+    }
+    if (action === 'toggle-details') {
+      state.detailsOpen = !state.detailsOpen;
+      return renderMain();
+    }
+    if (action === 'back-to-inbox') {
+      state.selectedRoom = null;
+      state.detailsOpen = false;
+      return renderMain();
+    }
+    if (action === 'back-to-chats') {
+      state.screen = 'chats';
+      renderMain();
+      host.querySelector('.community-room.is-active')?.focus();
+      return;
     }
     if (action === 'topic') {
       const room = state.topics.find((item) => item.id === id);
@@ -675,6 +764,19 @@ export function renderCommunity(host) {
     if (event.target?.id === 'communityDraft') {
       const counter = host.querySelector('[data-counter]');
       if (counter) counter.textContent = `${event.target.value.length}/${COMMUNITY_LIMITS.messageCharacters}`;
+    }
+    if (event.target?.matches('[data-chat-search]')) {
+      state.searchQuery = event.target.value;
+      const query = state.searchQuery.trim().toLocaleLowerCase();
+      host.querySelectorAll('.community-inbox__section').forEach((section) => {
+        let visibleRows = 0;
+        section.querySelectorAll('[data-room-search]').forEach((row) => {
+          row.hidden = query !== '' && !row.dataset.roomSearch.includes(query);
+          if (!row.hidden) visibleRows++;
+        });
+        const hasRows = section.querySelector('[data-room-search]');
+        section.hidden = query !== '' && hasRows && visibleRows === 0;
+      });
     }
   };
 
