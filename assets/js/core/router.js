@@ -4,6 +4,7 @@ const routes = [];
 let current = { path: '/', params: {}, query: {} };
 let notFoundHandler = null;
 const listeners = new Set();
+const renderedListeners = new Set();
 
 export function route(pattern, handler) {
   // pattern مثل: '/unit/:unitId'
@@ -13,6 +14,7 @@ export function route(pattern, handler) {
 }
 
 export function onRouteChange(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+export function onRouteRendered(fn) { renderedListeners.add(fn); return () => renderedListeners.delete(fn); }
 
 export function parseHash(hash = location.hash) {
   const raw = String(hash || '').replace(/^#/, '');
@@ -93,6 +95,9 @@ export async function resolve() {
     } else {
       await run();
     }
+  }
+  if (myToken === resolveToken) {
+    renderedListeners.forEach((fn) => { try { fn(current); } catch (e) { console.warn(e); } });
   }
   return current;
 }

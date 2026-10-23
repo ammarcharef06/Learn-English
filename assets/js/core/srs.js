@@ -45,6 +45,10 @@ export function dueCount(entries) {
   return entries.reduce((n, e) => n + (isDue(e.itemId) ? 1 : 0), 0);
 }
 
+export function dueEntries(entries, ref = todayKey()) {
+  return entries.filter((entry) => progress.items[entry.itemId]?.seen > 0 && isDue(entry.itemId, ref));
+}
+
 export function stats(entries) {
   const total = entries.length;
   let newCount = 0, learning = 0, mature = 0, due = 0;
@@ -70,6 +74,40 @@ export function weakestFirst(entries, limit = null) {
   }).sort((a, b) => b.weight - a.weight);
   const out = scored.map((s) => s.e);
   return limit ? out.slice(0, limit) : out;
+}
+
+export function smartReviewPlan(entries, size = 15, ref = todayKey()) {
+  const limit = Math.max(0, Math.floor(Number(size) || 0));
+  if (!limit) return { entries: [], dueCount: 0, weakCount: 0, newCount: 0 };
+
+  const unique = [...new Map(entries.map((entry) => [entry.itemId, entry])).values()];
+  const due = unique.flatMap((entry) => {
+    const item = progress.items[entry.itemId];
+    if (!item?.seen) return [];
+    const overdueDays = daysBetween(item.due || ref, ref);
+    if (overdueDays < 0) return [];
+    const accuracy = item.correct / Math.max(1, item.seen);
+    return [{
+      entry,
+      overdueDays,
+      weak: item.wrong > 0 && (accuracy < 0.7 || item.box < 3),
+      priority: overdueDays * 10 + (1 - accuracy) * 4 + Math.min(item.wrong, 8) * 0.2,
+    }];
+  }).sort((a, b) => b.priority - a.priority || a.entry.itemId.localeCompare(b.entry.itemId));
+
+  const selectedDue = due.slice(0, limit);
+  const selected = selectedDue.map(({ entry }) => entry);
+  const selectedIds = new Set(selected.map((entry) => entry.itemId));
+  const freshLimit = Math.min(5, limit - selected.length);
+  const fresh = unique.filter((entry) => !progress.items[entry.itemId]?.seen && !selectedIds.has(entry.itemId))
+    .slice(0, freshLimit);
+
+  return {
+    entries: [...selected, ...fresh],
+    dueCount: selected.length,
+    weakCount: selectedDue.filter((item) => item.weak).length,
+    newCount: fresh.length,
+  };
 }
 
 export function masteryOf(itemId) {

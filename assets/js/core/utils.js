@@ -3,6 +3,13 @@
 export const qs = (sel, root = document) => root.querySelector(sel);
 export const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+export function focusMainHeading(root) {
+  const heading = root?.querySelector('h1');
+  if (!heading) return;
+  heading.setAttribute('tabindex', '-1');
+  heading.focus({ preventScroll: true });
+}
+
 export function esc(str) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

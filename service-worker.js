@@ -2,7 +2,7 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.2.0';
+const VERSION = 'v4.4.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -33,6 +33,9 @@ const CORE = [
   './assets/js/core/gamify.js',
   './assets/js/core/journey.js',
   './assets/js/core/conversation-practice.js',
+  './assets/js/core/community-config.js',
+  './assets/js/core/community.js',
+  './assets/js/core/community-safety.js',
   './assets/js/core/notify.js',
   './assets/js/core/ads.js',
   './assets/js/core/updater.js',
@@ -62,6 +65,7 @@ const CORE = [
   './assets/js/views/dashboard.js',
   './assets/js/views/journey.js',
   './assets/js/views/conversations.js',
+  './assets/js/views/community.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
   './assets/js/views/zero-shell.js',

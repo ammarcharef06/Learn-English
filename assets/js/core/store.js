@@ -13,6 +13,7 @@ export const DEFAULT_SETTINGS = {
   skin: 'kali',             // kali | gnome | classic
   uiLang: 'ar',             // ar | en
   fontSize: 100,            // 85..130
+  highContrast: false,
   sound: true,              // أصوات النجاح/الخطأ
   autoSpeak: false,         // نطق تلقائي لكلمة السؤال
   tts: { voice: '', rate: 0.92, pitch: 1, lang: 'en-US' },

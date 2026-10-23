@@ -1,13 +1,13 @@
 /* ============================================================
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
-import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange } from './core/router.js';
+import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange, onRouteRendered } from './core/router.js';
 import { settings, saveSettings, subscribe, progress, flush } from './core/store.js';
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { registerZeroSounds } from './core/zero-audio.js';
 import { isAuthed, extendSession } from './core/auth.js';
-import { qs, qsa, toast, esc } from './core/utils.js';
+import { qs, qsa, toast, esc, focusMainHeading } from './core/utils.js';
 import { renderLock, lockSite } from './views/auth.js';
 import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderTopbar } from './views/topbar.js';
@@ -22,7 +22,7 @@ import { renderReading } from './views/reading.js';
 import { renderExams } from './views/exams.js';
 import { renderStats } from './views/stats.js';
 import { renderNotebook } from './views/notebook.js';
-import { renderSettings, applyTheme, applySkin, applyLang, SKINS } from './views/settings.js';
+import { renderSettings, applyTheme, applySkin, applyLang, applyAccessibility, SKINS } from './views/settings.js';
 import { renderAbout } from './views/about.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
@@ -32,6 +32,7 @@ import { updateBannerForRoute, showQueuedInterstitial } from './core/ads.js';
 import { renderSupport } from './views/support.js';
 import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
+import { renderCommunity, disposeCommunity } from './views/community.js';
 import { APP_VERSION } from './core/app-version.js';
 
 const view = () => qs('#view');
@@ -58,6 +59,7 @@ function setupRoutes() {
   route('/support', () => renderSupport(view()));
   route('/journey', () => renderJourney(view()));
   route('/conversations', () => renderConversations(view()));
+  route('/community', () => renderCommunity(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
     view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
@@ -237,6 +239,7 @@ function boot() {
 
 async function main() {
   applySkin();
+  applyAccessibility();
   applyLang();
   initSpeech();
   registerZeroSounds();
@@ -250,6 +253,7 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
+    if (route.path !== '/community') disposeCommunity();
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
@@ -262,6 +266,7 @@ async function main() {
     showQueuedInterstitial().catch((error) => console.warn('Interstitial ad unavailable.', error));
     try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
   });
+  onRouteRendered(() => requestAnimationFrame(() => focusMainHeading(view())));
 
   const media = window.matchMedia('(prefers-color-scheme: dark)');
   media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applySkin(); });

@@ -74,20 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.14',
-    name: 'English Academy v1.0.14',
+    tag_name: 'v1.0.15',
+    name: 'English Academy v1.0.15',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
       { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.14/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.15/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.14' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.15' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -253,6 +253,30 @@ const session = srs.buildSession(pool, 15);
 check('جلسة البطاقات تُبنى بحجم صحيح', session.length === 15 && new Set(session.map((e) => e.itemId)).size === 15);
 const weak = srs.weakestFirst(pool, 5);
 check('ترتيب الأضعف يعمل', weak.length === 5 && weak[0].itemId);
+store.saveProgress((p) => {
+  p.items = {
+    overdueWeak: { seen: 4, correct: 1, wrong: 3, box: 1, due: '2026-10-17', last: '2026-10-13' },
+    dueStrong: { seen: 4, correct: 4, wrong: 0, box: 5, due: '2026-10-20', last: '2026-10-16' },
+    futureMastered: { seen: 5, correct: 5, wrong: 0, box: 7, due: '2026-10-25', last: '2026-10-18' },
+  };
+});
+const smartEntries = [
+  { itemId: 'dueStrong' }, { itemId: 'overdueWeak' }, { itemId: 'futureMastered' },
+  { itemId: 'newOne' }, { itemId: 'newTwo' }, { itemId: 'newOne' },
+];
+const smartPlan = srs.smartReviewPlan(smartEntries, 3, '2026-10-20');
+check('المراجعة الذكية تبدأ بالأقدم والأضعف', smartPlan.entries[0].itemId === 'overdueWeak');
+check('المراجعة الذكية تستبعد المؤجل وتزيل التكرار',
+  smartPlan.entries.map((entry) => entry.itemId).join(',') === 'overdueWeak,dueStrong,newOne');
+check('ملخص المراجعة الذكية يحصي المستحق والضعيف والجديد',
+  smartPlan.dueCount === 2 && smartPlan.weakCount === 1 && smartPlan.newCount === 1);
+const smallSmartPlan = srs.smartReviewPlan(smartEntries, 1, '2026-10-20');
+check('ملخص الجلسة يطابق حجمها عند كثرة الكلمات المستحقة',
+  smallSmartPlan.dueCount === 1 && smallSmartPlan.weakCount === 1 && smallSmartPlan.entries.length === 1);
+check('المراجعة الذكية تحد الكلمات الجديدة بخمس',
+  srs.smartReviewPlan(['1', '2', '3', '4', '5', '6'].map((id) => ({ itemId: `fresh${id}` })), 20).newCount === 5);
+check('مجموعة المستحق فقط لا تضم الجديد أو المؤجل',
+  srs.dueEntries(smartEntries, '2026-10-20').map((entry) => entry.itemId).join(',') === 'dueStrong,overdueWeak');
 
 /* ================= 6. الإشعارات ================= */
 section('منطق الإشعارات والتذكير');
@@ -349,27 +373,27 @@ try {
   globalThis.fetch = async () => ({
     ok: true,
     json: async () => ({
-      tag_name: 'v1.0.14',
-      name: 'English Academy v1.0.14',
+      tag_name: 'v1.0.15',
+      name: 'English Academy v1.0.15',
       body: 'Release notes',
-      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.14',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.15',
       assets: [
         { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.14/SHA256SUMS.txt' },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.15/SHA256SUMS.txt' },
       ],
     }),
   });
   await updater.checkForUpdateInBackground();
   check('Background update check stores a new release even when notification display fails',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.14'
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.15'
     && !localStorage.getItem('lea.update.notified'));
   showUpdateNotification = true;
   localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
   await updater.checkForUpdateInBackground();
   check('Failed update notification is retried and only marked after display succeeds',
-    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.14');
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.15');
   check('Pending update is preserved when background check is throttled',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.14');
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.15');
 } finally {
   globalThis.fetch = oldFetch;
   if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
@@ -407,11 +431,38 @@ section('الترجمة (عربي/إنجليزي)');
 const i18n = await mod('assets/js/core/i18n.js');
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
+check('نص حالة التذكير مترجم بالعربية', i18n.t('set.reminderOn') === 'التذكير مُفعَّل');
 i18n.setUiLang('en');
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
+check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
 check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);
 i18n.setUiLang('ar');
 check('مفتاح غير موجود يعود كما هو', i18n.t('nope.missing') === 'nope.missing');
+
+section('إمكانية الوصول');
+const theme = await mod('assets/js/core/theme.js');
+store.saveSettings({ highContrast: true, reduceAnimations: true });
+theme.applyAccessibility();
+check('التباين المرتفع يُطبّق على الواجهة', document.documentElement.dataset.contrast === 'high');
+check('تقليل الحركة يُطبّق على الواجهة', document.documentElement.dataset.reduceMotion === 'true');
+store.saveSettings({ highContrast: false, reduceAnimations: false });
+theme.applyAccessibility();
+
+section('المجتمع التعليمي');
+const community = await mod('assets/js/core/community.js');
+const communitySafety = await mod('assets/js/core/community-safety.js');
+const communitySource = await readFile(join(ROOT, 'assets/js/core/community.js'), 'utf8');
+const communityConfig = await mod('assets/js/core/community-config.js');
+const progressBeforeCommunityInit = localStorage.getItem('lea.progress.v1');
+check('إعدادات مشروع Supabase العام مفعّلة', community.communityConfigured() === true
+  && communityConfig.COMMUNITY_CONFIG.supabaseUrl.startsWith('https://')
+  && communityConfig.COMMUNITY_CONFIG.publishableKey.startsWith('sb_publishable_'));
+check('مفاتيح التخزين المحلي للدروس تبقى مستقلة عن Auth المجتمع',
+  /storageKey:\s*'lea\.community\.auth\.v1'/.test(communitySource)
+    && localStorage.getItem('lea.progress.v1') === progressBeforeCommunityInit);
+check('فلتر الرسائل يلتقط ألفاظ الإساءة الواضحة', communitySafety.containsBlockedLanguage('This is FUCK.'));
+check('فلتر الرسائل يلتقط تمويه علامات الترقيم', communitySafety.containsBlockedLanguage('f.u.c.k'));
+check('فلتر الرسائل لا يمنع جملة تعليمية سليمة', !communitySafety.containsBlockedLanguage('I enjoy learning English.'));
 
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
@@ -433,6 +484,23 @@ check('مفتاح التاريخ بصيغة صحيحة', /^\d{4}-\d{2}-\d{2}$/.t
 check('حساب النسبة', utils.pct(3, 4) === 75);
 check('مدة مقروءة', utils.fmtDuration(125).includes('2'));
 check('وقت التذكير بصيغة عربية', utils.prettyTimeAr('19:00').includes('7'));
+let headingFocus = false, headingTabIndex = null;
+utils.focusMainHeading({
+  querySelector: () => ({
+    setAttribute: (name, value) => { if (name === 'tabindex') headingTabIndex = value; },
+    focus: (options) => { headingFocus = options.preventScroll === true; },
+  }),
+});
+check('الانتقال بين الصفحات ينقل التركيز إلى عنوان المحتوى', headingFocus && headingTabIndex === '-1');
+const router = await mod('assets/js/core/router.js');
+const previousHash = window.location.hash;
+const routeOrder = [];
+router.route('/render-focus-test', () => routeOrder.push('render'));
+router.onRouteRendered(() => routeOrder.push('focused'));
+window.location.hash = '#/render-focus-test';
+await router.resolve();
+check('يُنفّذ نقل التركيز بعد اكتمال رسم الصفحة', routeOrder.join(',') === 'render,focused');
+window.location.hash = previousHash;
 
 /* ================= التقرير ================= */
 console.log(`\n${'='.repeat(46)}`);
