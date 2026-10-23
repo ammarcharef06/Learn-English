@@ -20,6 +20,7 @@ export async function communityClient() {
           autoRefreshToken: true,
           persistSession: true,
           detectSessionInUrl: true,
+          flowType: 'pkce',
           storageKey: 'lea.community.auth.v1',
         },
         realtime: { params: { eventsPerSecond: 8 } },
@@ -43,9 +44,22 @@ export async function communitySession() {
   return checked(await client.auth.getSession());
 }
 
+export async function handleCommunityAuthCallback(url) {
+  const callback = new URL(url);
+  if (callback.protocol !== 'com.ammarcharef06.learnenglish:'
+    || callback.hostname !== 'auth' || callback.pathname !== '/callback') return false;
+  const code = callback.searchParams.get('code');
+  if (!code) throw new Error('رابط تأكيد البريد غير مكتمل. افتح رسالة التأكيد مجدداً.');
+  const client = await communityClient();
+  checked(await client.auth.exchangeCodeForSession(code));
+  return true;
+}
+
 export async function communitySignUp({ email, password, displayName }) {
   const client = await communityClient();
-  const redirectTo = new URL('./', window.location.href).href;
+  const redirectTo = window.Capacitor?.isNativePlatform?.()
+    ? 'com.ammarcharef06.learnenglish://auth/callback'
+    : new URL('./', window.location.href).href;
   return checked(await client.auth.signUp({
     email: email.trim(),
     password,

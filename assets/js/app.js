@@ -33,6 +33,7 @@ import { renderSupport } from './views/support.js';
 import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
 import { renderCommunity, disposeCommunity } from './views/community.js';
+import { handleCommunityAuthCallback } from './core/community.js';
 import { APP_VERSION } from './core/app-version.js';
 
 const view = () => qs('#view');
@@ -112,13 +113,18 @@ function bindGlobalEvents() {
     if (url) location.hash = String(url).replace(/^.*#/, '#');
   });
   const capacitorApp = window.Capacitor?.Plugins?.App || window.CapacitorUpdateBundle?.App;
-  const handleAppLink = (url) => {
+  const handleAppLink = async (url) => {
     try {
       const deepLink = new URL(url);
-      if (deepLink.protocol === 'com.ammarcharef06.learnenglish:'
-        && deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
+      if (deepLink.protocol !== 'com.ammarcharef06.learnenglish:') return;
+      if (deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
+      if (deepLink.hostname === 'auth' && await handleCommunityAuthCallback(url)) {
+        navigate('/community');
+        toast('تم تأكيد بريدك الإلكتروني وتسجيل الدخول بنجاح.', 'ok');
+      }
     } catch (error) {
-      console.warn('Ignored an invalid app link.', error);
+      console.error('Could not process the app link.', error);
+      toast(error.message || 'تعذّر إكمال تأكيد البريد داخل التطبيق.', 'warn');
     }
   };
   Promise.resolve(capacitorApp?.addListener?.('appUrlOpen', ({ url } = {}) => handleAppLink(url)))
