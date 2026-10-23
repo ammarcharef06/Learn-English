@@ -14,7 +14,9 @@ export const NAV_ITEMS = [
   { href: '#/flashcards', key: 'nav.flashcards', icon: '🃏', group: 'nav.group.practice' },
   { href: '#/reading', key: 'nav.reading', icon: '📖', group: 'nav.group.practice', bottom: true },
   { href: '#/exams', key: 'nav.exams', icon: '🧪', group: 'nav.group.practice' },
+  { href: '#/conversations', key: 'nav.conversations', icon: '💬', group: 'nav.group.practice' },
   { href: '#/stats', key: 'nav.stats', icon: '📊', group: 'nav.group.me' },
+  { href: '#/journey', key: 'nav.journey', icon: '🧭', group: 'nav.group.me' },
   { href: '#/notebook', key: 'nav.notebook', icon: '📒', group: 'nav.group.me' },
   { href: '#/settings', key: 'nav.settings', icon: '⚙️', group: 'nav.group.me', bottom: true },
 ];
@@ -71,7 +73,8 @@ const SECTION_MAP = {
   '': '#/',
   lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
-  exams: '#/exams', stats: '#/stats', notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',
+  exams: '#/exams', stats: '#/stats', journey: '#/journey', conversations: '#/conversations',
+  notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',
 };
 
 export function activeHrefFor(path) {

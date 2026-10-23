@@ -1,6 +1,6 @@
 {
   "name": "learn-english",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
@@ -16,7 +16,7 @@
     "desktop:start": "electron .",
     "desktop:dist": "electron-builder",
     "check": "node tools/check.mjs",
-    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
+    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android"
   },

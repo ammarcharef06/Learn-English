@@ -2,7 +2,7 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.1.0';
+const VERSION = 'v4.2.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -31,6 +31,8 @@ const CORE = [
   './assets/js/core/speech.js',
   './assets/js/core/srs.js',
   './assets/js/core/gamify.js',
+  './assets/js/core/journey.js',
+  './assets/js/core/conversation-practice.js',
   './assets/js/core/notify.js',
   './assets/js/core/ads.js',
   './assets/js/core/updater.js',
@@ -46,6 +48,7 @@ const CORE = [
   './assets/js/data/curriculum-b1.js',
   './assets/js/data/readings.js',
   './assets/js/data/badges.js',
+  './assets/js/data/conversations.js',
   './assets/js/data/zero.js',
   './assets/js/data/zero-letters.js',
   './assets/js/data/zero-time.js',
@@ -57,6 +60,8 @@ const CORE = [
   './assets/js/views/auth.js',
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
+  './assets/js/views/journey.js',
+  './assets/js/views/conversations.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
   './assets/js/views/zero-shell.js',

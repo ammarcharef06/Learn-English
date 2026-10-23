@@ -30,6 +30,9 @@ import { startReminderLoop, syncReminderSchedule } from './core/notify.js';
 import { scheduleBackgroundUpdateChecks } from './core/updater.js';
 import { updateBannerForRoute, showQueuedInterstitial } from './core/ads.js';
 import { renderSupport } from './views/support.js';
+import { renderJourney } from './views/journey.js';
+import { renderConversations } from './views/conversations.js';
+import { APP_VERSION } from './core/app-version.js';
 
 const view = () => qs('#view');
 
@@ -53,6 +56,8 @@ function setupRoutes() {
   route('/notebook', () => renderNotebook(view()));
   route('/settings', (p, q) => renderSettings(view(), q || {}));
   route('/support', () => renderSupport(view()));
+  route('/journey', () => renderJourney(view()));
+  route('/conversations', () => renderConversations(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
     view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
@@ -204,6 +209,9 @@ function waitForActive(reg, timeout = 8000) {
 function renderAll() {
   renderNav();
   applyI18n(document);
+  document.querySelectorAll('[data-app-version]').forEach((element) => {
+    element.textContent = `${t('common.version')} ${APP_VERSION}`;
+  });
   renderSidebarStats();
   resolve();
 }

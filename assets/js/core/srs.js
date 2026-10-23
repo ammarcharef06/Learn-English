@@ -24,6 +24,13 @@ export function gradeItem(itemId, quality) {
     it.due = dateKey(addDays(new Date(), interval));
     it.last = todayKey();
     p.items[itemId] = it;
+    p.missionActivity = p.missionActivity || {};
+    const mission = p.missionActivity[todayKey()] || { reviewedItems: [] };
+    mission.reviewedItems = mission.reviewedItems || [];
+    if (!mission.reviewedItems.includes(itemId) && mission.reviewedItems.length < 20) {
+      mission.reviewedItems.push(itemId);
+    }
+    p.missionActivity[todayKey()] = mission;
   });
   return getItem(itemId);
 }

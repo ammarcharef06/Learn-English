@@ -7,6 +7,7 @@ import { vocabularyEntries } from '../core/quizgen.js';
 import { weakestFirst } from '../core/srs.js';
 import { LEVELS } from '../data/curriculum.js';
 import { pageHead, progressBar, statCard } from './shell.js';
+import { weeklySummary } from '../core/journey.js';
 
 const TYPE_LABELS = {
   mcq: 'اختيار من متعدد', fill: 'ملء الفراغ', order: 'ترتيب الكلمات',
@@ -22,6 +23,7 @@ export function renderStats(host) {
   const earned = badges.filter((b) => b.earned);
   const o = overallStats();
   const minutes = Math.round((totals.seconds || 0) / 60);
+  const week = weeklySummary();
 
   const days = [];
   for (let i = 13; i >= 0; i--) {
@@ -44,6 +46,20 @@ export function renderStats(host) {
       ${statCard({ label: t('common.streak'), value: st.streak, foot: `أفضل سلسلة: ${st.best}` })}
       ${statCard({ label: t('stats.studyTime'), value: `${minutes} د`, foot: `${(totals.sessions || 0)} ${t('stats.sessions')}` })}
     </div>
+
+    <section class="card weekly-report" aria-labelledby="weeklyReportTitle" style="margin-top:18px">
+      <div class="dashboard-section-head">
+        <div class="card__title"><span class="dashboard-icon" aria-hidden="true">🗓️</span><div><span class="dashboard-label">${esc(t('journey.weekly'))}</span><h2 id="weeklyReportTitle">${esc(t('journey.weeklyTitle'))}</h2></div></div>
+        <a class="btn btn--sm" href="#/journey">${esc(t('journey.openMap'))} ←</a>
+      </div>
+      <div class="grid grid--4">
+        ${statCard({ label: t('journey.studyDays'), value: `${week.current.activeDays}/7`, foot: `${t('journey.previousWeek')}: ${week.previous.activeDays}/7` })}
+        ${statCard({ label: t('journey.questions'), value: week.current.questions, foot: `${t('journey.previousWeek')}: ${week.previous.questions}` })}
+        ${statCard({ label: t('journey.talks'), value: week.current.conversations, foot: `${t('journey.previousWeek')}: ${week.previous.conversations}` })}
+        ${statCard({ label: t('stats.accuracy'), value: `${week.current.accuracy}%`, foot: `${week.current.minutes} ${t('stats.studyTime')}` })}
+      </div>
+      <p class="muted small" style="margin-top:12px">${esc(week.current.activeDays ? t('journey.weeklyEncouragement') : t('journey.weeklyEmpty'))} 🔒 ${esc(t('journey.localOnly'))}</p>
+    </section>
 
     <div class="card" style="margin-top:18px">
       <div class="card__title"><span class="ico">📈</span><h2>${t('stats.last14')}</h2></div>

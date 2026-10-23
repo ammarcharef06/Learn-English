@@ -9,6 +9,7 @@ import { vocabularyEntries } from '../core/quizgen.js';
 import { weakestFirst, stats as srsStats } from '../core/srs.js';
 import { statCard, progressBar } from './shell.js';
 import { nextReminderText, wordOfTheDay } from '../core/notify.js';
+import { dailyMission, weeklySummary } from '../core/journey.js';
 
 function greeting() {
   const h = new Date().getHours();
@@ -37,6 +38,9 @@ export function renderDashboard(host) {
   const today = progress.activity[todayKey()] || { q: 0, c: 0, minutes: 0, points: 0 };
   const goalReached = q.done >= q.target;
   const wod = wordOfTheDay();
+  const mission = dailyMission();
+  const week = weeklySummary().current;
+  const lessonHref = next ? `#/lesson/${next.unit.id}/${next.lessonIndex}` : '#/drills?mode=smart';
 
   host.innerHTML = `
     <div class="dashboard">
@@ -62,11 +66,46 @@ export function renderDashboard(host) {
         </div>
       </section>
 
+      <section class="card dashboard-mission" aria-labelledby="dailyMissionTitle">
+        <div class="dashboard-section-head">
+          <div class="card__title"><span class="dashboard-icon" aria-hidden="true">🎯</span><div><span class="dashboard-label">${esc(t('journey.today'))}</span><h2 id="dailyMissionTitle">${esc(t('journey.mission'))}</h2></div></div>
+          <span class="chip chip--brand">${mission.done}/${mission.total} ${esc(t('journey.steps'))}</span>
+        </div>
+        <p class="muted small">${esc(mission.done === mission.total ? t('journey.missionDone') : t('journey.missionEncouragement'))}</p>
+        <div class="dashboard-mission__tasks">
+          ${mission.tasks.map((task) => {
+            const content = {
+              review: { icon: '🃏', label: t('journey.review'), detail: `${task.count}/${task.target}`, href: task.href },
+              lesson: { icon: '📘', label: t('journey.lesson'), detail: task.done ? t('journey.completed') : t('journey.lessonHint'), href: lessonHref },
+              conversation: { icon: '💬', label: t('journey.conversation'), detail: task.done ? t('journey.completed') : t('journey.conversationHint'), href: '#/conversations' },
+            }[task.id];
+            return `<a class="dashboard-mission__task ${task.done ? 'is-done' : ''}" href="${content.href}">
+              <span aria-hidden="true">${task.done ? '✓' : content.icon}</span><b>${esc(content.label)}</b><small>${esc(content.detail)}</small>
+            </a>`;
+          }).join('')}
+        </div>
+        <a class="dashboard-mission__map" href="#/journey">${esc(t('journey.openMap'))} ←</a>
+      </section>
+
       <section class="dashboard-stats" aria-label="${esc(t('dash.title'))}">
         ${statCard({ label: t('common.points'), value: progress.points || 0, foot: `+${today.points || 0} ${t('common.today')}`, variant: 'stat--brand' })}
         ${statCard({ label: t('common.streak'), value: `${st.streak} 🔥`, foot: `أفضل سلسلة: ${st.best}`, variant: st.streak > 0 ? 'stat--ok' : '' })}
         ${statCard({ label: t('stats.accuracy'), value: `${acc}%`, foot: `${progress.totals.correct || 0} / ${progress.totals.questions || 0}` })}
         ${statCard({ label: t('stats.studyTime'), value: `${Math.round((progress.totals.seconds || 0) / 60)} د`, foot: `${q.done} ${t('common.questionsShort')} ${t('common.today')}` })}
+      </section>
+
+      <section class="card dashboard-week" aria-labelledby="dashboardWeekTitle">
+        <div class="dashboard-section-head">
+          <div class="card__title"><span class="dashboard-icon" aria-hidden="true">📈</span><div><span class="dashboard-label">${esc(t('journey.weekly'))}</span><h2 id="dashboardWeekTitle">${esc(t('journey.weeklyTitle'))}</h2></div></div>
+          <a class="btn btn--sm" href="#/stats">${esc(t('journey.fullReport'))} ←</a>
+        </div>
+        <div class="dashboard-week__grid">
+          <div><b>${week.activeDays}/7</b><span>${esc(t('journey.studyDays'))}</span></div>
+          <div><b>${week.questions}</b><span>${esc(t('journey.questions'))}</span></div>
+          <div><b>${week.conversations}</b><span>${esc(t('journey.talks'))}</span></div>
+          <div><b>${week.minutes}</b><span>${esc(t('stats.studyTime'))}</span></div>
+        </div>
+        <p class="dashboard-week__note">${esc(week.activeDays ? t('journey.weeklyEncouragement') : t('journey.weeklyEmpty'))}</p>
       </section>
 
       <section class="dashboard-panels grid grid--2">

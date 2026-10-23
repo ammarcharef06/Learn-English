@@ -60,6 +60,8 @@ export const DEFAULT_PROGRESS = {
   badges: [],
   notebook: [],      // { en, ar, note, at, itemId }
   activity: {},      // "YYYY-MM-DD": { q, c, points, minutes }
+  missionActivity: {}, // "YYYY-MM-DD": { reviewedItems, lesson, conversation }
+  conversations: { completed: {}, sessions: 0, turns: 0, correct: 0, active: null },
   exams: [],         // { id, at, level, score, total, seconds }
   goals: {},         // "YYYY-MM-DD": { target, done }
   settingsTouched: false,

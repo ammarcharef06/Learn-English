@@ -152,7 +152,14 @@ export function completeUnit(unitId) {
 }
 
 export function markLessonRead(key) {
-  saveProgress((p) => { p.lessons = p.lessons || {}; p.lessons[key] = true; });
+  saveProgress((p) => {
+    p.lessons = p.lessons || {};
+    p.lessons[key] = true;
+    p.missionActivity = p.missionActivity || {};
+    const mission = p.missionActivity[todayKey()] || { reviewedItems: [] };
+    mission.lesson = true;
+    p.missionActivity[todayKey()] = mission;
+  });
 }
 
 export function addNotebook(entry) {
