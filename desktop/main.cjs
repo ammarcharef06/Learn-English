@@ -2,6 +2,7 @@ const { app, BrowserWindow, Notification, Tray, Menu, ipcMain, shell } = require
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { createStaticServer } = require('./server.cjs');
+const { listenWithStableOrigin } = require('./stable-server.cjs');
 const { downloadInstaller } = require('./update-download.cjs');
 
 app.setName('English Academy');
@@ -16,6 +17,10 @@ let reminder = { enabled: false, days: [], time: '19:00', title: '', body: '' };
 let quitting = false;
 let trustedOrigin = '';
 let downloadedInstaller = '';
+const hasSingleInstanceLock = app.requestSingleInstanceLock();
+
+if (!hasSingleInstanceLock) app.quit();
+else app.on('second-instance', () => showWindow());
 
 function validReminder(value) {
   return value && typeof value === 'object'
@@ -242,6 +247,7 @@ registerTrustedHandler('notifications:cancel', async () => {
 });
 
 app.whenReady().then(async () => {
+  if (!hasSingleInstanceLock) return;
   try {
     const storedReminder = JSON.parse(await fs.readFile(REMINDER_PATH(), 'utf8'));
     if (validReminder(storedReminder)) reminder = storedReminder;
@@ -256,15 +262,15 @@ app.whenReady().then(async () => {
   }
 
   server = createStaticServer(WEB_ROOT);
-  server.once('error', (error) => {
-    console.error('Could not start the local app server.', error);
-    app.quit();
-  });
-  server.listen(0, '127.0.0.1', () => {
-    const url = `http://127.0.0.1:${server.address().port}/`;
+  try {
+    const port = await listenWithStableOrigin(server, app.getPath('userData'));
+    const url = `http://127.0.0.1:${port}/`;
     trustedOrigin = new URL(url).origin;
     createWindow(url);
-  });
+  } catch (error) {
+    console.error('Could not start the local app server.', error);
+    app.quit();
+  }
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0 && server?.listening) {
       createWindow(`http://127.0.0.1:${server.address().port}/`);

@@ -3,10 +3,14 @@ import { createRequire } from 'node:module';
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { createServer } from 'node:http';
 
 const require = createRequire(import.meta.url);
 const { createStaticServer } = require('../desktop/server.cjs');
 const { validateReleaseUrl } = require('../desktop/update-download.cjs');
+const { listenWithStableOrigin } = require('../desktop/stable-server.cjs');
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const server = createStaticServer(root);
 const desktopMain = await readFile(resolve(root, 'desktop', 'main.cjs'), 'utf8');
@@ -44,6 +48,21 @@ assert.equal(validateReleaseUrl('https://release-assets.githubusercontent.com/as
 assert.throws(() => validateReleaseUrl('https://example.com/installer.exe'), /untrusted/i);
 assert.throws(() => validateReleaseUrl('https://github.com/other/repo/releases/download/v1/installer.exe'), /untrusted/i);
 assert.throws(() => validateReleaseUrl('https://example.com/asset', true), /untrusted/i);
+assert.match(desktopMain, /listenWithStableOrigin\(server, app\.getPath\('userData'\)\)/);
+assert.doesNotMatch(desktopMain, /server\.listen\(0,/);
+
+const temporaryUserData = await mkdtemp(join(tmpdir(), 'lea-origin-test-'));
+let stablePort;
+try {
+  const firstServer = createServer();
+  stablePort = await listenWithStableOrigin(firstServer, temporaryUserData, 0);
+  await new Promise((resolveClose, reject) => firstServer.close((error) => error ? reject(error) : resolveClose()));
+  const secondServer = createServer();
+  assert.equal(await listenWithStableOrigin(secondServer, temporaryUserData, 0), stablePort);
+  await new Promise((resolveClose, reject) => secondServer.close((error) => error ? reject(error) : resolveClose()));
+} finally {
+  await rm(temporaryUserData, { recursive: true, force: true });
+}
 
 async function findAudio(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
