@@ -2,7 +2,7 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.5.0';
+const VERSION = 'v4.6.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
