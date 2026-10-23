@@ -7,7 +7,7 @@ import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
 import { pageHead } from './shell.js';
 import { APP_VERSION } from '../core/app-version.js';
-import { checkForUpdate, downloadAndOpenUpdate } from '../core/updater.js';
+import { checkForUpdate, checkForUpdateInBackground, downloadAndOpenUpdate } from '../core/updater.js';
 
 export function renderSettings(host, query = {}) {
   const s = settings;
@@ -272,6 +272,7 @@ export function renderSettings(host, query = {}) {
         return;
       }
       toast(enabled ? t('set.notificationsEnabledToast') : t('set.notificationsDisabledToast'), 'ok');
+      if (enabled) await checkForUpdateInBackground();
     } catch (error) {
       console.error('Could not update reminder schedule', error);
       saveSettings({ reminder: { enabled: !enabled, launchAtLogin: !enabled } });

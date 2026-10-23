@@ -74,19 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.11',
-    name: 'English Academy v1.0.11',
+    tag_name: 'v1.0.12',
+    name: 'English Academy v1.0.12',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.11/SHA256SUMS.txt' },
+      { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.12/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.11' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.12' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -329,6 +330,52 @@ const desktopResult = await notify.syncReminderSchedule();
 check('Desktop schedule reaches the native adapter', desktopResult.ok
   && desktopSchedule?.time === '20:00' && desktopSchedule?.launchAtLogin === true);
 check('Notification adapter detects desktop', notify.notificationPlatform() === 'desktop');
+const updateStore = await mod('assets/js/core/store.js');
+const priorNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { onLine: true } });
+try {
+  let showUpdateNotification = false;
+  let updateNotificationAttempts = 0;
+  window.leaNotifications.show = async () => {
+    updateNotificationAttempts++;
+    return showUpdateNotification;
+  };
+  window.leaUpdates = { async getRuntime() { return { platform: 'win32' }; } };
+  updateStore.saveSettings({ reminder: { enabled: true } });
+  localStorage.removeItem('lea.update.lastCheck');
+  localStorage.removeItem('lea.update.backgroundCheck');
+  localStorage.removeItem('lea.update.notified');
+  localStorage.removeItem('lea.update.pending');
+  globalThis.fetch = async () => ({
+    ok: true,
+    json: async () => ({
+      tag_name: 'v1.0.12',
+      name: 'English Academy v1.0.12',
+      body: 'Release notes',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.12',
+      assets: [
+        { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.12/SHA256SUMS.txt' },
+      ],
+    }),
+  });
+  await updater.checkForUpdateInBackground();
+  check('Background update check stores a new release even when notification display fails',
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.12'
+    && !localStorage.getItem('lea.update.notified'));
+  showUpdateNotification = true;
+  localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
+  await updater.checkForUpdateInBackground();
+  check('Failed update notification is retried and only marked after display succeeds',
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.12');
+  check('Pending update is preserved when background check is throttled',
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.12');
+} finally {
+  globalThis.fetch = oldFetch;
+  if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
+  else delete globalThis.navigator;
+  window.leaUpdates = undefined;
+}
 globalThis.window.leaNotifications = undefined;
 saveSettings({ reminder: { enabled: false } });
 const settingsSource = await readFile(join(ROOT, 'assets/js/views/settings.js'), 'utf8');

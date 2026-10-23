@@ -21,6 +21,8 @@ const storeModule = await readFile(resolve(root, 'assets', 'js', 'core', 'store.
 const preload = await readFile(resolve(root, 'desktop', 'preload.cjs'), 'utf8');
 const updater = await readFile(resolve(root, 'assets', 'js', 'core', 'updater.js'), 'utf8');
 const updateDownload = await readFile(resolve(root, 'desktop', 'update-download.cjs'), 'utf8');
+const updateCheckerPlugin = await readFile(resolve(root, 'android', 'app', 'src', 'main', 'java', 'com', 'ammarcharef06', 'learnenglish', 'UpdateCheckerPlugin.java'), 'utf8');
+const updateWorker = await readFile(resolve(root, 'android', 'app', 'src', 'main', 'java', 'com', 'ammarcharef06', 'learnenglish', 'UpdateCheckWorker.java'), 'utf8');
 const trustedHandlerHelper = desktopMain.match(/function registerTrustedHandler\(channel, handler\) \{[\s\S]*?\n\}/)?.[0];
 assert.ok(trustedHandlerHelper, 'trusted IPC handler helper exists');
 assert.doesNotMatch(trustedHandlerHelper, /\n {2}registerTrustedHandler\(/, 'handler registrations must not be nested inside the helper');
@@ -48,6 +50,9 @@ assert.equal(validateReleaseUrl('https://release-assets.githubusercontent.com/as
 assert.throws(() => validateReleaseUrl('https://example.com/installer.exe'), /untrusted/i);
 assert.throws(() => validateReleaseUrl('https://github.com/other/repo/releases/download/v1/installer.exe'), /untrusted/i);
 assert.throws(() => validateReleaseUrl('https://example.com/asset', true), /untrusted/i);
+assert.match(updateCheckerPlugin, /enqueueUniqueWork\(IMMEDIATE_WORK_NAME/);
+assert.match(updateCheckerPlugin, /cancelUniqueWork\(IMMEDIATE_WORK_NAME\)/);
+assert.match(updateWorker, /catch \(IOException error\)[\s\S]*?return Result\.retry\(\)/);
 assert.match(desktopMain, /listenWithStableOrigin\(server, app\.getPath\('userData'\)\)/);
 assert.doesNotMatch(desktopMain, /server\.listen\(0,/);
 

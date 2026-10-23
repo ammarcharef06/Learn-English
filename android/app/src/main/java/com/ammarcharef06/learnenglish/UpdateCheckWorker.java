@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -72,6 +73,9 @@ public final class UpdateCheckWorker extends Worker {
             }
             showUpdateNotification(latest);
             return Result.success();
+        } catch (IOException error) {
+            Log.w("LEAUpdateCheck", "Background release check will retry.", error);
+            return Result.retry();
         } catch (Exception error) {
             Log.w("LEAUpdateCheck", "Background release check failed.", error);
             return Result.success();

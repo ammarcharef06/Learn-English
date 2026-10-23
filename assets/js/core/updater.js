@@ -4,6 +4,7 @@ import { settings } from './store.js';
 const RELEASE_API = 'https://api.github.com/repos/ammarcharef06/Learn-English/releases/latest';
 const CHECKSUMS_NAME = 'SHA256SUMS.txt';
 const CHECK_INTERVAL = 24 * 60 * 60 * 1000;
+const BACKGROUND_CHECK_KEY = 'lea.update.backgroundCheck';
 const MAX_DOWNLOAD_BYTES = 700 * 1024 * 1024;
 
 export function compareVersions(left, right) {
@@ -154,39 +155,59 @@ export async function downloadAndOpenUpdate(release, onProgress = () => {}) {
 }
 
 export function scheduleBackgroundUpdateChecks() {
-  const announcePending = async () => {
-    if (!settings.reminder.enabled) return;
-    let pending;
-    try { pending = JSON.parse(localStorage.getItem('lea.update.pending') || 'null'); }
-    catch { pending = null; }
-    if (!pending?.version || pending.version === localStorage.getItem('lea.update.notified')) return;
+  const check = async () => {
+    await checkForUpdateInBackground();
+  };
+  void check();
+  return setInterval(check, CHECK_INTERVAL);
+}
+
+let backgroundCheckInFlight = false;
+export async function checkForUpdateInBackground() {
+  if (backgroundCheckInFlight || !settings.reminder.enabled || !navigator.onLine) return;
+  backgroundCheckInFlight = true;
+  try {
+    await announcePendingUpdate();
+    const lastCheck = Number(localStorage.getItem(BACKGROUND_CHECK_KEY) || 0);
+    if (Date.now() - lastCheck < CHECK_INTERVAL) return;
+    const result = await checkForUpdate({ force: true });
+    localStorage.setItem(BACKGROUND_CHECK_KEY, String(Date.now()));
+    if (result.supported && result.update) {
+      localStorage.setItem('lea.update.pending', JSON.stringify({
+        version: result.latestVersion,
+        url: result.release.url,
+      }));
+      await announcePendingUpdate();
+    } else if (result.supported) {
+      localStorage.removeItem('lea.update.pending');
+    }
+  } catch (error) {
+    console.warn('Background update check failed.', error);
+  } finally {
+    backgroundCheckInFlight = false;
+  }
+}
+
+async function announcePendingUpdate() {
+  if (!settings.reminder.enabled) return false;
+  let pending;
+  try { pending = JSON.parse(localStorage.getItem('lea.update.pending') || 'null'); }
+  catch { pending = null; }
+  if (!pending?.version || pending.version === localStorage.getItem('lea.update.notified')) return false;
+  try {
     const { showNotification } = await import('./notify.js');
-    await showNotification(
+    const shown = await showNotification(
       'تحديث جديد لأكاديمية الإنجليزية',
       `الإصدار ${pending.version} متاح الآن. اضغط لعرض التفاصيل والتحديث.`,
       { tag: 'lea-update', url: './index.html#/settings?section=updates' },
     );
+    if (!shown) return false;
     localStorage.setItem('lea.update.notified', pending.version);
-  };
-  const check = async () => {
-    if (!navigator.onLine) return;
-    try {
-      const result = await checkForUpdate();
-      if (result.supported && result.update) {
-        localStorage.setItem('lea.update.pending', JSON.stringify({
-          version: result.latestVersion,
-          url: result.release.url,
-        }));
-      } else if (result.supported) {
-        localStorage.removeItem('lea.update.pending');
-      }
-      await announcePending();
-    } catch (error) {
-      console.warn('Background update check failed.', error);
-    }
-  };
-  void check();
-  return setInterval(check, CHECK_INTERVAL);
+    return true;
+  } catch (error) {
+    console.warn('Could not show the app update notification.', error);
+    return false;
+  }
 }
 
 function isTrustedReleaseUrl(value) {
