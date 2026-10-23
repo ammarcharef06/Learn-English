@@ -172,10 +172,10 @@ export function renderCommunity(host) {
   boot().catch((error) => screenMessage(host, error.message || copy().sendFailed, true));
 
   async function boot() {
-    const { data } = await communitySession();
+    const { session } = await communitySession();
     if (state.disposed) return;
-    state.session = data.session;
-    state.user = data.session?.user || null;
+    state.session = session;
+    state.user = session?.user || null;
     if (!state.user) return renderAuth();
     await refreshData();
     renderMain();
