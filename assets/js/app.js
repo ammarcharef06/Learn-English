@@ -32,8 +32,6 @@ import { updateBannerForRoute, showQueuedInterstitial } from './core/ads.js';
 import { renderSupport } from './views/support.js';
 import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
-import { renderCommunity, disposeCommunity } from './views/community.js';
-import { handleCommunityAuthCallback } from './core/community.js';
 import { APP_VERSION } from './core/app-version.js';
 
 const view = () => qs('#view');
@@ -60,7 +58,6 @@ function setupRoutes() {
   route('/support', () => renderSupport(view()));
   route('/journey', () => renderJourney(view()));
   route('/conversations', () => renderConversations(view()));
-  route('/community', () => renderCommunity(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
     view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
@@ -118,10 +115,6 @@ function bindGlobalEvents() {
       const deepLink = new URL(url);
       if (deepLink.protocol !== 'com.ammarcharef06.learnenglish:') return;
       if (deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
-      if (deepLink.hostname === 'auth' && await handleCommunityAuthCallback(url)) {
-        navigate('/community');
-        toast('تم تأكيد بريدك الإلكتروني وتسجيل الدخول بنجاح.', 'ok');
-      }
     } catch (error) {
       console.error('Could not process the app link.', error);
       toast(error.message || 'تعذّر إكمال تأكيد البريد داخل التطبيق.', 'warn');
@@ -259,8 +252,6 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
-    document.body.classList.toggle('community-messenger-mode', route.path === '/community');
-    if (route.path !== '/community') disposeCommunity();
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();

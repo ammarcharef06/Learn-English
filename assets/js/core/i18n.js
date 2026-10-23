@@ -13,7 +13,6 @@ const DICT = {
   'nav.stats': ['إحصائياتي', 'My Stats'],
   'nav.journey': ['رحلتي', 'My Journey'],
   'nav.conversations': ['محادثة عملية', 'Conversations'],
-  'nav.community': ['مجتمع التعلّم', 'Learning community'],
   'nav.notebook': ['دفتر كلماتي', 'My Notebook'],
   'nav.settings': ['الإعدادات', 'Settings'],
   'nav.support': ['دعم التطبيق', 'Support us'],
