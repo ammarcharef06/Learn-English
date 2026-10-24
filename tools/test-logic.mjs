@@ -452,8 +452,26 @@ check('تصدير المزامنة السحابية يقتصر على المست
   JSON.stringify({ levels: cloudPayload.learner.levelStats, ids: cloudPayload.srs.cards.map((card) => card.id).slice(0, 5) }));
 check('تصدير المزامنة السحابية ينتج JSON قابلاً للرفع',
   (() => { try { return JSON.parse(JSON.stringify(cloudPayload)).srs.cards.length > 0; } catch { return false; } })());
+const sync = await mod('assets/js/core/sync.js');
+const queuedSnapshot = sync.queueSyncProgress(cloudPayload);
+check('لقطة المزامنة تُحفظ محلياً قبل وجود خدمة سحابية', queuedSnapshot.pending
+  && queuedSnapshot.cardCount === cloudPayload.srs.cards.length
+  && (await sync.flushSyncQueue()).status === 'queued');
+const failedSync = await sync.flushSyncQueue(async () => { throw new Error('offline fixture'); });
+check('فشل النقل يبقي اللقطة محلياً مع تسجيل الخطأ',
+  failedSync.status === 'queued' && failedSync.lastError === 'offline fixture');
+const successfulSync = await sync.flushSyncQueue(async (payload) => {
+  if (payload.schemaVersion !== 1) throw new Error('bad payload');
+});
+check('نجاح النقل الممرر يمسح اللقطة المعلّقة', successfulSync.status === 'synced'
+  && !sync.getSyncQueueStatus().pending);
+let invalidPayloadRejected = false;
+try { sync.queueSyncProgress({ app: 'wrong' }); } catch (error) { invalidPayloadRejected = error instanceof TypeError; }
+check('وحدة المزامنة ترفض بنية JSON غير صالحة', invalidPayloadRejected);
 const pointsBefore = store.progress.points;
+sync.queueSyncProgress(cloudPayload);
 resetProgress();
+check('تصفير التقدم يمسح لقطة المزامنة المحلية القديمة', !sync.getSyncQueueStatus().pending);
 check('التصفير يمسح النقاط', store.progress.points === 0);
 store.saveSettings({ security: { lockEnabled: true } });
 parsed.settings.push = { enabled: true, appId: 'legacy-app-id' };
@@ -468,10 +486,17 @@ section('الترجمة (عربي/إنجليزي)');
 const i18n = await mod('assets/js/core/i18n.js');
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
+check('إعدادات المزامنة تعرض تنبيهاً صريحاً بالحفظ المحلي فقط',
+  i18n.t('set.syncProgress') === 'مزامنة التقدّم'
+    && i18n.t('set.syncLocalOnly').includes('لن تُرسل أي بيانات عبر الشبكة'));
+const syncSettingsSource = await readFile(join(ROOT, 'assets/js/views/settings.js'), 'utf8');
+check('زر المزامنة يضيف لقطة محلية من مخطط التقدم الموحّد',
+  syncSettingsSource.includes('id="queueSyncBtn"') && syncSettingsSource.includes('queueSyncProgress(exportCloudProgress())'));
 check('نص حالة التذكير مترجم بالعربية', i18n.t('set.reminderOn') === 'التذكير مُفعَّل');
 check('بطاقات SRS لها تسمية مترجمة', i18n.t('common.cards') === 'بطاقات');
 i18n.setUiLang('en');
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
+check('ترجمة زر المزامنة متاحة بالإنجليزية', i18n.t('set.syncProgress') === 'Sync progress');
 check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
 check('بطاقات SRS مترجمة بالإنجليزية', i18n.t('common.cards') === 'cards');
 check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);

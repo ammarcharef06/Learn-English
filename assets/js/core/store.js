@@ -5,7 +5,8 @@ const K_SETTINGS = 'lea.settings.v1';
 const K_PROGRESS = 'lea.progress.v1';
 const K_AUTH = 'lea.auth.v1';
 const K_SESSION = 'lea.session.v1';
-export const KEYS = { K_SETTINGS, K_PROGRESS, K_AUTH, K_SESSION };
+const K_SYNC_QUEUE = 'lea.sync.queue.v1';
+export const KEYS = { K_SETTINGS, K_PROGRESS, K_AUTH, K_SESSION, K_SYNC_QUEUE };
 
 export const DEFAULT_SETTINGS = {
   v: 1,
@@ -232,6 +233,7 @@ export function importAll(json) {
 export function resetProgress() {
   progress = deepMerge(DEFAULT_PROGRESS, {});
   localStorage.setItem(K_PROGRESS, JSON.stringify(progress));
+  localStorage.removeItem(K_SYNC_QUEUE);
   emit('progress');
 }
 export function resetSettings() {

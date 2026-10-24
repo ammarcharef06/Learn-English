@@ -31,6 +31,7 @@ const CORE = [
   './assets/js/core/router.js',
   './assets/js/core/speech.js',
   './assets/js/core/srs.js',
+  './assets/js/core/sync.js',
   './assets/js/core/gamify.js',
   './assets/js/core/journey.js',
   './assets/js/core/conversation-practice.js',

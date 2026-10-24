@@ -1,13 +1,14 @@
 /* الإعدادات: المظهر، الصوت، الإشعارات، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
 import { esc, qs, qsa, toast, openModal, download, readFileText, prettyTimeAr } from '../core/utils.js';
-import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, importAll, progress } from '../core/store.js';
+import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, exportCloudProgress, importAll, progress } from '../core/store.js';
 import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
 import { pageHead } from './shell.js';
 import { APP_VERSION } from '../core/app-version.js';
 import { checkForUpdate, checkForUpdateInBackground, downloadAndOpenUpdate } from '../core/updater.js';
+import { getSyncQueueStatus, queueSyncProgress } from '../core/sync.js';
 
 export function renderSettings(host, query = {}) {
   const s = settings;
@@ -17,6 +18,7 @@ export function renderSettings(host, query = {}) {
   const voices = englishVoices();
   const passwordConfigured = hasPassword();
   const passwordLockEnabled = lockEnabled();
+  const syncStatus = getSyncQueueStatus();
 
   host.innerHTML = `
     ${pageHead({ icon: '⚙️', title: t('set.title'), subtitle: t('set.subtitle') })}
@@ -64,6 +66,15 @@ export function renderSettings(host, query = {}) {
         <label class="switch"><input type="checkbox" id="reduceMotion" aria-label="${t('set.reduceMotion')}" aria-describedby="reduceMotionHint" ${s.reduceAnimations ? 'checked' : ''} /><span class="switch__track"></span></label>
       </div>
     </section>
+
+    <div class="card" style="margin-top:16px" id="syncCard">
+      <div class="card__title"><span class="ico">☁️</span><h2>${t('set.syncProgress')}</h2></div>
+      <p class="small muted">${t('set.syncLocalOnly')}</p>
+      <div class="row row--wrap" style="gap:8px">
+        <button class="btn btn--primary" type="button" id="queueSyncBtn">☁️ ${t('set.syncProgress')}</button>
+        <span class="chip" id="syncQueueStatus" role="status" aria-live="polite">${syncStatus.pending ? t('set.syncQueued', { count: syncStatus.cardCount }) : t('set.syncNoPending')}</span>
+      </div>
+    </div>
 
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔊</span><h2>الصوت والنطق</h2></div>
@@ -432,6 +443,17 @@ export function renderSettings(host, query = {}) {
     window.__leaLockNow?.();
   });
   /* ---------- البيانات ---------- */
+  qs('#queueSyncBtn', host)?.addEventListener('click', () => {
+    try {
+      const queued = queueSyncProgress(exportCloudProgress());
+      const status = qs('#syncQueueStatus', host);
+      if (status) status.textContent = t('set.syncQueued', { count: queued.cardCount });
+      toast(t('set.syncPrepared'), 'ok');
+    } catch (error) {
+      console.error('Could not prepare local cloud sync snapshot', error);
+      toast(t('set.syncPrepareFailed'), 'bad');
+    }
+  });
   qs('#exportBtn', host)?.addEventListener('click', () => {
     download(`learn-english-backup-${new Date().toISOString().slice(0, 10)}.json`, exportAll());
     toast('تم تنزيل النسخة الاحتياطية ⬇', 'ok');
