@@ -74,20 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.20',
-    name: 'English Academy v1.0.20',
+    tag_name: 'v1.0.21',
+    name: 'English Academy v1.0.21',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
       { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.20/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.21/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.20' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.21' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -373,27 +373,27 @@ try {
   globalThis.fetch = async () => ({
     ok: true,
     json: async () => ({
-      tag_name: 'v1.0.20',
-      name: 'English Academy v1.0.20',
+      tag_name: 'v1.0.21',
+      name: 'English Academy v1.0.21',
       body: 'Release notes',
-      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.20',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.21',
       assets: [
         { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.20/SHA256SUMS.txt' },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.21/SHA256SUMS.txt' },
       ],
     }),
   });
   await updater.checkForUpdateInBackground();
   check('Background update check stores a new release even when notification display fails',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.20'
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.21'
     && !localStorage.getItem('lea.update.notified'));
   showUpdateNotification = true;
   localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
   await updater.checkForUpdateInBackground();
   check('Failed update notification is retried and only marked after display succeeds',
-    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.20');
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.21');
   check('Pending update is preserved when background check is throttled',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.20');
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.21');
 } finally {
   globalThis.fetch = oldFetch;
   if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
@@ -429,14 +429,49 @@ store.saveSettings({ security: { lockEnabled: false } });
 /* ================= 8. الترجمة ================= */
 section('الترجمة (عربي/إنجليزي)');
 const i18n = await mod('assets/js/core/i18n.js');
+const themeForLang = await mod('assets/js/core/theme.js');
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
 check('نص حالة التذكير مترجم بالعربية', i18n.t('set.reminderOn') === 'التذكير مُفعَّل');
+saveSettings({ uiLang: 'ar' });
+themeForLang.applyLang();
+const { renderDashboard } = await mod('assets/js/views/dashboard.js');
+const { renderSession } = await mod('assets/js/views/session.js');
+const arabicDashboard = { innerHTML: '' };
+const arabicSession = { innerHTML: '' };
+renderDashboard(arabicDashboard);
+renderSession(arabicSession);
+check('اقتراح لوحة البداية يبقى عربياً في الواجهة العربية',
+  arabicDashboard.innerHTML.includes('<b>التحيات والتعريف بالنفس</b>'));
+check('ترجمة عبارة المقهى واتجاهها عربيان',
+  arabicDashboard.innerHTML.includes('<p lang="ar" dir="rtl">أود كوباً من الشاي، من فضلك.</p>'));
+check('تفصيل درس جلسة اليوم يبقى عربياً',
+  arabicSession.innerHTML.includes('A1 — المبتدئ · التحيات والتعريف بالنفس'));
 i18n.setUiLang('en');
+saveSettings({ uiLang: 'en' });
+themeForLang.applyLang();
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
 check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
-check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);
+check('واجهة الإنجليزية تستخدم اتجاه LTR', i18n.isRTL() === false && document.documentElement.dir === 'ltr');
+const englishDashboard = { innerHTML: '' };
+const englishSession = { innerHTML: '' };
+renderDashboard(englishDashboard);
+renderSession(englishSession);
+check('اقتراح لوحة البداية يستخدم عنوان المنهج الإنجليزي',
+  englishDashboard.innerHTML.includes('<b>Greetings and Introductions</b>')
+  && !englishDashboard.innerHTML.includes('<b>التحيات والتعريف بالنفس</b>'));
+check('معنى عبارة المقهى واتجاهه إنجليزيان',
+  englishDashboard.innerHTML.includes('<p lang="en" dir="ltr">A polite way to order a cup of tea.</p>')
+  && !englishDashboard.innerHTML.includes('<p lang="en" dir="ltr">أود كوباً من الشاي، من فضلك.</p>'));
+check('تفصيل درس جلسة اليوم يستخدم عنوان المنهج الإنجليزي',
+  englishSession.innerHTML.includes('A1 · Greetings and Introductions')
+  && !englishSession.innerHTML.includes('A1 · التحيات والتعريف بالنفس'));
+check('جلسة المراجعة الذكية تطلب خمسة عناصر المطابقة لهدف اليوم',
+  englishSession.innerHTML.includes('#/flashcards?mode=smart&size=5'));
 i18n.setUiLang('ar');
+saveSettings({ uiLang: 'ar' });
+themeForLang.applyLang();
+check('واجهة العربية تستخدم اتجاه RTL', i18n.isRTL() && document.documentElement.dir === 'rtl');
 check('مفتاح غير موجود يعود كما هو', i18n.t('nope.missing') === 'nope.missing');
 
 section('إمكانية الوصول');

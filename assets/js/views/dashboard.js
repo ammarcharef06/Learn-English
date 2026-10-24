@@ -39,6 +39,9 @@ export function renderDashboard(host) {
   const phraseSaved = (progress.notebook || []).some((entry) => entry.en?.trim().toLowerCase() === cafePhrase.en.trim().toLowerCase());
   const lessonHref = next ? `#/lesson/${next.unit.id}/${next.lessonIndex}` : '#/drills?mode=smart';
   const routeLevel = next ? LEVELS.find((level) => level.id === next.unit.levelId) : LEVELS[LEVELS.length - 1];
+  const lessonTitle = next
+    ? settings.uiLang === 'en' ? next.unit.titleEn || next.unit.title : next.unit.title
+    : t('journey.courseDone');
   const routeProgress = routeLevel ? levelPercent(routeLevel.id) : 100;
   const cafeHref = '#/conversations?scene=at-a-cafe';
   const conversationHref = activeScene ? '#/conversations' : cafeHref;
@@ -51,9 +54,9 @@ export function renderDashboard(host) {
           <h1 id="dashboardTitle">${esc(t('dash.welcome'))}</h1>
           <p>${esc(t('dash.subtitle'))}</p>
         </div>
-        <a class="town-route" href="${lessonHref}" aria-label="${esc(`${t('town.route')}: ${routeLevel?.id.toUpperCase() || 'A1'} · ${next?.unit.title || t('journey.courseDone')}`)}">
+        <a class="town-route" href="${lessonHref}" aria-label="${esc(`${t('town.route')}: ${routeLevel?.id.toUpperCase() || 'A1'} · ${lessonTitle}`)}">
           <span class="town-route__badge">${esc(routeLevel?.id.toUpperCase() || 'A1')}</span>
-          <span class="town-route__copy"><small>${esc(t('town.route'))}</small><b>${esc(next?.unit.title || t('journey.courseDone'))}</b></span>
+          <span class="town-route__copy"><small>${esc(t('town.route'))}</small><b>${esc(lessonTitle)}</b></span>
           <span class="town-route__progress" aria-hidden="true"><i style="width:${routeProgress}%"></i></span>
           <span class="town-route__percent">${routeProgress}%</span>
         </a>
@@ -123,7 +126,7 @@ export function renderDashboard(host) {
           ${supportingTasks.map((task) => {
             const content = {
               review: { icon: '↻', label: t('journey.review'), detail: task.done ? t('journey.completed') : `${task.count}/${task.target} · ${t('town.reviewHint')}`, href: task.href, color: 'mint' },
-              lesson: { icon: '▤', label: t('journey.lesson'), detail: task.done ? t('journey.completed') : next?.unit.title || t('journey.lessonHint'), href: lessonHref, color: 'lilac' },
+              lesson: { icon: '▤', label: t('journey.lesson'), detail: task.done ? t('journey.completed') : lessonTitle, href: lessonHref, color: 'lilac' },
             }[task.id];
             return `<a class="town-quest ${task.done ? 'is-done' : ''} ${task.id === nextTaskId ? 'is-next' : ''}" href="${content.href}">
               <span class="town-quest__icon town-quest__icon--${content.color}" aria-hidden="true">${task.done ? '✓' : content.icon}</span>
@@ -138,7 +141,7 @@ export function renderDashboard(host) {
 
       <section class="town-phrase" aria-labelledby="townPhraseTitle">
         <span class="town-phrase__seal" aria-hidden="true">✧</span>
-        <div class="town-phrase__content"><span class="town-section-kicker">${esc(t('town.phraseLabel'))}</span><h2 id="townPhraseTitle" class="en" lang="en" dir="ltr">${esc(cafePhrase.en)}</h2><p>${esc(cafePhrase.ar)}</p></div>
+        <div class="town-phrase__content"><span class="town-section-kicker">${esc(t('town.phraseLabel'))}</span><h2 id="townPhraseTitle" class="en" lang="en" dir="ltr">${esc(cafePhrase.en)}</h2><p lang="${settings.uiLang === 'en' ? 'en' : 'ar'}" dir="${settings.uiLang === 'en' ? 'ltr' : 'rtl'}">${esc(t('town.phraseMeaning'))}</p></div>
         <div class="town-phrase__actions">${speakBtn(cafePhrase.en)}${phraseSaved ? `<span class="town-phrase__saved">✓ ${esc(t('common.notebook.added'))}</span>` : `<button class="town-phrase__save" type="button" data-nb data-en="${esc(cafePhrase.en)}" data-ar="${esc(cafePhrase.ar)}">＋ ${esc(t('town.savePhrase'))}</button>`}</div>
       </section>
     </div>

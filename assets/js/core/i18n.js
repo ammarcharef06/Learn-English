@@ -172,6 +172,7 @@ const DICT = {
   'town.goNow': ['ابدأ', 'Start'],
   'town.adjustGoal': ['اضبط هدفك اليومي', 'Set your daily goal'],
   'town.phraseLabel': ['عبارة من مقهى روز', 'A phrase from Rose Café'],
+  'town.phraseMeaning': ['أود كوباً من الشاي، من فضلك.', 'A polite way to order a cup of tea.'],
   'town.savePhrase': ['أضفها إلى دفتري', 'Save to my notebook'],
   'zchoice.eyebrow': ['محطة البداية · يمكنك تغييرها لاحقاً', 'YOUR FIRST STOP · CHANGE IT ANYTIME'],
   'zchoice.title': ['من أي محطة نبدأ؟', 'Where shall we begin?'],
