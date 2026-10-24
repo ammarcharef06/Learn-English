@@ -13,7 +13,7 @@ export function zeroModeOn() {
 
 /* أقسام قسم A0 في الدرج (بنفس شكل قائمة الموقع) */
 const NAV = [
-  { hash: '#/zero', icon: '🗺️', label: 'المراحل الثمانية', key: 'stages' },
+  { hash: '#/zero', icon: '🗺️', label: 'المراحل الخمس', key: 'stages' },
   { hash: '#/zero/exam', icon: '🧪', label: 'الاختبار النهائي', key: 'exam' },
   { hash: '#/zero/certificate', icon: '🎓', label: 'شهادة التأسيس', key: 'cert' },
   { hash: '#/zero/pad', icon: '✍️', label: 'لوح الكتابة', key: 'pad' },

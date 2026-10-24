@@ -135,7 +135,7 @@ try {
   const { LEVELS, ALL_UNITS, READINGS, curriculumStats } = await import(pathToFileURL(join(ROOT, 'assets/js/data/curriculum.js')).href);
   const stats = curriculumStats();
   ok(`المنهج: ${LEVELS.length} مستويات · ${stats.units} وحدة · ${stats.vocab} كلمة · ${stats.grammar} درس قواعد · ${stats.sentences} جملة`);
-  if (READINGS.length !== 12) bad(`عدد المطالعات ${READINGS.length} بدل 12`);
+  if (READINGS.length !== 16) bad(`عدد المطالعات ${READINGS.length} بدل 16`);
 
   const unitIds = new Set();
   for (const u of ALL_UNITS) {
@@ -247,23 +247,24 @@ try {
   const T = z.ZERO_TOTALS;
   ok(`قسم A0: ${z.ZERO_STAGES.length} مراحل · ${T.items} عنصراً · ${T.letters} حرفاً · ${T.digraphs} مركّباً · ${T.words} كلمة · ${T.sentences} جملة · ${T.readings} قراءات`);
 
-  if (z.ZERO_STAGES.length !== 8) bad(`عدد مراحل A0 ${z.ZERO_STAGES.length} بدل 8`);
+  if (z.ZERO_STAGES.length !== 5) bad(`عدد مراحل A0 ${z.ZERO_STAGES.length} بدل 5`);
+  if (z.ZERO_STAGES.some((stage) => ['digraphs', 'words', 'reading'].includes(stage.id))) bad('A0 ما زال يتضمن محتوى نُقل إلى A1');
   if (z.LETTERS.length !== 26) bad(`عدد حروف A0 ${z.LETTERS.length} بدل 26`);
-  if (z.DIGRAPHS.length !== 12) bad(`عدد الحروف المركّبة ${z.DIGRAPHS.length} بدل 12`);
+  if (z.DIGRAPHS.length !== 12 || T.digraphs !== 0) bad('الحروف المركبة لم تُنقل بالكامل من المسار النشط A0');
   if (z.WORD_GROUPS.length !== 8) bad(`عدد مجموعات الكلمات ${z.WORD_GROUPS.length} بدل 8`);
-  if (z.SENTENCES.length !== 40) bad(`عدد جمل A0 ${z.SENTENCES.length} بدل 40`);
-  if (z.READINGS.length !== 4) bad(`عدد قراءات A0 ${z.READINGS.length} بدل 4`);
+  if (z.SENTENCES.length !== 40 || T.sentences !== 15) bad('بيانات الجمل المنقولة أو عدد عبارات A0 غير صحيح');
+  if (z.READINGS.length !== 4 || T.readings !== 0) bad('بيانات القراءات المنقولة أو عدد قراءات A0 غير صحيح');
   if (z.DAYS.length !== 7 || z.MONTHS.length !== 12 || z.SEASONS.length !== 4) bad('الأيام/الشهور/الفصول في A0 غير مكتملة');
   if (z.PRONOUNS.length !== 8 || z.TO_BE.length !== 3) bad('الضمائر أو أفعال to be في A0 غير مكتملة');
   if (z.ORDINALS.length !== 10) bad(`عدد الأرقام الترتيبية ${z.ORDINALS.length} بدل 10`);
 
   const nums = z.NUMBERS.map((x) => x.n);
-  for (let i = 0; i <= 20; i++) if (!nums.includes(i)) bad(`رقم مفقود في A0: ${i}`);
-  for (const n of [30, 40, 50, 60, 70, 80, 90, 100]) if (!nums.includes(n)) bad(`رقم مفقود في A0: ${n}`);
+  for (let i = 0; i <= 20; i++) if (!nums.includes(i)) bad(`رقم مفقود في بيانات التأسيس: ${i}`);
+  for (const n of [30, 40, 50, 60, 70, 80, 90, 100]) if (!nums.includes(n)) bad(`رقم مفقود في بيانات التأسيس: ${n}`);
 
   const words = z.WORD_GROUPS.flatMap((g) => g.words.map((w) => w.en.toLowerCase()));
-  if (words.length !== 120) bad(`إجمالي كلمات A0 ${words.length} بدل 120`);
-  if (new Set(words).size !== words.length) bad('كلمات A0 فيها تكرار');
+  if (words.length !== 120 || T.words !== 0) bad(`إجمالي الكلمات المنقولة ${words.length} أو بقيت في A0`);
+  if (new Set(words).size !== words.length) bad('كلمات التأسيس المنقولة فيها تكرار');
   for (const g of z.WORD_GROUPS) {
     if (g.words.length !== 15) bad(`مجموعة ${g.id} فيها ${g.words.length} كلمة بدل 15`);
     for (const w of g.words) if (!w.en || !w.ar || !w.pron || !w.emoji) bad(`كلمة ناقصة في A0 (${g.id}): ${w.en}`);
@@ -326,7 +327,7 @@ try {
   const exam = z.zeroExamQuestions(30);
   if (exam.length !== 30) bad(`الاختبار النهائي يولّد ${exam.length} سؤالاً بدل 30`);
   if (new Set(exam.map((q) => q.id)).size !== exam.length) bad('أسئلة الاختبار النهائي فيها تكرار');
-  if (new Set(exam.map((q) => q.topic)).size < 6) bad('الاختبار النهائي لا يغطّي 6 مراحل على الأقل');
+  if (new Set(exam.map((q) => q.topic)).size < 5) bad('الاختبار النهائي لا يغطّي المراحل الخمس');
   ok(`أسئلة A0: ${stageQs} سؤال تدريب (5 لكل مرحلة) + ${exam.length} في الاختبار النهائي على ${new Set(exam.map((q) => q.topic)).size} مراحل`);
 
   // منطق الإتقان: 0% ثم 100% ثم التوصية بالانتقال إلى A1
@@ -346,7 +347,7 @@ try {
 try {
   const b = await import(pathToFileURL(join(ROOT, 'assets/js/data/badges.js')).href);
   const a0 = b.BADGES.filter((x) => String(x.id).startsWith('a0-'));
-  if (a0.length !== 13) bad(`عدد شارات A0 ${a0.length} بدل 13`);
+  if (a0.length !== 11) bad(`عدد شارات A0 ${a0.length} بدل 11`);
   for (const x of a0) {
     if (!x.icon || !x.ar || !x.en || !x.descAr || typeof x.check !== 'function') bad(`شارة A0 ناقصة: ${x.id}`);
   }
@@ -395,7 +396,7 @@ try {
   if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
   const zeroShell = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
   if (!/renderZeroDrawer/.test(zeroShell) || !/sidenav/.test(zeroShell)) bad('درج A0 غير مربوط بالقائمة الجانبية');
-  for (const l of ['المراحل الثمانية', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
+  for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
     if (!zeroShell.includes(l)) bad(`درج A0 ينقصه: ${l}`);
   }
   const appSrc = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');

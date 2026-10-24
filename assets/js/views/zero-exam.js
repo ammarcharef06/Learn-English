@@ -21,7 +21,7 @@ function reqList(snap) {
     <span class="${ok ? '' : 'muted'}">${text}</span>
   </div>`;
   return `<div class="stack" style="gap:10px">
-    ${row(snap.doneStages === ZERO_TOTALS.stages, `إتمام المراحل الثمانية <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b>`)}
+    ${row(snap.doneStages === ZERO_TOTALS.stages, `إتمام المراحل الخمس <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b>`)}
     ${row(snap.lettersMastered === ZERO_TOTALS.letters, `إتقان الحروف الستة والعشرين <b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b>`)}
     ${row(snap.examBest >= PASS, `النتيجة في الاختبار <b>${arNum(snap.examBest)}٪</b> من ${arNum(PASS)}٪`)}
   </div>`;
@@ -38,7 +38,7 @@ export function renderZeroExam(host) {
     <div class="page-head">
       <div>
         <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>الاختبار النهائي</h1></div>
-        <p>${arNum(EXAM_SIZE)} سؤالاً من المراحل الثمانية. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.</p>
+        <p>${arNum(EXAM_SIZE)} سؤالاً من المراحل الخمس. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.</p>
       </div>
       <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← المراحل</a></div>
     </div>
@@ -138,15 +138,15 @@ export function renderZeroCertificate(host) {
         <div class="zcert__name" id="certNameOut" aria-live="polite">${esc(cert.name || '................................')}</div>
 
         <p class="zcert__body">
-          أتمّ المتعلّم المراحل الثمانية لقسم «من الصفر»: الحروف الستة والعشرين، والحروف المركّبة، والأرقام،
-          والأيام والشهور والفصول والوقت، والضمائر وفعل الكينونة، وأول ١٢٠ كلمة، وأول ٤٠ جملة، وأربع قراءات.
+          أتمّ المتعلّم المراحل الخمس لقسم «من الصفر»: الحروف الستة والعشرين، والأرقام من صفر إلى عشرين،
+          وأيام الأسبوع، والضمائر الأساسية، والتحيات البسيطة.
         </p>
 
         <div class="grid grid--4">
           ${stat('الإتقان', `${arNum(snap.percent)}٪`)}
           ${stat('الاختبار', `${arNum(snap.examBest)}٪`)}
           ${stat('الحروف', `${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}`)}
-          ${stat('الكلمات', `${arNum(snap.wordsLearned)}/${arNum(ZERO_TOTALS.words)}`)}
+          ${stat('أيام الأسبوع', arNum(ZERO_TOTALS.days))}
         </div>
 
         <div class="zcert__foot">
@@ -181,7 +181,7 @@ export function renderZeroCertificate(host) {
 
   qs('#certCopy', host)?.addEventListener('click', async () => {
     const c = certificate();
-    const text = `شهادة تأسيس A0 — أكاديمية الإنجليزية\nالاسم: ${c.name || '—'}\nرقم الشهادة: ${c.code || '—'}\nالإتقان: ${snap.percent}%\nالاختبار: ${snap.examBest}%\nالمراحل: ${snap.doneStages}/${ZERO_TOTALS.stages}\nالحروف: ${snap.lettersMastered}/${ZERO_TOTALS.letters}\nالكلمات: ${snap.wordsLearned}/${ZERO_TOTALS.words}`;
+    const text = `شهادة تأسيس A0 — أكاديمية الإنجليزية\nالاسم: ${c.name || '—'}\nرقم الشهادة: ${c.code || '—'}\nالإتقان: ${snap.percent}%\nالاختبار: ${snap.examBest}%\nالمراحل: ${snap.doneStages}/${ZERO_TOTALS.stages}\nالحروف: ${snap.lettersMastered}/${ZERO_TOTALS.letters}\nالأيام: ${ZERO_TOTALS.days}\nالضمائر: ${ZERO_TOTALS.pronouns}`;
     try { await navigator.clipboard.writeText(text); toast('نُسخ ملخّص تقدّمك 📋', 'ok'); }
     catch { toast('تعذّر النسخ — انسخه يدوياً', 'warn'); }
   });

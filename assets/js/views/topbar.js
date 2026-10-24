@@ -49,7 +49,7 @@ export function topbarHTML(mode = 'site') {
   const isZero = mode === 'zero';
   const brandHref = isZero ? '#/zero' : '#/';
   const name = isZero ? 'من الصفر — تأسيس A0' : t('brand.name');
-  const tag = isZero ? 'الحروف · الأرقام · أول ١٢٠ كلمة' : t('brand.tag');
+  const tag = isZero ? 'الحروف · الأرقام · التحيات' : t('brand.tag');
   return `
     <button class="icon-btn topbar__menu" id="btnMenu" type="button" title="القائمة" aria-label="القائمة" aria-expanded="false" aria-controls="sidebar">
       <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>

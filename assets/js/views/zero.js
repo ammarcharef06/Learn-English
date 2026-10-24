@@ -37,7 +37,7 @@ export function renderZero(host) {
   const snap = zeroSnapshot();
   const cert = certificate();
   const next = nextStage(snap.stageList);
-  const nums = ['١', '٢', '٣', '٤', '٥', '٦', '٧', '٨'];
+  const nums = ['١', '٢', '٣', '٤', '٥'];
   const started = snap.percent > 0;
 
   const chip = (s) => {
@@ -50,7 +50,7 @@ export function renderZero(host) {
     <div class="page-head">
       <div>
         <div class="page-title"><span class="ico" aria-hidden="true">🌱</span><h1>من الصفر — تأسيس A0</h1></div>
-        <p>ثماني مراحل مرتّبة: الحروف، ثم الحروف المركّبة، ثم الأرقام والوقت، ثم الضمائر، ثم ١٢٠ كلمة و٤٠ جملة وأربع قراءات.</p>
+        <p>خمس مراحل قصيرة للمبتدئ المطلق: الأبجدية، والأرقام الأساسية، وأيام الأسبوع، والضمائر، والتحيات البسيطة.</p>
       </div>
       <div class="row row--wrap">
         <a class="btn btn--primary" href="#/zero/stage/${next.id}">${started ? `متابعة: ${esc(next.titleAr)}` : 'ابدأ بالحروف'} ←</a>
@@ -64,7 +64,7 @@ export function renderZero(host) {
           ${ringHTML(snap.percent, `${arNum(snap.percent)}٪`)}
           <div>
             <b>تقدّمك في التأسيس</b>
-            <div class="small muted">${arNum(snap.doneStages)} من ${arNum(ZERO_TOTALS.stages)} مراحل · ${arNum(snap.lettersMastered)} من ${arNum(ZERO_TOTALS.letters)} حرفاً · ${arNum(snap.wordsLearned)} من ${arNum(ZERO_TOTALS.words)} كلمة</div>
+            <div class="small muted">${arNum(snap.doneStages)} من ${arNum(ZERO_TOTALS.stages)} مراحل · ${arNum(snap.lettersMastered)} من ${arNum(ZERO_TOTALS.letters)} حرفاً · ${arNum(ZERO_TOTALS.days)} أيام · ${arNum(ZERO_TOTALS.pronouns)} ضمائر</div>
           </div>
         </div>
         <span class="chip chip--brand">${snap.examBest ? `الاختبار النهائي ${arNum(snap.examBest)}٪` : 'لم تجرّب الاختبار النهائي بعد'}</span>
@@ -74,7 +74,7 @@ export function renderZero(host) {
 
     <div class="card mt-4">
       <div class="card__title">
-        <span class="ico" aria-hidden="true">🗺️</span><h2>المراحل الثمانية</h2>
+        <span class="ico" aria-hidden="true">🗺️</span><h2>المراحل الخمس</h2>
         <span class="spacer chip chip--brand">${arNum(ZERO_TOTALS.stages)} مراحل</span>
       </div>
       <div class="stack">
@@ -96,7 +96,7 @@ export function renderZero(host) {
     <div class="grid grid--3 mt-4">
       <a class="card card--interactive" href="#/zero/exam">
         <div class="card__title"><span class="ico" aria-hidden="true">🧪</span><h3>الاختبار النهائي</h3></div>
-        <p class="small muted">٣٠ سؤالاً من المراحل الثمانية. ${snap.examBest ? `أفضل نتيجة: ${arNum(snap.examBest)}٪` : 'بلا حدّ للمحاولات.'}</p>
+        <p class="small muted">٣٠ سؤالاً من المراحل الخمس. ${snap.examBest ? `أفضل نتيجة: ${arNum(snap.examBest)}٪` : 'بلا حدّ للمحاولات.'}</p>
       </a>
       <a class="card card--interactive" href="#/zero/certificate">
         <div class="card__title"><span class="ico" aria-hidden="true">🎓</span><h3>شهادة التأسيس</h3></div>

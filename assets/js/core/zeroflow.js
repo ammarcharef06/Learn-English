@@ -5,7 +5,7 @@
    في مكان واحد: progress.zero
    ------------------------------------------------------------ */
 import { progress, saveProgress, settings, saveSettings } from './store.js';
-import { zeroStats, ZERO_STAGES, ZERO_TOTALS, LETTERS, DIGRAPHS, WORD_GROUPS, READINGS } from '../data/zero.js';
+import { zeroStats, ZERO_STAGES, ZERO_TOTALS, LETTERS } from '../data/zero.js';
 import { award, evaluateBadges, POINTS } from './gamify.js';
 
 /* نقاط خاصة بقسم التأسيس */
@@ -60,14 +60,10 @@ export function zeroSnapshot() {
     ...st,
     raw: z,
     letterList: LETTERS.map((l) => ({ ...l, done: !!z.letters?.[l.id] })),
-    digraphList: DIGRAPHS.map((d) => ({ ...d, done: !!z.digraphs?.[d.id] })),
-    wordGroups: WORD_GROUPS.map((g) => ({
-      ...g,
-      learned: g.words.filter((w) => z.words?.[w.en]).length,
-      words: g.words.map((w) => ({ ...w, done: !!z.words?.[w.en] })),
-    })),
+    digraphList: [],
+    wordGroups: [],
     stageList: ZERO_STAGES.map((s) => ({ ...s, state: z.stages?.[s.id] || {} })),
-    readingList: READINGS.map((r) => ({ ...r, state: z.readings?.[r.id] || {} })),
+    readingList: [],
     totals: ZERO_TOTALS,
   };
 }

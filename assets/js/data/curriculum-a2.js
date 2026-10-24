@@ -720,3 +720,29 @@ for (const unit of LEVEL_A2.units) {
     if (addition) Object.assign(word, addition);
   }
 }
+
+const A2_CLASSROOM_FOCUS = [
+  { term: 'question', meaningAr: 'سؤال', example: { en: 'Write one question about the lesson.', ar: 'اكتب سؤالاً عن الدرس.' } },
+  { term: 'answer', meaningAr: 'إجابة', example: { en: 'Give a short answer.', ar: 'أعطِ إجابة قصيرة.' } },
+];
+
+for (const unit of LEVEL_A2.units) unit.academic_focus = A2_CLASSROOM_FOCUS.map((item) => ({ ...item, example: { ...item.example } }));
+
+const A2_PHRASAL_VERBS = {
+  a2u1: [
+    { en: 'wake up', ar: 'يستيقظ', example: { en: 'I wake up at seven on weekdays.', ar: 'أستيقظ في السابعة أيام الأسبوع.' } },
+    { en: 'meet up', ar: 'يلتقي بشخص في موعد متفق عليه', example: { en: 'We meet up after class.', ar: 'نلتقي بعد الصف.' } },
+    { en: 'grow up', ar: 'ينشأ أو يكبر', example: { en: 'I hope to grow up healthy and happy.', ar: 'آمل أن أكبر بصحة وسعادة.' } },
+    { en: 'clean up', ar: 'ينظف المكان أو يرتبه', example: { en: 'I clean up my room every Saturday.', ar: 'أنظف غرفتي كل يوم سبت.' } },
+  ],
+  a2u2: [
+    { en: 'eat out', ar: 'يتناول الطعام خارج المنزل', example: { en: 'We eat out on Fridays.', ar: 'نتناول الطعام خارج المنزل أيام الجمعة.' } },
+    { en: 'try on', ar: 'يجرب قطعة ملابس قبل شرائها', example: { en: 'Can I try on this jacket?', ar: 'هل يمكنني تجربة هذه السترة؟' } },
+  ],
+};
+
+for (const unit of LEVEL_A2.units) {
+  for (const phrase of A2_PHRASAL_VERBS[unit.id] || []) {
+    unit.vocabulary.push({ ...phrase, pos: 'phrase', emoji: '💬' });
+  }
+}

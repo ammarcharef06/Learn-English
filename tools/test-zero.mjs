@@ -264,11 +264,12 @@ describe('القراءات الأربع', () => {
 /* ============================================================
    2) المراحل
    ============================================================ */
-describe('المراحل الثمانية', () => {
-  it('8 مراحل بمعرّفات فريدة وبترتيب 1..8', () => {
-    eq(ZERO_STAGES.length, 8, 'عدد المراحل');
-    eq(new Set(ZERO_STAGES.map((s) => s.id)).size, 8, 'معرّفات فريدة');
-    eq(ZERO_STAGES.map((s) => s.n).join(','), '1,2,3,4,5,6,7,8', 'ترقيم المراحل');
+describe('مراحل A0 الأساسية الخمس', () => {
+  it('5 مراحل بمعرّفات فريدة وبترتيب 1..5', () => {
+    eq(ZERO_STAGES.length, 5, 'عدد المراحل');
+    eq(new Set(ZERO_STAGES.map((s) => s.id)).size, 5, 'معرّفات فريدة');
+    eq(ZERO_STAGES.map((s) => s.n).join(','), '1,2,3,4,5', 'ترقيم المراحل');
+    assert(!ZERO_STAGES.some((s) => ['digraphs', 'words', 'reading'].includes(s.id)), 'محتوى A1 ما زال في مسار A0');
   });
   it('كل مرحلة لها محتوى فعلي', () => {
     for (const s of ZERO_STAGES) {
@@ -279,13 +280,16 @@ describe('المراحل الثمانية', () => {
   });
   it('الإجماليات مطابقة لعدد العناصر الفعلي', () => {
     eq(ZERO_TOTALS.letters, 26, 'إجمالي الحروف');
-    eq(ZERO_TOTALS.digraphs, 12, 'إجمالي المركّبة');
-    eq(ZERO_TOTALS.words, 120, 'إجمالي الكلمات');
-    eq(ZERO_TOTALS.sentences, 40, 'إجمالي الجمل');
-    eq(ZERO_TOTALS.readings, 4, 'إجمالي القراءات');
+    eq(ZERO_TOTALS.digraphs, 0, 'الحروف المركبة منقولة إلى A1');
+    eq(ZERO_TOTALS.numbers, 21, 'الأرقام الأساسية من صفر إلى عشرين');
+    eq(ZERO_TOTALS.days, 7, 'أيام الأسبوع');
+    eq(ZERO_TOTALS.pronouns, 8, 'الضمائر الأساسية');
+    eq(ZERO_TOTALS.words, 0, 'الكلمات الموضوعية منقولة إلى A1');
+    eq(ZERO_TOTALS.sentences, 15, 'عبارات التحية والتعارف');
+    eq(ZERO_TOTALS.readings, 0, 'القراءات منقولة إلى A1');
     const sum = ZERO_STAGES.reduce((n, s) => n + zeroStageSize(s.id), 0);
     eq(ZERO_TOTALS.items, sum, 'إجمالي عناصر المراحل');
-    gte(ZERO_TOTALS.items, 300, 'إجمالي عناصر المرحلة');
+    gte(ZERO_TOTALS.items, 70, 'إجمالي عناصر المرحلة');
   });
   it('كل عنصر له معنى عربي (أو نطق) ومفتاح فريد', () => {
     for (const s of ZERO_STAGES) {
@@ -364,9 +368,9 @@ describe('الاختبار النهائي (~30 سؤالاً)', () => {
     eq(qs.length, 30, 'عدد أسئلة الاختبار');
     eq(new Set(qs.map((q) => q.id)).size, 30, 'أسئلة فريدة');
   });
-  it('يغطّي 6 مراحل مختلفة على الأقل', () => {
+  it('يغطي كل المراحل الخمس', () => {
     const topics = new Set(zeroExamQuestions(30).map((q) => q.topic));
-    gte(topics.size, 6, 'عدد المراحل المغطاة');
+    gte(topics.size, 5, 'عدد المراحل المغطاة');
   });
   it('كل سؤال سليم', () => {
     for (const q of zeroExamQuestions(30)) {
@@ -408,13 +412,13 @@ describe('إحصاءات التقدّم (zeroStats)', () => {
     for (const g of WORD_GROUPS) for (const w of g.words) zero.words[w.en] = true;
     const st = zeroStats({ zero });
     eq(st.percent, 100, 'نسبة الإتقان');
-    eq(st.doneStages, 8, 'المراحل');
+    eq(st.doneStages, 5, 'المراحل');
     eq(st.lettersMastered, 26, 'الحروف');
-    eq(st.wordsLearned, 120, 'الكلمات');
+    eq(st.wordsLearned, 0, 'الكلمات الموضوعية أصبحت ضمن A1');
     eq(st.readyForA1, true, 'الاستحقاق');
     assert(/A1/.test(zeroAdvice(st).text), 'التوصية يجب أن تذكر A1');
   });
-  it('نسبة 100% تتطلّب اختباراً كاملاً (96% تعطي 99%)', () => {
+  it('نسبة الإتقان تتطلب المراحل والحروف والاختبار', () => {
     const zero = { stages: {}, letters: {}, words: {}, exam: { best: 96 } };
     for (const s of ZERO_STAGES) zero.stages[s.id] = { seen: true, done: true };
     for (const l of LETTERS) zero.letters[l.id] = true;
@@ -426,7 +430,7 @@ describe('إحصاءات التقدّم (zeroStats)', () => {
   });
   it('النسبة تتقدّم بشكل رتيب مع المراحل', () => {
     let last = -1;
-    for (let k = 0; k <= 8; k++) {
+    for (let k = 0; k <= 5; k++) {
       const zero = { stages: {}, letters: {}, words: {}, exam: { best: 0 } };
       ZERO_STAGES.slice(0, k).forEach((s) => { zero.stages[s.id] = { done: true }; });
       const p = zeroStats({ zero }).percent;
@@ -442,9 +446,9 @@ describe('كتابة التقدّم (zeroflow)', () => {
     resetProgress();
     const st = flow.zeroSnapshot();
     eq(st.percent, 0, 'النسبة بعد التصفير');
-    eq(st.stageList.length, 8, 'قائمة المراحل');
-    eq(st.wordGroups.length, 8, 'قائمة مجموعات الكلمات');
-    eq(st.wordGroups.reduce((n, g) => n + g.words.length, 0), 120, 'كلمات اللقطة');
+    eq(st.stageList.length, 5, 'قائمة المراحل');
+    eq(st.wordGroups.length, 0, 'مفردات A0 المنقولة غير معروضة في هذا المسار');
+    eq(st.readingList.length, 0, 'قراءات A0 المنقولة غير معروضة في هذا المسار');
   });
   it('زيارة مرحلة وإتمامها يُسجّلان', () => {
     flow.markStageSeen('letters');
@@ -577,9 +581,9 @@ describe('كتابة التقدّم (zeroflow)', () => {
 });
 
 describe('شارات التأسيس', () => {
-  it('13 شارة A0 بمعرّفات a0-* وأوصاف عربية', () => {
+  it('11 شارة A0 بمعرّفات a0-* وأوصاف عربية', () => {
     const A0 = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-'));
-    eq(A0.length, 13, 'عدد شارات A0');
+    eq(A0.length, 11, 'عدد شارات A0');
     for (const b of A0) {
       truthy(b.icon && b.ar && b.en && b.descAr && b.descEn, `شارة ناقصة: ${b.id}`);
       eq(typeof b.check, 'function', `شارة بلا دالة فحص: ${b.id}`);
@@ -589,9 +593,7 @@ describe('شارات التأسيس', () => {
     resetProgress();
     for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
     for (const l of LETTERS) flow.markLetter(l.id, true);
-    for (const d of DIGRAPHS) flow.markDigraph(d.id, true);
-    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
-    flow.markReadingDone('zr1', 4, 4);
+    for (const phrase of SENTENCES.filter((item) => ['greetings', 'polite', 'intro'].includes(item.group)).slice(0, 3)) flow.markSentence(phrase.en, true);
     flow.recordZeroExam(30, 30);
     flow.grantCertificate();
     gamify.evaluateBadges();
@@ -619,7 +621,6 @@ describe('التوصية بالانتقال إلى A1 (بلا قفل)', () => {
     resetProgress();
     for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
     for (const l of LETTERS) flow.markLetter(l.id, true);
-    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
     flow.recordZeroExam(30, 30);
     const rec = flow.a1Recommendation();
     eq(rec.ready, true, 'جاهزة');
@@ -745,7 +746,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   it('تنقّل A0 = نفس درج الموقع (تنقّل واحد لكل الأجهزة)', () => {
     assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
     assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
-    for (const l of ['المراحل الثمانية', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
+    for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
       assert(shellSrc.includes(l), `درج A0 ينقصه: ${l}`);
     }
     const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');

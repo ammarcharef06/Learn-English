@@ -1,10 +1,12 @@
+import { WORD_GROUPS as A0_WORD_GROUPS } from './zero-words.js';
+
 export const LEVEL_A1 = {
   id: "a1",
   label: "A1 — المبتدئ",
   labelEn: "Beginner (A1)",
   icon: "🌱",
   color: "#22c55e",
-  summary: "منهج المستوى الأول: أساسيات الحياة اليومية من التحيات والعائلة إلى الألوان والملابس في جمل قصيرة واضحة.",
+  summary: "منهج المبتدئ يبدأ بالمفردات الأساسية المنقولة من التأسيس، ثم يبني عليها القواعد والتواصل اليومي.",
   units: [
     {
       id: "a1u1",
@@ -652,7 +654,7 @@ const A1_UNIT_ENRICHMENT = {
     ],
     vocabulary: {
       hello: { collocations: [{ en: "say hello", ar: "يلقي التحية", example: { en: "Please say hello to your teacher.", ar: "ألقِ التحية على معلمك من فضلك." } }] },
-      meet: { collocations: [{ en: "meet a friend", ar: "يلتقي صديقاً" }], phrasalVerbs: [{ en: "meet up", ar: "يلتقي بشخص في موعد متفق عليه", example: { en: "We meet up after class.", ar: "نلتقي بعد الصف." } }] },
+      meet: { collocations: [{ en: "meet a friend", ar: "يلتقي صديقاً" }] },
     },
   },
   a1u2: {
@@ -668,7 +670,7 @@ const A1_UNIT_ENRICHMENT = {
       { id: "member", term: "member", meaningAr: "فرد أو عضو في مجموعة", example: { en: "Each member of my family has a role.", ar: "لكل فرد في عائلتي دور." }, paraphrasing: [{ original: "My family has five people.", paraphrase: "There are five members in my family." }] },
       { id: "similar", term: "similar", meaningAr: "متشابه", example: { en: "The two sisters have similar interests.", ar: "للأختين اهتمامات متشابهة." }, readingAnalysis: [{ term: "description", meaningAr: "وصف صفات الشخص أو المجموعة" }] },
     ],
-    vocabulary: { family: { collocations: [{ en: "close family", ar: "عائلة مترابطة" }] }, live: { collocations: [{ en: "live with", ar: "يعيش مع" }], phrasalVerbs: [{ en: "grow up", ar: "ينشأ أو يكبر", example: { en: "I grew up in a large family.", ar: "نشأت في عائلة كبيرة." } }] } },
+    vocabulary: { family: { collocations: [{ en: "close family", ar: "عائلة مترابطة" }] }, live: { collocations: [{ en: "live with", ar: "يعيش مع" }] } },
   },
   a1u3: {
     phonetics: [
@@ -683,7 +685,7 @@ const A1_UNIT_ENRICHMENT = {
       { id: "period", term: "period", meaningAr: "فترة زمنية", example: { en: "A week is a period of seven days.", ar: "الأسبوع فترة من سبعة أيام." }, paraphrasing: [{ original: "The lesson lasts 60 minutes.", paraphrase: "The lesson lasts one hour." }] },
       { id: "data", term: "data", meaningAr: "بيانات أو معلومات", example: { en: "The table shows the class times.", ar: "يعرض الجدول أوقات الصف." }, readingAnalysis: [{ term: "table", meaningAr: "جدول ينظم البيانات في صفوف وأعمدة" }] },
     ],
-    vocabulary: { time: { collocations: [{ en: "tell the time", ar: "يقرأ الساعة" }] }, night: { phrasalVerbs: [{ en: "wake up", ar: "يستيقظ", example: { en: "I wake up at seven on weekdays.", ar: "أستيقظ في السابعة أيام الأسبوع." } }] } },
+    vocabulary: { time: { collocations: [{ en: "tell the time", ar: "يقرأ الساعة" }] } },
   },
   a1u4: {
     phonetics: [
@@ -698,7 +700,7 @@ const A1_UNIT_ENRICHMENT = {
       { id: "category", term: "category", meaningAr: "فئة أو تصنيف", example: { en: "Fruit is a food category.", ar: "الفاكهة فئة من الطعام." }, paraphrasing: [{ original: "Apples and bananas are fruit.", paraphrase: "Apples and bananas belong to the fruit category." }] },
       { id: "process", term: "process", meaningAr: "عملية أو خطوات متتابعة", example: { en: "Making a sandwich is a simple process.", ar: "إعداد شطيرة عملية بسيطة." }, readingAnalysis: [{ term: "sequence", meaningAr: "ترتيب الخطوات حسب حدوثها" }] },
     ],
-    vocabulary: { water: { collocations: [{ en: "a glass of water", ar: "كوب من الماء" }] }, eat: { phrasalVerbs: [{ en: "eat out", ar: "يتناول الطعام خارج المنزل", example: { en: "We eat out on Fridays.", ar: "نتناول الطعام خارج المنزل أيام الجمعة." } }] } },
+    vocabulary: { water: { collocations: [{ en: "a glass of water", ar: "كوب من الماء" }] } },
   },
   a1u5: {
     phonetics: [
@@ -713,7 +715,7 @@ const A1_UNIT_ENRICHMENT = {
       { id: "location", term: "location", meaningAr: "موقع أو مكان", example: { en: "The map shows the location of the rooms.", ar: "تعرض الخريطة مواقع الغرف." }, paraphrasing: [{ original: "The lamp is next to the bed.", paraphrase: "The lamp is beside the bed." }] },
       { id: "function", term: "function", meaningAr: "وظيفة أو غرض", example: { en: "A key has the function of opening a lock.", ar: "وظيفة المفتاح فتح القفل." }, readingAnalysis: [{ term: "label", meaningAr: "تسمية عنصر في مخطط أو رسم" }] },
     ],
-    vocabulary: { house: { collocations: [{ en: "at home", ar: "في المنزل" }] }, clean: { phrasalVerbs: [{ en: "clean up", ar: "ينظف المكان أو يرتبه", example: { en: "I clean up my room every Saturday.", ar: "أنظف غرفتي كل يوم سبت." } }] } },
+    vocabulary: { house: { collocations: [{ en: "at home", ar: "في المنزل" }] } },
   },
   a1u6: {
     phonetics: [
@@ -728,7 +730,7 @@ const A1_UNIT_ENRICHMENT = {
       { id: "describe", term: "describe", meaningAr: "يصف بذكر الصفات", example: { en: "Describe the colors in the picture.", ar: "صِف الألوان في الصورة." }, paraphrasing: [{ original: "The park is large and green.", paraphrase: "It is a spacious park with green grass." }] },
       { id: "feature", term: "feature", meaningAr: "صفة أو خاصية مميزة", example: { en: "Color is one feature of the jacket.", ar: "اللون إحدى خصائص السترة." }, readingAnalysis: [{ term: "visual detail", meaningAr: "تفصيل يمكن ملاحظته في صورة أو مشهد" }] },
     ],
-    vocabulary: { wear: { collocations: [{ en: "wear a uniform", ar: "يرتدي زياً موحداً" }] }, buy: { phrasalVerbs: [{ en: "try on", ar: "يجرب قطعة ملابس قبل شرائها", example: { en: "Can I try on this jacket?", ar: "هل يمكنني تجربة هذه السترة؟" } }] } },
+    vocabulary: { wear: { collocations: [{ en: "wear a uniform", ar: "يرتدي زياً موحداً" }] } },
   },
 };
 
@@ -744,3 +746,200 @@ for (const unit of LEVEL_A1.units) {
     if (addition) Object.assign(word, addition);
   }
 }
+
+for (const unit of LEVEL_A1.units.filter((item) => A1_UNIT_ENRICHMENT[item.id])) {
+  unit.academic_focus = [
+    { term: 'word', meaningAr: 'كلمة', example: { en: 'Write the new word.', ar: 'اكتب الكلمة الجديدة.' } },
+    { term: 'sentence', meaningAr: 'جملة', example: { en: 'Read the sentence aloud.', ar: 'اقرأ الجملة بصوت مسموع.' } },
+  ];
+}
+
+const FOUNDATION_UNIT_DETAILS = {
+  family: {
+    title: 'الأشخاص والجسم: الكلمات الأولى', titleEn: 'First Words: People and the Body', icon: '👨‍👩‍👧',
+    goal: 'أن يسمّي المتعلم أفراد العائلة والأشخاص وأجزاء الجسم الأساسية.',
+    grammar: 'استخدم this is للتعريف بشخص أو جزء من الجسم، وthese are للتعريف بأكثر من شخص.',
+    example: { en: 'This is my mother.', ar: 'هذه أمي.' },
+    phonetics: { en: 'mother', ipa: '/ˈmʌðə/', ar: 'أم', pair: 'mother / brother', tip: 'انتبه إلى اختلاف الحركة الأولى بين الكلمتين.' },
+    transfer: { incorrect: 'This is my parents.', corrected: 'These are my parents.', explanationAr: 'استخدم صيغة الجمع these are عند الحديث عن الوالدين.' },
+  },
+  body: {
+    title: 'الجسم والصحة: الكلمات الأولى', titleEn: 'First Words: Body and Health', icon: '💪',
+    goal: 'أن يسمّي المتعلم أجزاء الجسم الأساسية وبعض الأشخاص المرتبطين بالصحة.',
+    grammar: 'استخدم my قبل اسم الجزء الذي تتحدث عنه.',
+    example: { en: 'My head hurts.', ar: 'رأسي يؤلمني.' },
+    phonetics: { en: 'head', ipa: '/hed/', ar: 'رأس', pair: 'head / hand', tip: 'ميّز بين الحركة القصيرة /e/ في head وبين /æ/ في hand.' },
+    transfer: { incorrect: 'My head is hurt.', corrected: 'My head hurts.', explanationAr: 'لوصف الألم المعتاد نقول إن الجزء يؤلمنا: My head hurts.' },
+  },
+  food: {
+    title: 'الطعام والألوان: الكلمات الأولى', titleEn: 'First Words: Food and Colors', icon: '🍎',
+    goal: 'أن يسمّي المتعلم أطعمة ومشروبات وألواناً وأشكالاً أساسية.',
+    grammar: 'استخدم I like مع الطعام، وضع اللون قبل الاسم عند وصف شيء.',
+    example: { en: 'I like bread and cheese.', ar: 'أحب الخبز والجبن.' },
+    phonetics: { en: 'fish', ipa: '/fɪʃ/', ar: 'سمك', pair: 'fan / van', tip: 'ميّز /f/ المهموس عن /v/ المجهور.' },
+    transfer: { incorrect: 'I like the tea.', corrected: 'I like tea.', explanationAr: 'عند الحديث عن الشاي عموماً لا نحتاج عادةً إلى the.' },
+  },
+  colors: {
+    title: 'الألوان والأشكال: الكلمات الأولى', titleEn: 'First Words: Colors and Shapes', icon: '🎨',
+    goal: 'أن يسمّي المتعلم ألواناً وأشكالاً أساسية.',
+    grammar: 'تأتي الصفة اللونية قبل الاسم في الإنجليزية.',
+    example: { en: 'It is a red circle.', ar: 'إنها دائرة حمراء.' },
+    phonetics: { en: 'red', ipa: '/red/', ar: 'أحمر', pair: 'red / read (past)', tip: 'في صيغة الماضي، read تُنطق مثل red؛ والسياق يوضح المعنى.' },
+    transfer: { incorrect: 'a car red', corrected: 'a red car', explanationAr: 'تأتي الصفة قبل الاسم في الإنجليزية.' },
+  },
+  animals: {
+    title: 'الحيوانات: الكلمات الأولى', titleEn: 'First Words: Animals', icon: '🐾',
+    goal: 'أن يسمّي المتعلم حيوانات مألوفة.',
+    grammar: 'استخدم a قبل اسم الحيوان المفرد الذي يبدأ بصوت ساكن.',
+    example: { en: 'I see a cat.', ar: 'أرى قطة.' },
+    phonetics: { en: 'cat', ipa: '/kæt/', ar: 'قطة', pair: 'cat / cut', tip: 'ميّز /æ/ في cat عن /ʌ/ في cut.' },
+    transfer: { incorrect: 'I have cat.', corrected: 'I have a cat.', explanationAr: 'يحتاج الاسم المفرد المعدود غالباً إلى a أو an.' },
+  },
+  school: {
+    title: 'المدرسة: الكلمات الأولى', titleEn: 'First Words: School', icon: '🏫',
+    goal: 'أن يسمّي المتعلم أدوات وأشخاصاً وأعمالاً مدرسية أساسية.',
+    grammar: 'استخدم this is لتسمية شيء قريب، وmy لبيان أنه يخصك.',
+    example: { en: 'This is my pen.', ar: 'هذا قلمي.' },
+    phonetics: { en: 'pen', ipa: '/pen/', ar: 'قلم', pair: 'pen / pan', tip: 'ميّز /e/ القصيرة عن /æ/ في pan.' },
+    transfer: { incorrect: 'I in school.', corrected: 'I am at school.', explanationAr: 'تحتاج الجملة الإنجليزية إلى فعل، ونستخدم at school للحديث عن الوجود في المدرسة.' },
+  },
+  home: {
+    title: 'المنزل والأفعال اليومية: الكلمات الأولى', titleEn: 'First Words: Home and Everyday Verbs', icon: '🏠',
+    goal: 'أن يسمّي المتعلم أشياء المنزل ويستخدم أفعالاً يومية شائعة.',
+    grammar: 'ابدأ الجملة بضمير الفاعل ثم الفعل، واستخدم in أو on لوصف المكان.',
+    example: { en: 'My book is on the table.', ar: 'كتابي على الطاولة.' },
+    phonetics: { en: 'house', ipa: '/haʊs/', ar: 'منزل', pair: 'house / horse', tip: 'انتبه إلى اختلاف الحركة في الكلمتين.' },
+    transfer: { incorrect: 'The book is in the table.', corrected: 'The book is on the table.', explanationAr: 'استخدم on عندما يكون الشيء فوق سطح الطاولة.' },
+  },
+  verbs: {
+    title: 'أفعال يومية: الكلمات الأولى', titleEn: 'First Words: Everyday Verbs', icon: '🏃',
+    goal: 'أن يستخدم المتعلم أفعالاً يومية شائعة في جمل قصيرة.',
+    grammar: 'ابدأ الجملة بضمير الفاعل ثم الفعل بصيغته الأساسية مع I.',
+    example: { en: 'I read every day.', ar: 'أقرأ كل يوم.' },
+    phonetics: { en: 'read', ipa: '/riːd/', ar: 'يقرأ', pair: 'read / red', tip: 'في المضارع تُنطق read /riːd/، وتُنطق red /red/.' },
+    transfer: { incorrect: 'Study English every day.', corrected: 'I study English every day.', explanationAr: 'اذكر ضمير الفاعل في الجملة الإنجليزية العادية.' },
+  },
+};
+
+function foundationExample(groupId, word) {
+  if (groupId === 'family') {
+    const familySubjects = {
+      mother: 'أمي', father: 'أبي', sister: 'أختي', brother: 'أخي',
+      grandmother: 'جدتي', grandfather: 'جدي', son: 'ابني', daughter: 'ابنتي',
+      baby: 'طفلي الصغير', family: 'عائلتي', parents: 'والداي', wife: 'زوجتي',
+      husband: 'زوجي', aunt: 'عمتي', uncle: 'عمي',
+    };
+    return word.en === 'parents'
+      ? { en: 'My parents are here.', ar: 'والداي هنا.' }
+      : { en: `My ${word.en} is here.`, ar: `${familySubjects[word.en] || word.ar} هنا.` };
+  }
+  if (groupId === 'body') {
+    const bodyExamples = {
+      head: ['I wash my head.', 'أغسل رأسي.'],
+      eye: ['I wash my eye.', 'أغسل عيني.'],
+      ear: ['I wash my ear.', 'أغسل أذني.'],
+      nose: ['I wash my nose.', 'أغسل أنفي.'],
+      mouth: ['I wash my mouth.', 'أغسل فمي.'],
+      hand: ['I wash my hand.', 'أغسل يدي.'],
+      foot: ['I wash my foot.', 'أغسل قدمي.'],
+      hair: ['I wash my hair.', 'أغسل شعري.'],
+      tooth: ['I brush my tooth.', 'أنظف سني بالفرشاة.'],
+      face: ['I wash my face.', 'أغسل وجهي.'],
+      arm: ['I wash my arm.', 'أغسل ذراعي.'],
+      leg: ['I wash my leg.', 'أغسل ساقي.'],
+      finger: ['I wash my finger.', 'أغسل إصبعي.'],
+      heart: ['The doctor checks my heart.', 'يفحص الطبيب قلبي.'],
+      doctor: ['The doctor helps me.', 'الطبيب يساعدني.'],
+    };
+    const [en, ar] = bodyExamples[word.en];
+    return { en, ar };
+  }
+  if (groupId === 'food') return { en: `I like ${word.en}.`, ar: `أحب ${word.ar}.` };
+  if (groupId === 'colors') return word.en === 'color'
+    ? { en: 'What color is it?', ar: 'ما لونه؟' }
+    : ['circle', 'square', 'triangle', 'star'].includes(word.en)
+    ? { en: `I see a ${word.en}.`, ar: `أرى ${word.ar}.` }
+    : { en: `It is ${word.en}.`, ar: `إنه ${word.ar}.` };
+  if (groupId === 'animals') return word.en === 'animal'
+    ? { en: 'I see an animal.', ar: 'أرى حيواناً.' }
+    : { en: `I see a ${word.en}.`, ar: `أرى ${word.ar}.` };
+  if (groupId === 'school' || groupId === 'home') return { en: `This is my ${word.en}.`, ar: `هذا ${word.ar}.` };
+  const verbExamples = {
+    go: ['I go to school.', 'أذهب إلى المدرسة.'],
+    come: ['I come home at four.', 'أعود إلى المنزل في الرابعة.'],
+    see: ['I see my friend.', 'أرى صديقي.'],
+    read: ['I read every day.', 'أقرأ كل يوم.'],
+    write: ['I write a word.', 'أكتب كلمة.'],
+    speak: ['I speak English.', 'أتحدث الإنجليزية.'],
+    listen: ['I listen to my teacher.', 'أستمع إلى معلمي.'],
+    wake: ['I wake up early.', 'أستيقظ مبكراً.'],
+    play: ['I play after school.', 'ألعب بعد المدرسة.'],
+    work: ['I work every day.', 'أعمل كل يوم.'],
+    study: ['I study English.', 'أدرس الإنجليزية.'],
+    eat: ['I eat lunch at home.', 'أتناول الغداء في المنزل.'],
+    drink: ['I drink water.', 'أشرب الماء.'],
+  };
+  const [en, ar] = verbExamples[word.en] || [`I ${word.en} every day.`, `أستخدم الفعل ${word.ar} في جملة.`];
+  return { en, ar };
+}
+
+const EXISTING_A1_WORDS = new Set(LEVEL_A1.units.flatMap((unit) => unit.vocabulary.map((word) => word.en.toLowerCase())));
+const A0_FOUNDATION_GROUPS = [
+  { id: 'people-body', groupIds: ['family', 'body'], detailId: 'family' },
+  { id: 'food-colors', groupIds: ['food', 'colors'], detailId: 'food' },
+  { id: 'animals', groupIds: ['animals'], detailId: 'animals' },
+  { id: 'school', groupIds: ['school'], detailId: 'school' },
+  { id: 'home-verbs', groupIds: ['home', 'verbs'], detailId: 'home' },
+];
+
+const MIGRATED_A0_UNITS = A0_FOUNDATION_GROUPS.map((cluster) => {
+  const details = FOUNDATION_UNIT_DETAILS[cluster.detailId];
+  const words = A0_WORD_GROUPS.filter((group) => cluster.groupIds.includes(group.id))
+    .flatMap((group) => group.words.map((word) => ({ ...word, groupId: group.id })))
+    .filter((word) => !EXISTING_A1_WORDS.has(word.en.toLowerCase()));
+  const vocabulary = words.map((word) => ({
+    en: word.en,
+    ar: word.ar,
+    pos: word.groupId === 'verbs' ? 'verb' : word.groupId === 'colors' && !['circle', 'square', 'triangle', 'star', 'color'].includes(word.en) ? 'adjective' : 'noun',
+    emoji: word.emoji,
+    example: foundationExample(word.groupId, word),
+  }));
+  return {
+    id: `a1-foundation-${cluster.id}`,
+    title: details.title,
+    titleEn: details.titleEn,
+    icon: details.icon,
+    goal: details.goal,
+    grammar: [{
+      title: details.grammar,
+      explain: `<p>${details.grammar}</p>`,
+      examples: [details.example],
+      tips: ['اقرأ المثال بصوت واضح، ثم استبدل الكلمة بكلمة أخرى من المجموعة.'],
+    }],
+    vocabulary,
+    phonetics: [{
+      en: details.phonetics.en,
+      ipa: details.phonetics.ipa,
+      ar: details.phonetics.ar,
+      contrastPairs: [{ en: details.phonetics.pair, ar: details.phonetics.tip }],
+      connectedSpeech: [{ en: details.example.en, ar: 'اربط الكلمات في العبارة بسلاسة، مع إبقاء كل كلمة واضحة.' }],
+      intonation: [{ en: `${details.example.en} ↘`, ar: 'نبرة هادئة تهبط عند نهاية الجملة الخبرية.' }],
+    }],
+    arabic_l1_transfers: [
+      {
+        incorrect: details.transfer.incorrect,
+        corrected: details.transfer.corrected,
+        explanationAr: details.transfer.explanationAr,
+      },
+      { incorrect: 'I happy.', corrected: 'I am happy.', explanationAr: 'لا تحذف فعل الكينونة am في جملة الوصف.' },
+    ],
+    academic_focus: [
+      { term: 'word', meaningAr: 'كلمة', example: { en: 'Read the word.', ar: 'اقرأ الكلمة.' } },
+      { term: 'example', meaningAr: 'مثال', example: { en: 'Read one example.', ar: 'اقرأ مثالاً واحداً.' } },
+    ],
+    sentences: vocabulary.slice(0, 6).map((word) => word.example),
+    dialogue: [],
+  };
+});
+
+LEVEL_A1.units.unshift(...MIGRATED_A0_UNITS);

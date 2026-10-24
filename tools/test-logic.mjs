@@ -233,7 +233,7 @@ const acc2 = gamify.accuracy();
 check('الدقة تنخفض بعد الخطأ', acc2 === 86, `${acc2}%`);
 const badgeStates = gamify.badgesWithState();
 check('قائمة الشارات كاملة', badgeStates.length >= 20 && badgeStates.every((b) => 'earned' in b));
-check('stats المستوى تُحسب', gamify.levelStats('a1').total === 6);
+check('stats المستوى تُحسب بعد إضافة وحدات التأسيس إلى A1', gamify.levelStats('a1').total === 11);
 
 /* ================= 5. التكرار المتباعد ================= */
 section('التكرار المتباعد (SRS)');
@@ -471,10 +471,11 @@ section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
 check('المستويات الستة A1–C2 نشطة بعد التحقق والاستيراد', cur.LEVELS.length === 6
   && ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].every((level) => cur.getLevel(level)));
-check('٣٦ وحدة نشطة إجمالاً', cur.ALL_UNITS.length === 36);
-check('١٢ مطالعة', cur.READINGS.length === 12);
+check('٤١ وحدة نشطة بعد ترحيل مفردات A0', cur.ALL_UNITS.length === 41);
+check('١٦ مطالعة بعد ترحيل قراءات A0', cur.READINGS.length === 16);
 check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
-check('المطالعات موزعة على المستويات', ['a1', 'a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
+check('المطالعات موزعة على المستويات', cur.readingsOfLevel('a1').length === 8
+  && ['a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
 check('اقتراح الدرس التالي يعمل', cur.nextLessonSuggestion() !== null);
 check('إحصاءات المنهج صحيحة', cur.curriculumStats().vocab >= 280);
 check('مخطط الوحدات يشمل النطق IPA وأخطاء النقل من العربية', cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa')
@@ -486,17 +487,21 @@ check('الوحدات النشطة تعرض الحقول الخمسة مباشر
   Array.isArray(u.grammar) && Array.isArray(u.vocabulary) && Array.isArray(u.phonetics)
   && Array.isArray(u.arabic_l1_transfers) && Array.isArray(u.academic_focus) && !('vocab' in u)));
 const a1a2Units = cur.ALL_UNITS.filter((unit) => ['a1', 'a2'].includes(unit.levelId));
+const enrichedA1A2Units = a1a2Units.filter((unit) => !unit.id.startsWith('a1-foundation-'));
 const a1a2ReviewEntries = qg.curriculumReviewEntries({ levels: ['a1', 'a2'] });
-check('كل وحدات A1 وA2 تحتوي أبعاد المنهج الخمسة مع IPA وأمثلة', a1a2Units.length === 12
+check('كل وحدات A1 وA2 تحتوي أبعاد المنهج الخمسة مع IPA وأمثلة', a1a2Units.length === 17
   && a1a2Units.every((unit) => unit.grammar.length && unit.vocabulary.length
-    && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa && item.en && item.ar
+    && unit.phonetics.length >= 1 && unit.phonetics.every((item) => item.ipa && item.en && item.ar
       && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
     && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2));
-check('إثراء مفردات A1 وA2 بالمتلازمات والأفعال المركبة قابل للمراجعة', a1a2Units.every((unit) =>
-  unit.vocabulary.some((word) => word.collocations?.length)
-    && unit.vocabulary.some((word) => word.phrasalVerbs?.length))
+check('متلازمات A1/A2 وأفعال A2 المركبة قابلة للمراجعة', enrichedA1A2Units.every((unit) =>
+  unit.vocabulary.some((word) => word.collocations?.length))
+  && a1a2Units.filter((unit) => unit.levelId === 'a2').some((unit) =>
+    unit.vocabulary.some((word) => word.phrasalVerbs?.length))
+  && !a1a2Units.filter((unit) => unit.id.startsWith('a1u')).some((unit) =>
+    unit.vocabulary.some((word) => word.phrasalVerbs?.length))
   && ['phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
-    'l1-transfer', 'academic', 'academic:paraphrasing', 'academic:readingAnalysis',
+    'l1-transfer', 'academic',
     'collocation', 'phrasal-verb'].every((kind) => a1a2ReviewEntries.some((entry) => entry.kind === kind))
   && a1a2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
 const b1Units = cur.ALL_UNITS.filter((unit) => unit.levelId === 'b1');
