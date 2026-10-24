@@ -142,7 +142,7 @@ export function renderFlashcards(host) {
     })[e.kind?.split(':')[0]] || 'other';
     const axisLabel = t(`fc.axis.${axisKey}`);
     const speakControl = (text, audioUrl, label = t('common.listen')) => text
-      ? `<button class="btn btn--sm fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}">🔊 ${esc(label)}</button>`
+      ? `<button class="btn btn--sm fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}" aria-pressed="false"><span class="fc__speak-icon" aria-hidden="true">🔊</span> ${esc(label)}</button>`
       : '';
 
     host.innerHTML = `
@@ -210,7 +210,21 @@ export function renderFlashcards(host) {
     flipButton.addEventListener('click', flip);
     host.querySelectorAll('[data-speak-text]').forEach((button) => button.addEventListener('click', (event) => {
       event.stopPropagation();
-      speak(button.dataset.speakText, { audioUrl: button.dataset.audioUrl || undefined });
+      speak(button.dataset.speakText, {
+        audioUrl: button.dataset.audioUrl || undefined,
+        onstart: () => {
+          button.classList.add('is-playing');
+          button.setAttribute('aria-pressed', 'true');
+          const icon = button.querySelector('.fc__speak-icon');
+          if (icon) icon.textContent = '⏵';
+        },
+        onend: () => {
+          button.classList.remove('is-playing');
+          button.setAttribute('aria-pressed', 'false');
+          const icon = button.querySelector('.fc__speak-icon');
+          if (icon) icon.textContent = '🔊';
+        },
+      });
     }));
     if (!state.flipped) { /* لا ننطق تلقائياً لتجنب الإزعاج */ }
 

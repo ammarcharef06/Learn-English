@@ -178,6 +178,44 @@ export function exportAll() {
     settings, progress, auth: readAuth(),
   }, null, 2);
 }
+
+export function exportCloudProgress() {
+  const levelStats = Object.fromEntries(Object.entries(progress.byLevel || {}).map(([level, value]) => [
+    level,
+    {
+      questions: Number.isFinite(value?.q) ? value.q : 0,
+      correct: Number.isFinite(value?.c) ? value.c : 0,
+    },
+  ]));
+  const unitProgress = Object.fromEntries(Object.entries(progress.units || {}).map(([unitId, value]) => [
+    unitId,
+    { done: Boolean(value?.done) },
+  ]));
+  const cards = Object.entries(progress.items || {}).flatMap(([id, item]) => {
+    if (item?.algorithm !== 'sm2') return [];
+    return [{
+      id,
+      repetitions: Number.isFinite(item.repetitions) ? item.repetitions : 0,
+      interval: Number.isFinite(item.interval) ? item.interval : 0,
+      easeFactor: Number.isFinite(item.easeFactor) ? item.easeFactor : 2.5,
+      seen: Number.isFinite(item.seen) ? item.seen : 0,
+      correct: Number.isFinite(item.correct) ? item.correct : 0,
+      wrong: Number.isFinite(item.wrong) ? item.wrong : 0,
+      lapses: Number.isFinite(item.lapses) ? item.lapses : 0,
+      due: typeof item.due === 'string' ? item.due : '',
+      last: typeof item.last === 'string' ? item.last : '',
+    }];
+  });
+
+  return {
+    app: 'learn-english',
+    schemaVersion: 1,
+    exportedAt: new Date().toISOString(),
+    learner: { levelStats, unitProgress },
+    srs: { algorithm: 'sm2', cards },
+  };
+}
+
 export function importAll(json) {
   const data = JSON.parse(json);
   if (!data || typeof data !== 'object') throw new Error('ملف غير صالح');

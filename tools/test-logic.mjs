@@ -137,7 +137,7 @@ window.speechSynthesis = {
   cancel() {},
   getVoices: () => [],
   addEventListener() {},
-  speak() { synthesized++; },
+  speak(utterance) { synthesized++; utterance.onstart?.(); },
 };
 window.SpeechSynthesisUtterance = class {};
 globalThis.SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
@@ -147,6 +147,11 @@ check('التسجيل المسجّل يُختار للتشغيل', speech.speak(
 await new Promise((resolve) => setTimeout(resolve, 0));
 check('فشل التسجيل لا يشغّل صوت المتصفح بديلاً', synthesized === 0);
 check('النص غير المسجّل يبقى قابلاً للنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+const playbackEvents = [];
+speech.speak('active word', { onstart: () => playbackEvents.push('start'), onend: () => playbackEvents.push('end') });
+speech.stopSpeaking();
+check('تشغيل الصوت يرسل حالتي البدء والإيقاف لتنظيف واجهة البطاقة',
+  playbackEvents.join(',') === 'start,end');
 check('مسار الصوت النسبي يُقبل ضمن نفس النطاق', speech.normalizeAudioUrl('./audio/word.mp3') === 'https://example.com/Learn-English/audio/word.mp3');
 check('مصدر صوت خارجي أو مخطط غير آمن يُرفض', speech.normalizeAudioUrl('https://other.example/audio.mp3') === ''
   && speech.normalizeAudioUrl('javascript:alert(1)') === '');
@@ -431,6 +436,22 @@ const exported = exportAll();
 check('التصدير ينتج JSON صالحاً', (() => { try { JSON.parse(exported); return true; } catch { return false; } })());
 const parsed = JSON.parse(exported);
 check('النسخة تحتوي الإعدادات والتقدم', !!parsed.settings && !!parsed.progress);
+store.saveProgress((p) => {
+  p.units.cloudFixture = { done: true, internalNote: 'not for cloud' };
+  p.items.cloudLegacyFixture = { box: 3, seen: 4 };
+});
+const cloudPayload = store.exportCloudProgress();
+check('تصدير المزامنة السحابية يقتصر على المستوى وتقدم الوحدات وبطاقات SM-2',
+  cloudPayload.schemaVersion === 1 && cloudPayload.srs.algorithm === 'sm2'
+    && !!cloudPayload.learner.levelStats.a1 && cloudPayload.learner.unitProgress.cloudFixture.done
+    && !!cloudPayload.srs.cards.find((card) => card.id === 'overdueWeak')
+    && typeof cloudPayload.srs.cards.find((card) => card.id === 'overdueWeak')?.due === 'string'
+    && !Object.hasOwn(cloudPayload, 'settings') && !Object.hasOwn(cloudPayload, 'auth')
+    && !cloudPayload.srs.cards.some((card) => card.id === 'cloudLegacyFixture')
+    && !Object.hasOwn(cloudPayload.learner.unitProgress.cloudFixture, 'internalNote'),
+  JSON.stringify({ levels: cloudPayload.learner.levelStats, ids: cloudPayload.srs.cards.map((card) => card.id).slice(0, 5) }));
+check('تصدير المزامنة السحابية ينتج JSON قابلاً للرفع',
+  (() => { try { return JSON.parse(JSON.stringify(cloudPayload)).srs.cards.length > 0; } catch { return false; } })());
 const pointsBefore = store.progress.points;
 resetProgress();
 check('التصفير يمسح النقاط', store.progress.points === 0);
@@ -470,6 +491,14 @@ theme.applyAccessibility();
 section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
 const audioLinks = await mod('assets/js/data/curriculum-audio.js');
+check('خريطة الصوت تضم تسجيلات المنهج وتستخدم مسارات محلية', Object.keys(audioLinks.CURRICULUM_AUDIO).length === 754
+  && Object.values(audioLinks.CURRICULUM_AUDIO).every((url) => /^\.\/assets\/audio\/curriculum\/[a-f0-9]{64}\.mp3$/.test(url)));
+const flashcardSource = await readFile(join(ROOT, 'assets/js/views/flashcards.js'), 'utf8');
+const mainCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
+check('زر الصوت في البطاقات يعرض حالة تشغيل مرئية ومعلنة للوصول',
+  flashcardSource.includes('aria-pressed="false"') && flashcardSource.includes("classList.add('is-playing')")
+    && flashcardSource.includes("classList.remove('is-playing')")
+    && mainCss.includes('.fc__speak.is-playing'));
 const audioFixture = [{
   vocabulary: [{ en: 'A New Word' }, { en: 'Hello', audio_url: './assets/audio/existing.mp3' }],
   sentences: [{ en: 'A sample sentence.' }],

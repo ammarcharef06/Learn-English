@@ -597,7 +597,11 @@
   .fc__word--ar { font-family: var(--font-ar); direction: rtl; font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
   .fc__ex { color: var(--text-2); font-size: .94rem; }
   .fc__ipa { direction: ltr; font-family: var(--font-en); color: var(--brand-1); font-size: 1.05rem; }
-  .fc__speak { max-inline-size: 100%; }
+  .fc__speak { max-inline-size: 100%; transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease); }
+  .fc__speak.is-playing { color: var(--brand-contrast, #fff); background: var(--brand-1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-1) 22%, transparent); }
+  .fc__speak.is-playing .fc__speak-icon { display: inline-block; animation: fc-audio-pulse 900ms ease-in-out infinite alternate; }
+  @keyframes fc-audio-pulse { to { transform: scale(1.18); } }
+  @media (prefers-reduced-motion: reduce) { .fc__speak.is-playing .fc__speak-icon { animation: none; } }
   .fc-actions { display: flex; gap: var(--sp-2); justify-content: center; flex-wrap: wrap; margin-block-start: var(--sp-4); }
   .fc-meta { display: flex; justify-content: space-between; max-inline-size: 640px; margin-inline: auto; margin-block-end: var(--sp-3); color: var(--text-3); font-size: .84rem; font-weight: 700; }
 

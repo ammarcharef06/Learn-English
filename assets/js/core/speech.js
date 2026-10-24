@@ -51,6 +51,21 @@ function bestVoice() {
    تُستخدم للتسجيلات التعليمية المحددة؛ وما عداها يُنطق بالمحرّك المدمج. */
 const soundBank = new Map();
 let audioEl = null;
+let playbackSequence = 0;
+let activePlayback = null;
+
+function finishPlayback(id) {
+  if (!activePlayback || activePlayback.id !== id) return;
+  const { onend } = activePlayback;
+  activePlayback = null;
+  try { onend?.(); } catch { /* تجاهل */ }
+}
+
+function startPlayback(opts = {}) {
+  const id = ++playbackSequence;
+  activePlayback = { id, onend: opts.onend };
+  return id;
+}
 
 export function registerSoundBank(map = {}) {
   for (const [k, v] of Object.entries(map)) {
@@ -76,6 +91,7 @@ export function normalizeAudioUrl(source) {
 }
 
 export function speak(text, opts = {}) {
+  stopSpeaking();
   if (opts.audioUrl) {
     const src = normalizeAudioUrl(opts.audioUrl);
     if (!src) {
@@ -84,14 +100,24 @@ export function speak(text, opts = {}) {
     }
     try {
       audioEl = audioEl || new Audio();
-      audioEl.pause();
+      const id = startPlayback(opts);
       audioEl.src = src;
       audioEl.currentTime = 0;
-      audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
-      audioEl.onerror = () => console.warn('Pronunciation audio failed to load', src, audioEl.error || '');
+      audioEl.onplay = () => {
+        if (activePlayback?.id !== id) return;
+        try { opts?.onstart?.(); } catch { /* تجاهل */ }
+      };
+      audioEl.onended = () => finishPlayback(id);
+      audioEl.onerror = () => {
+        console.warn('Pronunciation audio failed to load', src, audioEl.error || '');
+        finishPlayback(id);
+      };
       const pr = audioEl.play();
       if (pr && typeof pr.catch === 'function') {
-        pr.catch((error) => console.warn('Pronunciation audio could not be played', src, error));
+        pr.catch((error) => {
+          console.warn('Pronunciation audio could not be played', src, error);
+          finishPlayback(id);
+        });
       }
       return true;
     } catch (error) {
@@ -103,14 +129,24 @@ export function speak(text, opts = {}) {
   if (src) {
     try {
       audioEl = audioEl || new Audio();
-      audioEl.pause();
+      const id = startPlayback(opts);
       audioEl.src = src;
       audioEl.currentTime = 0;
-      audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
-      audioEl.onerror = () => console.warn('Recorded pronunciation failed to load', src, audioEl.error || '');
+      audioEl.onplay = () => {
+        if (activePlayback?.id !== id) return;
+        try { opts?.onstart?.(); } catch { /* تجاهل */ }
+      };
+      audioEl.onended = () => finishPlayback(id);
+      audioEl.onerror = () => {
+        console.warn('Recorded pronunciation failed to load', src, audioEl.error || '');
+        finishPlayback(id);
+      };
       const pr = audioEl.play();
       if (pr && typeof pr.catch === 'function') {
-        pr.catch((error) => console.warn('Recorded pronunciation could not be played', src, error));
+        pr.catch((error) => {
+          console.warn('Recorded pronunciation could not be played', src, error);
+          finishPlayback(id);
+        });
       }
       return true;
     } catch (error) {
@@ -124,22 +160,30 @@ export function speak(text, opts = {}) {
 /* النطق المدمج في المتصفح */
 export function speakBuiltIn(text, opts = {}) {
   if (!isSpeechSupported() || !text) return false;
-  try { window.speechSynthesis.cancel(); } catch {}
+  stopSpeaking();
+  const id = startPlayback(opts);
   const u = new SpeechSynthesisUtterance(String(text));
   const v = bestVoice();
   if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = settings?.tts?.lang || 'en-US'; }
   u.rate = opts.rate != null ? opts.rate : (settings?.tts?.rate || 0.92);
   u.pitch = opts.pitch != null ? opts.pitch : (settings?.tts?.pitch || 1);
   u.volume = 1;
-  if (opts.onend) u.onend = opts.onend;
+  u.onstart = () => {
+    if (activePlayback?.id !== id) return;
+    try { opts?.onstart?.(); } catch { /* تجاهل */ }
+  };
+  u.onend = () => finishPlayback(id);
+  u.onerror = () => finishPlayback(id);
   window.speechSynthesis.speak(u);
   return true;
 }
 
 export function stopSpeaking() {
   if (audioEl) { try { audioEl.pause(); } catch { /* تجاهل */ } }
-  if (!isSpeechSupported()) return;
-  try { window.speechSynthesis.cancel(); } catch {}
+  if (isSpeechSupported()) {
+    try { window.speechSynthesis.cancel(); } catch {}
+  }
+  if (activePlayback) finishPlayback(activePlayback.id);
 }
 
 /* نغمات قصيرة للتصحيح */

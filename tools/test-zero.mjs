@@ -840,6 +840,13 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   it('نسخة الـ Service Worker رُفعت لتحديث الملفات المخزّنة', () => {
     assert(/VERSION\s*=\s*'v(?:[2-9]|[1-9]\d)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
   });
+  it('ملفات المنهج والصوتيات A1-C2 تُخزَّن مسبقاً للعمل دون اتصال', () => {
+    assert(sw.includes('./assets/js/data/curriculum-audio.js'), 'خريطة صوت المنهج غير مخزّنة');
+    assert(sw.includes('mapSource.matchAll') && sw.includes('audioUrls'), 'لا تُستخرج ملفات MP3 من خريطة الصوت');
+    assert(/cache\.addAll\(audioUrls\.slice/.test(sw), 'لا يتم تخزين ملفات MP3 مسبقاً على دفعات');
+    assert(/url2\.pathname\.includes\('\/assets\/audio\/'\)/.test(sw), 'لا يوجد مسار cache-first للتسجيلات');
+    assert(/if \(cached\) return cached/.test(sw), 'التسجيل المخزّن لا يُقدّم دون اتصال');
+  });
 });
 
 /* ---------------- التقرير ---------------- */
