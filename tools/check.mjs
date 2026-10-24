@@ -360,6 +360,7 @@ try {
 try {
   const need = [
     'zero.html', 'manifest-zero.webmanifest',
+    'assets/css/main.css',
     'assets/js/data/zero.js', 'assets/js/data/zero-letters.js', 'assets/js/data/zero-time.js', 'assets/js/data/zero-words.js',
     'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js', 'assets/js/zero-main.js',
     'assets/js/views/zero.js', 'assets/js/views/zero-shell.js', 'assets/js/views/zero-stage.js',
@@ -414,7 +415,9 @@ try {
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
   if (/id="zbar"|id="znav"|id="btnZero"/.test(html)) bad('index.html ما زال يحتوي عناصر واجهة A0');
   if (/zero-pad\.css/.test(html)) bad('index.html يُحمّل أنماط لوح الكتابة (خاص بصفحة A0)');
-  if (!html.includes('./assets/css/zero.css')) bad('أنماط شاشة الدخول غير مربوطة في index.html');
+  if (!html.includes('./assets/css/main.css')) bad('نظام تصميم التطبيق غير مربوط في index.html');
+  if (/assets\/css\/(?:redesign|skins\/|zero\.css)/.test(html)) bad('index.html ما زال يحمّل طبقات CSS القديمة أو الخاصة بصفحة A0');
+  if ((html.match(/href="\.\/assets\/css\/[^"]+"/g) || []).length !== 1) bad('index.html يجب أن يستخدم ملف التصميم الموحد فقط');
 
   const shellSrc = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
   const zeroLinks = (shellSrc.match(/href="\.\/zero\.html"/g) || []).length;

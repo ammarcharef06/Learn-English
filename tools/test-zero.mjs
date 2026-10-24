@@ -721,9 +721,9 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(!/zero-(stage|exam|shell)\.js/.test(app), 'app.js يستورد واجهات A0');
     assert(/isAuthed\(\)/.test(zeroMain), 'صفحة A0 لا تحمي نفسها بجلسة الموقع');
   });
-  it('شاشة الاختيار تُستدعى مرة واحدة عند إقلاع الموقع', () => {
-    assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
-    assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
+  it('يفتح الموقع مباشرة على لوحة البدء دون شاشة اختيار أولية', () => {
+    assert(!/zero-entry\.js/.test(app), 'app.js ما زال يحمّل شاشة اختيار A0/A1');
+    assert(/route\('\/'/.test(app), 'الموقع لا يفتح لوحة البداية مباشرة');
   });
   it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
     for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
@@ -772,7 +772,9 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
     assert(!/zero\.html/.test(bottomBlock), 'الشريط السفلي فيه خيار دخول ثانٍ إلى A0');
     assert(!/zero-pad\.css/.test(html), 'index.html يُحمّل أنماط لوح الكتابة');
-    assert(html.includes('./assets/css/zero.css'), 'أنماط شاشة الدخول غير مربوطة في index.html');
+    assert(html.includes('./assets/css/main.css'), 'نظام تصميم التطبيق غير مربوط في index.html');
+    assert(!/assets\/css\/(?:redesign|skins\/|zero\.css)/.test(html), 'index.html ما زال يحمّل أنماط A0 أو طبقات التصميم القديمة');
+    eq((html.match(/href="\.\/assets\/css\/[^"]+"/g) || []).length, 1, 'index.html لا يستخدم ملف تصميم موحداً');
     assert(/zero\.html/.test(entryJs), 'اختيار «من الصفر» لا ينقل إلى صفحة A0');
   });
   it('زر الخروج من صفحة A0 يعيد إلى الموقع', () => {

@@ -26,12 +26,6 @@ export function renderSettings(host, query = {}) {
     <div class="card">
       <div class="card__title"><span class="ico">🎨</span><h2>${t('set.appearance')}</h2></div>
       <div class="setting-row">
-        <div class="setting-row__text"><b>ستايل الواجهة</b><span>شكل الموقع العام: كالي GNOME (الافتراضي)، GNOME (فاتح/داكن)، أو الكلاسيكي.</span></div>
-        <div class="setting-row__control seg" id="skinSeg">
-          ${SKINS.map((s) => `<button type="button" data-skin="${s.id}" class="${settings.skin === s.id ? 'is-active' : ''}" title="${esc(s.desc)}">${esc(s.ar)}</button>`).join('')}
-        </div>
-      </div>
-      <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.theme')}</b><span id="themeHint">فاتح، داكن، أو تلقائي حسب نظام جهازك.</span></div>
         <div class="setting-row__control seg" id="themeSeg">
           <button type="button" data-theme="auto" class="${s.theme === 'auto' ? 'is-active' : ''}">${t('set.themeAuto')}</button>
@@ -210,17 +204,9 @@ export function renderSettings(host, query = {}) {
     }
 
   /* ---------- المظهر ---------- */
-  qsa('#skinSeg button', host).forEach((b) => b.addEventListener('click', () => {
-    saveSettings({ skin: b.dataset.skin });
-    applySkin();
-    qsa('#skinSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
-    const label = SKINS.find((s) => s.id === b.dataset.skin);
-    toast(`الستايل: ${label ? label.ar : b.dataset.skin}`, 'ok');
-    renderSettings(host);
-  }));
   qsa('#themeSeg button', host).forEach((b) => b.addEventListener('click', () => {
     saveSettings({ theme: b.dataset.theme });
-    applySkin();
+    applyTheme();
     qsa('#themeSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
     toast(t('set.saved'), 'ok');
   }));
@@ -443,7 +429,14 @@ export function renderSettings(host, query = {}) {
     window.__leaLockNow?.();
   });
   /* ---------- البيانات ---------- */
-  qs('#queueSyncBtn', host)?.addEventListener('click', () => {
+  qs('#queueSyncBtn', host)?.addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    if (button.disabled) return;
+    const idleLabel = button.innerHTML;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    button.innerHTML = `<span class="sync-spinner" aria-hidden="true"></span>${t('set.syncPreparing')}`;
+    await new Promise((resolve) => window.requestAnimationFrame(resolve));
     try {
       const queued = queueSyncProgress(exportCloudProgress());
       const status = qs('#syncQueueStatus', host);
@@ -452,6 +445,10 @@ export function renderSettings(host, query = {}) {
     } catch (error) {
       console.error('Could not prepare local cloud sync snapshot', error);
       toast(t('set.syncPrepareFailed'), 'bad');
+    } finally {
+      button.innerHTML = idleLabel;
+      button.removeAttribute('aria-busy');
+      button.disabled = false;
     }
   });
   qs('#exportBtn', host)?.addEventListener('click', () => {
@@ -514,5 +511,5 @@ function confirmAction(title, body, onOk) {
 }
 
 /* المظهر واللغة: منطق مشترك بين الصفحتين (انظر core/theme.js) */
-import { SKINS, applyTheme, applySkin, applyLang, applyAccessibility } from '../core/theme.js';
-export { SKINS, applyTheme, applySkin, applyLang, applyAccessibility };
+import { applyTheme, applySkin, applyLang, applyAccessibility } from '../core/theme.js';
+export { applyTheme, applySkin, applyLang, applyAccessibility };

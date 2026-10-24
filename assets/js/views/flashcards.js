@@ -13,8 +13,9 @@ import {
 } from '../core/quizgen.js';
 import { getItem, gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
 import { recordAnswer } from '../core/gamify.js';
-import { pageHead, progressBar, renderSidebarStats } from './shell.js';
+import { pageHead, renderSidebarStats } from './shell.js';
 import { speak, stopSpeaking } from '../core/speech.js';
+import { ALL_UNITS } from '../data/curriculum.js';
 
 const DECKS = [
   { id: 'all', ar: 'كل الكلمات', icon: '🌍' },
@@ -59,10 +60,80 @@ function allEntries() {
   ];
 }
 
+const REVIEW_AXES = [
+  { key: 'grammar', labelKey: 'fc.axis.grammar' },
+  { key: 'vocabulary', labelKey: 'fc.axis.vocabulary' },
+  { key: 'phonetics', labelKey: 'fc.axis.phonetics' },
+  { key: 'arabic_l1_transfers', labelKey: 'fc.axis.arabic_l1_transfers' },
+  { key: 'academic_focus', labelKey: 'fc.axis.academic_focus' },
+];
+
+function detailLines(record, axis) {
+  if (typeof record === 'string') return [esc(record)];
+  if (!record || typeof record !== 'object') return [];
+  const en = record.en || record.term || record.word || record.incorrect || record.pattern || record.original || record.phrase || '';
+  const ar = record.ar || record.meaningAr || record.definitionAr || record.corrected || record.explanationAr || record.paraphrase || record.rephrased || record.title || '';
+  const parts = [];
+  if (en && ar) parts.push(`<span class="en" lang="en" dir="ltr">${esc(en)}</span><span> — ${esc(ar)}</span>`);
+  else if (en) parts.push(`<span class="en" lang="en" dir="ltr">${esc(en)}</span>`);
+  else if (ar) parts.push(esc(ar));
+  if (record.ipa) parts.push(`<span class="en" lang="en" dir="ltr">${esc(record.ipa)}</span>`);
+  if (record.explain && axis === 'grammar') parts.push(esc(record.explain));
+  if (record.example?.en) parts.push(`<span class="en" lang="en" dir="ltr">${esc(record.example.en)}</span>${record.example.ar ? ` — ${esc(record.example.ar)}` : ''}`);
+  if (record.incorrect && record.corrected) parts.push(`<span class="en" lang="en" dir="ltr">${esc(record.incorrect)} → ${esc(record.corrected)}</span>`);
+  if (record.note) parts.push(esc(record.note));
+  const nestedKeys = axis === 'vocabulary' ? ['collocations', 'phrasalVerbs']
+    : axis === 'phonetics' ? ['contrastPairs', 'connectedSpeech', 'intonation']
+      : axis === 'arabic_l1_transfers' ? ['practice']
+        : axis === 'academic_focus' ? ['paraphrasing', 'idioms', 'readingAnalysis']
+          : axis === 'grammar' ? ['examples'] : [];
+  for (const key of nestedKeys) {
+    for (const nested of (Array.isArray(record[key]) ? record[key] : []).slice(0, 2)) {
+      if (typeof nested === 'string') parts.push(esc(nested));
+      else {
+        const nestedEn = nested.en || nested.term || nested.incorrect || nested.original || nested.pattern || nested.pair || nested.text || nested.fullForm || '';
+        const nestedAr = nested.ar || nested.meaningAr || nested.corrected || nested.explanationAr || nested.rephrased || nested.paraphrase || nested.tip || nested.reduced || '';
+        if (nestedEn) parts.push(`<span class="en" lang="en" dir="ltr">${esc(nestedEn)}</span>${nestedAr ? ` — ${esc(nestedAr)}` : ''}`);
+        if (nested.ipa) parts.push(`<span class="en" lang="en" dir="ltr">${esc(nested.ipa)}</span>`);
+        if (nested.explain) parts.push(esc(nested.explain));
+        if (!nestedEn && !nestedAr && !nested.ipa && !nested.explain) {
+          parts.push(esc(Object.values(nested).filter((value) => typeof value === 'string').join(' — ')));
+        }
+      }
+    }
+  }
+  return parts;
+}
+
+function axisRecords(unit, axis) {
+  const value = unit?.[axis.key];
+  if (Array.isArray(value)) return value;
+  if (value && typeof value === 'object') return Object.values(value);
+  return [];
+}
+
+function renderDepthDetails(entry) {
+  const unit = ALL_UNITS.find((candidate) => candidate.id === entry.unitId);
+  const groups = REVIEW_AXES.map((axis) => {
+    const lines = axisRecords(unit, axis).flatMap((record) => detailLines(record, axis.key)).slice(0, 4);
+    if (!lines.length && axis.key === 'phonetics' && entry.ipa) {
+      lines.push(`<span class="en" lang="en" dir="ltr">${esc(entry.en)} · ${esc(entry.ipa)}</span>`);
+    }
+    if (!lines.length && axis.key === entry.kind) {
+      lines.push(esc(entry.note || entry.ar));
+    }
+    if (!lines.length) lines.push(esc(t('fc.noAxisDetail')));
+    return `<section class="fc-depth__group"><h3>${esc(t(axis.labelKey))}</h3>${lines.map((line) => `<p class="fc-depth__item">${line}</p>`).join('')}</section>`;
+  });
+  return groups.join('');
+}
+
 export function renderFlashcards(host) {
-  const state = { deck: 'all', size: 15, session: [], mode: 'deck', index: 0, flipped: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
+  const state = { deck: 'all', size: 15, session: [], mode: 'deck', index: 0, flipped: false, sheetOpen: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
 
   function setup() {
+    document.body.classList.remove('fc-focus-mode');
+    document.onkeydown = null;
     stopSpeaking();
     state.session = [];
     const entries = deckEntries(state.deck);
@@ -87,7 +158,7 @@ export function renderFlashcards(host) {
       <div class="card" style="margin-top:18px">
         <div class="card__title"><span class="ico">🗂️</span><h3>${t('fc.deck')}</h3></div>
         <div class="row row--wrap" style="gap:8px">
-          ${DECKS.map((d) => `<button class="btn btn--sm ${d.id === state.deck ? 'btn--primary' : ''}" type="button" data-deck="${d.id}" aria-pressed="${d.id === state.deck}">${d.icon} ${esc(d.ar)}</button>`).join('')}
+          ${DECKS.map((d) => `<button class="btn btn--sm ${d.id === state.deck ? 'btn--primary' : ''}" type="button" data-deck="${d.id}" aria-pressed="${d.id === state.deck}">${esc(d.ar)}</button>`).join('')}
         </div>
         <div class="grid grid--2" style="margin-top:16px">
           <div class="field">
@@ -126,73 +197,94 @@ export function renderFlashcards(host) {
 
   function renderCard() {
     if (state.index >= state.session.length) return renderEnd();
+    document.body.classList.add('fc-focus-mode');
+    state.sheetOpen = false;
     const e = state.session[state.index];
     const it = getItem(e.itemId);
     const interval = it ? it.interval : 0;
     const easeFactor = it ? it.easeFactor : 2.5;
     const total = state.session.length;
-    const axisKey = ({
-      grammar: 'grammar',
-      word: 'vocabulary',
-      collocation: 'vocabulary',
-      'phrasal-verb': 'vocabulary',
-      phonetics: 'phonetics',
-      'l1-transfer': 'arabic_l1_transfers',
-      academic: 'academic_focus',
-    })[e.kind?.split(':')[0]] || 'other';
-    const axisLabel = t(`fc.axis.${axisKey}`);
+    const depthDetails = renderDepthDetails(e);
     const speakControl = (text, audioUrl, label = t('common.listen')) => text
-      ? `<button class="btn btn--sm fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}" aria-pressed="false"><span class="fc__speak-icon" aria-hidden="true">🔊</span> ${esc(label)}</button>`
+      ? `<button class="btn fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}" aria-pressed="false"><svg class="fc__speak-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 10v4h4l5 4V6l-5 4H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 9a5 5 0 0 1 0 6m2.5-8.5a8.5 8.5 0 0 1 0 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>${esc(label)}</span></button>`
       : '';
 
     host.innerHTML = `
-      ${pageHead({
-        icon: '🃏', title: t('fc.title'),
-        subtitle: `${DECKS.find((d) => d.id === state.deck)?.ar || ''} · ${e.topicTitle || ''}`,
-        actionsHtml: `<button class="btn btn--sm" type="button" id="fcQuit">${esc(t('common.close'))}</button>`,
-      })}
-      <div class="fc-meta">
-        <span>${state.index + 1} / ${total}</span>
-        <span>📅 ${interval}d · EF ${easeFactor.toFixed(2)}</span>
-      </div>
-      <div style="max-width:620px;margin:0 auto 10px">${progressBar(((state.index) / total) * 100)}</div>
-
-      <div class="fc-stage">
-        <div class="fc ${state.flipped ? 'is-flipped' : ''}" id="fcCard">
-          <div class="fc__face" id="fcFront" aria-hidden="false">
-            <span class="fc__label">${esc(e.emoji || '🔤')} ${esc(axisLabel)}</span>
-            <span class="fc__word">${esc(e.en)}</span>
-            ${e.ipa ? `<span class="fc__ipa" lang="en" dir="ltr">${esc(e.ipa)}</span>` : ''}
-            ${speakControl(e.en, e.audioUrl)}
-            ${e.ipaAudioUrl ? speakControl(e.en, e.ipaAudioUrl, t('fc.ipaAudio')) : ''}
-            <span class="hint">${t('fc.flipHint')}</span>
+      <section class="fc-focus" aria-label="${esc(t('fc.title'))}">
+        <header class="fc-focus__top">
+          <button class="fc-focus__close" type="button" id="fcQuit" aria-label="${esc(t('common.close'))}">×</button>
+          <div class="fc-focus__progress" aria-label="${state.index + 1} / ${total}">
+            <span>${state.index + 1}<i>/</i>${total}</span>
+            <div class="progress"><i style="width:${Math.round(((state.index + 1) / total) * 100)}%"></i></div>
           </div>
-          <div class="fc__face fc__face--back" id="fcBack" aria-hidden="true" inert>
-            <span class="fc__label">${esc(axisLabel)} · ${esc(t('common.word'))}</span>
-            <span class="fc__word fc__word--ar">${esc(e.ar)}</span>
-            ${e.ex ? `<span class="fc__ex en" lang="en" dir="ltr">${esc(e.ex.en)}</span>${e.ex.ar ? `<span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}${speakControl(e.ex.en, e.ex.audio_url || '', t('fc.exampleAudio'))}` : ''}
-            ${e.note ? `<span class="fc__ex">${esc(e.note)}</span>` : ''}
-            ${speakControl(e.en, e.audioUrl)}
+          <span class="fc-focus__interval">${interval}d · EF ${easeFactor.toFixed(2)}</span>
+        </header>
+
+        <div class="fc-stage">
+          <div class="fc ${state.flipped ? 'is-flipped' : ''}" id="fcCard">
+            <div class="fc__face fc__face--front" id="fcFront" aria-hidden="false">
+              <span class="fc__word" lang="en" dir="ltr">${esc(e.en)}</span>
+              <div class="fc-front-actions">${speakControl(e.en, e.audioUrl)}</div>
+              <button class="fc-flip-prompt" type="button" id="fcFlipFront" aria-controls="fcCard" aria-expanded="false">${esc(t('fc.flip'))}<span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="fc__face fc__face--back" id="fcBack" aria-hidden="true" inert>
+              <div class="fc__answer">
+                <span class="fc__word fc__word--ar">${esc(e.ar)}</span>
+                ${e.ex ? `<div class="fc__example"><span class="fc__ex en" lang="en" dir="ltr">${esc(e.ex.en)}</span>${e.ex.ar ? `<span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}${speakControl(e.ex.en, e.ex.audio_url || '', t('fc.exampleAudio'))}</div>` : ''}
+              </div>
+              ${depthDetails ? `<button class="fc-depth-trigger" type="button" data-depth-open aria-expanded="false" aria-controls="fcDepthSheet"><span class="fc-sheet-grip" aria-hidden="true"></span><span>${esc(t('fc.deepDetails'))}</span><span aria-hidden="true">⌃</span></button>` : ''}
+              <div class="fc-actions" aria-hidden="false">
+                <button class="btn fc-grade fc-grade--again" type="button" data-grade="0">${t('fc.again')} <span class="kbd">1</span></button>
+                <button class="btn fc-grade fc-grade--hard" type="button" data-grade="1">${t('fc.hard')} <span class="kbd">2</span></button>
+                <button class="btn fc-grade fc-grade--good" type="button" data-grade="2">${t('fc.good')} <span class="kbd">3</span></button>
+                <button class="btn fc-grade fc-grade--easy" type="button" data-grade="3">${t('fc.easy')} <span class="kbd">4</span></button>
+              </div>
+              <button class="fc-flip-again" type="button" id="fcFlipBack" aria-controls="fcCard" aria-expanded="true">${esc(t('fc.hideAnswer'))}</button>
+            </div>
           </div>
         </div>
-      </div>
+        <p class="fc-focus__status" id="fcFlipStatus" role="status" aria-live="polite">${t('fc.flipBeforeGrade')}</p>
+      </section>
 
-      <div class="center" style="margin-top:12px">
-        <button class="btn" type="button" id="fcFlip" aria-controls="fcCard" aria-expanded="false">${t('fc.flip')}</button>
-      </div>
-
-      <div class="fc-actions">
-        <button class="btn btn--bad" type="button" data-grade="0" ${state.flipped ? '' : 'disabled'}>😵 ${t('fc.again')} <span class="kbd">1</span></button>
-        <button class="btn" type="button" data-grade="1" ${state.flipped ? '' : 'disabled'}>😕 ${t('fc.hard')} <span class="kbd">2</span></button>
-        <button class="btn btn--ok" type="button" data-grade="2" ${state.flipped ? '' : 'disabled'}>🙂 ${t('fc.good')} <span class="kbd">3</span></button>
-        <button class="btn btn--primary" type="button" data-grade="3" ${state.flipped ? '' : 'disabled'}>😎 ${t('fc.easy')} <span class="kbd">4</span></button>
-      </div>
-      <p class="center small muted" id="fcFlipStatus" role="status" aria-live="polite" style="margin-top:10px">${t('fc.flipBeforeGrade')}</p>
-    `;
+      ${depthDetails ? `
+        <div class="fc-sheet-layer" id="fcDepthSheet" hidden inert>
+          <button class="fc-sheet-backdrop" type="button" data-sheet-close aria-label="${esc(t('common.close'))}"></button>
+          <section class="fc-sheet" role="dialog" aria-modal="true" aria-labelledby="fcSheetTitle" tabindex="-1">
+            <button class="fc-sheet__handle" type="button" data-sheet-handle aria-label="${esc(t('fc.closeDetails'))}">
+              <span class="fc-sheet-grip" aria-hidden="true"></span>
+            </button>
+            <header class="fc-sheet__header">
+              <div><span class="dashboard-label">${esc(e.topicTitle || '')}</span><h2 id="fcSheetTitle">${esc(t('fc.deepDetails'))}</h2></div>
+              <button class="fc-sheet__close" type="button" data-sheet-close aria-label="${esc(t('common.close'))}">×</button>
+            </header>
+            <div class="fc-depth__panel">${depthDetails}</div>
+          </section>
+        </div>` : ''}`;
 
     const card = qs('#fcCard', host);
-    const flipButton = qs('#fcFlip', host);
+    const flipButtons = [...host.querySelectorAll('#fcFlipFront, #fcFlipBack')];
+    const sheetLayer = qs('#fcDepthSheet', host);
+    const sheet = qs('.fc-sheet', host);
+    const sheetOpener = qs('[data-depth-open]', host);
+    let touchStartY = null;
+    const closeSheet = (restoreFocus = true) => {
+      if (!sheetLayer || sheetLayer.hidden) return;
+      sheetLayer.hidden = true;
+      sheetLayer.inert = true;
+      state.sheetOpen = false;
+      sheetOpener?.setAttribute('aria-expanded', 'false');
+      if (restoreFocus && sheetOpener?.isConnected) sheetOpener.focus();
+    };
+    const openSheet = () => {
+      if (!sheetLayer || !state.flipped) return;
+      sheetLayer.hidden = false;
+      sheetLayer.inert = false;
+      state.sheetOpen = true;
+      sheetOpener?.setAttribute('aria-expanded', 'true');
+      requestAnimationFrame(() => qs('.fc-sheet__close', sheetLayer)?.focus());
+    };
     const flip = () => {
+      if (state.sheetOpen) closeSheet(false);
       state.flipped = !state.flipped;
       card.classList.toggle('is-flipped', state.flipped);
       const front = qs('#fcFront', host);
@@ -201,13 +293,38 @@ export function renderFlashcards(host) {
       front.toggleAttribute('inert', state.flipped);
       back.setAttribute('aria-hidden', String(!state.flipped));
       back.toggleAttribute('inert', !state.flipped);
-      flipButton.setAttribute('aria-expanded', String(state.flipped));
-      flipButton.textContent = state.flipped ? t('fc.hideAnswer') : t('fc.flip');
+      flipButtons.forEach((button) => button.setAttribute('aria-expanded', String(state.flipped)));
       host.querySelectorAll('[data-grade]').forEach((b) => { b.disabled = !state.flipped; });
+      sheetOpener?.setAttribute('aria-expanded', 'false');
+      requestAnimationFrame(() => qs(state.flipped ? '#fcFlipBack' : '#fcFlipFront', host)?.focus());
       const status = qs('#fcFlipStatus', host);
       if (status) status.textContent = state.flipped ? t('fc.answerRevealed') : t('fc.flipBeforeGrade');
     };
-    flipButton.addEventListener('click', flip);
+    flipButtons.forEach((button) => button.addEventListener('click', flip));
+    sheetOpener?.addEventListener('click', openSheet);
+    host.querySelectorAll('[data-sheet-close]').forEach((button) => button.addEventListener('click', () => closeSheet()));
+    const bindSwipeUp = (element, onSwipe) => {
+      element?.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'touch') touchStartY = event.clientY;
+      }, { passive: true });
+      element?.addEventListener('pointerup', (event) => {
+        if (touchStartY !== null && touchStartY - event.clientY > 48) onSwipe();
+        touchStartY = null;
+      }, { passive: true });
+      element?.addEventListener('pointercancel', () => { touchStartY = null; }, { passive: true });
+    };
+    bindSwipeUp(sheetOpener, openSheet);
+    bindSwipeUp(qs('#fcBack', host), openSheet);
+    bindSwipeUp(qs('[data-sheet-handle]', host), () => closeSheet());
+    sheet?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const focusable = [...sheet.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]')];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
     host.querySelectorAll('[data-speak-text]').forEach((button) => button.addEventListener('click', (event) => {
       event.stopPropagation();
       speak(button.dataset.speakText, {
@@ -215,14 +332,10 @@ export function renderFlashcards(host) {
         onstart: () => {
           button.classList.add('is-playing');
           button.setAttribute('aria-pressed', 'true');
-          const icon = button.querySelector('.fc__speak-icon');
-          if (icon) icon.textContent = '⏵';
         },
         onend: () => {
           button.classList.remove('is-playing');
           button.setAttribute('aria-pressed', 'false');
-          const icon = button.querySelector('.fc__speak-icon');
-          if (icon) icon.textContent = '🔊';
         },
       });
     }));
@@ -232,6 +345,10 @@ export function renderFlashcards(host) {
     qs('#fcQuit', host)?.addEventListener('click', () => setup());
     document.onkeydown = (ev) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+      if (state.sheetOpen) {
+        if (ev.key === 'Escape') closeSheet();
+        return;
+      }
       if (['1', '2', '3', '4'].includes(ev.key) && state.flipped) grade(Number(ev.key) - 1);
     };
   }
@@ -254,6 +371,7 @@ export function renderFlashcards(host) {
   }
 
   function renderEnd() {
+    document.body.classList.remove('fc-focus-mode');
     document.onkeydown = null;
     const total = state.session.length;
     const remembered = state.result.good + state.result.easy;

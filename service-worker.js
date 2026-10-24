@@ -2,7 +2,7 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.13.0';
+const VERSION = 'v4.16.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
@@ -11,12 +11,8 @@ const CORE = [
   './manifest.webmanifest',
   './manifest-zero.webmanifest',
   './assets/css/main.css',
-  './assets/css/redesign.css',
-  './assets/css/skins/atelier.css',
   './assets/css/zero.css',
   './assets/css/zero-pad.css',
-  './assets/css/skins/gnome.css',
-  './assets/css/skins/kali.css',
   './assets/img/favicon.svg',
   './assets/img/icon-192.png',
   './assets/img/icon-512.png',

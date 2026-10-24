@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>أكاديمية الإنجليزية — Learn English</title>
   <meta name="description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
-  <meta name="theme-color" content="#f3f4fb" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#101222" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#050607" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="English Academy" />
@@ -20,14 +19,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="./assets/css/main.css" />
-  <link rel="stylesheet" href="./assets/css/skins/gnome.css" />
-  <link rel="stylesheet" href="./assets/css/skins/kali.css" />
-  <link rel="stylesheet" href="./assets/css/zero.css" />
-  <link rel="stylesheet" href="./assets/css/redesign.css" />
-  <link rel="stylesheet" href="./assets/css/skins/atelier.css" />
 
   <script>
     /* حارس الإقلاع: يشرح سبب عدم عمل الموقع بدلاً من صفحة صامتة */
@@ -74,10 +68,9 @@
       try {
         var raw = localStorage.getItem('lea.settings.v1');
         var s = raw ? JSON.parse(raw) : {};
-        var theme = s.theme || 'auto';
+        var theme = s.theme || 'dark';
         var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.dataset.skin = s.skin || 'atelier';
-        if ((s.skin || 'atelier') === 'kali') dark = true;
+        document.documentElement.dataset.skin = 'nocturne';
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         document.documentElement.dataset.uiLang = s.uiLang === 'en' ? 'en' : 'ar';
         document.documentElement.dir = s.uiLang === 'en' ? 'ltr' : 'rtl';
@@ -85,7 +78,7 @@
         document.documentElement.dataset.contrast = s.highContrast ? 'high' : 'normal';
         document.documentElement.dataset.reduceMotion = s.reduceAnimations ? 'true' : 'false';
         if (s.fontSize) document.documentElement.style.setProperty('--font-scale', String(s.fontSize / 100));
-      } catch (e) { document.documentElement.dataset.theme = 'light'; }
+      } catch (e) { document.documentElement.dataset.theme = 'dark'; }
     })();
   </script>
 </head>

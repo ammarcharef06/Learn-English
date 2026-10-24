@@ -13,7 +13,6 @@ import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } 
 import { renderTopbar } from './views/topbar.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
-import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -22,7 +21,7 @@ import { renderReading } from './views/reading.js';
 import { renderExams } from './views/exams.js';
 import { renderStats } from './views/stats.js';
 import { renderNotebook } from './views/notebook.js';
-import { renderSettings, applyTheme, applySkin, applyLang, applyAccessibility, SKINS } from './views/settings.js';
+import { renderSettings, applyTheme, applySkin, applyLang, applyAccessibility } from './views/settings.js';
 import { renderAbout } from './views/about.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
@@ -252,6 +251,7 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
+    document.body.classList.remove('home-focus-mode', 'fc-focus-mode');
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
@@ -279,8 +279,6 @@ async function main() {
     boot();
     window.__leaBooted = true;
     await initRouter();
-    /* شاشة الاختيار عند الدخول — مرة واحدة فقط (A0 أم A1) */
-    if (shouldShowZeroChoice()) setTimeout(() => showZeroChoice(), 420);
     startReminderLoop();
     scheduleBackgroundUpdateChecks();
     syncReminderSchedule().then((result) => {

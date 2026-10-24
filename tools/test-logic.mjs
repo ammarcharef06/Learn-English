@@ -497,6 +497,24 @@ check('بطاقات SRS لها تسمية مترجمة', i18n.t('common.cards') 
 i18n.setUiLang('en');
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
 check('ترجمة زر المزامنة متاحة بالإنجليزية', i18n.t('set.syncProgress') === 'Sync progress');
+const syncPreparingEnglish = i18n.t('set.syncPreparing');
+i18n.setUiLang('ar');
+const syncPreparingArabic = i18n.t('set.syncPreparing');
+i18n.setUiLang('en');
+check('حالة انتظار المزامنة المحلية مترجمة بالعربية والإنجليزية',
+  syncPreparingArabic === 'جارٍ حفظ لقطة التقدم محلياً…'
+    && syncPreparingEnglish === 'Saving progress snapshot locally…');
+check('واجهة المزامنة تعلن حالة الانشغال وإكمالاً بصرياً',
+  syncSettingsSource.includes("button.setAttribute('aria-busy', 'true')")
+    && syncSettingsSource.includes('class="sync-spinner"')
+    && syncSettingsSource.includes('window.requestAnimationFrame'));
+const responsiveCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
+check('بطاقات الهاتف توفر أزرار تقييم ولمس صوتية واسعة',
+  responsiveCss.includes('.fc-actions .btn { min-block-size: 56px;')
+    && responsiveCss.includes('.fc__speak { min-inline-size: 56px; min-block-size: 56px;'));
+check('حركات الانتقال تحترم تفضيلات تقليل الحركة',
+  responsiveCss.includes('::view-transition-old(root)')
+    && responsiveCss.includes('html[data-reduce-motion="true"] ::view-transition-new(root)'));
 check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
 check('بطاقات SRS مترجمة بالإنجليزية', i18n.t('common.cards') === 'cards');
 check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);
@@ -519,11 +537,38 @@ const audioLinks = await mod('assets/js/data/curriculum-audio.js');
 check('خريطة الصوت تضم تسجيلات المنهج وتستخدم مسارات محلية', Object.keys(audioLinks.CURRICULUM_AUDIO).length === 754
   && Object.values(audioLinks.CURRICULUM_AUDIO).every((url) => /^\.\/assets\/audio\/curriculum\/[a-f0-9]{64}\.mp3$/.test(url)));
 const flashcardSource = await readFile(join(ROOT, 'assets/js/views/flashcards.js'), 'utf8');
+const dashboardSource = await readFile(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
 const mainCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
+const flashcardFront = flashcardSource.match(/<div class="fc__face fc__face--front"[^>]*>([\s\S]*?)<\/div>/)?.[1] || '';
 check('زر الصوت في البطاقات يعرض حالة تشغيل مرئية ومعلنة للوصول',
   flashcardSource.includes('aria-pressed="false"') && flashcardSource.includes("classList.add('is-playing')")
     && flashcardSource.includes("classList.remove('is-playing')")
     && mainCss.includes('.fc__speak.is-playing'));
+check('الوجه الأمامي للبطاقة يعرض العبارة وزر النطق فقط',
+  Boolean(flashcardFront) && !flashcardFront.includes('e.ipa') && !flashcardFront.includes('e.note')
+    && flashcardFront.includes('fc-front-actions'));
+check('تفاصيل البطاقة قابلة للتوسيع وتغطي المحاور الخمسة',
+  flashcardSource.includes('id="fcDepthSheet"')
+    && flashcardSource.includes('data-depth-open')
+    && flashcardSource.includes('bindSwipeUp(qs(\'#fcBack\', host), openSheet)')
+    && !flashcardSource.includes('<details class="fc-depth">')
+    && ['grammar', 'vocabulary', 'phonetics', 'arabic_l1_transfers', 'academic_focus'].every((axis) => flashcardSource.includes(`key: '${axis}'`)));
+check('الدرج السفلي يعرض المحاور الخمسة بعناوين مترجمة حتى عند غياب بيانات إضافية',
+  flashcardSource.includes("t('fc.noAxisDetail')")
+    && ['fc.axis.grammar', 'fc.axis.vocabulary', 'fc.axis.phonetics', 'fc.axis.arabic_l1_transfers', 'fc.axis.academic_focus'].every((key) => flashcardSource.includes(key)));
+check('ثيم Slate الداكن يستخدم ألواناً حيوية وخطوطاً تحريرية حديثة',
+  mainCss.includes('--bg: #0b1220;')
+    && mainCss.includes('--accent: #78aaff;')
+    && mainCss.includes('"IBM Plex Sans Arabic"')
+    && mainCss.includes('"Manrope"'));
+check('لوحة البدء تعرض الحلقة وزر التعلم وحدهما وتخفي إطار التطبيق',
+  dashboardSource.includes('href="#/drill?mode=goal"')
+    && dashboardSource.includes('dashboard-home__progress')
+    && dashboardSource.includes('dashboard-home__start')
+    && mainCss.includes('body.home-focus-mode #topbar')
+    && mainCss.includes('.dashboard-home__arc'));
+check('الواجهة الجديدة تبدأ افتراضياً بالوضع الداكن',
+  store.DEFAULT_SETTINGS.theme === 'dark' && (await readFile(join(ROOT, 'index.html'), 'utf8')).includes('var theme = s.theme || \'dark\''));
 const audioFixture = [{
   vocabulary: [{ en: 'A New Word' }, { en: 'Hello', audio_url: './assets/audio/existing.mp3' }],
   sentences: [{ en: 'A sample sentence.' }],
