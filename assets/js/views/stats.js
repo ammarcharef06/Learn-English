@@ -3,8 +3,8 @@ import { t } from '../core/i18n.js';
 import { esc, qs, pct, todayKey, addDays, dateKey, dayNameAr, fmtDuration, speakBtn } from '../core/utils.js';
 import { progress } from '../core/store.js';
 import { accuracy, badgesWithState, streakInfo, overallStats, levelStats } from '../core/gamify.js';
-import { vocabularyEntries } from '../core/quizgen.js';
-import { weakestFirst } from '../core/srs.js';
+import { vocabularyEntries, curriculumReviewEntries } from '../core/quizgen.js';
+import { getItem, weakestFirst } from '../core/srs.js';
 import { LEVELS } from '../data/curriculum.js';
 import { pageHead, progressBar, statCard } from './shell.js';
 import { weeklySummary } from '../core/journey.js';
@@ -35,7 +35,8 @@ export function renderStats(host) {
 
   const byType = Object.entries(progress.byType || {}).map(([k, v]) => ({ k, ...v, acc: pct(v.c, v.q) }));
   const byLevel = Object.entries(progress.byLevel || {}).map(([k, v]) => ({ k, ...v, acc: pct(v.c, v.q) }));
-  const weak = weakestFirst(vocabularyEntries(), 12).filter((e) => (progress.items[e.itemId]?.wrong || 0) > 0);
+  const reviewEntries = [...vocabularyEntries(), ...curriculumReviewEntries()];
+  const weak = weakestFirst(reviewEntries, 12).filter((entry) => getItem(entry.itemId).lapses > 0);
 
   host.innerHTML = `
     ${pageHead({ icon: '📊', title: t('stats.title'), subtitle: t('stats.subtitle') })}

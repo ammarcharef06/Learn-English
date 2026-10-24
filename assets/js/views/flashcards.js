@@ -1,9 +1,16 @@
 /* بطاقات الحفظ مع مراجعة متباعدة (SRS) */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs, toast, confetti } from '../core/utils.js';
-import { progress } from '../core/store.js';
-import { vocabularyEntries, readingWordEntries, pronounEntries, connectorEntries, questionEntries, notebookEntries } from '../core/quizgen.js';
-import { gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
+import {
+  vocabularyEntries,
+  curriculumReviewEntries,
+  readingWordEntries,
+  pronounEntries,
+  connectorEntries,
+  questionEntries,
+  notebookEntries,
+} from '../core/quizgen.js';
+import { getItem, gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
 import { recordAnswer } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
 import { speak } from '../core/speech.js';
@@ -24,7 +31,7 @@ const DECKS = [
 function deckEntries(deck) {
   switch (deck) {
     case 'notebook': return notebookEntries();
-    case 'a1': case 'a2': case 'b1': return vocabularyEntries({ levels: [deck] });
+    case 'a1': case 'a2': case 'b1': return [...vocabularyEntries({ levels: [deck] }), ...curriculumReviewEntries({ levels: [deck] })];
     case 'pronouns': return pronounEntries();
     case 'connectors': return connectorEntries();
     case 'questions': return questionEntries();
@@ -35,7 +42,15 @@ function deckEntries(deck) {
   }
 }
 function allEntries() {
-  return [...vocabularyEntries(), ...readingWordEntries(), ...pronounEntries(), ...connectorEntries(), ...questionEntries(), ...notebookEntries()];
+  return [
+    ...vocabularyEntries(),
+    ...curriculumReviewEntries(),
+    ...readingWordEntries(),
+    ...pronounEntries(),
+    ...connectorEntries(),
+    ...questionEntries(),
+    ...notebookEntries(),
+  ];
 }
 
 export function renderFlashcards(host) {
@@ -56,10 +71,10 @@ export function renderFlashcards(host) {
         <button class="btn btn--primary" type="button" id="fcSmart" ${smartPlan.entries.length ? '' : 'disabled'}>${t('fc.smartStart')} · ${smartPlan.entries.length}</button>
       </section>
       <div class="grid grid--4">
-        <div class="stat"><div class="stat__label">${t('fc.due')}</div><div class="stat__value">${st.due}</div><div class="stat__foot">${st.total} ${t('common.words')}</div></div>
+        <div class="stat"><div class="stat__label">${t('fc.due')}</div><div class="stat__value">${st.due}</div><div class="stat__foot">${st.total} ${t('common.cards')}</div></div>
         <div class="stat"><div class="stat__label">جديدة</div><div class="stat__value">${st.new}</div><div class="stat__foot">لم تُراجع بعد</div></div>
-        <div class="stat"><div class="stat__label">قيد التعلّم</div><div class="stat__value">${st.learning}</div><div class="stat__foot">صندوق أقل من ٥</div></div>
-        <div class="stat stat--ok"><div class="stat__label">متقنة</div><div class="stat__value">${st.mature}</div><div class="stat__foot">صندوق ٥+</div></div>
+        <div class="stat"><div class="stat__label">قيد التعلّم</div><div class="stat__value">${st.learning}</div><div class="stat__foot">أقل من ٣ تكرارات و٢١ يوماً</div></div>
+        <div class="stat stat--ok"><div class="stat__label">متقنة</div><div class="stat__value">${st.mature}</div><div class="stat__foot">٣ تكرارات وفاصل ٢١ يوماً فأكثر</div></div>
       </div>
 
       <div class="card" style="margin-top:18px">
@@ -78,7 +93,7 @@ export function renderFlashcards(host) {
             <label>${t('fc.remaining')}</label>
             <div class="row" style="gap:8px">
               <button class="btn btn--primary" type="button" id="fcStart" ${dueSession.length ? '' : 'disabled'}>▶ ${t('common.start')}</button>
-              <span class="chip chip--brand">${dueSession.length} ${t('common.word')}</span>
+              <span class="chip chip--brand">${dueSession.length} ${t('common.cards')}</span>
             </div>
           </div>
         </div>
@@ -104,8 +119,9 @@ export function renderFlashcards(host) {
   function renderCard() {
     if (state.index >= state.session.length) return renderEnd();
     const e = state.session[state.index];
-    const it = progress.items[e.itemId];
-    const box = it ? it.box : 0;
+    const it = getItem(e.itemId);
+    const interval = it ? it.interval : 0;
+    const easeFactor = it ? it.easeFactor : 2.5;
     const total = state.session.length;
 
     host.innerHTML = `
@@ -116,7 +132,7 @@ export function renderFlashcards(host) {
       })}
       <div class="fc-meta">
         <span>${state.index + 1} / ${total}</span>
-        <span>📦 ${esc(t('fc.deck'))}: ${box}/9</span>
+        <span>📅 ${interval}d · EF ${easeFactor.toFixed(2)}</span>
       </div>
       <div style="max-width:620px;margin:0 auto 10px">${progressBar(((state.index) / total) * 100)}</div>
 
@@ -132,6 +148,7 @@ export function renderFlashcards(host) {
             <span class="fc__label">${esc(t('common.word'))} ← ${esc(t('common.listen'))}</span>
             <span class="fc__word fc__word--ar">${esc(e.ar)}</span>
             ${e.ex ? `<span class="fc__ex en">${esc(e.ex.en)}</span><span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}
+            ${e.note ? `<span class="fc__ex">${esc(e.note)}</span>` : ''}
             ${speakBtn(e.en)}
           </div>
         </div>
@@ -181,7 +198,7 @@ export function renderFlashcards(host) {
   function grade(q) {
     const e = state.session[state.index];
     if (!e) return;
-    gradeItem(e.itemId, q);
+    gradeItem(e.itemId, [0, 3, 4, 5][q]);
     const res = recordAnswer({ correct: q > 0, itemId: e.itemId, type: 'flash', topic: e.topic, level: e.level, seconds: (Date.now() - state.startAt) / 1000 });
     if (q === 0) state.result.again++;
     else if (q === 1) state.result.hard++;

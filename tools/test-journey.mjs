@@ -36,8 +36,8 @@ check('daily mission starts with three incomplete, actionable steps',
   dailyMission().done === 0 && dailyMission().tasks.length === 3
   && dailyMission().tasks.every((task) => task.href.startsWith('#/')));
 
-for (let index = 0; index < 5; index++) gradeItem(`mission-word-${index}`, 2);
-gradeItem('mission-word-0', 2);
+for (let index = 0; index < 5; index++) gradeItem(`mission-word-${index}`, 4);
+gradeItem('mission-word-0', 4);
 markLessonRead('a1u1:0');
 let mission = dailyMission();
 check('review and lesson progress update without counting repeated words twice',

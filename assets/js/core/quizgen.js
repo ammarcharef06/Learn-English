@@ -14,7 +14,7 @@ export function vocabularyEntries({ levels = null } = {}) {
   const out = [];
   for (const u of ALL_UNITS) {
     if (levels && !levels.includes(u.levelId)) continue;
-    for (const v of u.vocab) {
+    for (const v of u.vocabulary) {
       out.push({
         itemId: `v:${u.id}:${v.en.toLowerCase()}`,
         en: v.en, ar: v.ar, ex: v.example || null, emoji: v.emoji || '', pos: v.pos || '',
@@ -23,6 +23,102 @@ export function vocabularyEntries({ levels = null } = {}) {
     }
   }
   return out;
+}
+
+export function reviewEntriesForUnit(unit) {
+  const out = [];
+  const fields = [
+    { field: 'phonetics', prefix: 'ph', kind: 'phonetics' },
+    { field: 'arabic_l1_transfers', prefix: 'l1', kind: 'l1-transfer' },
+    { field: 'academic_focus', prefix: 'af', kind: 'academic' },
+  ];
+
+  (unit.grammar || []).forEach((lesson, index) => {
+    const examples = (lesson.examples || []).map((example) => `${example.en} — ${example.ar}`).join('\n');
+    const explanation = String(lesson.explain || lesson.title || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    out.push({
+      itemId: `gr:${unit.id}:${lesson.id || index}`,
+      en: lesson.examples?.[0]?.en || lesson.title,
+      ar: explanation,
+      ex: null,
+      note: [lesson.title, examples].filter(Boolean).join('\n'),
+      level: unit.levelId,
+      topic: unit.id,
+      topicTitle: unit.title,
+      kind: 'grammar',
+      unitId: unit.id,
+    });
+  });
+
+  for (const { field, prefix, kind } of fields) {
+    (unit[field] || []).forEach((item, index) => {
+      const id = String(item.id || index);
+      const addReviewEntry = (record, entryId, entryKind, note = '') => {
+        const en = record.en || record.term || record.word || record.incorrect
+          || record.pattern || record.original || record.source || record.phrase;
+        const ar = record.ar || record.meaningAr || record.definitionAr || record.corrected
+          || record.ipa || record.explanationAr || record.paraphrase || record.rephrased;
+        if (!en || !ar) return;
+        out.push({
+          itemId: `${prefix}:${unit.id}:${entryId}`,
+          en,
+          ar,
+          ex: record.example || null,
+          note: record.ipa || record.pattern || record.explanationAr || record.note || note,
+          level: unit.levelId,
+          topic: unit.id,
+          topicTitle: unit.title,
+          kind: entryKind,
+          unitId: unit.id,
+        });
+      };
+      addReviewEntry(item, id, kind);
+      const nestedFields = field === 'phonetics'
+        ? ['contrastPairs', 'connectedSpeech', 'intonation']
+        : field === 'academic_focus' ? ['paraphrasing', 'idioms', 'readingAnalysis']
+          : field === 'arabic_l1_transfers' ? ['practice'] : [];
+      for (const nestedField of nestedFields) {
+        (item[nestedField] || []).forEach((record, nestedIndex) => {
+          if (typeof record === 'string') return;
+          addReviewEntry(record, `${id}:${nestedField}:${record.id || nestedIndex}`, `${kind}:${nestedField}`);
+        });
+      }
+    });
+  }
+  (unit.vocabulary || []).forEach((item, index) => {
+    for (const [field, kind, prefix] of [
+      ['collocations', 'collocation', 'col'],
+      ['phrasalVerbs', 'phrasal-verb', 'pv'],
+    ]) {
+      (item[field] || []).forEach((phrase, phraseIndex) => {
+        const en = phrase.en || phrase.term || phrase.phrase;
+        const ar = phrase.ar || phrase.meaningAr;
+        if (!en || !ar) return;
+        out.push({
+          itemId: `${prefix}:${unit.id}:${item.id || index}:${phrase.id || phraseIndex}`,
+          en,
+          ar,
+          ex: phrase.example || null,
+          note: phrase.note || '',
+          level: unit.levelId,
+          topic: unit.id,
+          topicTitle: unit.title,
+          kind,
+          unitId: unit.id,
+        });
+      });
+    }
+  });
+  return out;
+}
+
+export function curriculumReviewEntries({ levels = null } = {}) {
+  return ALL_UNITS
+    .filter((unit) => !levels || levels.includes(unit.levelId))
+    .flatMap(reviewEntriesForUnit);
 }
 
 export function sentenceEntries({ levels = null } = {}) {

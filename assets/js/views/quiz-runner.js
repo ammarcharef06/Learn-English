@@ -145,7 +145,7 @@ export function runQuiz(host, opts = {}) {
         correct, itemId: q.itemId || null, type: q.type, topic: q.topic, level: q.level,
         seconds: seconds || 0,
       });
-      if (q.itemId) gradeItem(q.itemId, correct ? 2 : 0);
+      if (q.itemId) gradeItem(q.itemId, correct ? 4 : 0);
       if (res && res.badges && res.badges.length) celebrateBadges(res.badges, qhost);
     }
     beep(correct ? 'ok' : 'bad');

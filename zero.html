@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>من الصفر — تأسيس A0 · أكاديمية الإنجليزية</title>
   <meta name="description" content="قسم «من الصفر» (A0): الحروف وأصواتها، الحروف المركّبة، الأرقام، الوقت، الضمائر، ١٢٠ كلمة، ٤٠ جملة، وقراءات أولى — بنطق عربي ولوح كتابة واختبار وشهادة." />
-  <meta name="theme-color" content="#2777ff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#23272f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f3f4fb" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#101222" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="من الصفر A0" />
@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="./assets/css/zero.css" />
   <link rel="stylesheet" href="./assets/css/zero-pad.css" />
   <link rel="stylesheet" href="./assets/css/redesign.css" />
+  <link rel="stylesheet" href="./assets/css/skins/atelier.css" />
 
   <script>
     /* نفس تهيئة الموقع: السمة والستايل قبل رسم الصفحة بلا وميض */
@@ -35,7 +36,7 @@
         var s = JSON.parse(localStorage.getItem('lea.settings.v1') || '{}');
         var theme = s.theme || 'auto';
         var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        var skin = s.skin || 'kali';
+        var skin = s.skin || 'atelier';
         document.documentElement.dataset.skin = skin;
         if (skin === 'kali') dark = true;
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';

@@ -71,7 +71,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "hello", ar: "مرحباً", pos: "phrase", emoji: "👋", example: { en: "Hello, my name is Ali.", ar: "مرحباً، اسمي علي." } },
         { en: "goodbye", ar: "إلى اللقاء", pos: "phrase", emoji: "🙋", example: { en: "Goodbye, see you tomorrow.", ar: "إلى اللقاء، أراك غداً." } },
         { en: "name", ar: "اسم", pos: "noun", emoji: "📛", example: { en: "My name is Sara.", ar: "اسمي سارة." } },
@@ -175,7 +175,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "family", ar: "عائلة", pos: "noun", emoji: "👨‍👩‍👧‍👦", example: { en: "My family is small and happy.", ar: "عائلتي صغيرة وسعيدة." } },
         { en: "mother", ar: "أم", pos: "noun", emoji: "👩", example: { en: "My mother is a doctor.", ar: "أمي طبيبة." } },
         { en: "father", ar: "أب", pos: "noun", emoji: "👨", example: { en: "My father works in a bank.", ar: "أبي يعمل في مصرف." } },
@@ -281,7 +281,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "number", ar: "رقم", pos: "noun", emoji: "🔢", example: { en: "My favourite number is seven.", ar: "رقمي المفضل هو سبعة." } },
         { en: "one", ar: "واحد", pos: "adjective", emoji: "1️⃣", example: { en: "I have one sister.", ar: "لدي أخت واحدة." } },
         { en: "two", ar: "اثنان", pos: "adjective", emoji: "2️⃣", example: { en: "I have two hands.", ar: "لدي يدان." } },
@@ -383,7 +383,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "food", ar: "طعام", pos: "noun", emoji: "🍽️", example: { en: "I like healthy food.", ar: "أحب الطعام الصحي." } },
         { en: "water", ar: "ماء", pos: "noun", emoji: "💧", example: { en: "I drink water every day.", ar: "أشرب الماء كل يوم." } },
         { en: "bread", ar: "خبز", pos: "noun", emoji: "🍞", example: { en: "We buy fresh bread every morning.", ar: "نشتري الخبز الطازج كل صباح." } },
@@ -489,7 +489,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "house", ar: "منزل", pos: "noun", emoji: "🏠", example: { en: "Our house is big and clean.", ar: "منزلنا كبير ونظيف." } },
         { en: "room", ar: "غرفة", pos: "noun", emoji: "🚪", example: { en: "My room is small but nice.", ar: "غرفتي صغيرة لكنها جميلة." } },
         { en: "door", ar: "باب", pos: "noun", emoji: "🚪", example: { en: "Please close the door.", ar: "أغلق الباب من فضلك." } },
@@ -592,7 +592,7 @@ export const LEVEL_A1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "color", ar: "لون", pos: "noun", emoji: "🎨", example: { en: "Blue is my favourite color.", ar: "الأزرق لوني المفضل." } },
         { en: "red", ar: "أحمر", pos: "adjective", emoji: "🔴", example: { en: "My bag is red.", ar: "حقيبتي حمراء." } },
         { en: "blue", ar: "أزرق", pos: "adjective", emoji: "🔵", example: { en: "The sky is blue today.", ar: "السماء زرقاء اليوم." } },
@@ -635,3 +635,112 @@ export const LEVEL_A1 = {
     }
   ]
 };
+
+const A1_UNIT_ENRICHMENT = {
+  a1u1: {
+    phonetics: [
+      { id: "hello", en: "hello", ipa: "/həˈləʊ/", ar: "مرحباً", contrastPairs: [{ en: "he / hi", ar: "ميّز /ɪ/ القصيرة عن /iː/ الطويلة." }], connectedSpeech: [{ en: "Nice to meet you.", ar: "اربط الكلمات بسلاسة مع إبقاء كل كلمة واضحة." }], intonation: [{ en: "How are you? ↗", ar: "تنغيم صاعد في السؤال الودّي القصير." }] },
+      { id: "name", en: "name", ipa: "/neɪm/", ar: "اسم", contrastPairs: [{ en: "name / nine", ar: "لاحظ اختلاف الحركة والنهاية /m/ و/n/." }], connectedSpeech: [{ en: "My name is Ali.", ar: "قد يضعف صوت is في الكلام المتصل، لكنه لا يُحذف." }], intonation: [{ en: "My name is Sara. ↘", ar: "تنغيم هابط عند إكمال المعلومة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "copula", incorrect: "I student.", corrected: "I am a student.", pattern: "حذف فعل الكينونة", explanationAr: "قد تُحذف الرابطة في العربية، لكن الإنجليزية تحتاج am/is/are، ويحتاج الاسم المفرد المعدود غالباً a/an." },
+      { id: "subject", incorrect: "My name, it is Ali.", corrected: "My name is Ali.", pattern: "تكرار الفاعل اسماً وضميراً", explanationAr: "اذكر الفاعل مرة واحدة في الجملة الإنجليزية المحايدة." },
+    ],
+    academic_focus: [
+      { id: "introduce", term: "introduce", meaningAr: "يقدّم شخصاً أو يعرّف بنفسه", example: { en: "I would like to introduce my classmate.", ar: "أود أن أقدّم زميلي في الصف." }, paraphrasing: [{ original: "This is my friend Ali.", paraphrase: "Let me introduce my friend, Ali." }] },
+      { id: "detail", term: "detail", meaningAr: "معلومة أو تفصيل", example: { en: "My name and country are details about me.", ar: "اسمي وبلدي معلومتان عني." }, readingAnalysis: [{ term: "personal information", meaningAr: "معلومات التعريف الأساسية بالشخص" }] },
+    ],
+    vocabulary: {
+      hello: { collocations: [{ en: "say hello", ar: "يلقي التحية", example: { en: "Please say hello to your teacher.", ar: "ألقِ التحية على معلمك من فضلك." } }] },
+      meet: { collocations: [{ en: "meet a friend", ar: "يلتقي صديقاً" }], phrasalVerbs: [{ en: "meet up", ar: "يلتقي بشخص في موعد متفق عليه", example: { en: "We meet up after class.", ar: "نلتقي بعد الصف." } }] },
+    },
+  },
+  a1u2: {
+    phonetics: [
+      { id: "family", en: "family", ipa: "/ˈfæməli/", ar: "عائلة", contrastPairs: [{ en: "man / men", ar: "ميّز /æ/ في man عن /e/ في men." }], connectedSpeech: [{ en: "My mother is kind.", ar: "اربط mother is بخفة دون حذف is." }], intonation: [{ en: "Is she your sister? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+      { id: "brother", en: "brother", ipa: "/ˈbrʌðə(r)/", ar: "أخ", contrastPairs: [{ en: "three / tree", ar: "ابدأ /θ/ بوضع اللسان قرب الأسنان ولا تستبدله بـ/t/." }], connectedSpeech: [{ en: "This is my brother.", ar: "تجنب إدخال حركة بين this وis." }], intonation: [{ en: "He is very kind. ↘", ar: "تنغيم هابط في الجملة الخبرية." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "possessive", incorrect: "the my sister", corrected: "my sister", pattern: "جمع أداة التعريف وصفة الملكية", explanationAr: "صفة الملكية my تحدد صاحب الاسم، فلا تسبقها the." },
+      { id: "repeated-subject", incorrect: "My father, he is a doctor.", corrected: "My father is a doctor.", pattern: "تكرار الفاعل", explanationAr: "يكفي الاسم فاعلاً؛ لا تكرره بضمير he في الجملة المحايدة." },
+    ],
+    academic_focus: [
+      { id: "member", term: "member", meaningAr: "فرد أو عضو في مجموعة", example: { en: "Each member of my family has a role.", ar: "لكل فرد في عائلتي دور." }, paraphrasing: [{ original: "My family has five people.", paraphrase: "There are five members in my family." }] },
+      { id: "similar", term: "similar", meaningAr: "متشابه", example: { en: "The two sisters have similar interests.", ar: "للأختين اهتمامات متشابهة." }, readingAnalysis: [{ term: "description", meaningAr: "وصف صفات الشخص أو المجموعة" }] },
+    ],
+    vocabulary: { family: { collocations: [{ en: "close family", ar: "عائلة مترابطة" }] }, live: { collocations: [{ en: "live with", ar: "يعيش مع" }], phrasalVerbs: [{ en: "grow up", ar: "ينشأ أو يكبر", example: { en: "I grew up in a large family.", ar: "نشأت في عائلة كبيرة." } }] } },
+  },
+  a1u3: {
+    phonetics: [
+      { id: "three", en: "three", ipa: "/θriː/", ar: "ثلاثة", contrastPairs: [{ en: "three / tree", ar: "ميّز /θ/ عن /t/ ولا تحوّل th إلى تاء." }], connectedSpeech: [{ en: "three o'clock", ar: "اربط العدد بعبارة الوقت من دون وقفة طويلة." }], intonation: [{ en: "What time is it? ↘", ar: "تنغيم هابط شائع في سؤال أداة الاستفهام." }] },
+      { id: "day", en: "day", ipa: "/deɪ/", ar: "يوم", contrastPairs: [{ en: "day / they", ar: "ميّز /d/ عن /ð/ في بداية الكلمة." }], connectedSpeech: [{ en: "on Monday at eight", ar: "اربط on بـMonday مع إبقاء حرف الجر مسموعاً." }], intonation: [{ en: "Is it Friday today? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "plural", incorrect: "two book", corrected: "two books", pattern: "نسيان علامة الجمع", explanationAr: "يأتي الاسم المعدود جمعاً بعد الأعداد الأكبر من واحد." },
+      { id: "weekday-preposition", incorrect: "in Monday", corrected: "on Monday", pattern: "نقل حرف الجر حرفياً", explanationAr: "تُستخدم on مع أيام الأسبوع، وat مع وقت الساعة المحدد مثل at six." },
+    ],
+    academic_focus: [
+      { id: "period", term: "period", meaningAr: "فترة زمنية", example: { en: "A week is a period of seven days.", ar: "الأسبوع فترة من سبعة أيام." }, paraphrasing: [{ original: "The lesson lasts 60 minutes.", paraphrase: "The lesson lasts one hour." }] },
+      { id: "data", term: "data", meaningAr: "بيانات أو معلومات", example: { en: "The table shows the class times.", ar: "يعرض الجدول أوقات الصف." }, readingAnalysis: [{ term: "table", meaningAr: "جدول ينظم البيانات في صفوف وأعمدة" }] },
+    ],
+    vocabulary: { time: { collocations: [{ en: "tell the time", ar: "يقرأ الساعة" }] }, night: { phrasalVerbs: [{ en: "wake up", ar: "يستيقظ", example: { en: "I wake up at seven on weekdays.", ar: "أستيقظ في السابعة أيام الأسبوع." } }] } },
+  },
+  a1u4: {
+    phonetics: [
+      { id: "egg", en: "egg", ipa: "/eɡ/", ar: "بيضة", contrastPairs: [{ en: "pen / pan", ar: "ميّز /e/ في pen عن /æ/ في pan." }], connectedSpeech: [{ en: "an apple", ar: "اربط an بالكلمة التالية دون فصل مصطنع." }], intonation: [{ en: "Would you like some tea? ↘", ar: "غالباً ينخفض الصوت في العرض المهذب." }] },
+      { id: "rice", en: "rice", ipa: "/raɪs/", ar: "أرز", contrastPairs: [{ en: "rice / rise", ar: "ميّز /s/ المهموسة عن /z/ المجهورة." }], connectedSpeech: [{ en: "I eat rice every day.", ar: "حافظ على نهايات الكلمات عند وصل الجملة." }], intonation: [{ en: "Tea or coffee? ↘↗", ar: "قد يرتفع الصوت عند الخيار الأول ويهبط عند الأخير." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "article", incorrect: "I eat apple.", corrected: "I eat an apple.", pattern: "حذف أداة التنكير", explanationAr: "الاسم المفرد المعدود يحتاج عادةً a أو an إذا لم يكن محدداً." },
+      { id: "uncountable", incorrect: "two breads", corrected: "two pieces of bread", pattern: "جمع اسم غير معدود", explanationAr: "bread غير معدود بهذا المعنى؛ استخدم وحدة مثل pieces of bread." },
+    ],
+    academic_focus: [
+      { id: "category", term: "category", meaningAr: "فئة أو تصنيف", example: { en: "Fruit is a food category.", ar: "الفاكهة فئة من الطعام." }, paraphrasing: [{ original: "Apples and bananas are fruit.", paraphrase: "Apples and bananas belong to the fruit category." }] },
+      { id: "process", term: "process", meaningAr: "عملية أو خطوات متتابعة", example: { en: "Making a sandwich is a simple process.", ar: "إعداد شطيرة عملية بسيطة." }, readingAnalysis: [{ term: "sequence", meaningAr: "ترتيب الخطوات حسب حدوثها" }] },
+    ],
+    vocabulary: { water: { collocations: [{ en: "a glass of water", ar: "كوب من الماء" }] }, eat: { phrasalVerbs: [{ en: "eat out", ar: "يتناول الطعام خارج المنزل", example: { en: "We eat out on Fridays.", ar: "نتناول الطعام خارج المنزل أيام الجمعة." } }] } },
+  },
+  a1u5: {
+    phonetics: [
+      { id: "room", en: "room", ipa: "/ruːm/", ar: "غرفة", contrastPairs: [{ en: "room / broom", ar: "لاحظ /r/ في مقابل مجموعة الأصوات /br/." }], connectedSpeech: [{ en: "There is a lamp.", ar: "اربط there is بسلاسة مع وضوح is." }], intonation: [{ en: "Is there a garden? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+      { id: "chair", en: "chair", ipa: "/tʃeə(r)/", ar: "كرسي", contrastPairs: [{ en: "chair / share", ar: "ميّز الصوت المركب /tʃ/ عن /ʃ/." }], connectedSpeech: [{ en: "a chair in the room", ar: "لا تضف حركة بين حرف الجر والاسم التالي." }], intonation: [{ en: "The keys are on the table. ↘", ar: "تنغيم هابط في وصف المكان." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "existence", incorrect: "In my room a bed.", corrected: "There is a bed in my room.", pattern: "نقل ترتيب الجملة الاسمية", explanationAr: "استخدم There is/are لتقديم وجود الشيء، ثم اذكر مكانه." },
+      { id: "place-preposition", incorrect: "The book is in the table.", corrected: "The book is on the table.", pattern: "الخلط بين حروف الجر المكانية", explanationAr: "on لسطح الشيء، وin لما بداخله؛ اختر وفق العلاقة المكانية." },
+    ],
+    academic_focus: [
+      { id: "location", term: "location", meaningAr: "موقع أو مكان", example: { en: "The map shows the location of the rooms.", ar: "تعرض الخريطة مواقع الغرف." }, paraphrasing: [{ original: "The lamp is next to the bed.", paraphrase: "The lamp is beside the bed." }] },
+      { id: "function", term: "function", meaningAr: "وظيفة أو غرض", example: { en: "A key has the function of opening a lock.", ar: "وظيفة المفتاح فتح القفل." }, readingAnalysis: [{ term: "label", meaningAr: "تسمية عنصر في مخطط أو رسم" }] },
+    ],
+    vocabulary: { house: { collocations: [{ en: "at home", ar: "في المنزل" }] }, clean: { phrasalVerbs: [{ en: "clean up", ar: "ينظف المكان أو يرتبه", example: { en: "I clean up my room every Saturday.", ar: "أنظف غرفتي كل يوم سبت." } }] } },
+  },
+  a1u6: {
+    phonetics: [
+      { id: "shirt", en: "shirt", ipa: "/ʃɜːt/", ar: "قميص", contrastPairs: [{ en: "sheep / ship", ar: "ميّز /iː/ الطويلة عن /ɪ/ القصيرة." }], connectedSpeech: [{ en: "She is wearing a shirt.", ar: "تُوصل she is وقد تختصر إلى she's في الحديث." }], intonation: [{ en: "What are you wearing? ↘", ar: "تنغيم هابط شائع في سؤال أداة الاستفهام." }] },
+      { id: "green", en: "green", ipa: "/ɡriːn/", ar: "أخضر", contrastPairs: [{ en: "green / clean", ar: "ميّز /ɡ/ المجهورة عن /k/ المهموسة." }], connectedSpeech: [{ en: "a green jacket", ar: "اربط أداة التنكير بالصفة دون إضافة مقطع." }], intonation: [{ en: "Are they new shoes? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "adjective-order", incorrect: "a shirt blue", corrected: "a blue shirt", pattern: "وضع الصفة بعد الاسم", explanationAr: "تأتي الصفة عادةً قبل الاسم في الإنجليزية." },
+      { id: "clothing-article", incorrect: "I am wearing red jacket.", corrected: "I am wearing a red jacket.", pattern: "حذف أداة الاسم المفرد المعدود", explanationAr: "أضف a/an قبل الصفة والاسم المفرد المعدود غير المحدد." },
+    ],
+    academic_focus: [
+      { id: "describe", term: "describe", meaningAr: "يصف بذكر الصفات", example: { en: "Describe the colors in the picture.", ar: "صِف الألوان في الصورة." }, paraphrasing: [{ original: "The park is large and green.", paraphrase: "It is a spacious park with green grass." }] },
+      { id: "feature", term: "feature", meaningAr: "صفة أو خاصية مميزة", example: { en: "Color is one feature of the jacket.", ar: "اللون إحدى خصائص السترة." }, readingAnalysis: [{ term: "visual detail", meaningAr: "تفصيل يمكن ملاحظته في صورة أو مشهد" }] },
+    ],
+    vocabulary: { wear: { collocations: [{ en: "wear a uniform", ar: "يرتدي زياً موحداً" }] }, buy: { phrasalVerbs: [{ en: "try on", ar: "يجرب قطعة ملابس قبل شرائها", example: { en: "Can I try on this jacket?", ar: "هل يمكنني تجربة هذه السترة؟" } }] } },
+  },
+};
+
+for (const unit of LEVEL_A1.units) {
+  const enrichment = A1_UNIT_ENRICHMENT[unit.id];
+  Object.assign(unit, {
+    phonetics: enrichment.phonetics,
+    arabic_l1_transfers: enrichment.arabic_l1_transfers,
+    academic_focus: enrichment.academic_focus,
+  });
+  for (const word of unit.vocabulary) {
+    const addition = enrichment.vocabulary[word.en];
+    if (addition) Object.assign(word, addition);
+  }
+}

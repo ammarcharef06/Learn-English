@@ -141,10 +141,14 @@ try {
   for (const u of ALL_UNITS) {
     if (unitIds.has(u.id)) bad(`معرّف وحدة مكرر: ${u.id}`);
     unitIds.add(u.id);
+    for (const component of ['grammar', 'vocabulary', 'phonetics', 'arabic_l1_transfers', 'academic_focus']) {
+      if (!Array.isArray(u[component])) bad(`الوحدة ${u.id} تفتقد الحقل ${component}`);
+    }
+    if ('vocab' in u) bad(`الوحدة ${u.id} تستخدم الحقل القديم vocab`);
     if (!u.grammar.length) bad(`الوحدة ${u.id} بلا دروس قواعد`);
-    if (u.vocab.length < 8) bad(`الوحدة ${u.id} مفرداتها قليلة (${u.vocab.length})`);
+    if (u.vocabulary.length < 8) bad(`الوحدة ${u.id} مفرداتها قليلة (${u.vocabulary.length})`);
     const vocabSet = new Set();
-    for (const v of u.vocab) {
+    for (const v of u.vocabulary) {
       if (vocabSet.has(v.en.toLowerCase())) bad(`كلمة مكررة في ${u.id}: ${v.en}`);
       vocabSet.add(v.en.toLowerCase());
       if (!v.en || !v.ar) bad(`مفردة ناقصة في ${u.id}: ${JSON.stringify(v).slice(0, 60)}`);
@@ -215,6 +219,9 @@ try {
   for (const p of list) {
     const target = join(ROOT, p.replace('./', ''));
     if (!existsSync(target) && !p.endsWith('/')) { bad(`Service Worker يشير إلى ملف غير موجود: ${p}`); missing++; }
+  }
+  if (!list.includes('./assets/js/data/curriculum-advanced.js')) {
+    bad('Service Worker لا يخزّن مخطط المنهج المتقدم للاستخدام دون اتصال');
   }
   ok(`Service Worker: ${list.length} ملفاً للتخزين المؤقت${missing ? '' : ' — كلها موجودة'}`);
 } catch (e) { bad(`فشل فحص Service Worker: ${e.message}`); }

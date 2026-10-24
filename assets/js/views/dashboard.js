@@ -5,8 +5,8 @@ import { progress, settings, goalForToday } from '../core/store.js';
 import { streakInfo, overallStats, accuracy, badgesWithState } from '../core/gamify.js';
 import { LEVELS, nextLessonSuggestion, curriculumStats, levelPercent } from '../data/curriculum.js';
 import { STUDY_TIPS } from '../data/badges.js';
-import { vocabularyEntries } from '../core/quizgen.js';
-import { weakestFirst, stats as srsStats } from '../core/srs.js';
+import { vocabularyEntries, curriculumReviewEntries } from '../core/quizgen.js';
+import { getItem, weakestFirst, stats as srsStats } from '../core/srs.js';
 import { statCard, progressBar } from './shell.js';
 import { nextReminderText, wordOfTheDay } from '../core/notify.js';
 import { dailyMission, weeklySummary } from '../core/journey.js';
@@ -31,10 +31,11 @@ export function renderDashboard(host) {
   const q = goalForToday();
   const next = nextLessonSuggestion();
   const cs = curriculumStats();
-  const due = srsStats(vocabularyEntries()).due;
+  const reviewEntries = [...vocabularyEntries(), ...curriculumReviewEntries()];
+  const due = srsStats(reviewEntries).due;
   const badges = badgesWithState();
   const earned = badges.filter((b) => b.earned);
-  const weak = weakestFirst(vocabularyEntries(), 6).filter((e) => (progress.items[e.itemId]?.wrong || 0) > 0 || !progress.items[e.itemId]);
+  const weak = weakestFirst(reviewEntries, 6).filter((e) => getItem(e.itemId).lapses > 0 || !getItem(e.itemId).seen);
   const today = progress.activity[todayKey()] || { q: 0, c: 0, minutes: 0, points: 0 };
   const goalReached = q.done >= q.target;
   const wod = wordOfTheDay();
@@ -49,6 +50,10 @@ export function renderDashboard(host) {
           <span class="dashboard-overline"><i aria-hidden="true"></i>${esc(greeting())}</span>
           <h1 id="dashboardTitle">${esc(t('dash.welcome'))}</h1>
           <p>${esc(t('dash.subtitle'))}</p>
+          <div class="dashboard-hero__signals" aria-label="${esc(t('dash.title'))}">
+            <span><i aria-hidden="true">🔥</i><b>${st.streak}</b>${esc(t('common.streak'))}</span>
+            <span><i aria-hidden="true">✦</i><b>${progress.points || 0}</b>${esc(t('common.points'))}</span>
+          </div>
           ${wod ? `<div class="dashboard-word"><span class="dashboard-word__label">📘 كلمة اليوم</span><span class="en">${esc(wod.en)}</span><span>${esc(wod.ar)}</span>${speakBtn(wod.en)}</div>` : ''}
           <div class="hero-actions dashboard-hero__actions">
             <a class="btn btn--solid" href="#/drill?mode=goal">🎯 ${esc(goalReached ? t('common.continue') : t('dash.goal'))}</a>

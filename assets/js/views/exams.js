@@ -254,7 +254,7 @@ function renderUnitExamIntro(host, unit) {
     <div class="grid grid--4">
       <div class="stat"><div class="stat__label">${t('common.questionsShort')}</div><div class="stat__value">12</div><div class="stat__foot">من مفردات وجمل الوحدة</div></div>
       <div class="stat"><div class="stat__label">${t('exam.timeLimit')}</div><div class="stat__value">10</div><div class="stat__foot">${t('common.minutes')}</div></div>
-      <div class="stat"><div class="stat__label">مفردات الوحدة</div><div class="stat__value">${unit.vocab.length}</div><div class="stat__foot">${unit.sentences.length} جملة</div></div>
+      <div class="stat"><div class="stat__label">مفردات الوحدة</div><div class="stat__value">${unit.vocabulary.length}</div><div class="stat__foot">${unit.sentences.length} جملة</div></div>
       <div class="stat ${st ? 'stat--brand' : ''}"><div class="stat__label">محاولاتك السابقة</div><div class="stat__value">${st ? Math.round((st.c / Math.max(1, st.q)) * 100) + '%' : '—'}</div><div class="stat__foot">${st ? `${st.c} / ${st.q}` : 'لم تختبر هذه الوحدة بعد'}</div></div>
     </div>
     <div class="card card--brand" style="margin-top:16px">

@@ -67,7 +67,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "deadline", ar: "موعد نهائي", pos: "noun", emoji: "⏰", example: { en: "The deadline for the report is Friday.", ar: "الموعد النهائي للتقرير هو يوم الجمعة." } },
         { en: "meeting", ar: "اجتماع", pos: "noun", emoji: "🗣️", example: { en: "Our team meeting starts at nine.", ar: "يبدأ اجتماع فريقنا في التاسعة." } },
         { en: "colleague", ar: "زميل عمل", pos: "noun", emoji: "🤝", example: { en: "My colleague helped me with the project.", ar: "ساعدني زميلي في المشروع." } },
@@ -166,7 +166,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "discount", ar: "خصم", pos: "noun", emoji: "🏷️", example: { en: "There is a big discount on shoes today.", ar: "يوجد خصم كبير على الأحذية اليوم." } },
         { en: "receipt", ar: "إيصال", pos: "noun", emoji: "🧾", example: { en: "Please keep the receipt in your bag.", ar: "من فضلك احتفظ بالإيصال في حقيبتك." } },
         { en: "refund", ar: "استرداد المال", pos: "noun", emoji: "💸", example: { en: "I asked for a full refund yesterday.", ar: "طلبت استرداد المال كاملًا أمس." } },
@@ -268,7 +268,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "luggage", ar: "أمتعة", pos: "noun", emoji: "🧳", example: { en: "Our luggage was too heavy for the plane.", ar: "كانت أمتعتنا ثقيلة جدًا على الطائرة." } },
         { en: "passport", ar: "جواز سفر", pos: "noun", emoji: "🛂", example: { en: "Show your passport at the airport gate.", ar: "أظهر جواز سفرك عند بوابة المطار." } },
         { en: "departure", ar: "مغادرة", pos: "noun", emoji: "🛫", example: { en: "The departure time is eight in the morning.", ar: "وقت المغادرة هو الثامنة صباحًا." } },
@@ -371,7 +371,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "headache", ar: "صداع", pos: "noun", emoji: "🤕", example: { en: "I have a terrible headache today.", ar: "عندي صداع شديد اليوم." } },
         { en: "medicine", ar: "دواء", pos: "noun", emoji: "💊", example: { en: "Take this medicine after lunch.", ar: "تناول هذا الدواء بعد الغداء." } },
         { en: "appointment", ar: "موعد مع الطبيب", pos: "noun", emoji: "📆", example: { en: "I made an appointment with the dentist.", ar: "حجزت موعدًا مع طبيب الأسنان." } },
@@ -471,7 +471,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "forecast", ar: "توقّع الطقس", pos: "noun", emoji: "📡", example: { en: "The forecast says rain for tomorrow.", ar: "يقول توقّع الطقس إن غدًا ممطر." } },
         { en: "temperature", ar: "درجة الحرارة", pos: "noun", emoji: "🌡️", example: { en: "The temperature dropped below zero last night.", ar: "انخفضت درجة الحرارة تحت الصفر ليلة أمس." } },
         { en: "thunder", ar: "رعد", pos: "noun", emoji: "⛈️", example: { en: "The thunder woke the whole village.", ar: "أيقظ الرعد القرية كلها." } },
@@ -570,7 +570,7 @@ export const LEVEL_A2 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "device", ar: "جهاز", pos: "noun", emoji: "📲", example: { en: "This device charges in about one hour.", ar: "يُشحن هذا الجهاز في نحو ساعة." } },
         { en: "screen", ar: "شاشة", pos: "noun", emoji: "🖥️", example: { en: "The screen of my phone is broken.", ar: "شاشة هاتفي مكسورة." } },
         { en: "charger", ar: "شاحن", pos: "noun", emoji: "🔌", example: { en: "I forgot my charger at the office.", ar: "نسيت شاحني في المكتب." } },
@@ -614,3 +614,109 @@ export const LEVEL_A2 = {
     }
   ]
 };
+
+const A2_UNIT_ENRICHMENT = {
+  a2u1: {
+    phonetics: [
+      { id: "deadline", en: "deadline", ipa: "/ˈdedlaɪn/", ar: "موعد نهائي", contrastPairs: [{ en: "work / walk", ar: "تدرّب على الحركة في work /ɜː/ مقابل walk /ɔː/." }], connectedSpeech: [{ en: "take a break", ar: "تُختزل أداة a غالباً إلى /ə/ في الكلام الطبيعي." }], intonation: [{ en: "When is the deadline? ↘", ar: "تنغيم هابط شائع في سؤال أداة الاستفهام." }] },
+      { id: "schedule", en: "schedule", ipa: "/ˈʃedjuːl/ (UK), /ˈskedʒuːl/ (US)", ar: "جدول مواعيد", contrastPairs: [{ en: "she / see", ar: "ميّز /ʃ/ عن /s/ في بداية الكلمة." }], connectedSpeech: [{ en: "I usually start work at eight.", ar: "قد يضعف صوت usually غير المنبور؛ حافظ على مقاطع الكلمة." }], intonation: [{ en: "I usually study after work. ↘", ar: "هبوط النبرة في الجملة الخبرية." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "third-person", incorrect: "She work every day.", corrected: "She works every day.", pattern: "إغفال علامة المفرد الغائب", explanationAr: "في المضارع البسيط نضيف -s غالباً إلى الفعل مع he/she/it." },
+      { id: "past-question", incorrect: "Did you went to work?", corrected: "Did you go to work?", pattern: "تكرار علامة الماضي", explanationAr: "بعد did يعود الفعل إلى صورته الأساسية؛ did يحمل علامة الماضي." },
+    ],
+    academic_focus: [
+      { id: "routine", term: "routine", meaningAr: "روتين أو تسلسل معتاد", example: { en: "The survey describes students' morning routines.", ar: "يصف الاستطلاع روتين الطلاب الصباحي." }, paraphrasing: [{ original: "I do the same tasks every morning.", paraphrase: "I follow the same morning routine." }] },
+      { id: "organise", term: "organise", meaningAr: "ينظّم", example: { en: "Organise your tasks by deadline.", ar: "نظّم مهامك حسب الموعد النهائي." }, readingAnalysis: [{ term: "sequence", meaningAr: "ترتيب الأحداث أو المهام" }] },
+    ],
+    vocabulary: { deadline: { collocations: [{ en: "meet a deadline", ar: "يلتزم بموعد نهائي" }] }, commute: { phrasalVerbs: [{ en: "get to work", ar: "يصل إلى العمل", example: { en: "I get to work by bus.", ar: "أصل إلى العمل بالحافلة." } }] } },
+  },
+  a2u2: {
+    phonetics: [
+      { id: "receipt", en: "receipt", ipa: "/rɪˈsiːt/", ar: "إيصال", contrastPairs: [{ en: "price / prize", ar: "ميّز /s/ المهموسة عن /z/ المجهورة." }], connectedSpeech: [{ en: "How much is it?", ar: "تُوصل الكلمات في سؤال السعر، مع بقاء much مسموعة." }], intonation: [{ en: "Could I have a receipt, please? ↘", ar: "هبوط لطيف في نهاية الطلب المهذب." }] },
+      { id: "cheap", en: "cheap", ipa: "/tʃiːp/", ar: "رخيص", contrastPairs: [{ en: "cheap / sheep", ar: "ميّز /tʃ/ المركب عن /ʃ/." }], connectedSpeech: [{ en: "a cheap pair of shoes", ar: "حافظ على وضوح /p/ قبل بداية pair." }], intonation: [{ en: "Is this cheaper? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "much-many", incorrect: "much customers", corrected: "many customers", pattern: "الخلط بين much وmany", explanationAr: "استخدم many مع الأسماء المعدودة الجمع، وmuch مع الأسماء غير المعدودة." },
+      { id: "lend-borrow", incorrect: "Can you borrow me some money?", corrected: "Can you lend me some money?", pattern: "الخلط بين lend وborrow", explanationAr: "lend يعني أن تعطي شيئاً مؤقتاً، وborrow يعني أن تأخذه مؤقتاً." },
+    ],
+    academic_focus: [
+      { id: "compare", term: "compare", meaningAr: "يقارن", example: { en: "Compare the prices of the two products.", ar: "قارن أسعار المنتجين." }, paraphrasing: [{ original: "The blue bag costs less than the red bag.", paraphrase: "The blue bag is cheaper than the red one." }] },
+      { id: "amount", term: "amount", meaningAr: "كمية", example: { en: "The receipt shows the total amount.", ar: "يوضح الإيصال المبلغ الإجمالي." }, readingAnalysis: [{ term: "total", meaningAr: "مجموع القيم أو الأسعار" }] },
+    ],
+    vocabulary: { discount: { collocations: [{ en: "get a discount", ar: "يحصل على خصم" }] }, afford: { phrasalVerbs: [{ en: "pay for", ar: "يدفع ثمن شيء", example: { en: "I will pay for the groceries.", ar: "سأدفع ثمن حاجات البقالة." } }] } },
+  },
+  a2u3: {
+    phonetics: [
+      { id: "departure", en: "departure", ipa: "/dɪˈpɑːtʃə(r)/", ar: "مغادرة", contrastPairs: [{ en: "ship / sheep", ar: "ميّز /ɪ/ القصيرة عن /iː/ الطويلة." }], connectedSpeech: [{ en: "The train was leaving when I arrived.", ar: "حافظ على نطق was الخفيف عند وصله بالفعل." }], intonation: [{ en: "What time does the train depart? ↘", ar: "تنغيم هابط في سؤال أداة الاستفهام." }] },
+      { id: "journey", en: "journey", ipa: "/ˈdʒɜːni/", ar: "رحلة", contrastPairs: [{ en: "journey / sherry", ar: "ميّز /dʒ/ عن /ʃ/ في البداية." }], connectedSpeech: [{ en: "We arrived at the station on time.", ar: "لا تحذف at عند وصلها بالكلمات المحيطة." }], intonation: [{ en: "Did you enjoy the journey? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "did-base", incorrect: "We didn't took the train.", corrected: "We didn't take the train.", pattern: "إبقاء الفعل في الماضي بعد did", explanationAr: "بعد didn't أو did يأتي الفعل بصورته الأساسية." },
+      { id: "travel-preposition", incorrect: "I arrived to the airport.", corrected: "I arrived at the airport.", pattern: "نقل حرف الجر مع فعل الوصول", explanationAr: "نستخدم arrive at لمكان محدد، وarrive in مع مدينة أو بلد." },
+    ],
+    academic_focus: [
+      { id: "route", term: "route", meaningAr: "مسار أو طريق", example: { en: "The map shows the route to the station.", ar: "تعرض الخريطة المسار إلى المحطة." }, paraphrasing: [{ original: "The bus goes from the hotel to the airport.", paraphrase: "The bus route connects the hotel and airport." }] },
+      { id: "sequence", term: "sequence", meaningAr: "تسلسل أو ترتيب", example: { en: "The travel guide lists the stops in sequence.", ar: "يسرد دليل السفر المحطات بالترتيب." }, readingAnalysis: [{ term: "first / next / finally", meaningAr: "روابط توضّح ترتيب الأحداث" }] },
+    ],
+    vocabulary: { departure: { collocations: [{ en: "departure time", ar: "وقت المغادرة" }] }, board: { phrasalVerbs: [{ en: "get on", ar: "يصعد إلى وسيلة نقل", example: { en: "We get on the bus at the next stop.", ar: "نصعد إلى الحافلة في المحطة التالية." } }] } },
+  },
+  a2u4: {
+    phonetics: [
+      { id: "medicine", en: "medicine", ipa: "/ˈmedɪsən/", ar: "دواء", contrastPairs: [{ en: "breathe / breath", ar: "breathe ينتهي بصوت /ð/ مجهور، وbreath بصوت /θ/ مهموس." }], connectedSpeech: [{ en: "You should see a doctor.", ar: "قد تختصر should في الكلام المتصل، لكن لا تخلطها بـshouldn't." }], intonation: [{ en: "You should get some rest. ↘", ar: "هبوط النبرة في نصيحة مباشرة." }] },
+      { id: "nervous", en: "nervous", ipa: "/ˈnɜːvəs/", ar: "متوتر", contrastPairs: [{ en: "very / wary", ar: "انتبه لاختلاف الحركة الأولى وموقع النبر." }], connectedSpeech: [{ en: "I feel nervous about the appointment.", ar: "اربط about بالكلمة التالية مع وضوح المقطع المنبور." }], intonation: [{ en: "Are you feeling better? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "advice-count", incorrect: "an advice", corrected: "some advice", pattern: "معاملة advice كاسم معدود", explanationAr: "advice غير معدود؛ لا يسبقه a/an ولا يجمع عادةً، ويمكن قول a piece of advice." },
+      { id: "modal-base", incorrect: "You should to rest.", corrected: "You should rest.", pattern: "إضافة to بعد الفعل المساعد", explanationAr: "يأتي الفعل بصورته الأساسية مباشرة بعد should وmust." },
+    ],
+    academic_focus: [
+      { id: "symptom", term: "symptom", meaningAr: "عَرَض صحي", example: { en: "The patient described each symptom.", ar: "وصف المريض كل عَرَض." }, paraphrasing: [{ original: "My head hurts.", paraphrase: "I have a headache." }] },
+      { id: "recommend", term: "recommend", meaningAr: "يوصي أو ينصح", example: { en: "The doctor recommends regular exercise.", ar: "يوصي الطبيب بممارسة الرياضة بانتظام." }, readingAnalysis: [{ term: "cause and effect", meaningAr: "علاقة السبب بالنتيجة" }] },
+    ],
+    vocabulary: { symptom: { collocations: [{ en: "common symptom", ar: "عَرَض شائع" }] }, recover: { phrasalVerbs: [{ en: "get over", ar: "يتعافى من مرض أو تجربة صعبة", example: { en: "She got over the flu last week.", ar: "تعافت من الإنفلونزا الأسبوع الماضي." } }] } },
+  },
+  a2u5: {
+    phonetics: [
+      { id: "weather", en: "weather", ipa: "/ˈweðə(r)/", ar: "طقس", contrastPairs: [{ en: "weather / whether", ar: "الكلمتان متطابقتان غالباً في النطق؛ يحدد السياق المعنى." }], connectedSpeech: [{ en: "It is going to rain.", ar: "غالباً تُختصر going to إلى gonna في الحديث غير الرسمي، لا في الكتابة الرسمية." }], intonation: [{ en: "Will it rain tomorrow? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+      { id: "thunder", en: "thunder", ipa: "/ˈθʌndə(r)/", ar: "رعد", contrastPairs: [{ en: "thin / tin", ar: "ميّز /θ/ عن /t/ في بداية الكلمة." }], connectedSpeech: [{ en: "The forecast says it will be sunny.", ar: "اربط says it دون إسقاط ضمير it." }], intonation: [{ en: "It may be windy this afternoon. ↘", ar: "هبوط النبرة عند إكمال التوقع." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "weather-spelling", incorrect: "The whether is cold today.", corrected: "The weather is cold today.", pattern: "الخلط بين weather وwhether", explanationAr: "weather تعني الطقس، أما whether فتُستخدم غالباً بمعنى ما إذا؛ وهما متطابقتان في النطق." },
+      { id: "will-plan", incorrect: "I will visit my friend yesterday.", corrected: "I visited my friend yesterday.", pattern: "عدم اتساق الزمن مع ظرفه", explanationAr: "استخدم الماضي مع yesterday، ولا تجمعه مع will الدال على المستقبل." },
+    ],
+    academic_focus: [
+      { id: "forecast", term: "forecast", meaningAr: "توقع أو تنبؤ", example: { en: "The forecast predicts rain in the afternoon.", ar: "تتوقع النشرة هطول المطر بعد الظهر." }, paraphrasing: [{ original: "It will probably be sunny.", paraphrase: "The forecast suggests sunshine." }] },
+      { id: "trend", term: "trend", meaningAr: "اتجاه أو نمط متكرر", example: { en: "The chart shows a rising temperature trend.", ar: "يعرض المخطط اتجاهاً تصاعدياً في درجات الحرارة." }, readingAnalysis: [{ term: "increase / decrease", meaningAr: "ارتفاع / انخفاض في قيمة أو كمية" }] },
+    ],
+    vocabulary: { forecast: { collocations: [{ en: "weather forecast", ar: "نشرة الطقس" }] }, hiking: { phrasalVerbs: [{ en: "go out", ar: "يخرج لممارسة نشاط", example: { en: "We go out hiking when the weather is mild.", ar: "نخرج للمشي عندما يكون الطقس معتدلاً." } }] } },
+  },
+  a2u6: {
+    phonetics: [
+      { id: "device", en: "device", ipa: "/dɪˈvaɪs/", ar: "جهاز", contrastPairs: [{ en: "save / safe", ar: "ميّز /v/ المجهورة في save عن /f/ المهموسة في safe." }], connectedSpeech: [{ en: "Have you updated the app?", ar: "قد يختزل have في الكلام، مع إبقاء بنية المضارع التام." }], intonation: [{ en: "Have you ever used this app? ↗", ar: "تنغيم صاعد في سؤال نعم/لا." }] },
+      { id: "privacy", en: "privacy", ipa: "/ˈprɪvəsi/", ar: "خصوصية", contrastPairs: [{ en: "fan / van", ar: "ميّز /f/ المهموسة عن /v/ المجهورة." }], connectedSpeech: [{ en: "I have already changed my password.", ar: "اربط have already مع المحافظة على النبر في already." }], intonation: [{ en: "You should protect your account. ↘", ar: "هبوط النبرة في النصيحة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "present-perfect-time", incorrect: "I have downloaded it yesterday.", corrected: "I downloaded it yesterday.", pattern: "الجمع بين المضارع التام ووقت ماضٍ محدد", explanationAr: "استخدم الماضي البسيط مع yesterday؛ المضارع التام لا يحدد وقتاً ماضياً منتهياً." },
+      { id: "privacy-preposition", incorrect: "I depend in this app.", corrected: "I depend on this app.", pattern: "ترجمة حرف الجر حرفياً", explanationAr: "الفعل depend يتطلب حرف الجر on في هذا المعنى." },
+    ],
+    academic_focus: [
+      { id: "privacy", term: "privacy", meaningAr: "خصوصية", example: { en: "Privacy settings control who can see your information.", ar: "تحدد إعدادات الخصوصية من يمكنه رؤية معلوماتك." }, paraphrasing: [{ original: "Do not share your password.", paraphrase: "Keep your password private." }] },
+      { id: "function", term: "function", meaningAr: "وظيفة أو خاصية", example: { en: "The search function helps users find information.", ar: "تساعد وظيفة البحث المستخدمين على إيجاد المعلومات." }, readingAnalysis: [{ term: "feature", meaningAr: "خاصية يقدمها التطبيق أو الجهاز" }] },
+    ],
+    vocabulary: { password: { collocations: [{ en: "strong password", ar: "كلمة مرور قوية" }] }, update: { phrasalVerbs: [{ en: "log in", ar: "يسجل الدخول", example: { en: "Log in to your account to check the update.", ar: "سجّل الدخول إلى حسابك للتحقق من التحديث." } }] } },
+  },
+};
+
+for (const unit of LEVEL_A2.units) {
+  const enrichment = A2_UNIT_ENRICHMENT[unit.id];
+  Object.assign(unit, {
+    phonetics: enrichment.phonetics,
+    arabic_l1_transfers: enrichment.arabic_l1_transfers,
+    academic_focus: enrichment.academic_focus,
+  });
+  for (const word of unit.vocabulary) {
+    const addition = enrichment.vocabulary[word.en];
+    if (addition) Object.assign(word, addition);
+  }
+}

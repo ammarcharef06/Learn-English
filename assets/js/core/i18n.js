@@ -73,6 +73,7 @@ const DICT = {
   'common.minutes': ['دقيقة', 'min'],
   'common.questionsShort': ['سؤال', 'questions'],
   'common.words': ['كلمة', 'words'],
+  'common.cards': ['بطاقات', 'cards'],
   'common.word': ['كلمة', 'word'],
   'common.notebook.add': ['أضف إلى دفتري', 'Add to notebook'],
   'common.notebook.added': ['في دفتري', 'In notebook'],

@@ -213,7 +213,7 @@ export function renderSettings(host, query = {}) {
     qsa('#themeSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
     toast(t('set.saved'), 'ok');
   }));
-  if ((settings.skin || 'kali') === 'kali') {
+  if ((settings.skin || 'atelier') === 'kali') {
     const themeHint = qs('#themeHint', host);
     if (themeHint) themeHint.textContent = 'ستايل كالي داكن دائماً — اختر «GNOME» لتتمكن من التبديل بين الفاتح والداكن.';
     qsa('#themeSeg button', host).forEach((b) => { b.disabled = true; b.style.opacity = '.45'; });

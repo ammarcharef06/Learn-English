@@ -2,12 +2,32 @@
 import { LEVEL_A1 } from './curriculum-a1.js';
 import { LEVEL_A2 } from './curriculum-a2.js';
 import { LEVEL_B1 } from './curriculum-b1.js';
+import {
+  normalizeCurriculumUnit,
+  validateLevel,
+  importStagedLevel,
+} from './curriculum-advanced.js';
 import { READINGS } from './readings.js';
 import { progress } from '../core/store.js';
 
 export { READINGS };
+export {
+  ADVANCED_UNIT_SCHEMA,
+  B2_STAGED_CURRICULUM,
+  CURRICULUM_SCHEMA_VERSION,
+  PLANNED_LEVELS,
+  UNIT_COMPONENTS,
+  exportStagedLevel,
+  importStagedLevel,
+  isPlannedLevel,
+  normalizeCurriculumUnit,
+  validateLevel,
+} from './curriculum-advanced.js';
 
-export const LEVELS = [LEVEL_A1, LEVEL_A2, LEVEL_B1];
+export const LEVELS = [LEVEL_A1, LEVEL_A2, LEVEL_B1].map((level) => ({
+  ...level,
+  units: level.units.map(normalizeCurriculumUnit),
+}));
 
 export const ALL_UNITS = LEVELS.flatMap((l) => l.units.map((u) => ({
   id: u.id,
@@ -19,11 +39,27 @@ export const ALL_UNITS = LEVELS.flatMap((l) => l.units.map((u) => ({
   levelLabel: l.label,
   levelColor: l.color,
   levelIcon: l.icon,
-  grammar: u.grammar || [],
-  vocab: u.vocab || [],
-  sentences: u.sentences || [],
-  dialogue: u.dialogue || [],
+  ...u,
 })));
+
+export function activateStagedLevel(payload) {
+  const imported = importStagedLevel(payload);
+  if (!imported.valid) return imported;
+  if (LEVELS.some((active) => active.id === imported.level.id)) {
+    return { level: null, valid: false, warnings: [`المستوى ${imported.level.id} مفعّل مسبقاً.`] };
+  }
+
+  const level = imported.level;
+  LEVELS.push(level);
+  ALL_UNITS.push(...level.units.map((unit) => ({
+    ...unit,
+    levelId: level.id,
+    levelLabel: level.label,
+    levelColor: level.color,
+    levelIcon: level.icon,
+  })));
+  return { level, valid: true, warnings: [] };
+}
 
 export function getLevel(id) { return LEVELS.find((l) => l.id === id) || null; }
 export function getUnit(unitId) { return ALL_UNITS.find((u) => u.id === unitId) || null; }
@@ -46,7 +82,7 @@ export function unitPercent(unitId) {
   const lessons = u.grammar.length;
   const read = u.grammar.filter((_, i) => progress.lessons?.[`${unitId}:${i}`]).length;
   const quiz = progress.units?.[unitId]?.quiz;
-  const quizPart = quiz && quiz.q ? Math.min(1, quiz.q / Math.max(6, u.vocab.length)) : 0;
+  const quizPart = quiz && quiz.q ? Math.min(1, quiz.q / Math.max(6, u.vocabulary.length)) : 0;
   const lessonPart = lessons ? read / lessons : 0;
   return Math.round(((lessonPart * 0.6) + (quizPart * 0.4)) * 100);
 }
@@ -63,7 +99,7 @@ export function readingsOfLevel(level) { return READINGS.filter((r) => r.level =
 export function curriculumStats() {
   const units = ALL_UNITS.length;
   const done = ALL_UNITS.filter((u) => progress.units?.[u.id]?.done).length;
-  const vocab = ALL_UNITS.reduce((n, u) => n + u.vocab.length, 0);
+  const vocab = ALL_UNITS.reduce((n, u) => n + u.vocabulary.length, 0);
   const grammar = ALL_UNITS.reduce((n, u) => n + u.grammar.length, 0);
   const sentences = ALL_UNITS.reduce((n, u) => n + u.sentences.length, 0);
   return { units, done, vocab, grammar, sentences, readings: READINGS.length, percent: units ? Math.round((done / units) * 100) : 0 };

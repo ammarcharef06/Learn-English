@@ -237,15 +237,25 @@ section('التكرار المتباعد (SRS)');
 const srs = await mod('assets/js/core/srs.js');
 resetProgress();
 const it0 = srs.getItem('srs:test');
-check('عنصر جديد صندوقه صفر', it0.box === 0 && it0.seen === 0);
-srs.gradeItem('srs:test', 2);
-srs.gradeItem('srs:test', 2);
-const it2 = srs.gradeItem('srs:test', 2);
-check('الصندوق يتقدم مع الإجابات الصحيحة', it2.box === 3, `box=${it2.box}`);
-check('تاريخ الاستحقاق في المستقبل', it2.due > srs.getItem('srs:test').last);
+check('بطاقة جديدة تبدأ بإعدادات SM-2 الافتراضية', it0.repetitions === 0 && it0.interval === 0
+  && it0.easeFactor === 2.5 && it0.seen === 0);
+srs.gradeItem('srs:test', 5);
+srs.gradeItem('srs:test', 5);
+const it2 = srs.gradeItem('srs:test', 5);
+check('SM-2 يحدد الفواصل 1 ثم 6 ثم يطبق عامل السهولة', it2.interval === 17 && it2.repetitions === 3);
+check('عامل السهولة يتكيف مع جودة الإجابة', it2.easeFactor > 2.5);
+const srsUtils = await mod('assets/js/core/utils.js');
+check('تاريخ الاستحقاق يُشتق من الفاصل الديناميكي',
+  it2.due === srsUtils.dateKey(srsUtils.addDays(new Date(), it2.interval)));
 srs.gradeItem('srs:test', 0);
-check('الخطأ يعيد الصندوق للصفر', srs.getItem('srs:test').box === 0);
-check('الأخطاء تُحتسب', srs.getItem('srs:test').wrong === 1);
+check('الإجابة الأقل من 3 تعيد التكرار إلى اليوم التالي',
+  srs.getItem('srs:test').repetitions === 0 && srs.getItem('srs:test').interval === 1);
+srs.gradeItem('srs:test', 3);
+check('عامل السهولة يحترم الحد الأدنى', srs.getItem('srs:test').easeFactor >= srs.MIN_EASE_FACTOR);
+check('الإجابات الصحيحة والخاطئة تُحصى', srs.getItem('srs:test').wrong === 1 && srs.getItem('srs:test').correct === 4);
+check('درجة الجودة الخارجة عن نطاق SM-2 تُرفض', (() => {
+  try { srs.gradeItem('srs:invalid', 6); return false; } catch (error) { return error instanceof RangeError; }
+})());
 const master = srs.masteryOf('srs:test');
 check('نسبة الإتقان محسوبة', typeof master === 'number' && master >= 0 && master <= 100, `${master}`);
 const pool = qg.entriesForSource('pronouns').slice(0, 40);
@@ -255,9 +265,9 @@ const weak = srs.weakestFirst(pool, 5);
 check('ترتيب الأضعف يعمل', weak.length === 5 && weak[0].itemId);
 store.saveProgress((p) => {
   p.items = {
-    overdueWeak: { seen: 4, correct: 1, wrong: 3, box: 1, due: '2026-10-17', last: '2026-10-13' },
-    dueStrong: { seen: 4, correct: 4, wrong: 0, box: 5, due: '2026-10-20', last: '2026-10-16' },
-    futureMastered: { seen: 5, correct: 5, wrong: 0, box: 7, due: '2026-10-25', last: '2026-10-18' },
+    overdueWeak: { algorithm: 'sm2', repetitions: 1, interval: 6, easeFactor: 1.7, seen: 4, correct: 1, wrong: 3, lapses: 3, due: '2026-10-17', last: '2026-10-13' },
+    dueStrong: { algorithm: 'sm2', repetitions: 4, interval: 21, easeFactor: 2.5, seen: 4, correct: 4, wrong: 0, lapses: 0, due: '2026-10-20', last: '2026-10-16' },
+    futureMastered: { algorithm: 'sm2', repetitions: 5, interval: 60, easeFactor: 2.5, seen: 5, correct: 5, wrong: 0, lapses: 0, due: '2026-10-25', last: '2026-10-18' },
   };
 });
 const smartEntries = [
@@ -277,6 +287,9 @@ check('المراجعة الذكية تحد الكلمات الجديدة بخم
   srs.smartReviewPlan(['1', '2', '3', '4', '5', '6'].map((id) => ({ itemId: `fresh${id}` })), 20).newCount === 5);
 check('مجموعة المستحق فقط لا تضم الجديد أو المؤجل',
   srs.dueEntries(smartEntries, '2026-10-20').map((entry) => entry.itemId).join(',') === 'dueStrong,overdueWeak');
+store.saveProgress((p) => { p.items.legacyFixture = { seen: 8, correct: 7, wrong: 1, box: 5, due: '2099-01-01' }; });
+check('بيانات صناديق قديمة تبدأ كبطاقة جديدة في SM-2', srs.getItem('legacyFixture').algorithm === 'sm2'
+  && srs.getItem('legacyFixture').seen === 0 && srs.isDue('legacyFixture'));
 
 /* ================= 6. الإشعارات ================= */
 section('منطق الإشعارات والتذكير');
@@ -432,9 +445,11 @@ const i18n = await mod('assets/js/core/i18n.js');
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
 check('نص حالة التذكير مترجم بالعربية', i18n.t('set.reminderOn') === 'التذكير مُفعَّل');
+check('بطاقات SRS لها تسمية مترجمة', i18n.t('common.cards') === 'بطاقات');
 i18n.setUiLang('en');
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
 check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
+check('بطاقات SRS مترجمة بالإنجليزية', i18n.t('common.cards') === 'cards');
 check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);
 i18n.setUiLang('ar');
 check('مفتاح غير موجود يعود كما هو', i18n.t('nope.missing') === 'nope.missing');
@@ -454,10 +469,124 @@ const cur = await mod('assets/js/data/curriculum.js');
 check('ثلاثة مستويات', cur.LEVELS.length === 3);
 check('١٨ وحدة إجمالاً', cur.ALL_UNITS.length === 18);
 check('١٢ مطالعة', cur.READINGS.length === 12);
-check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocab.length && u.grammar.length && u.sentences.length));
+check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
 check('المطالعات موزعة على المستويات', ['a1', 'a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
 check('اقتراح الدرس التالي يعمل', cur.nextLessonSuggestion() !== null);
 check('إحصاءات المنهج صحيحة', cur.curriculumStats().vocab >= 280);
+check('المستويات المتقدمة الثلاثة لها مخطط خماسي الأبعاد', cur.PLANNED_LEVELS.map((l) => l.id).join(',') === 'b2,c1,c2'
+  && cur.PLANNED_LEVELS.every(cur.isPlannedLevel));
+check('المستويات المخططة لا تدخل المنهج النشط قبل تجهيز المحتوى', cur.LEVELS.length === 3
+  && cur.PLANNED_LEVELS.every((l) => !cur.LEVELS.some((active) => active.id === l.id)));
+check('مخطط الوحدات يشمل النطق IPA وأخطاء النقل من العربية', cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa')
+  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('incorrect')
+  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('corrected'));
+check('الوحدات النشطة تعرض الحقول الخمسة مباشرة', cur.ALL_UNITS.every((u) =>
+  Array.isArray(u.grammar) && Array.isArray(u.vocabulary) && Array.isArray(u.phonetics)
+  && Array.isArray(u.arabic_l1_transfers) && Array.isArray(u.academic_focus) && !('vocab' in u)));
+const a1a2Units = cur.ALL_UNITS.filter((unit) => ['a1', 'a2'].includes(unit.levelId));
+const a1a2ReviewEntries = qg.curriculumReviewEntries({ levels: ['a1', 'a2'] });
+check('كل وحدات A1 وA2 تحتوي أبعاد المنهج الخمسة مع IPA وأمثلة', a1a2Units.length === 12
+  && a1a2Units.every((unit) => unit.grammar.length && unit.vocabulary.length
+    && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa && item.en && item.ar
+      && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
+    && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2));
+check('إثراء مفردات A1 وA2 بالمتلازمات والأفعال المركبة قابل للمراجعة', a1a2Units.every((unit) =>
+  unit.vocabulary.some((word) => word.collocations?.length)
+    && unit.vocabulary.some((word) => word.phrasalVerbs?.length))
+  && ['phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+    'l1-transfer', 'academic', 'academic:paraphrasing', 'academic:readingAnalysis',
+    'collocation', 'phrasal-verb'].every((kind) => a1a2ReviewEntries.some((entry) => entry.kind === kind))
+  && a1a2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b1Units = cur.ALL_UNITS.filter((unit) => unit.levelId === 'b1');
+const b1ReviewEntries = qg.curriculumReviewEntries({ levels: ['b1'] });
+check('كل وحدات B1 الست مثرية بالمحاور الخمسة وبمواد صوتية متقدمة', b1Units.length === 6
+  && b1Units.every((unit) => unit.grammar.length && unit.vocabulary.length
+    && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
+      && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
+    && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2
+    && unit.vocabulary.some((word) => word.collocations?.length)
+    && unit.vocabulary.some((word) => word.phrasalVerbs?.length)));
+check('محتوى B1 الصوتي والأكاديمي والمفرداتي يُنشئ بطاقات SRS صالحة', [
+  'phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+  'l1-transfer', 'academic', 'academic:paraphrasing', 'academic:idioms',
+  'collocation', 'phrasal-verb',
+].every((kind) => b1ReviewEntries.some((entry) => entry.kind === kind))
+  && b1ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b2Stage = cur.B2_STAGED_CURRICULUM;
+const b2ReviewEntries = b2Stage.units.flatMap((unit) =>
+  qg.reviewEntriesForUnit({ ...unit, levelId: 'b2', levelLabel: b2Stage.label }));
+check('B2 المرحلي يحتوي ست وحدات صالحة بالمخطط الخماسي ولا يُفعّل تلقائياً',
+  b2Stage.units.length === 6 && cur.validateLevel(b2Stage).valid
+    && cur.isPlannedLevel(cur.PLANNED_LEVELS.find((level) => level.id === 'b2'))
+    && b2Stage.units.every((unit) => unit.grammar.length && unit.vocabulary.length
+      && unit.phonetics.length >= 2 && unit.arabic_l1_transfers.length >= 2
+      && unit.academic_focus.length >= 2 && unit.sentences.length && unit.dialogue.length));
+check('محتوى B2 المتقدم يدخل بطاقات SRS في المحاور الخمسة', [
+  'grammar', 'phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech',
+  'phonetics:intonation', 'l1-transfer', 'academic', 'academic:paraphrasing',
+  'academic:idioms', 'collocation', 'phrasal-verb',
+].every((kind) => b2ReviewEntries.some((entry) => entry.kind === kind))
+  && b2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b2Export = cur.exportStagedLevel(b2Stage);
+const b2Imported = cur.importStagedLevel(b2Export);
+check('تصدير واستيراد محتوى B2 يحافظان على الوحدات ويظلان خارج المنهج النشط',
+  b2Imported.valid && b2Imported.level.units.length === 6
+    && !cur.LEVELS.some((level) => level.id === 'b2'));
+const stagedFixture = {
+  id: 'b2-test', label: 'B2 test', labelEn: 'B2 test', icon: '🧭', color: '#000',
+  units: [{
+    id: 'b2-test-u1', title: 'Test unit', grammar: [{ title: 'Grammar' }],
+    vocabulary: [{ en: 'decision', ar: 'قرار', collocations: [{ en: 'make a decision', ar: 'يتخذ قراراً' }], phrasalVerbs: [{ en: 'carry out', ar: 'ينفذ' }] }],
+    phonetics: [{
+      id: 'ipa', en: 'think', ipa: '/θɪŋk/', ar: 'ثِنك',
+      contrastPairs: [{ id: 'pair', en: 'pat / bat', ar: '/p/ مقابل /b/' }],
+      connectedSpeech: [{ en: 'want to → wanna', ar: 'وصل واختزال في الكلام' }],
+      intonation: [{ en: 'rising tone', ar: 'تنغيم صاعد' }],
+    }],
+    arabic_l1_transfers: [{ id: 'transfer', incorrect: 'I very like it.', corrected: 'I like it very much.', explanationAr: 'موضع الظرف' }],
+    academic_focus: [{
+      id: 'term', term: 'evidence', meaningAr: 'دليل',
+      paraphrasing: [{ original: 'The study is important.', paraphrase: 'The research is significant.' }],
+      idioms: [{ phrase: 'in the long run', meaningAr: 'على المدى البعيد' }],
+      readingAnalysis: [{ term: 'claim', meaningAr: 'ادعاء الكاتب' }],
+    }],
+  }],
+};
+check('التحقق يمنع تفعيل وحدة ناقصة مع تحذير محدد', !cur.validateLevel({
+  ...stagedFixture, units: [{ ...stagedFixture.units[0], phonetics: [] }],
+}).valid && cur.validateLevel({ ...stagedFixture, units: [{ ...stagedFixture.units[0], phonetics: [] }] })
+  .warnings.some((warning) => warning.includes('phonetics')));
+const stagedExport = cur.exportStagedLevel(stagedFixture);
+const stagedImport = cur.importStagedLevel(stagedExport);
+check('خط أنابيب التصدير والاستيراد يحافظ على مخطط الوحدة', stagedImport.valid
+  && !('vocab' in stagedImport.level.units[0]) && stagedImport.level.units[0].vocabulary.length === 1);
+const componentReviewEntries = qg.reviewEntriesForUnit({
+  ...stagedFixture.units[0], levelId: 'b2-test', levelLabel: 'B2 test',
+});
+check('بطاقات SRS تشمل القواعد وIPA والنقل والمتلازمات والأفعال المركبة', [
+  'grammar', 'phonetics', 'l1-transfer', 'academic', 'collocation', 'phrasal-verb',
+].every((kind) => componentReviewEntries.some((entry) => entry.kind === kind))
+  && componentReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+check('SRS يراجع الأزواج الصوتية والوصل والتنغيم وإعادة الصياغة والتعابير الاصطلاحية',
+  ['phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+    'academic:paraphrasing', 'academic:idioms', 'academic:readingAnalysis']
+    .every((kind) => componentReviewEntries.some((entry) => entry.kind === kind)));
+const activatedFixture = cur.activateStagedLevel(stagedExport);
+check('تفعيل المستوى المراجع يضيفه إلى المنهج النشط مرة واحدة', activatedFixture.valid
+  && cur.getLevel('b2-test') === activatedFixture.level
+  && cur.unitsOfLevel('b2-test').length === 1
+  && !cur.activateStagedLevel(stagedExport).valid);
+const activeReviewKinds = [
+  ...qg.vocabularyEntries({ levels: ['b2-test'] }),
+  ...qg.curriculumReviewEntries({ levels: ['b2-test'] }),
+].map((entry) => entry.kind);
+check('المحور الخامس كله يدخل بطاقات SRS بعد تفعيل الوحدة', [
+  'word', 'grammar', 'phonetics', 'l1-transfer', 'academic', 'collocation', 'phrasal-verb',
+].every((kind) => activeReviewKinds.includes(kind)));
+if (activatedFixture.valid) {
+  cur.LEVELS.splice(cur.LEVELS.indexOf(activatedFixture.level), 1);
+  cur.ALL_UNITS.splice(cur.ALL_UNITS.findIndex((unit) => unit.levelId === 'b2-test'), 1);
+}
 
 /* ================= 10. الأدوات المساعدة ================= */
 section('الأدوات المساعدة');

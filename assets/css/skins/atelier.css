@@ -1,0 +1,696 @@
+/* Atelier — a vivid, progress-led learning space for both study areas. */
+html[data-skin="atelier"] {
+  color-scheme: light;
+  --radius-xs: 8px;
+  --radius-sm: 13px;
+  --radius: 21px;
+  --radius-lg: 30px;
+  --bg: #f3f4fb;
+  --bg-2: #fafaff;
+  --surface: #fff;
+  --surface-2: #f6f6fc;
+  --surface-3: #ececf7;
+  --line: #e3e3f0;
+  --line-strong: #cecee1;
+  --text: #17182e;
+  --text-2: #53556f;
+  --text-3: #6a6b82;
+  --overlay: rgb(20 20 44 / 48%);
+  --brand-1: #605cf5;
+  --brand-2: #f07866;
+  --brand-3: #32c4b3;
+  --brand-soft: #ecebff;
+  --brand-text: #4742cf;
+  --ok: #198c70;
+  --ok-soft: #e1f5ef;
+  --warn: #a96d14;
+  --warn-soft: #fbf0d8;
+  --warn-text: #80510d;
+  --bad: #bd514c;
+  --bad-soft: #fbe9e7;
+  --shadow-1: 0 2px 5px rgb(35 33 80 / 4%), 0 12px 28px rgb(35 33 80 / 6%);
+  --shadow-2: 0 10px 28px rgb(35 33 80 / 10%), 0 28px 64px rgb(35 33 80 / 8%);
+  --shadow-3: 0 24px 70px rgb(20 19 48 / 28%);
+}
+
+html[data-skin="atelier"][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101222;
+  --bg-2: #15182c;
+  --surface: #191d34;
+  --surface-2: #202540;
+  --surface-3: #292e4c;
+  --line: #303652;
+  --line-strong: #464e72;
+  --text: #f3f2ff;
+  --text-2: #c7c8df;
+  --text-3: #a8abc9;
+  --overlay: rgb(0 0 0 / 68%);
+  --brand-1: #9491ff;
+  --brand-2: #ff9a83;
+  --brand-3: #53dec8;
+  --brand-soft: #292747;
+  --brand-text: #c1bfff;
+  --ok: #67d9b5;
+  --ok-soft: #1b3b37;
+  --warn: #f1c276;
+  --warn-soft: #42371f;
+  --warn-text: #f2d18c;
+  --bad: #ff968e;
+  --bad-soft: #432b35;
+  --shadow-1: 0 2px 5px rgb(0 0 0 / 19%), 0 12px 28px rgb(0 0 0 / 15%);
+  --shadow-2: 0 10px 28px rgb(0 0 0 / 28%), 0 28px 64px rgb(0 0 0 / 18%);
+  --shadow-3: 0 24px 70px rgb(0 0 0 / 54%);
+}
+
+html[data-skin="atelier"][data-contrast="high"] {
+  --line: #59645e;
+  --line-strong: #343f39;
+  --text-2: #35443e;
+  --text-3: #43534c;
+  --brand-text: #06483c;
+}
+
+html[data-skin="atelier"][data-theme="dark"][data-contrast="high"] {
+  --bg: #000;
+  --bg-2: #000;
+  --surface: #090d0b;
+  --surface-2: #131a16;
+  --surface-3: #202923;
+  --line: #a5b4a9;
+  --line-strong: #fff;
+  --text: #fff;
+  --text-2: #f0f4ef;
+  --text-3: #d9e2da;
+  --brand-soft: #203b30;
+  --brand-text: #baf2d6;
+}
+
+html[data-skin="atelier"] ::selection {
+  color: var(--text);
+  background: color-mix(in srgb, var(--brand-1) 25%, var(--surface));
+}
+
+html[data-skin="atelier"] :focus-visible {
+  outline: 3px solid var(--brand-1);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+html[data-skin="atelier"] body {
+  background:
+    radial-gradient(ellipse at 76% -24rem, color-mix(in srgb, var(--brand-1) 16%, transparent), transparent 48rem),
+    radial-gradient(ellipse at 6% 38rem, color-mix(in srgb, var(--brand-3) 6%, transparent), transparent 30rem),
+    var(--bg);
+}
+
+html[data-skin="atelier"] .app {
+  background: transparent;
+}
+
+html[data-skin="atelier"] .topbar {
+  min-height: 76px;
+  padding-inline: clamp(18px, 5vw, 84px);
+  background: color-mix(in srgb, var(--bg-2) 88%, transparent) !important;
+  border-block-end: 1px solid color-mix(in srgb, var(--brand-1) 15%, var(--line)) !important;
+  box-shadow: 0 5px 24px color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+html[data-skin="atelier"] .topbar .brand__mark {
+  inline-size: 46px;
+  block-size: 46px;
+  padding: 4px;
+  border: 1px solid color-mix(in srgb, var(--brand-1) 18%, var(--line));
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-skin="atelier"] .topbar .brand__text b {
+  color: var(--text);
+  letter-spacing: -.035em;
+}
+
+html[data-skin="atelier"] .topbar .brand__text small {
+  color: var(--text-3);
+}
+
+html[data-skin="atelier"] .topbar .icon-btn {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text-2);
+}
+
+html[data-skin="atelier"] .topbar .icon-btn:hover {
+  border-color: color-mix(in srgb, var(--brand-1) 48%, var(--line));
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+
+html[data-skin="atelier"] .topbar #btnLang {
+  border-radius: 14px;
+  font-weight: 750;
+}
+
+html[data-skin="atelier"] .layout {
+  max-width: 1510px;
+  padding-block: clamp(24px, 4vw, 54px);
+  padding-inline: clamp(16px, 5vw, 76px);
+}
+
+html[data-skin="atelier"] .view {
+  max-width: 1180px;
+}
+
+html[data-skin="atelier"] .page-head {
+  margin-block-end: clamp(22px, 3vw, 34px);
+}
+
+html[data-skin="atelier"] .page-head h1,
+html[data-skin="atelier"] .card__title h2 {
+  letter-spacing: -.035em;
+}
+
+html[data-skin="atelier"] .card,
+html[data-skin="atelier"] .stat,
+html[data-skin="atelier"] .acc,
+html[data-skin="atelier"] .unit-card,
+html[data-skin="atelier"] .q-card,
+html[data-skin="atelier"] .modal,
+html[data-skin="atelier"] .mini-progress,
+html[data-skin="atelier"] .vocab-card,
+html[data-skin="atelier"] .badge-item {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  background-color: var(--surface);
+  box-shadow: var(--shadow-1) !important;
+}
+
+html[data-skin="atelier"] .card {
+  padding: clamp(20px, 2.8vw, 32px);
+}
+
+html[data-skin="atelier"] .card--brand {
+  border-color: color-mix(in srgb, var(--brand-1) 18%, var(--line)) !important;
+  background: linear-gradient(145deg, var(--brand-soft), var(--surface)) !important;
+}
+
+html[data-skin="atelier"] .btn {
+  min-height: 46px;
+  border-radius: 14px !important;
+  font-weight: 700;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+html[data-skin="atelier"] .btn:hover {
+  filter: none;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-1);
+}
+
+html[data-skin="atelier"] .btn:active {
+  transform: translateY(0);
+}
+
+html[data-skin="atelier"] .btn--primary {
+  background: var(--brand-1) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-1) 23%, transparent);
+}
+
+html[data-skin="atelier"][data-theme="dark"] .btn--primary {
+  color: #14211b !important;
+}
+
+html[data-skin="atelier"] .input,
+html[data-skin="atelier"] .select,
+html[data-skin="atelier"] .textarea {
+  min-height: 48px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px !important;
+  background: var(--surface);
+}
+
+html[data-skin="atelier"] .chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+html[data-skin="atelier"] .progress {
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-3);
+}
+
+html[data-skin="atelier"] .progress > i {
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand-1), color-mix(in srgb, var(--brand-1) 66%, var(--brand-3)));
+}
+
+html[data-skin="atelier"] .hero,
+html[data-skin="atelier"] .dashboard-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 11%);
+  border-radius: var(--radius-lg) !important;
+  background:
+    radial-gradient(ellipse at 100% 0, rgb(226 160 132 / 31%), transparent 40%),
+    radial-gradient(ellipse at 0 100%, rgb(139 211 181 / 23%), transparent 48%),
+    linear-gradient(125deg, #183d36 0%, #205a4e 58%, #2a6858 100%) !important;
+  box-shadow: 0 22px 58px rgb(23 60 51 / 17%) !important;
+}
+
+html[data-skin="atelier"] .hero::after {
+  inline-size: 390px !important;
+  block-size: 390px !important;
+  inset-block-start: -190px !important;
+  inset-inline-end: -100px !important;
+  border: 1px solid rgb(255 255 255 / 16%);
+  background: radial-gradient(circle, rgb(255 255 255 / 7%) 0 28%, transparent 29% 43%, rgb(255 255 255 / 5%) 44% 45%, transparent 46%) !important;
+}
+
+html[data-skin="atelier"] .hero h1,
+html[data-skin="atelier"] .dashboard-hero h1 {
+  color: #fff;
+  letter-spacing: -.04em;
+}
+
+html[data-skin="atelier"] .hero p,
+html[data-skin="atelier"] .dashboard-hero__copy > p {
+  color: #e4eee5 !important;
+}
+
+html[data-skin="atelier"] .dashboard {
+  gap: clamp(18px, 2.2vw, 28px);
+}
+
+html[data-skin="atelier"] .dashboard-hero {
+  min-height: 300px;
+  padding: clamp(28px, 5vw, 56px) !important;
+}
+
+html[data-skin="atelier"] .dashboard-overline {
+  color: #d5e7d9;
+  letter-spacing: .025em;
+}
+
+html[data-skin="atelier"] .dashboard-overline i {
+  background: #57e0c6;
+  box-shadow: 0 0 0 5px rgb(87 224 198 / 17%);
+}
+
+html[data-skin="atelier"] .dashboard-word {
+  border-color: rgb(255 255 255 / 19%);
+  border-radius: 15px;
+  background: rgb(10 35 29 / 28%);
+}
+
+html[data-skin="atelier"] .dashboard-hero__orbit {
+  border-color: rgb(255 255 255 / 19%);
+  border-block-start-color: #51dfc5;
+  border-inline-end-color: #a5a1ff;
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat {
+  padding: 20px 22px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2) !important;
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat::before {
+  inline-size: 4px;
+  border-radius: 999px;
+  background: var(--brand-2);
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:nth-child(even)::before {
+  background: var(--brand-1);
+}
+
+html[data-skin="atelier"] .dashboard-panel .card__title,
+html[data-skin="atelier"] .dashboard-section-head {
+  margin-block-end: 22px;
+}
+
+html[data-skin="atelier"] .dashboard-icon {
+  border: 1px solid color-mix(in srgb, var(--brand-1) 15%, var(--line));
+  border-radius: 15px;
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+
+html[data-skin="atelier"] .dashboard-panel--continue {
+  border-color: color-mix(in srgb, var(--brand-1) 20%, var(--line)) !important;
+  background: linear-gradient(145deg, var(--brand-soft), var(--surface)) !important;
+}
+
+html[data-skin="atelier"] .dashboard-level {
+  border-radius: 17px;
+  background: var(--surface-2);
+}
+
+html[data-skin="atelier"] .dashboard-level:hover {
+  border-color: color-mix(in srgb, var(--brand-1) 45%, var(--line));
+  box-shadow: var(--shadow-1);
+}
+
+html[data-skin="atelier"] .sidebar.is-open {
+  background:
+    radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--brand-1) 11%, transparent), transparent 44%),
+    var(--bg-2);
+  border-inline-end: 1px solid var(--line);
+  box-shadow: var(--shadow-3);
+}
+
+html[data-skin="atelier"] .sidebar.is-open .sidenav__brand {
+  border-block-end-color: var(--line);
+}
+
+html[data-skin="atelier"] .sidebar.is-open .sidenav__brand img {
+  border-color: color-mix(in srgb, var(--brand-1) 25%, var(--line));
+  border-radius: 16px;
+  box-shadow: var(--shadow-1);
+}
+
+html[data-skin="atelier"] .sidebar.is-open .sidenav a:not(.zero-nav) {
+  border-radius: 15px;
+}
+
+html[data-skin="atelier"] .sidebar.is-open .sidenav a:not(.zero-nav) .ico {
+  border: 1px solid color-mix(in srgb, var(--brand-1) 8%, var(--line));
+  border-radius: 12px;
+}
+
+html[data-skin="atelier"] .sidebar.is-open .sidenav a:not(.zero-nav).is-active {
+  border-color: color-mix(in srgb, var(--brand-1) 27%, var(--line));
+  background: var(--brand-soft);
+  color: var(--brand-text);
+}
+
+html[data-skin="atelier"] .sidebar.is-open .streak-card {
+  border: 1px solid color-mix(in srgb, var(--brand-2) 20%, var(--line));
+  border-radius: 18px;
+  box-shadow: var(--shadow-1);
+}
+
+html[data-skin="atelier"] .sidebar.is-open .mini-progress {
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--brand-soft) 62%, var(--surface));
+}
+
+html[data-skin="atelier"] .footer {
+  color: var(--text-3);
+}
+
+html[data-skin="atelier"] .dashboard-hero {
+  min-height: 370px;
+  border-radius: 34px !important;
+  background:
+    radial-gradient(ellipse at 12% 112%, rgb(46 217 196 / 25%), transparent 38%),
+    radial-gradient(ellipse at 92% -4%, rgb(255 147 127 / 29%), transparent 39%),
+    linear-gradient(118deg, #3732a8 0%, #544ddd 51%, #7267ef 100%) !important;
+  box-shadow: 0 25px 75px rgb(66 57 196 / 29%) !important;
+}
+
+html[data-skin="atelier"][data-theme="light"] .dashboard-hero {
+  background:
+    radial-gradient(ellipse at 12% 112%, rgb(46 217 196 / 25%), transparent 38%),
+    radial-gradient(ellipse at 92% -4%, rgb(255 147 127 / 29%), transparent 39%),
+    linear-gradient(118deg, #3732a8 0%, #544ddd 51%, #7267ef 100%) !important;
+}
+
+html[data-skin="atelier"] .dashboard-hero::after {
+  inline-size: 460px !important;
+  block-size: 460px !important;
+  inset-block-start: -205px !important;
+  inset-inline-end: -84px !important;
+  border: 1px solid rgb(255 255 255 / 18%);
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 8%) 0 22%, transparent 23% 37%, rgb(255 255 255 / 6%) 38% 39%, transparent 40% 55%, rgb(255 255 255 / 5%) 56% 57%, transparent 58%) !important;
+  pointer-events: none;
+}
+
+html[data-skin="atelier"] .dashboard-hero__copy {
+  max-width: 760px;
+}
+
+html[data-skin="atelier"] .dashboard-hero h1 {
+  max-width: 18ch;
+  font-size: clamp(2.1rem, 5vw, 3.65rem);
+  line-height: 1.14;
+}
+
+html[data-skin="atelier"] .dashboard-hero__copy > p {
+  max-width: 48ch;
+  font-size: clamp(1rem, 1.4vw, 1.16rem);
+  line-height: 1.75;
+}
+
+html[data-skin="atelier"] .dashboard-hero__signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-block-start: 20px;
+}
+
+html[data-skin="atelier"] .dashboard-hero__signals > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 6px 13px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 999px;
+  background: rgb(17 19 74 / 20%);
+  color: #f3f2ff;
+  font-size: .83rem;
+  backdrop-filter: blur(10px);
+}
+
+html[data-skin="atelier"] .dashboard-hero__signals i {
+  color: #9ff3df;
+  font-style: normal;
+}
+
+html[data-skin="atelier"] .dashboard-hero__signals b {
+  color: #fff;
+  font-size: .9rem;
+}
+
+html[data-skin="atelier"] .dashboard-hero__actions {
+  gap: 10px;
+}
+
+html[data-skin="atelier"] .dashboard-hero__actions .btn {
+  border: 1px solid rgb(255 255 255 / 23%);
+  background: rgb(255 255 255 / 11%);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+html[data-skin="atelier"] .dashboard-hero__actions .btn--solid {
+  border-color: #fff;
+  background: #fff;
+  color: #423cb9;
+  box-shadow: 0 8px 24px rgb(22 20 102 / 22%);
+}
+
+html[data-skin="atelier"] .dashboard-hero__actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgb(20 18 92 / 25%);
+}
+
+html[data-skin="atelier"] .dashboard-hero__aside {
+  padding-inline-start: 27px;
+  border-inline-start-color: rgb(255 255 255 / 23%);
+}
+
+html[data-skin="atelier"] .dashboard-hero__orbit {
+  inline-size: 150px;
+  border-width: 10px;
+  border-color: rgb(255 255 255 / 17%);
+  border-block-start-color: #51dfc5;
+  border-inline-end-color: #a5a1ff;
+  box-shadow: 0 0 38px rgb(137 130 255 / 17%), inset 0 0 26px rgb(255 255 255 / 4%);
+}
+
+html[data-skin="atelier"] .dashboard-word {
+  border-color: rgb(255 255 255 / 20%);
+  background: rgb(23 21 100 / 28%);
+  backdrop-filter: blur(12px);
+}
+
+html[data-skin="atelier"] .dashboard-mission {
+  border-color: color-mix(in srgb, var(--brand-1) 20%, var(--line)) !important;
+}
+
+html[data-skin="atelier"] .dashboard-mission__task {
+  min-height: 88px;
+  padding: 15px 17px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--brand-1) 8%, var(--surface)), var(--surface));
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+html[data-skin="atelier"] .dashboard-mission__task:nth-child(2) {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand-3) 10%, var(--surface)), var(--surface));
+}
+
+html[data-skin="atelier"] .dashboard-mission__task:nth-child(3) {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--brand-2) 9%, var(--surface)), var(--surface));
+}
+
+html[data-skin="atelier"] .dashboard-mission__task:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--brand-1) 38%, var(--line));
+  box-shadow: var(--shadow-2);
+}
+
+html[data-skin="atelier"] .dashboard-mission__task.is-done {
+  border-color: color-mix(in srgb, var(--ok) 45%, var(--line));
+  background: var(--ok-soft);
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat {
+  border-radius: 19px !important;
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:nth-child(1)::before {
+  background: var(--brand-1);
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:nth-child(2)::before {
+  background: var(--brand-2);
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:nth-child(3)::before {
+  background: var(--brand-3);
+}
+
+html[data-skin="atelier"] .dashboard-stats .stat:nth-child(4)::before {
+  background: #e5b74f;
+}
+
+html[data-skin="atelier"] .dashboard-goal .progress > i {
+  background: linear-gradient(90deg, var(--brand-1), var(--brand-3));
+}
+
+html[data-skin="atelier"] .dashboard-panel--continue {
+  background:
+    radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--brand-1) 12%, transparent), transparent 48%),
+    linear-gradient(145deg, var(--surface), var(--brand-soft)) !important;
+}
+
+html[data-skin="atelier"] .dashboard-course {
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--brand-3) 8%, transparent), transparent 44%),
+    var(--surface);
+}
+
+html[data-skin="atelier"] .dashboard-level {
+  border-radius: 18px;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+html[data-skin="atelier"] .dashboard-level:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2);
+}
+
+html[data-skin="atelier"] .dashboard-level:nth-child(1) .progress > i {
+  background: linear-gradient(90deg, #605cf5, #9693ff);
+}
+
+html[data-skin="atelier"] .dashboard-level:nth-child(2) .progress > i {
+  background: linear-gradient(90deg, #16a891, #53d7bd);
+}
+
+html[data-skin="atelier"] .dashboard-level:nth-child(3) .progress > i {
+  background: linear-gradient(90deg, #ec8c62, #f4bc68);
+}
+
+html[data-skin="atelier"][data-contrast="high"] a:not(.btn) {
+  text-decoration: underline;
+  text-underline-offset: .16em;
+}
+
+html[data-skin="atelier"][data-contrast="high"] :focus-visible {
+  outline-width: 4px;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  html[data-skin="atelier"] .topbar {
+    min-height: 64px;
+    padding-inline: 14px;
+  }
+
+  html[data-skin="atelier"] .layout {
+    padding: 20px 14px 30px;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero {
+    min-height: 0;
+    padding: 22px 18px !important;
+    border-radius: 25px !important;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero h1 {
+    font-size: clamp(1.8rem, 7vw, 2.35rem);
+  }
+
+  html[data-skin="atelier"] .dashboard-hero__copy > p {
+    font-size: .94rem;
+    line-height: 1.65;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero__signals {
+    margin-block-start: 11px;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-block-start: 13px;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero__actions .btn {
+    min-height: 40px;
+    justify-content: center;
+  }
+
+  html[data-skin="atelier"] .dashboard-word {
+    gap: 7px;
+    margin-block-start: 11px;
+    padding: 7px 10px;
+  }
+
+  html[data-skin="atelier"] .dashboard-mission__task {
+    min-height: 74px;
+  }
+
+  html[data-skin="atelier"] .dashboard-hero__word {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="atelier"] *,
+  html[data-skin="atelier"] *::before,
+  html[data-skin="atelier"] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

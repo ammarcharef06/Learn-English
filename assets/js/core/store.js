@@ -10,7 +10,7 @@ export const KEYS = { K_SETTINGS, K_PROGRESS, K_AUTH, K_SESSION };
 export const DEFAULT_SETTINGS = {
   v: 1,
   theme: 'auto',            // auto | light | dark
-  skin: 'kali',             // kali | gnome | classic
+  skin: 'atelier',          // atelier | kali | gnome | classic
   uiLang: 'ar',             // ar | en
   fontSize: 100,            // 85..130
   highContrast: false,
