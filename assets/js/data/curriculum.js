@@ -6,6 +6,10 @@ import {
   normalizeCurriculumUnit,
   validateLevel,
   importStagedLevel,
+  exportStagedLevel,
+  B2_STAGED_CURRICULUM,
+  C1_STAGED_CURRICULUM,
+  C2_STAGED_CURRICULUM,
 } from './curriculum-advanced.js';
 import { READINGS } from './readings.js';
 import { progress } from '../core/store.js';
@@ -14,6 +18,8 @@ export { READINGS };
 export {
   ADVANCED_UNIT_SCHEMA,
   B2_STAGED_CURRICULUM,
+  C1_STAGED_CURRICULUM,
+  C2_STAGED_CURRICULUM,
   CURRICULUM_SCHEMA_VERSION,
   PLANNED_LEVELS,
   UNIT_COMPONENTS,
@@ -59,6 +65,11 @@ export function activateStagedLevel(payload) {
     levelIcon: level.icon,
   })));
   return { level, valid: true, warnings: [] };
+}
+
+const b2Activation = activateStagedLevel(exportStagedLevel(B2_STAGED_CURRICULUM));
+if (!b2Activation.valid) {
+  throw new Error(`تعذر تفعيل منهج B2 المحقق: ${b2Activation.warnings.join(' ')}`);
 }
 
 export function getLevel(id) { return LEVELS.find((l) => l.id === id) || null; }

@@ -466,16 +466,16 @@ theme.applyAccessibility();
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
-check('ثلاثة مستويات', cur.LEVELS.length === 3);
-check('١٨ وحدة إجمالاً', cur.ALL_UNITS.length === 18);
+check('أربعة مستويات نشطة بعد تفعيل B2', cur.LEVELS.length === 4);
+check('٢٤ وحدة نشطة إجمالاً', cur.ALL_UNITS.length === 24);
 check('١٢ مطالعة', cur.READINGS.length === 12);
 check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
 check('المطالعات موزعة على المستويات', ['a1', 'a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
 check('اقتراح الدرس التالي يعمل', cur.nextLessonSuggestion() !== null);
 check('إحصاءات المنهج صحيحة', cur.curriculumStats().vocab >= 280);
-check('المستويات المتقدمة الثلاثة لها مخطط خماسي الأبعاد', cur.PLANNED_LEVELS.map((l) => l.id).join(',') === 'b2,c1,c2'
+check('المستويان C1 وC2 لهما مخطط خماسي الأبعاد', cur.PLANNED_LEVELS.map((l) => l.id).join(',') === 'c1,c2'
   && cur.PLANNED_LEVELS.every(cur.isPlannedLevel));
-check('المستويات المخططة لا تدخل المنهج النشط قبل تجهيز المحتوى', cur.LEVELS.length === 3
+check('C1 وC2 لا يدخلان المنهج النشط قبل اكتمال مراجعتهما', cur.LEVELS.length === 4
   && cur.PLANNED_LEVELS.every((l) => !cur.LEVELS.some((active) => active.id === l.id)));
 check('مخطط الوحدات يشمل النطق IPA وأخطاء النقل من العربية', cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa')
   && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('incorrect')
@@ -513,11 +513,10 @@ check('محتوى B1 الصوتي والأكاديمي والمفرداتي يُ
 ].every((kind) => b1ReviewEntries.some((entry) => entry.kind === kind))
   && b1ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
 const b2Stage = cur.B2_STAGED_CURRICULUM;
-const b2ReviewEntries = b2Stage.units.flatMap((unit) =>
-  qg.reviewEntriesForUnit({ ...unit, levelId: 'b2', levelLabel: b2Stage.label }));
-check('B2 المرحلي يحتوي ست وحدات صالحة بالمخطط الخماسي ولا يُفعّل تلقائياً',
+const b2ReviewEntries = qg.curriculumReviewEntries({ levels: ['b2'] });
+check('B2 اجتاز التحقق والاستيراد وأصبح نشطاً في المنهج',
   b2Stage.units.length === 6 && cur.validateLevel(b2Stage).valid
-    && cur.isPlannedLevel(cur.PLANNED_LEVELS.find((level) => level.id === 'b2'))
+    && cur.getLevel('b2')?.status === 'ready' && cur.unitsOfLevel('b2').length === 6
     && b2Stage.units.every((unit) => unit.grammar.length && unit.vocabulary.length
       && unit.phonetics.length >= 2 && unit.arabic_l1_transfers.length >= 2
       && unit.academic_focus.length >= 2 && unit.sentences.length && unit.dialogue.length));
@@ -529,9 +528,31 @@ check('محتوى B2 المتقدم يدخل بطاقات SRS في المحاو�
   && b2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
 const b2Export = cur.exportStagedLevel(b2Stage);
 const b2Imported = cur.importStagedLevel(b2Export);
-check('تصدير واستيراد محتوى B2 يحافظان على الوحدات ويظلان خارج المنهج النشط',
-  b2Imported.valid && b2Imported.level.units.length === 6
-    && !cur.LEVELS.some((level) => level.id === 'b2'));
+check('SRS يراجع مفردات B2 النشطة إلى جانب أبعادها الخمسة',
+  qg.vocabularyEntries({ levels: ['b2'] }).length >= 12
+    && b2ReviewEntries.some((entry) => entry.kind === 'phrasal-verb')
+    && b2Imported.valid && b2Imported.level.units.length === 6);
+const cLevelData = [cur.C1_STAGED_CURRICULUM, cur.C2_STAGED_CURRICULUM];
+check('C1 وC2 يتضمنان وحدات خماسية الأبعاد صالحة وتبقى مرحلية',
+  cLevelData.every((level) => level.units.length === 6 && cur.validateLevel(level).valid
+    && cur.isPlannedLevel(cur.PLANNED_LEVELS.find((planned) => planned.id === level.id))
+    && !cur.getLevel(level.id)
+    && level.units.every((unit) => unit.grammar.length >= 2 && unit.vocabulary.length >= 4
+      && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
+        && item.accentNote && item.connectedSpeech?.length && item.intonation?.length)
+      && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2)));
+check('C1 وC2 يغطيان التنغيم الساخر وإعادة الصياغة والأمثال وبطاقات SRS',
+  cLevelData.every((level) => {
+    const entries = level.units.flatMap((unit) =>
+      qg.reviewEntriesForUnit({ ...unit, levelId: level.id, levelLabel: level.label }));
+    const allText = JSON.stringify(level).toLowerCase();
+    return ['phonetics:intonation', 'phonetics:connectedSpeech', 'academic:paraphrasing',
+      'academic:idioms', 'collocation', 'phrasal-verb'].every((kind) =>
+      entries.some((entry) => entry.kind === kind))
+      && /sarcas|سخر|irony|مفارقة/.test(allText)
+      && /proverb|مثل|saying/.test(allText)
+      && entries.every((entry) => entry.itemId && entry.en && entry.ar);
+  }));
 const stagedFixture = {
   id: 'b2-test', label: 'B2 test', labelEn: 'B2 test', icon: '🧭', color: '#000',
   units: [{
