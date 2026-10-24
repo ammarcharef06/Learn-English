@@ -13,6 +13,7 @@ import {
 } from './curriculum-advanced.js';
 import { READINGS } from './readings.js';
 import { progress } from '../core/store.js';
+import { attachCurriculumAudio } from './curriculum-audio.js';
 
 export { READINGS };
 export {
@@ -47,6 +48,8 @@ export const ALL_UNITS = LEVELS.flatMap((l) => l.units.map((u) => ({
   levelIcon: l.icon,
   ...u,
 })));
+
+attachCurriculumAudio(ALL_UNITS);
 
 export function activateStagedLevel(payload) {
   const imported = importStagedLevel(payload);

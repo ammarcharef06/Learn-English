@@ -469,6 +469,20 @@ theme.applyAccessibility();
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
+const audioLinks = await mod('assets/js/data/curriculum-audio.js');
+const audioFixture = [{
+  vocabulary: [{ en: 'A New Word' }, { en: 'Hello', audio_url: './assets/audio/existing.mp3' }],
+  sentences: [{ en: 'A sample sentence.' }],
+}];
+audioLinks.attachCurriculumAudio(audioFixture, {
+  'a new word': './assets/audio/curriculum/word.mp3',
+  hello: './assets/audio/curriculum/replacement.mp3',
+  'a sample sentence.': './assets/audio/curriculum/sentence.mp3',
+});
+check('روابط الصوت المولّدة تُرفق بالمفردات والجمل دون استبدال التسجيل الموجود',
+  audioFixture[0].vocabulary[0].audio_url === './assets/audio/curriculum/word.mp3'
+    && audioFixture[0].sentences[0].audio_url === './assets/audio/curriculum/sentence.mp3'
+    && audioFixture[0].vocabulary[1].audio_url === './assets/audio/existing.mp3');
 check('المستويات الستة A1–C2 نشطة بعد التحقق والاستيراد', cur.LEVELS.length === 6
   && ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].every((level) => cur.getLevel(level)));
 check('٤١ وحدة نشطة بعد ترحيل مفردات A0', cur.ALL_UNITS.length === 41);
