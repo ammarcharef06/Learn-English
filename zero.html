@@ -4,40 +4,34 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>من الصفر — تأسيس A0 · أكاديمية الإنجليزية</title>
-  <meta name="description" content="قسم «من الصفر» (A0): الحروف وأصواتها، الحروف المركّبة، الأرقام، الوقت، الضمائر، ١٢٠ كلمة، ٤٠ جملة، وقراءات أولى — بنطق عربي ولوح كتابة واختبار وشهادة." />
-  <meta name="theme-color" content="#34775b" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#171d1a" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="قسم «من الصفر» (A0): الأبجدية، والأرقام الأساسية، وأيام الأسبوع، والضمائر، والتحيات البسيطة — مع نطق عربي ولوح كتابة واختبار وشهادة." />
+  <meta name="theme-color" content="#050607" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="أكاديمية الإنجليزية" />
+  <meta name="apple-mobile-web-app-title" content="من الصفر A0" />
 
-  <!-- هوية تثبيت واحدة للأكاديمية؛ يبدأ التطبيق من الرئيسية ويمكنه فتح A0 مباشرة. -->
-  <link rel="manifest" href="./manifest.webmanifest" />
+  <!-- تطبيق مستقل: بيان التثبيت خاص بهذه الصفحة -->
+  <link rel="manifest" href="./manifest-zero.webmanifest" />
   <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./assets/img/apple-touch-icon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- نظام تصميم الأكاديمية المشترك، ثم أنماط المحتوى التأسيسي فقط -->
+  <!-- واجهة موحدة مع إضافات التأسيس A0 -->
   <link rel="stylesheet" href="./assets/css/main.css" />
-  <link rel="stylesheet" href="./assets/css/skins/gnome.css" />
-  <link rel="stylesheet" href="./assets/css/skins/kali.css" />
   <link rel="stylesheet" href="./assets/css/zero.css" />
   <link rel="stylesheet" href="./assets/css/zero-pad.css" />
-  <link rel="stylesheet" href="./assets/css/redesign.css" />
 
   <script>
     /* نفس تهيئة الموقع: السمة والستايل قبل رسم الصفحة بلا وميض */
     (function () {
       try {
         var s = JSON.parse(localStorage.getItem('lea.settings.v1') || '{}');
-        var theme = s.theme || 'auto';
+        var theme = s.theme || 'dark';
         var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        var skin = s.skin || 'kali';
-        document.documentElement.dataset.skin = skin;
-        if (skin === 'kali') dark = true;
+        document.documentElement.dataset.skin = 'nocturne';
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         document.documentElement.dataset.uiLang = 'ar';
         document.documentElement.dataset.zero = 'a0';
@@ -45,7 +39,7 @@
         document.documentElement.dataset.reduceMotion = s.reduceAnimations ? 'true' : 'false';
         if (s.fontSize) document.documentElement.style.setProperty('--font-scale', String(s.fontSize / 100));
       } catch (e) {
-        document.documentElement.dataset.theme = 'light';
+        document.documentElement.dataset.theme = 'dark';
         document.documentElement.dataset.zero = 'a0';
       }
     })();
@@ -54,7 +48,7 @@
 <body>
   <a class="skip-link" href="#view">تخطَّ إلى المحتوى</a>
 
-  <!-- غلاف الأكاديمية المشترك؛ محتوى A0 ومساراته لها نقطة دخول خاصة. -->
+  <!-- نفس هيكل الموقع: شريط علوي + محتوى — بلا قائمة مستويات ولا أي عنصر من موقع المستويات -->
   <div id="app" class="app">
     <header class="topbar" id="topbar"></header>
 

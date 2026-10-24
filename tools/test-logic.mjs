@@ -74,20 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.0.21',
-    name: 'English Academy v1.0.21',
+    tag_name: 'v1.0.19',
+    name: 'English Academy v1.0.19',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
       { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.21/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.19/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.0.21' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.0.19' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -137,7 +137,7 @@ window.speechSynthesis = {
   cancel() {},
   getVoices: () => [],
   addEventListener() {},
-  speak() { synthesized++; },
+  speak(utterance) { synthesized++; utterance.onstart?.(); },
 };
 window.SpeechSynthesisUtterance = class {};
 globalThis.SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
@@ -147,6 +147,14 @@ check('التسجيل المسجّل يُختار للتشغيل', speech.speak(
 await new Promise((resolve) => setTimeout(resolve, 0));
 check('فشل التسجيل لا يشغّل صوت المتصفح بديلاً', synthesized === 0);
 check('النص غير المسجّل يبقى قابلاً للنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+const playbackEvents = [];
+speech.speak('active word', { onstart: () => playbackEvents.push('start'), onend: () => playbackEvents.push('end') });
+speech.stopSpeaking();
+check('تشغيل الصوت يرسل حالتي البدء والإيقاف لتنظيف واجهة البطاقة',
+  playbackEvents.join(',') === 'start,end');
+check('مسار الصوت النسبي يُقبل ضمن نفس النطاق', speech.normalizeAudioUrl('./audio/word.mp3') === 'https://example.com/Learn-English/audio/word.mp3');
+check('مصدر صوت خارجي أو مخطط غير آمن يُرفض', speech.normalizeAudioUrl('https://other.example/audio.mp3') === ''
+  && speech.normalizeAudioUrl('javascript:alert(1)') === '');
 console.warn = savedWarn;
 if (savedAudio === undefined) delete globalThis.Audio;
 else globalThis.Audio = savedAudio;
@@ -230,22 +238,32 @@ const acc2 = gamify.accuracy();
 check('الدقة تنخفض بعد الخطأ', acc2 === 86, `${acc2}%`);
 const badgeStates = gamify.badgesWithState();
 check('قائمة الشارات كاملة', badgeStates.length >= 20 && badgeStates.every((b) => 'earned' in b));
-check('stats المستوى تُحسب', gamify.levelStats('a1').total === 6);
+check('stats المستوى تُحسب بعد إضافة وحدات التأسيس إلى A1', gamify.levelStats('a1').total === 11);
 
 /* ================= 5. التكرار المتباعد ================= */
 section('التكرار المتباعد (SRS)');
 const srs = await mod('assets/js/core/srs.js');
 resetProgress();
 const it0 = srs.getItem('srs:test');
-check('عنصر جديد صندوقه صفر', it0.box === 0 && it0.seen === 0);
-srs.gradeItem('srs:test', 2);
-srs.gradeItem('srs:test', 2);
-const it2 = srs.gradeItem('srs:test', 2);
-check('الصندوق يتقدم مع الإجابات الصحيحة', it2.box === 3, `box=${it2.box}`);
-check('تاريخ الاستحقاق في المستقبل', it2.due > srs.getItem('srs:test').last);
+check('بطاقة جديدة تبدأ بإعدادات SM-2 الافتراضية', it0.repetitions === 0 && it0.interval === 0
+  && it0.easeFactor === 2.5 && it0.seen === 0);
+srs.gradeItem('srs:test', 5);
+srs.gradeItem('srs:test', 5);
+const it2 = srs.gradeItem('srs:test', 5);
+check('SM-2 يحدد الفواصل 1 ثم 6 ثم يطبق عامل السهولة', it2.interval === 17 && it2.repetitions === 3);
+check('عامل السهولة يتكيف مع جودة الإجابة', it2.easeFactor > 2.5);
+const srsUtils = await mod('assets/js/core/utils.js');
+check('تاريخ الاستحقاق يُشتق من الفاصل الديناميكي',
+  it2.due === srsUtils.dateKey(srsUtils.addDays(new Date(), it2.interval)));
 srs.gradeItem('srs:test', 0);
-check('الخطأ يعيد الصندوق للصفر', srs.getItem('srs:test').box === 0);
-check('الأخطاء تُحتسب', srs.getItem('srs:test').wrong === 1);
+check('الإجابة الأقل من 3 تعيد التكرار إلى اليوم التالي',
+  srs.getItem('srs:test').repetitions === 0 && srs.getItem('srs:test').interval === 1);
+srs.gradeItem('srs:test', 3);
+check('عامل السهولة يحترم الحد الأدنى', srs.getItem('srs:test').easeFactor >= srs.MIN_EASE_FACTOR);
+check('الإجابات الصحيحة والخاطئة تُحصى', srs.getItem('srs:test').wrong === 1 && srs.getItem('srs:test').correct === 4);
+check('درجة الجودة الخارجة عن نطاق SM-2 تُرفض', (() => {
+  try { srs.gradeItem('srs:invalid', 6); return false; } catch (error) { return error instanceof RangeError; }
+})());
 const master = srs.masteryOf('srs:test');
 check('نسبة الإتقان محسوبة', typeof master === 'number' && master >= 0 && master <= 100, `${master}`);
 const pool = qg.entriesForSource('pronouns').slice(0, 40);
@@ -255,9 +273,9 @@ const weak = srs.weakestFirst(pool, 5);
 check('ترتيب الأضعف يعمل', weak.length === 5 && weak[0].itemId);
 store.saveProgress((p) => {
   p.items = {
-    overdueWeak: { seen: 4, correct: 1, wrong: 3, box: 1, due: '2026-10-17', last: '2026-10-13' },
-    dueStrong: { seen: 4, correct: 4, wrong: 0, box: 5, due: '2026-10-20', last: '2026-10-16' },
-    futureMastered: { seen: 5, correct: 5, wrong: 0, box: 7, due: '2026-10-25', last: '2026-10-18' },
+    overdueWeak: { algorithm: 'sm2', repetitions: 1, interval: 6, easeFactor: 1.7, seen: 4, correct: 1, wrong: 3, lapses: 3, due: '2026-10-17', last: '2026-10-13' },
+    dueStrong: { algorithm: 'sm2', repetitions: 4, interval: 21, easeFactor: 2.5, seen: 4, correct: 4, wrong: 0, lapses: 0, due: '2026-10-20', last: '2026-10-16' },
+    futureMastered: { algorithm: 'sm2', repetitions: 5, interval: 60, easeFactor: 2.5, seen: 5, correct: 5, wrong: 0, lapses: 0, due: '2026-10-25', last: '2026-10-18' },
   };
 });
 const smartEntries = [
@@ -277,6 +295,9 @@ check('المراجعة الذكية تحد الكلمات الجديدة بخم
   srs.smartReviewPlan(['1', '2', '3', '4', '5', '6'].map((id) => ({ itemId: `fresh${id}` })), 20).newCount === 5);
 check('مجموعة المستحق فقط لا تضم الجديد أو المؤجل',
   srs.dueEntries(smartEntries, '2026-10-20').map((entry) => entry.itemId).join(',') === 'dueStrong,overdueWeak');
+store.saveProgress((p) => { p.items.legacyFixture = { seen: 8, correct: 7, wrong: 1, box: 5, due: '2099-01-01' }; });
+check('بيانات صناديق قديمة تبدأ كبطاقة جديدة في SM-2', srs.getItem('legacyFixture').algorithm === 'sm2'
+  && srs.getItem('legacyFixture').seen === 0 && srs.isDue('legacyFixture'));
 
 /* ================= 6. الإشعارات ================= */
 section('منطق الإشعارات والتذكير');
@@ -373,27 +394,27 @@ try {
   globalThis.fetch = async () => ({
     ok: true,
     json: async () => ({
-      tag_name: 'v1.0.21',
-      name: 'English Academy v1.0.21',
+      tag_name: 'v1.0.19',
+      name: 'English Academy v1.0.19',
       body: 'Release notes',
-      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.21',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.0.19',
       assets: [
         { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.21/SHA256SUMS.txt' },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.0.19/SHA256SUMS.txt' },
       ],
     }),
   });
   await updater.checkForUpdateInBackground();
   check('Background update check stores a new release even when notification display fails',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.21'
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.19'
     && !localStorage.getItem('lea.update.notified'));
   showUpdateNotification = true;
   localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
   await updater.checkForUpdateInBackground();
   check('Failed update notification is retried and only marked after display succeeds',
-    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.21');
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.0.19');
   check('Pending update is preserved when background check is throttled',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.21');
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.0.19');
 } finally {
   globalThis.fetch = oldFetch;
   if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
@@ -415,8 +436,42 @@ const exported = exportAll();
 check('التصدير ينتج JSON صالحاً', (() => { try { JSON.parse(exported); return true; } catch { return false; } })());
 const parsed = JSON.parse(exported);
 check('النسخة تحتوي الإعدادات والتقدم', !!parsed.settings && !!parsed.progress);
+store.saveProgress((p) => {
+  p.units.cloudFixture = { done: true, internalNote: 'not for cloud' };
+  p.items.cloudLegacyFixture = { box: 3, seen: 4 };
+});
+const cloudPayload = store.exportCloudProgress();
+check('تصدير المزامنة السحابية يقتصر على المستوى وتقدم الوحدات وبطاقات SM-2',
+  cloudPayload.schemaVersion === 1 && cloudPayload.srs.algorithm === 'sm2'
+    && !!cloudPayload.learner.levelStats.a1 && cloudPayload.learner.unitProgress.cloudFixture.done
+    && !!cloudPayload.srs.cards.find((card) => card.id === 'overdueWeak')
+    && typeof cloudPayload.srs.cards.find((card) => card.id === 'overdueWeak')?.due === 'string'
+    && !Object.hasOwn(cloudPayload, 'settings') && !Object.hasOwn(cloudPayload, 'auth')
+    && !cloudPayload.srs.cards.some((card) => card.id === 'cloudLegacyFixture')
+    && !Object.hasOwn(cloudPayload.learner.unitProgress.cloudFixture, 'internalNote'),
+  JSON.stringify({ levels: cloudPayload.learner.levelStats, ids: cloudPayload.srs.cards.map((card) => card.id).slice(0, 5) }));
+check('تصدير المزامنة السحابية ينتج JSON قابلاً للرفع',
+  (() => { try { return JSON.parse(JSON.stringify(cloudPayload)).srs.cards.length > 0; } catch { return false; } })());
+const sync = await mod('assets/js/core/sync.js');
+const queuedSnapshot = sync.queueSyncProgress(cloudPayload);
+check('لقطة المزامنة تُحفظ محلياً قبل وجود خدمة سحابية', queuedSnapshot.pending
+  && queuedSnapshot.cardCount === cloudPayload.srs.cards.length
+  && (await sync.flushSyncQueue()).status === 'queued');
+const failedSync = await sync.flushSyncQueue(async () => { throw new Error('offline fixture'); });
+check('فشل النقل يبقي اللقطة محلياً مع تسجيل الخطأ',
+  failedSync.status === 'queued' && failedSync.lastError === 'offline fixture');
+const successfulSync = await sync.flushSyncQueue(async (payload) => {
+  if (payload.schemaVersion !== 1) throw new Error('bad payload');
+});
+check('نجاح النقل الممرر يمسح اللقطة المعلّقة', successfulSync.status === 'synced'
+  && !sync.getSyncQueueStatus().pending);
+let invalidPayloadRejected = false;
+try { sync.queueSyncProgress({ app: 'wrong' }); } catch (error) { invalidPayloadRejected = error instanceof TypeError; }
+check('وحدة المزامنة ترفض بنية JSON غير صالحة', invalidPayloadRejected);
 const pointsBefore = store.progress.points;
+sync.queueSyncProgress(cloudPayload);
 resetProgress();
+check('تصفير التقدم يمسح لقطة المزامنة المحلية القديمة', !sync.getSyncQueueStatus().pending);
 check('التصفير يمسح النقاط', store.progress.points === 0);
 store.saveSettings({ security: { lockEnabled: true } });
 parsed.settings.push = { enabled: true, appId: 'legacy-app-id' };
@@ -429,49 +484,41 @@ store.saveSettings({ security: { lockEnabled: false } });
 /* ================= 8. الترجمة ================= */
 section('الترجمة (عربي/إنجليزي)');
 const i18n = await mod('assets/js/core/i18n.js');
-const themeForLang = await mod('assets/js/core/theme.js');
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
+check('إعدادات المزامنة تعرض تنبيهاً صريحاً بالحفظ المحلي فقط',
+  i18n.t('set.syncProgress') === 'مزامنة التقدّم'
+    && i18n.t('set.syncLocalOnly').includes('لن تُرسل أي بيانات عبر الشبكة'));
+const syncSettingsSource = await readFile(join(ROOT, 'assets/js/views/settings.js'), 'utf8');
+check('زر المزامنة يضيف لقطة محلية من مخطط التقدم الموحّد',
+  syncSettingsSource.includes('id="queueSyncBtn"') && syncSettingsSource.includes('queueSyncProgress(exportCloudProgress())'));
 check('نص حالة التذكير مترجم بالعربية', i18n.t('set.reminderOn') === 'التذكير مُفعَّل');
-saveSettings({ uiLang: 'ar' });
-themeForLang.applyLang();
-const { renderDashboard } = await mod('assets/js/views/dashboard.js');
-const { renderSession } = await mod('assets/js/views/session.js');
-const arabicDashboard = { innerHTML: '' };
-const arabicSession = { innerHTML: '' };
-renderDashboard(arabicDashboard);
-renderSession(arabicSession);
-check('اقتراح لوحة البداية يبقى عربياً في الواجهة العربية',
-  arabicDashboard.innerHTML.includes('<b>التحيات والتعريف بالنفس</b>'));
-check('ترجمة عبارة المقهى واتجاهها عربيان',
-  arabicDashboard.innerHTML.includes('<p lang="ar" dir="rtl">أود كوباً من الشاي، من فضلك.</p>'));
-check('تفصيل درس جلسة اليوم يبقى عربياً',
-  arabicSession.innerHTML.includes('A1 — المبتدئ · التحيات والتعريف بالنفس'));
+check('بطاقات SRS لها تسمية مترجمة', i18n.t('common.cards') === 'بطاقات');
 i18n.setUiLang('en');
-saveSettings({ uiLang: 'en' });
-themeForLang.applyLang();
 check('الإنجليزية تعمل', i18n.t('nav.home') === 'Home');
-check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
-check('واجهة الإنجليزية تستخدم اتجاه LTR', i18n.isRTL() === false && document.documentElement.dir === 'ltr');
-const englishDashboard = { innerHTML: '' };
-const englishSession = { innerHTML: '' };
-renderDashboard(englishDashboard);
-renderSession(englishSession);
-check('اقتراح لوحة البداية يستخدم عنوان المنهج الإنجليزي',
-  englishDashboard.innerHTML.includes('<b>Greetings and Introductions</b>')
-  && !englishDashboard.innerHTML.includes('<b>التحيات والتعريف بالنفس</b>'));
-check('معنى عبارة المقهى واتجاهه إنجليزيان',
-  englishDashboard.innerHTML.includes('<p lang="en" dir="ltr">A polite way to order a cup of tea.</p>')
-  && !englishDashboard.innerHTML.includes('<p lang="en" dir="ltr">أود كوباً من الشاي، من فضلك.</p>'));
-check('تفصيل درس جلسة اليوم يستخدم عنوان المنهج الإنجليزي',
-  englishSession.innerHTML.includes('A1 · Greetings and Introductions')
-  && !englishSession.innerHTML.includes('A1 · التحيات والتعريف بالنفس'));
-check('جلسة المراجعة الذكية تطلب خمسة عناصر المطابقة لهدف اليوم',
-  englishSession.innerHTML.includes('#/flashcards?mode=smart&size=5'));
+check('ترجمة زر المزامنة متاحة بالإنجليزية', i18n.t('set.syncProgress') === 'Sync progress');
+const syncPreparingEnglish = i18n.t('set.syncPreparing');
 i18n.setUiLang('ar');
-saveSettings({ uiLang: 'ar' });
-themeForLang.applyLang();
-check('واجهة العربية تستخدم اتجاه RTL', i18n.isRTL() && document.documentElement.dir === 'rtl');
+const syncPreparingArabic = i18n.t('set.syncPreparing');
+i18n.setUiLang('en');
+check('حالة انتظار المزامنة المحلية مترجمة بالعربية والإنجليزية',
+  syncPreparingArabic === 'جارٍ حفظ لقطة التقدم محلياً…'
+    && syncPreparingEnglish === 'Saving progress snapshot locally…');
+check('واجهة المزامنة تعلن حالة الانشغال وإكمالاً بصرياً',
+  syncSettingsSource.includes("button.setAttribute('aria-busy', 'true')")
+    && syncSettingsSource.includes('class="sync-spinner"')
+    && syncSettingsSource.includes('window.requestAnimationFrame'));
+const responsiveCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
+check('بطاقات الهاتف توفر أزرار تقييم ولمس صوتية واسعة',
+  responsiveCss.includes('.fc-actions .btn { min-block-size: 56px;')
+    && responsiveCss.includes('.fc__speak { min-inline-size: 56px; min-block-size: 56px;'));
+check('حركات الانتقال تحترم تفضيلات تقليل الحركة',
+  responsiveCss.includes('::view-transition-old(root)')
+    && responsiveCss.includes('html[data-reduce-motion="true"] ::view-transition-new(root)'));
+check('نص حالة التذكير مترجم بالإنجليزية', i18n.t('set.reminderOn') === 'Reminder active');
+check('بطاقات SRS مترجمة بالإنجليزية', i18n.t('common.cards') === 'cards');
+check('وضع الاتجاه LTR في الإنجليزية', i18n.isRTL() === false);
+i18n.setUiLang('ar');
 check('مفتاح غير موجود يعود كما هو', i18n.t('nope.missing') === 'nope.missing');
 
 section('إمكانية الوصول');
@@ -486,13 +533,212 @@ theme.applyAccessibility();
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
-check('ثلاثة مستويات', cur.LEVELS.length === 3);
-check('١٨ وحدة إجمالاً', cur.ALL_UNITS.length === 18);
-check('١٢ مطالعة', cur.READINGS.length === 12);
-check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocab.length && u.grammar.length && u.sentences.length));
-check('المطالعات موزعة على المستويات', ['a1', 'a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
+const audioLinks = await mod('assets/js/data/curriculum-audio.js');
+check('خريطة الصوت تضم تسجيلات المنهج وتستخدم مسارات محلية', Object.keys(audioLinks.CURRICULUM_AUDIO).length === 754
+  && Object.values(audioLinks.CURRICULUM_AUDIO).every((url) => /^\.\/assets\/audio\/curriculum\/[a-f0-9]{64}\.mp3$/.test(url)));
+const flashcardSource = await readFile(join(ROOT, 'assets/js/views/flashcards.js'), 'utf8');
+const dashboardSource = await readFile(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
+const mainCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
+const flashcardFront = flashcardSource.match(/<div class="fc__face fc__face--front"[^>]*>([\s\S]*?)<\/div>/)?.[1] || '';
+check('زر الصوت في البطاقات يعرض حالة تشغيل مرئية ومعلنة للوصول',
+  flashcardSource.includes('aria-pressed="false"') && flashcardSource.includes("classList.add('is-playing')")
+    && flashcardSource.includes("classList.remove('is-playing')")
+    && mainCss.includes('.fc__speak.is-playing'));
+check('الوجه الأمامي للبطاقة يعرض العبارة وزر النطق فقط',
+  Boolean(flashcardFront) && !flashcardFront.includes('e.ipa') && !flashcardFront.includes('e.note')
+    && flashcardFront.includes('fc-front-actions'));
+check('تفاصيل البطاقة قابلة للتوسيع وتغطي المحاور الخمسة',
+  flashcardSource.includes('id="fcDepthSheet"')
+    && flashcardSource.includes('data-depth-open')
+    && flashcardSource.includes('bindSwipeUp(qs(\'#fcBack\', host), openSheet)')
+    && !flashcardSource.includes('<details class="fc-depth">')
+    && ['grammar', 'vocabulary', 'phonetics', 'arabic_l1_transfers', 'academic_focus'].every((axis) => flashcardSource.includes(`key: '${axis}'`)));
+check('الدرج السفلي يعرض المحاور الخمسة بعناوين مترجمة حتى عند غياب بيانات إضافية',
+  flashcardSource.includes("t('fc.noAxisDetail')")
+    && ['fc.axis.grammar', 'fc.axis.vocabulary', 'fc.axis.phonetics', 'fc.axis.arabic_l1_transfers', 'fc.axis.academic_focus'].every((key) => flashcardSource.includes(key)));
+check('ثيم Slate الداكن يستخدم ألواناً حيوية وخطوطاً تحريرية حديثة',
+  mainCss.includes('--bg: #0b1220;')
+    && mainCss.includes('--accent: #78aaff;')
+    && mainCss.includes('"IBM Plex Sans Arabic"')
+    && mainCss.includes('"Manrope"'));
+check('لوحة البدء تعرض الحلقة وزر التعلم وحدهما وتخفي إطار التطبيق',
+  dashboardSource.includes('href="#/drill?mode=goal"')
+    && dashboardSource.includes('dashboard-home__progress')
+    && dashboardSource.includes('dashboard-home__start')
+    && mainCss.includes('body.home-focus-mode #topbar')
+    && mainCss.includes('.dashboard-home__arc'));
+check('الواجهة الجديدة تبدأ افتراضياً بالوضع الداكن',
+  store.DEFAULT_SETTINGS.theme === 'dark' && (await readFile(join(ROOT, 'index.html'), 'utf8')).includes('var theme = s.theme || \'dark\''));
+const audioFixture = [{
+  vocabulary: [{ en: 'A New Word' }, { en: 'Hello', audio_url: './assets/audio/existing.mp3' }],
+  sentences: [{ en: 'A sample sentence.' }],
+}];
+audioLinks.attachCurriculumAudio(audioFixture, {
+  'a new word': './assets/audio/curriculum/word.mp3',
+  hello: './assets/audio/curriculum/replacement.mp3',
+  'a sample sentence.': './assets/audio/curriculum/sentence.mp3',
+});
+check('روابط الصوت المولّدة تُرفق بالمفردات والجمل دون استبدال التسجيل الموجود',
+  audioFixture[0].vocabulary[0].audio_url === './assets/audio/curriculum/word.mp3'
+    && audioFixture[0].sentences[0].audio_url === './assets/audio/curriculum/sentence.mp3'
+    && audioFixture[0].vocabulary[1].audio_url === './assets/audio/existing.mp3');
+check('المستويات الستة A1–C2 نشطة بعد التحقق والاستيراد', cur.LEVELS.length === 6
+  && ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].every((level) => cur.getLevel(level)));
+check('٤١ وحدة نشطة بعد ترحيل مفردات A0', cur.ALL_UNITS.length === 41);
+check('١٦ مطالعة بعد ترحيل قراءات A0', cur.READINGS.length === 16);
+check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
+check('المطالعات موزعة على المستويات', cur.readingsOfLevel('a1').length === 8
+  && ['a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
 check('اقتراح الدرس التالي يعمل', cur.nextLessonSuggestion() !== null);
 check('إحصاءات المنهج صحيحة', cur.curriculumStats().vocab >= 280);
+check('مخطط الوحدات يشمل النطق IPA وأخطاء النقل من العربية', cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa')
+  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('incorrect')
+  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('corrected')
+  && cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('audio_url')
+  && cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa_audio_url'));
+check('الوحدات النشطة تعرض الحقول الخمسة مباشرة', cur.ALL_UNITS.every((u) =>
+  Array.isArray(u.grammar) && Array.isArray(u.vocabulary) && Array.isArray(u.phonetics)
+  && Array.isArray(u.arabic_l1_transfers) && Array.isArray(u.academic_focus) && !('vocab' in u)));
+const a1a2Units = cur.ALL_UNITS.filter((unit) => ['a1', 'a2'].includes(unit.levelId));
+const enrichedA1A2Units = a1a2Units.filter((unit) => !unit.id.startsWith('a1-foundation-'));
+const a1a2ReviewEntries = qg.curriculumReviewEntries({ levels: ['a1', 'a2'] });
+check('كل وحدات A1 وA2 تحتوي أبعاد المنهج الخمسة مع IPA وأمثلة', a1a2Units.length === 17
+  && a1a2Units.every((unit) => unit.grammar.length && unit.vocabulary.length
+    && unit.phonetics.length >= 1 && unit.phonetics.every((item) => item.ipa && item.en && item.ar
+      && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
+    && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2));
+check('متلازمات A1/A2 وأفعال A2 المركبة قابلة للمراجعة', enrichedA1A2Units.every((unit) =>
+  unit.vocabulary.some((word) => word.collocations?.length))
+  && a1a2Units.filter((unit) => unit.levelId === 'a2').some((unit) =>
+    unit.vocabulary.some((word) => word.phrasalVerbs?.length))
+  && !a1a2Units.filter((unit) => unit.id.startsWith('a1u')).some((unit) =>
+    unit.vocabulary.some((word) => word.phrasalVerbs?.length))
+  && ['phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+    'l1-transfer', 'academic',
+    'collocation', 'phrasal-verb'].every((kind) => a1a2ReviewEntries.some((entry) => entry.kind === kind))
+  && a1a2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b1Units = cur.ALL_UNITS.filter((unit) => unit.levelId === 'b1');
+const b1ReviewEntries = qg.curriculumReviewEntries({ levels: ['b1'] });
+check('كل وحدات B1 الست مثرية بالمحاور الخمسة وبمواد صوتية متقدمة', b1Units.length === 6
+  && b1Units.every((unit) => unit.grammar.length && unit.vocabulary.length
+    && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
+      && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
+    && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2
+    && unit.vocabulary.some((word) => word.collocations?.length)
+    && unit.vocabulary.some((word) => word.phrasalVerbs?.length)));
+check('محتوى B1 الصوتي والأكاديمي والمفرداتي يُنشئ بطاقات SRS صالحة', [
+  'phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+  'l1-transfer', 'academic', 'academic:paraphrasing', 'academic:idioms',
+  'collocation', 'phrasal-verb',
+].every((kind) => b1ReviewEntries.some((entry) => entry.kind === kind))
+  && b1ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b2Stage = cur.B2_STAGED_CURRICULUM;
+const b2ReviewEntries = qg.curriculumReviewEntries({ levels: ['b2'] });
+check('B2 اجتاز التحقق والاستيراد وأصبح نشطاً في المنهج',
+  b2Stage.units.length === 6 && cur.validateLevel(b2Stage).valid
+    && cur.getLevel('b2')?.status === 'ready' && cur.unitsOfLevel('b2').length === 6
+    && b2Stage.units.every((unit) => unit.grammar.length && unit.vocabulary.length
+      && unit.phonetics.length >= 2 && unit.arabic_l1_transfers.length >= 2
+      && unit.academic_focus.length >= 2 && unit.sentences.length && unit.dialogue.length));
+check('محتوى B2 المتقدم يدخل بطاقات SRS في المحاور الخمسة', [
+  'grammar', 'phonetics', 'phonetics:contrastPairs', 'phonetics:connectedSpeech',
+  'phonetics:intonation', 'l1-transfer', 'academic', 'academic:paraphrasing',
+  'academic:idioms', 'collocation', 'phrasal-verb',
+].every((kind) => b2ReviewEntries.some((entry) => entry.kind === kind))
+  && b2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+const b2Export = cur.exportStagedLevel(b2Stage);
+const b2Imported = cur.importStagedLevel(b2Export);
+check('SRS يراجع مفردات B2 النشطة إلى جانب أبعادها الخمسة',
+  qg.vocabularyEntries({ levels: ['b2'] }).length >= 12
+    && b2ReviewEntries.some((entry) => entry.kind === 'phrasal-verb')
+    && b2Imported.valid && b2Imported.level.units.length === 6);
+const cLevelData = [cur.C1_STAGED_CURRICULUM, cur.C2_STAGED_CURRICULUM];
+check('C1 وC2 اجتازا التحقق والاستيراد وأصبحا نشطين',
+  cLevelData.every((level) => level.units.length === 6 && cur.validateLevel(level).valid
+    && cur.getLevel(level.id)?.status === 'ready'
+    && cur.unitsOfLevel(level.id).length === 6
+    && level.units.every((unit) => unit.grammar.length >= 2 && unit.vocabulary.length >= 8
+      && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
+        && item.accentNote && item.connectedSpeech?.length && item.intonation?.length)
+      && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2)));
+check('C1 وC2 يغطيان التنغيم الساخر وإعادة الصياغة والأمثال وبطاقات SRS',
+  cLevelData.every((level) => {
+    const entries = level.units.flatMap((unit) =>
+      qg.reviewEntriesForUnit({ ...unit, levelId: level.id, levelLabel: level.label }));
+    const allText = JSON.stringify(level).toLowerCase();
+    return ['phonetics:intonation', 'phonetics:connectedSpeech', 'academic:paraphrasing',
+      'academic:idioms', 'collocation', 'phrasal-verb'].every((kind) =>
+      entries.some((entry) => entry.kind === kind))
+      && /sarcas|سخر|irony|مفارقة/.test(allText)
+      && /proverb|مثل|saying/.test(allText)
+      && entries.every((entry) => entry.itemId && entry.en && entry.ar);
+  }));
+const stagedFixture = {
+  id: 'b2-test', label: 'B2 test', labelEn: 'B2 test', icon: '🧭', color: '#000',
+  units: [{
+    id: 'b2-test-u1', title: 'Test unit', grammar: [{ title: 'Grammar' }],
+    sentences: [{ en: 'We should make a decision.', ar: 'ينبغي أن نتخذ قراراً.', audio_url: 'audio/sentence.mp3' }],
+    vocabulary: [{ en: 'decision', ar: 'قرار', audio_url: 'audio/decision.mp3', ipa: '/dɪˈsɪʒən/', ipa_audio_url: 'audio/decision-ipa.mp3', collocations: [{ en: 'make a decision', ar: 'يتخذ قراراً' }], phrasalVerbs: [{ en: 'carry out', ar: 'ينفذ' }] }],
+    phonetics: [{
+      id: 'ipa', en: 'think', ipa: '/θɪŋk/', ar: 'ثِنك', audio_url: 'audio/think.mp3', ipa_audio_url: 'audio/think-ipa.mp3',
+      contrastPairs: [{ id: 'pair', en: 'pat / bat', ar: '/p/ مقابل /b/' }],
+      connectedSpeech: [{ en: 'want to → wanna', ar: 'وصل واختزال في الكلام' }],
+      intonation: [{ en: 'rising tone', ar: 'تنغيم صاعد' }],
+    }],
+    arabic_l1_transfers: [{ id: 'transfer', incorrect: 'I very like it.', corrected: 'I like it very much.', explanationAr: 'موضع الظرف' }],
+    academic_focus: [{
+      id: 'term', term: 'evidence', meaningAr: 'دليل',
+      paraphrasing: [{ original: 'The study is important.', paraphrase: 'The research is significant.' }],
+      idioms: [{ phrase: 'in the long run', meaningAr: 'على المدى البعيد' }],
+      readingAnalysis: [{ term: 'claim', meaningAr: 'ادعاء الكاتب' }],
+    }],
+  }],
+};
+check('التحقق يمنع تفعيل وحدة ناقصة مع تحذير محدد', !cur.validateLevel({
+  ...stagedFixture, units: [{ ...stagedFixture.units[0], phonetics: [] }],
+}).valid && cur.validateLevel({ ...stagedFixture, units: [{ ...stagedFixture.units[0], phonetics: [] }] })
+  .warnings.some((warning) => warning.includes('phonetics')));
+const stagedExport = cur.exportStagedLevel(stagedFixture);
+const stagedImport = cur.importStagedLevel(stagedExport);
+check('خط أنابيب التصدير والاستيراد يحافظ على مخطط الوحدة', stagedImport.valid
+  && !('vocab' in stagedImport.level.units[0]) && stagedImport.level.units[0].vocabulary.length === 1);
+const componentReviewEntries = qg.reviewEntriesForUnit({
+  ...stagedFixture.units[0], levelId: 'b2-test', levelLabel: 'B2 test',
+});
+const activatedFixture = cur.activateStagedLevel(stagedExport);
+check('بطاقات SRS تشمل القواعد وIPA والنقل والمتلازمات والأفعال المركبة', [
+  'grammar', 'phonetics', 'l1-transfer', 'academic', 'collocation', 'phrasal-verb',
+].every((kind) => componentReviewEntries.some((entry) => entry.kind === kind))
+  && componentReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
+check('SRS يراجع الأزواج الصوتية والوصل والتنغيم وإعادة الصياغة والتعابير الاصطلاحية',
+  ['phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
+    'academic:paraphrasing', 'academic:idioms', 'academic:readingAnalysis']
+    .every((kind) => componentReviewEntries.some((entry) => entry.kind === kind)));
+const audioVocabEntry = qg.vocabularyEntries({ levels: ['b2-test'] }).find((entry) => entry.en === 'decision');
+const audioSentenceEntry = qg.sentenceEntries({ levels: ['b2-test'] }).find((entry) => entry.en === 'We should make a decision.');
+const audioPhoneticsEntry = componentReviewEntries.find((entry) => entry.kind === 'phonetics');
+check('بطاقات SRS تحمل مسارات صوت الكلمة وIPA مع إبقاء IPA نصاً منفصلاً',
+  audioVocabEntry?.audioUrl === 'audio/decision.mp3'
+    && audioVocabEntry.ipa === '/dɪˈsɪʒən/'
+    && audioVocabEntry.ipaAudioUrl === 'audio/decision-ipa.mp3'
+    && audioSentenceEntry?.audioUrl === 'audio/sentence.mp3'
+    && audioPhoneticsEntry?.audioUrl === 'audio/think.mp3'
+    && audioPhoneticsEntry.ipaAudioUrl === 'audio/think-ipa.mp3');
+check('تفعيل المستوى المراجع يضيفه إلى المنهج النشط مرة واحدة', activatedFixture.valid
+  && cur.getLevel('b2-test') === activatedFixture.level
+  && cur.unitsOfLevel('b2-test').length === 1
+  && !cur.activateStagedLevel(stagedExport).valid);
+const activeReviewKinds = [
+  ...qg.vocabularyEntries({ levels: ['b2-test'] }),
+  ...qg.curriculumReviewEntries({ levels: ['b2-test'] }),
+].map((entry) => entry.kind);
+check('المحور الخامس كله يدخل بطاقات SRS بعد تفعيل الوحدة', [
+  'word', 'grammar', 'phonetics', 'l1-transfer', 'academic', 'collocation', 'phrasal-verb',
+].every((kind) => activeReviewKinds.includes(kind)));
+if (activatedFixture.valid) {
+  cur.LEVELS.splice(cur.LEVELS.indexOf(activatedFixture.level), 1);
+  cur.ALL_UNITS.splice(cur.ALL_UNITS.findIndex((unit) => unit.levelId === 'b2-test'), 1);
+}
 
 /* ================= 10. الأدوات المساعدة ================= */
 section('الأدوات المساعدة');

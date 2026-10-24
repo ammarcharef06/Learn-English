@@ -1,50 +1,46 @@
 ﻿/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
 import { t } from '../core/i18n.js';
-import { esc, qs, pct } from '../core/utils.js';
+import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
-import { progress } from '../core/store.js';
+import { progress, settings } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
 import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
-import { currentRoute } from '../core/router.js';
-import { dailyMission } from '../core/journey.js';
 
 export const NAV_ITEMS = [
-  { href: '#/', key: 'nav.home', icon: '⌂', group: 'nav.group.learn' },
-  { href: '#/lessons', key: 'nav.lessons', icon: '▤', group: 'nav.group.learn' },
-  { href: '#/reference', key: 'nav.reference', icon: '☷', group: 'nav.group.learn' },
-  { href: '#/drills', key: 'nav.drills', icon: '✳', group: 'nav.group.practice' },
-  { href: '#/flashcards', key: 'nav.flashcards', icon: '▱', group: 'nav.group.practice' },
-  { href: '#/reading', key: 'nav.reading', icon: '▧', group: 'nav.group.practice' },
-  { href: '#/exams', key: 'nav.exams', icon: '◷', group: 'nav.group.practice' },
-  { href: '#/conversations', key: 'nav.conversations', icon: '☏', group: 'nav.group.practice' },
-  { href: '#/stats', key: 'nav.stats', icon: '⌁', group: 'nav.group.me' },
-  { href: '#/journey', key: 'nav.journey', icon: '⌖', group: 'nav.group.me' },
-  { href: '#/notebook', key: 'nav.notebook', icon: '▣', group: 'nav.group.me' },
-  { href: '#/settings', key: 'nav.settings', icon: '⚙', group: 'nav.group.me' },
+  { href: '#/', key: 'nav.home', icon: '🏠', group: 'nav.group.learn', bottom: true },
+  { href: '#/lessons', key: 'nav.lessons', icon: '📚', group: 'nav.group.learn', bottom: true },
+  { href: '#/reference', key: 'nav.reference', icon: '📋', group: 'nav.group.learn' },
+  { href: '#/drills', key: 'nav.drills', icon: '🎯', group: 'nav.group.practice', bottom: true },
+  { href: '#/flashcards', key: 'nav.flashcards', icon: '🃏', group: 'nav.group.practice' },
+  { href: '#/reading', key: 'nav.reading', icon: '📖', group: 'nav.group.practice', bottom: true },
+  { href: '#/exams', key: 'nav.exams', icon: '🧪', group: 'nav.group.practice' },
+  { href: '#/conversations', key: 'nav.conversations', icon: '💬', group: 'nav.group.practice' },
+  { href: '#/stats', key: 'nav.stats', icon: '📊', group: 'nav.group.me' },
+  { href: '#/journey', key: 'nav.journey', icon: '🧭', group: 'nav.group.me' },
+  { href: '#/notebook', key: 'nav.notebook', icon: '📒', group: 'nav.group.me' },
+  { href: '#/settings', key: 'nav.settings', icon: '⚙️', group: 'nav.group.me', bottom: true },
 ];
-
-function navLink(item) {
-  const label = t(item.key);
-  return `<a href="${item.href}" data-nav data-route="${item.href}" title="${esc(label)}" aria-label="${esc(label)}">
-    <span class="ico" aria-hidden="true">${item.icon}</span><span class="lbl">${esc(label)}</span>
-  </a>`;
-}
 
 export function renderNav() {
   const side = qs('#sidenav');
-  const mission = dailyMission();
-  const missionPercent = mission.total ? Math.round((mission.done / mission.total) * 100) : 0;
+  const bottom = qs('#bottomnav');
+  const zs = zeroStats(progress);
 
   if (side) {
+    /* الخيار الوحيد للدخول إلى قسم «من الصفر» (A0) — صفحة zero.html المستقلة */
     let html = `
       <div class="sidenav__brand">
         <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
-        <span><b>${esc(t('town.name'))}</b><small>${esc(t('brand.tag'))}</small></span>
+        <span><b>English Academy</b><small>رحلتك نحو إتقان الإنجليزية</small></span>
       </div>
-      <a class="session-nav${mission.done === mission.total ? ' is-complete' : ''}" href="#/session" data-nav data-route="#/session" aria-label="${esc(t('session.title'))} · ${mission.done} ${esc(t('common.of'))} ${mission.total}">
-        <span class="session-nav__icon" aria-hidden="true">✦</span>
-        <span class="session-nav__copy"><b>${esc(t('session.title'))}</b><small>${esc(t('session.navDetail'))}</small><span class="session-nav__track" aria-hidden="true"><i data-session-fill style="width:${missionPercent}%"></i></span></span>
-        <span class="session-nav__count" data-session-count>${mission.done}/${mission.total}</span>
+      <a class="zero-nav" href="./zero.html" title="من الصفر — تأسيس A0 (صفحة مستقلة)">
+        <span class="zero-nav__badge" aria-hidden="true">A0</span>
+        <span class="zero-nav__txt">
+          <b>من الصفر — تأسيس A0</b>
+          <small>${zs.percent ? `${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل` : 'ابدأ من الحرف الأول'}</small>
+          <span class="progress"><i style="width:${zs.percent}%"></i></span>
+        </span>
+        <span class="zero-nav__arrow" aria-hidden="true">←</span>
       </a>`;
 
     let lastGroup = '';
@@ -53,7 +49,7 @@ export function renderNav() {
         html += `<div class="sidenav__group">${t(item.group)}</div>`;
         lastGroup = item.group;
       }
-      html += navLink(item);
+      html += `<a href="${item.href}" data-nav data-route="${item.href}" title="${t(item.key)}"><span class="ico" aria-hidden="true">${item.icon}</span><span class="lbl">${t(item.key)}</span></a>`;
     }
     html += `<div class="sidenav__group">${t('nav.group.learn')}</div>`;
     LEVELS.forEach((lv) => {
@@ -65,10 +61,12 @@ export function renderNav() {
     side.innerHTML = html;
   }
 
+  /* تنقّل واحد لكل الأجهزة: لا شريط سفلي — الدرج وحده */
+  if (bottom) bottom.innerHTML = '';
 }
 
 /* درج التنقّل: تنفيذ واحد مشترك بين الصفحتين (views/topbar.js) */
-export { openDrawer, closeDrawer } from './topbar.js';
+export { openDrawer, closeDrawer, toggleDrawer, isDrawerOpen } from './topbar.js';
 
 /* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
 const SECTION_MAP = {
@@ -77,7 +75,6 @@ const SECTION_MAP = {
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
   exams: '#/exams', stats: '#/stats', journey: '#/journey', conversations: '#/conversations',
   notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',
-  session: '#/session',
 };
 
 export function activeHrefFor(path) {
@@ -96,18 +93,17 @@ export function setActiveNav(path) {
 }
 
 export function renderSidebarStats() {
-  updateSessionPulse();
   const host = qs('#streakCard');
   if (host) {
     const s = streakInfo();
     if (s.streak > 0) {
       host.className = 'streak-card';
-      host.innerHTML = `<b>${s.streak} 🔥</b><span>${t('common.streak')} · ${t('town.bestStreak', { count: s.best })}</span>
+      host.innerHTML = `<b>${s.streak} 🔥</b><span>${t('common.streak')} · أفضل سلسلة: ${s.best}</span>
         <div class="progress" style="margin-top:8px;background:rgba(255,255,255,.25)"><i style="width:${pct(s.streak % 7 || 7, 7)}%;background:#fff"></i></div>
-        <span class="tiny">${s.today ? t('town.studiedToday') + ' ✅' : t('town.notStudiedToday')}</span>`;
+        <span class="tiny">${s.today ? 'درست اليوم ✅' : 'لم تدرس اليوم بعد'}</span>`;
     } else {
       host.className = 'streak-card streak-card--empty';
-      host.innerHTML = `<b>0</b><span>${t('town.startStreak')} 🔥</span>`;
+      host.innerHTML = `<b>0</b><span>ابدأ سلسلتك اليوم — أول جلسة تفتح السلسلة 🔥</span>`;
     }
   }
   const mini = qs('#miniProgress');
@@ -118,60 +114,22 @@ export function renderSidebarStats() {
       <b>${t('dash.courseProgress')}</b>
       <div class="progress"><i style="width:${o.percent}%"></i></div>
       <div class="small muted" style="margin-top:6px">${o.unitsDone} / ${o.unitsTotal} ${t('lessons.units')} · ${o.percent}%</div>
-      <div class="small muted">🌱 ${t('town.foundationProgress')}: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} ${t('town.stageCount')}</div>
+      <div class="small muted">🌱 التأسيس A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل</div>
       <div class="small muted">⭐ ${progress.points || 0} ${t('common.points')}</div>`;
   }
 }
 
-export function updateSessionPulse() {
-  const host = qs('.session-nav');
-  if (!host) return;
-  const mission = dailyMission();
-  const done = mission.done;
-  const total = mission.total;
-  const label = host.querySelector('[data-session-count]');
-  const fill = host.querySelector('[data-session-fill]');
-  if (label) label.textContent = `${done}/${total}`;
-  if (fill) fill.style.width = `${total ? Math.round((done / total) * 100) : 0}%`;
-  host.setAttribute('aria-label', `${t('session.title')} · ${done} ${t('common.of')} ${total}`);
-  host.classList.toggle('is-complete', done === total);
-}
 
-
-
-const PAGE_DISTRICTS = [
-  { id: 'session', key: 'town.district.academy', prefixes: ['/session'] },
-  { id: 'library', key: 'town.district.library', prefixes: ['/lessons', '/lesson', '/unit', '/level'] },
-  { id: 'archive', key: 'town.district.archive', prefixes: ['/reference'] },
-  { id: 'practice', key: 'town.district.practice', prefixes: ['/drill', '/drills'] },
-  { id: 'memory', key: 'town.district.memory', prefixes: ['/flashcards'] },
-  { id: 'garden', key: 'town.district.garden', prefixes: ['/reading'] },
-  { id: 'cafe', key: 'town.district.cafe', prefixes: ['/conversations'] },
-  { id: 'hall', key: 'town.district.hall', prefixes: ['/exams'] },
-  { id: 'observatory', key: 'town.district.observatory', prefixes: ['/stats'] },
-  { id: 'map', key: 'town.district.map', prefixes: ['/journey'] },
-  { id: 'notebook', key: 'town.district.notebook', prefixes: ['/notebook'] },
-  { id: 'house', key: 'town.district.house', prefixes: ['/settings'] },
-  { id: 'commons', key: 'town.district.commons', prefixes: ['/support', '/about'] },
-];
 
 export function pageHead({ icon = '', title = '', subtitle = '', actionsHtml = '' }) {
-  const path = currentRoute().path;
-  const district = PAGE_DISTRICTS.find(({ prefixes }) => prefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}/`)))
-    || { id: 'academy', key: 'town.district.academy' };
   return `
-    <header class="page-head" data-district="${district.id}">
-      <div class="page-head__main">
-        <nav class="page-head__wayfinding" aria-label="${esc(t('town.wayfinding'))}">
-          <a href="#/" data-nav><span aria-hidden="true">⌂</span>${esc(t('town.name'))}</a>
-          <span class="page-head__separator" aria-hidden="true">/</span>
-          <span class="page-head__district">${esc(t(district.key))}</span>
-        </nav>
-        <div class="page-title"><span class="ico" aria-hidden="true">${icon}</span><h1>${esc(title)}</h1></div>
+    <div class="page-head">
+      <div>
+        <div class="page-title"><span class="ico">${icon}</span><h1>${esc(title)}</h1></div>
         ${subtitle ? `<p>${esc(subtitle)}</p>` : ''}
       </div>
       ${actionsHtml ? `<div class="row row--wrap">${actionsHtml}</div>` : ''}
-    </header>`;
+    </div>`;
 }
 
 export function progressBar(percent, variant = '') {

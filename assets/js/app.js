@@ -6,14 +6,13 @@ import { settings, saveSettings, subscribe, progress, flush } from './core/store
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { registerZeroSounds } from './core/zero-audio.js';
-import { isAuthed, extendSession, startIdleSessionGuard } from './core/auth.js';
+import { isAuthed, extendSession } from './core/auth.js';
 import { qs, qsa, toast, esc, focusMainHeading } from './core/utils.js';
 import { renderLock, lockSite } from './views/auth.js';
-import { renderNav, setActiveNav, renderSidebarStats, updateSessionPulse, closeDrawer } from './views/shell.js';
+import { renderNav, setActiveNav, renderSidebarStats, openDrawer, closeDrawer } from './views/shell.js';
 import { renderTopbar } from './views/topbar.js';
 import { renderDashboard } from './views/dashboard.js';
 import { renderLessons, renderLevel, renderUnit, renderLesson } from './views/lessons.js';
-import { shouldShowZeroChoice, showZeroChoice } from './views/zero-entry.js';
 import { renderReference } from './views/reference.js';
 import { renderDrills } from './views/drills.js';
 import { renderDrillPage } from './views/drill.js';
@@ -22,7 +21,7 @@ import { renderReading } from './views/reading.js';
 import { renderExams } from './views/exams.js';
 import { renderStats } from './views/stats.js';
 import { renderNotebook } from './views/notebook.js';
-import { renderSettings, applyTheme, applySkin, applyLang, applyAccessibility, SKINS } from './views/settings.js';
+import { renderSettings, applyTheme, applySkin, applyLang, applyAccessibility } from './views/settings.js';
 import { renderAbout } from './views/about.js';
 import { stopActiveQuizzes } from './views/quiz-runner.js';
 import { addNotebook } from './core/gamify.js';
@@ -32,9 +31,7 @@ import { updateBannerForRoute, showQueuedInterstitial } from './core/ads.js';
 import { renderSupport } from './views/support.js';
 import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
-import { renderSession } from './views/session.js';
 import { APP_VERSION } from './core/app-version.js';
-import { setupPwaInstall } from './core/pwa-install.js';
 
 const view = () => qs('#view');
 
@@ -49,19 +46,17 @@ function setupRoutes() {
   route('/reference/:section', (p) => renderReference(view(), p.section));
   route('/drills', (p, q) => renderDrills(view(), q || {}));
   route('/drill', (p, q) => renderDrillPage(view(), q || {}));
-  route('/flashcards', (p, q) => renderFlashcards(view(), q || {}));
+  route('/flashcards', () => renderFlashcards(view()));
   route('/reading', () => renderReading(view(), null));
   route('/reading/:id', (p) => renderReading(view(), p.id));
   route('/exams', () => renderExams(view(), null));
   route('/exams/:id', (p) => renderExams(view(), p.id));
   route('/stats', () => renderStats(view()));
   route('/notebook', () => renderNotebook(view()));
-  route('/settings', (p, q) => renderSettings(view(), q || {}, q?.section || ''));
-  route('/settings/:section', (p, q) => renderSettings(view(), q || {}, p.section));
+  route('/settings', (p, q) => renderSettings(view(), q || {}));
   route('/support', () => renderSupport(view()));
   route('/journey', () => renderJourney(view()));
-  route('/session', () => renderSession(view()));
-  route('/conversations', (p, q) => renderConversations(view(), q || {}));
+  route('/conversations', () => renderConversations(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
     view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
@@ -71,7 +66,6 @@ function setupRoutes() {
 
 /* ---------------- الأحداث العامة ---------------- */
 function bindGlobalEvents() {
-  subscribe((kind) => { if (kind === 'progress') updateSessionPulse(); });
   document.addEventListener('click', (e) => {
     const sayBtn = e.target.closest('[data-say]');
     if (sayBtn && !e.target.closest('.quiz-shell')) {
@@ -89,7 +83,7 @@ function bindGlobalEvents() {
     if (e.target.closest('[data-nav]')) closeDrawer();
   });
 
-  /* الرأس المشترك: القائمة والوجهة واللغة؛ الانتقال بين العالمين زر واحد. */
+  /* الشريط العلوي المشترك (نفسه في صفحة A0): القائمة واللغة */
   renderTopbar(qs('#topbar'), 'site', { onRerender: renderAll });
 
   qs('#scrim')?.addEventListener('click', closeDrawer);
@@ -107,7 +101,7 @@ function bindGlobalEvents() {
   });
 
   document.addEventListener('lea:answered', () => { renderSidebarStats(); });
-  window.leaUpdates?.onUpdateClick?.(() => navigate('/settings/updates'));
+  window.leaUpdates?.onUpdateClick?.(() => navigate('/settings', { section: 'updates' }));
   const localNotifications = window.Capacitor?.Plugins?.LocalNotifications
     || window.CapacitorLocalNotificationsBundle?.LocalNotifications;
   localNotifications?.addListener?.('localNotificationActionPerformed', (event) => {
@@ -119,7 +113,7 @@ function bindGlobalEvents() {
     try {
       const deepLink = new URL(url);
       if (deepLink.protocol !== 'com.ammarcharef06.learnenglish:') return;
-      if (deepLink.hostname === 'updates') navigate('/settings/updates');
+      if (deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
     } catch (error) {
       console.error('Could not process the app link.', error);
       toast(error.message || 'تعذّر إكمال تأكيد البريد داخل التطبيق.', 'warn');
@@ -138,6 +132,35 @@ function bindGlobalEvents() {
       if (data.type === 'navigate' && data.url) location.hash = String(data.url).replace(/^.*#/, '#');
     });
   }
+}
+
+/* ---------------- التثبيت (PWA) ---------------- */
+let deferredPrompt = null;
+function setupInstall() {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = qs('#btnInstall');
+    if (btn) btn.hidden = false;
+  });
+  window.__leaInstall = async () => {
+    const btn = qs('#btnInstall');
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice?.outcome === 'accepted') { toast('تم تثبيت التطبيق 🎉', 'ok'); if (btn) btn.hidden = true; }
+      deferredPrompt = null;
+      return true;
+    }
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      toast('على الآيفون: زر المشاركة ← «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
+    } else {
+      toast('افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
+    }
+    return false;
+  };
+  window.addEventListener('appinstalled', () => toast('التطبيق مثبّت على جهازك ✅', 'ok'));
 }
 
 /* ---------------- Service Worker ---------------- */
@@ -185,7 +208,6 @@ function waitForActive(reg, timeout = 8000) {
 /* ---------------- إعادة الرسم ---------------- */
 function renderAll() {
   renderNav();
-  renderTopbar(qs('#topbar'), 'site', { onRerender: renderAll });
   applyI18n(document);
   document.querySelectorAll('[data-app-version]').forEach((element) => {
     element.textContent = `${t('common.version')} ${APP_VERSION}`;
@@ -220,7 +242,7 @@ async function main() {
   initSpeech();
   registerZeroSounds();
   bindGlobalEvents();
-  setupPwaInstall();
+  setupInstall();
   registerSW();
   setupRoutes();
   window.__leaRenderAll = renderAll;
@@ -229,6 +251,7 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
+    document.body.classList.remove('home-focus-mode', 'fc-focus-mode');
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
@@ -241,21 +264,7 @@ async function main() {
     showQueuedInterstitial().catch((error) => console.warn('Interstitial ad unavailable.', error));
     try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
   });
-  let zeroWelcomeTimer = 0;
-  onRouteRendered((renderedRoute) => {
-    const mainView = view();
-    if (mainView) {
-      mainView.classList.remove('view-arrive');
-      void mainView.offsetWidth;
-      mainView.classList.add('view-arrive');
-    }
-    requestAnimationFrame(() => focusMainHeading(view()));
-    if (renderedRoute.path !== '/' || !shouldShowZeroChoice() || qs('#zeroChoice')) return;
-    clearTimeout(zeroWelcomeTimer);
-    zeroWelcomeTimer = setTimeout(() => {
-      if (currentRoute().path === '/' && shouldShowZeroChoice()) showZeroChoice();
-    }, 420);
-  });
+  onRouteRendered(() => requestAnimationFrame(() => focusMainHeading(view())));
 
   const media = window.matchMedia('(prefers-color-scheme: dark)');
   media.addEventListener?.('change', () => { if ((settings.theme || 'auto') === 'auto') applySkin(); });
@@ -269,7 +278,6 @@ async function main() {
     started = true;
     boot();
     window.__leaBooted = true;
-    startIdleSessionGuard(() => window.__leaLockNow?.());
     await initRouter();
     startReminderLoop();
     scheduleBackgroundUpdateChecks();

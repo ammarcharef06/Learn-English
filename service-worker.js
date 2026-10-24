@@ -2,19 +2,17 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.12.4';
+const VERSION = 'v4.16.0';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
   './zero.html',
   './manifest.webmanifest',
+  './manifest-zero.webmanifest',
   './assets/css/main.css',
-  './assets/css/redesign.css',
   './assets/css/zero.css',
   './assets/css/zero-pad.css',
-  './assets/css/skins/gnome.css',
-  './assets/css/skins/kali.css',
   './assets/img/favicon.svg',
   './assets/img/icon-192.png',
   './assets/img/icon-512.png',
@@ -29,6 +27,7 @@ const CORE = [
   './assets/js/core/router.js',
   './assets/js/core/speech.js',
   './assets/js/core/srs.js',
+  './assets/js/core/sync.js',
   './assets/js/core/gamify.js',
   './assets/js/core/journey.js',
   './assets/js/core/conversation-practice.js',
@@ -36,13 +35,14 @@ const CORE = [
   './assets/js/core/ads.js',
   './assets/js/core/updater.js',
   './assets/js/core/app-version.js',
-  './assets/js/core/pwa-install.js',
   './assets/js/core/quizgen.js',
   './assets/js/core/zeroflow.js',
   './assets/js/core/zero-pad.js',
   './assets/js/core/theme.js',
   './assets/js/data/reference.js',
   './assets/js/data/curriculum.js',
+  './assets/js/data/curriculum-audio.js',
+  './assets/js/data/curriculum-advanced.js',
   './assets/js/data/curriculum-a1.js',
   './assets/js/data/curriculum-a2.js',
   './assets/js/data/curriculum-b1.js',
@@ -61,11 +61,9 @@ const CORE = [
   './assets/js/views/quiz-runner.js',
   './assets/js/views/dashboard.js',
   './assets/js/views/journey.js',
-  './assets/js/views/session.js',
   './assets/js/views/conversations.js',
   './assets/js/views/lessons.js',
   './assets/js/views/zero.js',
-  './assets/js/views/zero-head.js',
   './assets/js/views/zero-shell.js',
   './assets/js/views/zero-stage.js',
   './assets/js/views/zero-exam.js',
@@ -87,6 +85,16 @@ self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await Promise.allSettled(CORE.map((url) => cache.add(new Request(url, { cache: 'reload' }))));
+    const mapResponse = await cache.match('./assets/js/data/curriculum-audio.js');
+    if (!mapResponse?.ok) throw new Error('Could not load curriculum audio map for offline caching.');
+    const mapSource = await mapResponse.text();
+    const audioUrls = [...new Set(
+      [...mapSource.matchAll(/["'](\.\/assets\/audio\/curriculum\/[a-f0-9]+\.mp3)["']/g)]
+        .map((match) => match[1]),
+    )];
+    for (let i = 0; i < audioUrls.length; i += 30) {
+      await cache.addAll(audioUrls.slice(i, i + 30));
+    }
     await self.skipWaiting();
   })());
 });
@@ -114,18 +122,8 @@ const isSameOrigin = (url) => url.origin === self.location.origin;
 const isCacheableAsset = (url) => /\.(?:css|js|mjs|json|webmanifest|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname);
 const isCodeAsset = (url) => /\.(?:js|mjs|css|json|webmanifest)$/i.test(url.pathname);
 
-/* تسجيلات النطق التعليمية: تُخزَّن عند الطلب وتُستخدم بلا استبدال بصوت مولّد */
+/* التسجيلات الصوتية تبقى متاحة دون اتصال بعد تخزينها مسبقاً أو أول طلب ناجح */
 self.addEventListener('fetch', (event) => {
-  const u0 = new URL(event.request.url);
-  if (event.request.method === 'GET' && u0.pathname.includes('/assets/audio/zero/')) {
-    event.respondWith(
-      caches.match(event.request).then((hit) => hit || fetch(event.request).then((res) => {
-        if (res && res.ok) { const c = res.clone(); caches.open(CACHE).then((x) => x.put(event.request, c)).catch(() => {}); }
-        return res;
-      }))
-    );
-    return;
-  }
   const req = event.request;
   if (req.method !== 'GET') return;
 
@@ -134,6 +132,22 @@ self.addEventListener('fetch', (event) => {
 
   // Leave cross-origin requests (such as Google Fonts) to the browser.
   if (!isSameOrigin(url2)) return;
+
+  if (url2.pathname.includes('/assets/audio/')) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      const cached = await cache.match(req, { ignoreSearch: true });
+      if (cached) return cached;
+      try {
+        const response = await fetch(req);
+        if (response.ok) await cache.put(req, response.clone());
+        return response;
+      } catch {
+        return new Response('', { status: 504, statusText: 'Audio unavailable offline' });
+      }
+    })());
+    return;
+  }
 
   // التنقل: الشبكة أولاً ثم النسخة المخزّنة (ولكل صفحة نسختها: الموقع أو قسم A0)
   if (req.mode === 'navigate') {

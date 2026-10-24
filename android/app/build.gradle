@@ -4,8 +4,8 @@ def hasReleaseSigning = System.getenv("ANDROID_KEYSTORE_PATH")
     && System.getenv("ANDROID_STORE_PASSWORD")
     && System.getenv("ANDROID_KEY_ALIAS")
     && System.getenv("ANDROID_KEY_PASSWORD")
-def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000020').toString().toInteger()
-def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.20"
+def appVersionCode = (project.findProperty('androidVersionCode') ?: '1000018').toString().toInteger()
+def appVersionName = project.findProperty('appVersion')?.toString() ?: "1.0.18"
 
 android {
     namespace = "com.ammarcharef06.learnenglish"

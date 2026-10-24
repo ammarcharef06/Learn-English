@@ -7,8 +7,7 @@ const zStages = (p) => z0(p).stages || {};
 const zStageDone = (p, id) => !!zStages(p)[id]?.done;
 const zStagesDone = (p) => ZERO_STAGES.filter((s) => zStageDone(p, s.id)).length;
 const zLetters = (p) => Object.keys(z0(p).letters || {}).length;
-const zDigraphs = (p) => Object.keys(z0(p).digraphs || {}).length;
-const zWords = (p) => Object.keys(z0(p).words || {}).length;
+const zSentences = (p) => Object.keys(z0(p).sentences || {}).length;
 const zExam = (p) => Number(z0(p).exam?.best || 0);
 const zCert = (p) => !!z0(p).cert?.earned;
 
@@ -43,14 +42,12 @@ export const BADGES = [
   /* ---------- شارات قسم «من الصفر» (A0) ---------- */
   { id: 'a0-first-step', icon: '🌱', ar: 'أول مرحلة تأسيس', en: 'First foundation stage', descAr: 'أتممت أول مرحلة في قسم «من الصفر»', descEn: 'Completed your first A0 stage', check: (p) => zStagesDone(p) >= 1 },
   { id: 'a0-letters', icon: '🔤', ar: 'أتقنت الحروف الستة والعشرين', en: 'All 26 letters', descAr: `أتقنت ${ZERO_TOTALS.letters} حرفاً كلها`, descEn: 'Mastered all 26 letters', check: (p) => zLetters(p) >= ZERO_TOTALS.letters },
-  { id: 'a0-digraphs', icon: '🔡', ar: 'الحروف المركّبة', en: 'Digraphs', descAr: 'أتممت مرحلة الحروف المركّبة', descEn: 'Finished the digraphs stage', check: (p) => zStageDone(p, 'digraphs') && zDigraphs(p) >= ZERO_TOTALS.digraphs },
-  { id: 'a0-numbers', icon: '🔢', ar: 'من ٠ إلى ١٠٠', en: '0 to 100', descAr: 'أتممت مرحلة الأرقام والأرقام الترتيبية', descEn: 'Finished the numbers stage', check: (p) => zStageDone(p, 'numbers') },
-  { id: 'a0-time', icon: '📅', ar: 'الوقت والتقويم', en: 'Time & calendar', descAr: 'أتممت الأيام والشهور والفصول والوقت', descEn: 'Finished days, months, seasons and time', check: (p) => zStageDone(p, 'time') },
-  { id: 'a0-pronouns', icon: '🙋', ar: 'الضمائر و to be', en: 'Pronouns & to be', descAr: 'أتممت مرحلة الضمائر وفعل الكينونة', descEn: 'Finished pronouns and to be', check: (p) => zStageDone(p, 'pronouns') },
-  { id: 'a0-words120', icon: '🧺', ar: 'أول ١٢٠ كلمة', en: 'First 120 words', descAr: `أتقنت ${ZERO_TOTALS.words} كلمة أساسية`, descEn: 'Mastered the first 120 words', check: (p) => zWords(p) >= ZERO_TOTALS.words },
-  { id: 'a0-sentences40', icon: '💬', ar: 'أول ٤٠ جملة', en: 'First 40 sentences', descAr: 'أتممت مرحلة الجمل والأسئلة', descEn: 'Finished the sentences stage', check: (p) => zStageDone(p, 'sentences') },
-  { id: 'a0-reading', icon: '📖', ar: 'قارئ مبتدئ', en: 'Beginner reader', descAr: 'أتممت المرحلة الثامنة: القراءة الأولى', descEn: 'Finished the first reading stage', check: (p) => zStageDone(p, 'reading') },
-  { id: 'a0-stages8', icon: '🗺️', ar: 'كل مراحل التأسيس', en: 'All foundation stages', descAr: `أتممت ${ZERO_STAGES.length} مراحل قسم «من الصفر»`, descEn: 'Completed all 8 A0 stages', check: (p) => zStagesDone(p) >= ZERO_STAGES.length },
+  { id: 'a0-numbers', icon: '🔢', ar: 'الأرقام الأساسية', en: 'Basic numbers', descAr: 'أتممت مرحلة الأرقام من صفر إلى عشرين', descEn: 'Finished the numbers from 0 to 20', check: (p) => zStageDone(p, 'numbers') },
+  { id: 'a0-time', icon: '📅', ar: 'أيام الأسبوع', en: 'Days of the week', descAr: 'أتممت مرحلة أيام الأسبوع', descEn: 'Finished the days of the week', check: (p) => zStageDone(p, 'time') },
+  { id: 'a0-pronouns', icon: '🙋', ar: 'الضمائر الأساسية', en: 'Basic pronouns', descAr: 'أتممت مرحلة الضمائر الأساسية', descEn: 'Finished the basic pronouns', check: (p) => zStageDone(p, 'pronouns') },
+  { id: 'a0-sentences40', icon: '💬', ar: 'عبارات التحية', en: 'Greeting phrases', descAr: 'أتممت مرحلة التحيات والتعارف البسيط', descEn: 'Finished the basic greetings stage', check: (p) => zStageDone(p, 'sentences') },
+  { id: 'a0-greetings', icon: '🗣️', ar: 'متحدث لبق', en: 'Polite speaker', descAr: 'أتقنت ثلاث عبارات تحية أو لباقة', descEn: 'Mastered three greeting or polite phrases', check: (p) => zSentences(p) >= 3 },
+  { id: 'a0-stages5', icon: '🗺️', ar: 'كل مراحل التأسيس', en: 'All foundation stages', descAr: `أتممت ${ZERO_STAGES.length} مراحل قسم «من الصفر»`, descEn: 'Completed all 5 A0 stages', check: (p) => zStagesDone(p) >= ZERO_STAGES.length },
   { id: 'a0-exam90', icon: '🎯', ar: 'نجاح الاختبار النهائي', en: 'A0 exam passed', descAr: '٩٠٪ أو أكثر في الاختبار النهائي', descEn: 'Scored 90%+ on the A0 final exam', check: (p) => zExam(p) >= 90 },
   { id: 'a0-exam-perfect', icon: '💯', ar: 'الاختبار النهائي كامل', en: 'Perfect A0 exam', descAr: '١٠٠٪ في الاختبار النهائي', descEn: 'Scored 100% on the A0 final exam', check: (p) => zExam(p) >= 100 },
   { id: 'a0-certificate', icon: '🎓', ar: 'شهادة التأسيس', en: 'Foundation certificate', descAr: 'استلمت شهادة تأسيس A0', descEn: 'Earned the A0 foundation certificate', check: (p) => zCert(p) },

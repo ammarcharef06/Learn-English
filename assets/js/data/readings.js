@@ -1,4 +1,6 @@
-export const READINGS = [
+import { WORD_GROUPS as A0_WORD_GROUPS, READINGS as A0_READINGS } from './zero-words.js';
+
+const BASE_READINGS = [
   {
     id: "r-a1-1",
     level: "a1",
@@ -309,3 +311,30 @@ export const READINGS = [
     ]
   }
 ];
+
+const FOUNDATION_READINGS = A0_READINGS.map((reading) => {
+  const text = reading.lines.map((line) => line.en).join(' ');
+  const textAr = reading.lines.map((line) => line.ar).join(' ');
+  const normalizedText = text.toLowerCase();
+  return {
+    id: `r-a1-foundation-${reading.id}`,
+    level: 'a1',
+    title: reading.titleEn,
+    titleAr: reading.titleAr,
+    emoji: reading.emoji,
+    text,
+    textAr,
+    words: A0_WORD_GROUPS.flatMap((group) => group.words)
+      .filter((word) => normalizedText.includes(word.en.toLowerCase()))
+      .map((word) => ({ en: word.en, ar: word.ar })),
+    questions: reading.questions.map((question) => ({
+      q: question.q,
+      qAr: question.qAr,
+      options: question.options,
+      answer: question.answer,
+      explain: question.explain,
+    })),
+  };
+});
+
+export const READINGS = [...FOUNDATION_READINGS, ...BASE_READINGS];

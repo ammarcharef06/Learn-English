@@ -1,27 +1,66 @@
-/* تكرار متباعد (SRS) — نظام صناديق بسيط وفعّال */
+/* SuperMemo-2 spaced repetition for every reviewable curriculum item. */
 import { progress, saveProgress } from './store.js';
 import { todayKey, dateKey, addDays, daysBetween } from './utils.js';
 
-export const BOX_DAYS = [0, 1, 2, 4, 7, 14, 30, 60, 120, 240];
+export const MIN_EASE_FACTOR = 1.3;
+export const INITIAL_EASE_FACTOR = 2.5;
+export const MASTERY_INTERVAL_DAYS = 21;
+
+function newItem() {
+  return {
+    algorithm: 'sm2',
+    repetitions: 0,
+    interval: 0,
+    easeFactor: INITIAL_EASE_FACTOR,
+    seen: 0,
+    correct: 0,
+    wrong: 0,
+    lapses: 0,
+    due: todayKey(),
+    last: '',
+  };
+}
+
+function isSm2Item(item) {
+  return item?.algorithm === 'sm2';
+}
 
 export function getItem(itemId) {
-  return progress.items[itemId] || { seen: 0, correct: 0, wrong: 0, box: 0, due: todayKey(), last: '' };
+  const item = progress.items[itemId];
+  return isSm2Item(item) ? item : newItem();
+}
+
+export function nextInterval(item, quality) {
+  if (quality < 3) return 1;
+  if (item.repetitions === 0) return 1;
+  if (item.repetitions === 1) return 6;
+  return Math.max(1, Math.round(item.interval * item.easeFactor));
 }
 
 export function gradeItem(itemId, quality) {
-  // quality: 0 = لم أتذكر، 1 = صعب، 2 = جيد، 3 = سهل
+  if (!Number.isInteger(quality) || quality < 0 || quality > 5) {
+    throw new RangeError('SM-2 quality must be an integer from 0 to 5.');
+  }
+
   saveProgress((p) => {
-    const it = p.items[itemId] || { seen: 0, correct: 0, wrong: 0, box: 0, due: todayKey(), last: '' };
+    const existing = p.items[itemId];
+    const it = isSm2Item(existing) ? existing : newItem();
+    const efDelta = 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02);
+    it.easeFactor = Math.max(MIN_EASE_FACTOR, it.easeFactor + efDelta);
     it.seen += 1;
-    if (quality === 0) {
+
+    if (quality < 3) {
       it.wrong += 1;
-      it.box = 0;
+      it.lapses += 1;
+      it.repetitions = 0;
     } else {
       it.correct += 1;
-      it.box = quality === 1 ? Math.max(1, it.box) : Math.min(BOX_DAYS.length - 1, it.box + (quality === 3 ? 2 : 1));
+      it.interval = nextInterval(it, quality);
+      it.repetitions += 1;
     }
-    const interval = BOX_DAYS[it.box];
-    it.due = dateKey(addDays(new Date(), interval));
+
+    if (quality < 3) it.interval = nextInterval(it, quality);
+    it.due = dateKey(addDays(new Date(), it.interval));
     it.last = todayKey();
     p.items[itemId] = it;
     p.missionActivity = p.missionActivity || {};
@@ -37,7 +76,7 @@ export function gradeItem(itemId, quality) {
 
 export function isDue(itemId, ref = todayKey()) {
   const it = progress.items[itemId];
-  if (!it) return true;
+  if (!isSm2Item(it)) return true;
   return daysBetween(it.due || ref, ref) >= 0;
 }
 
@@ -46,33 +85,35 @@ export function dueCount(entries) {
 }
 
 export function dueEntries(entries, ref = todayKey()) {
-  return entries.filter((entry) => progress.items[entry.itemId]?.seen > 0 && isDue(entry.itemId, ref));
+  return entries.filter((entry) => isSm2Item(progress.items[entry.itemId])
+    && progress.items[entry.itemId].seen > 0 && isDue(entry.itemId, ref));
 }
 
 export function stats(entries) {
   const total = entries.length;
   let newCount = 0, learning = 0, mature = 0, due = 0;
-  for (const e of entries) {
-    const it = progress.items[e.itemId];
-    if (!it || !it.seen) newCount++;
-    else if (it.box >= 5) mature++;
+  for (const entry of entries) {
+    const item = progress.items[entry.itemId];
+    if (!isSm2Item(item) || !item.seen) newCount++;
+    else if (item.repetitions >= 3 && item.interval >= MASTERY_INTERVAL_DAYS) mature++;
     else learning++;
-    if (isDue(e.itemId)) due++;
+    if (isDue(entry.itemId)) due++;
   }
   return { total, new: newCount, learning, mature, due, mastered: mature };
 }
 
-/* ترتيب الأضعف: أخطاء أكثر أولاً، ثم غير المرئية */
 export function weakestFirst(entries, limit = null) {
-  const scored = entries.map((e) => {
-    const it = progress.items[e.itemId];
-    const seen = it ? it.seen : 0;
-    const wrong = it ? it.wrong : 0;
-    const acc = it && seen ? it.correct / seen : 0.5;
-    const weight = (wrong * 2.2) + (seen === 0 ? 0.6 : 0) + (1 - acc);
-    return { e, weight, seen };
+  const scored = entries.map((entry) => {
+    const stored = progress.items[entry.itemId];
+    const item = isSm2Item(stored) ? stored : null;
+    const seen = item ? item.seen : 0;
+    const accuracy = item && seen ? item.correct / seen : 0.5;
+    const lapseWeight = item ? item.lapses * 2.2 : 0;
+    const easePenalty = item ? Math.max(0, INITIAL_EASE_FACTOR - item.easeFactor) : 0;
+    const weight = lapseWeight + (seen === 0 ? 0.6 : 0) + (1 - accuracy) + easePenalty;
+    return { entry, weight };
   }).sort((a, b) => b.weight - a.weight);
-  const out = scored.map((s) => s.e);
+  const out = scored.map(({ entry }) => entry);
   return limit ? out.slice(0, limit) : out;
 }
 
@@ -83,15 +124,17 @@ export function smartReviewPlan(entries, size = 15, ref = todayKey()) {
   const unique = [...new Map(entries.map((entry) => [entry.itemId, entry])).values()];
   const due = unique.flatMap((entry) => {
     const item = progress.items[entry.itemId];
-    if (!item?.seen) return [];
+    if (!isSm2Item(item) || !item.seen) return [];
     const overdueDays = daysBetween(item.due || ref, ref);
     if (overdueDays < 0) return [];
     const accuracy = item.correct / Math.max(1, item.seen);
+    const weak = item.lapses > 0 && (accuracy < 0.7 || item.easeFactor < 2.1);
     return [{
       entry,
-      overdueDays,
-      weak: item.wrong > 0 && (accuracy < 0.7 || item.box < 3),
-      priority: overdueDays * 10 + (1 - accuracy) * 4 + Math.min(item.wrong, 8) * 0.2,
+      weak,
+      priority: overdueDays * 10 + (1 - accuracy) * 4
+        + Math.min(item.lapses, 8) * 0.4
+        + Math.max(0, INITIAL_EASE_FACTOR - item.easeFactor),
     }];
   }).sort((a, b) => b.priority - a.priority || a.entry.itemId.localeCompare(b.entry.itemId));
 
@@ -99,7 +142,7 @@ export function smartReviewPlan(entries, size = 15, ref = todayKey()) {
   const selected = selectedDue.map(({ entry }) => entry);
   const selectedIds = new Set(selected.map((entry) => entry.itemId));
   const freshLimit = Math.min(5, limit - selected.length);
-  const fresh = unique.filter((entry) => !progress.items[entry.itemId]?.seen && !selectedIds.has(entry.itemId))
+  const fresh = unique.filter((entry) => !isSm2Item(progress.items[entry.itemId]) && !selectedIds.has(entry.itemId))
     .slice(0, freshLimit);
 
   return {
@@ -111,10 +154,11 @@ export function smartReviewPlan(entries, size = 15, ref = todayKey()) {
 }
 
 export function masteryOf(itemId) {
-  const it = progress.items[itemId];
-  if (!it || !it.seen) return 0;
-  const acc = it.correct / it.seen;
-  return Math.round(Math.min(1, (it.box / (BOX_DAYS.length - 1)) * 0.7 + acc * 0.3) * 100);
+  const item = progress.items[itemId];
+  if (!isSm2Item(item) || !item.seen) return 0;
+  const repetitionScore = Math.min(1, item.repetitions / 5) * 0.6;
+  const intervalScore = Math.min(1, item.interval / MASTERY_INTERVAL_DAYS) * 0.4;
+  return Math.round((repetitionScore + intervalScore) * 100);
 }
 
 export function buildSession(entries, size = 20) {
@@ -122,18 +166,18 @@ export function buildSession(entries, size = 20) {
   const out = [];
   const take = (arr, limit) => {
     let added = 0;
-    for (const e of arr) {
+    for (const entry of arr) {
       if (added >= limit || out.length >= size) break;
-      if (seen.has(e.itemId)) continue;
-      seen.add(e.itemId);
-      out.push(e);
+      if (seen.has(entry.itemId)) continue;
+      seen.add(entry.itemId);
+      out.push(entry);
       added++;
     }
   };
-  const withItems = entries.filter((e) => progress.items[e.itemId]);
-  const due = withItems.filter((e) => isDue(e.itemId));
-  const learning = withItems.filter((e) => !isDue(e.itemId));
-  const fresh = entries.filter((e) => !progress.items[e.itemId]);
+  const withItems = entries.filter((entry) => isSm2Item(progress.items[entry.itemId]));
+  const due = withItems.filter((entry) => isDue(entry.itemId));
+  const learning = withItems.filter((entry) => !isDue(entry.itemId));
+  const fresh = entries.filter((entry) => !isSm2Item(progress.items[entry.itemId]));
 
   take(due, Math.ceil(size * 0.6));
   take(fresh, Math.ceil(size * 0.4));

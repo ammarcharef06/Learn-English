@@ -48,7 +48,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "opportunity", ar: "فرصة", pos: "noun", emoji: "🚪", example: { en: "This job is a great opportunity for me.", ar: "هذه الوظيفة فرصة رائعة لي." } },
         { en: "interview", ar: "مقابلة عمل", pos: "noun", emoji: "🎤", example: { en: "I have a job interview on Monday morning.", ar: "لدي مقابلة عمل صباح يوم الاثنين." } },
         { en: "experience", ar: "خبرة", pos: "noun", emoji: "📋", example: { en: "She has five years of experience in marketing.", ar: "لديها خمس سنوات من الخبرة في التسويق." } },
@@ -130,7 +130,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "stress", ar: "ضغط نفسي", pos: "noun", emoji: "😰", example: { en: "Too much stress can affect your sleep.", ar: "الضغط النفسي الشديد قد يؤثر في نومك." } },
         { en: "anxiety", ar: "قلق", pos: "noun", emoji: "😟", example: { en: "Anxiety can stop you from sleeping well at night.", ar: "القلق قد يمنعك من النوم جيداً في الليل." } },
         { en: "habit", ar: "عادة", pos: "noun", emoji: "🔁", example: { en: "Reading before bed is a good habit.", ar: "القراءة قبل النوم عادة جيدة." } },
@@ -212,7 +212,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "environment", ar: "البيئة", pos: "noun", emoji: "🌍", example: { en: "We must protect the environment for future generations.", ar: "علينا حماية البيئة للأجيال القادمة." } },
         { en: "pollution", ar: "تلوث", pos: "noun", emoji: "🏭", example: { en: "Air pollution is a serious problem in big cities.", ar: "تلوث الهواء مشكلة خطيرة في المدن الكبيرة." } },
         { en: "recycle", ar: "يعيد التدوير", pos: "verb", emoji: "♻️", example: { en: "We recycle paper and glass at home.", ar: "نعيد تدوير الورق والزجاج في المنزل." } },
@@ -294,7 +294,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "opinion", ar: "رأي", pos: "noun", emoji: "💭", example: { en: "In my opinion, the news is sometimes too dramatic.", ar: "في رأيي أن الأخبار مبالغ فيها أحياناً." } },
         { en: "headline", ar: "عنوان رئيسي", pos: "noun", emoji: "📰", example: { en: "The headline on the front page was shocking.", ar: "كان العنوان الرئيسي في الصفحة الأولى صادماً." } },
         { en: "article", ar: "مقال", pos: "noun", emoji: "📄", example: { en: "I read an interesting article about healthy eating.", ar: "قرأت مقالاً شيقاً عن الأكل الصحي." } },
@@ -377,7 +377,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "decision", ar: "قرار", pos: "noun", emoji: "🧩", example: { en: "Moving abroad was the biggest decision of my life.", ar: "كان الانتقال إلى الخارج أكبر قرار في حياتي." } },
         { en: "goal", ar: "هدف", pos: "noun", emoji: "🥅", example: { en: "My main goal is to speak English fluently.", ar: "هدفي الأساسي أن أتحدث الإنجليزية بطلاقة." } },
         { en: "career", ar: "مسار مهني", pos: "noun", emoji: "🚀", example: { en: "She wants a career in computer science.", ar: "تريد مساراً مهنياً في علوم الحاسوب." } },
@@ -459,7 +459,7 @@ export const LEVEL_B1 = {
           ]
         }
       ],
-      vocab: [
+      vocabulary: [
         { en: "relationship", ar: "علاقة", pos: "noun", emoji: "💞", example: { en: "A good relationship needs trust and honest talks.", ar: "العلاقة الجيدة تحتاج إلى ثقة وحديث صادق." } },
         { en: "trust", ar: "ثقة", pos: "noun", emoji: "🔐", example: { en: "Trust is the most important part of any friendship.", ar: "الثقة أهم جزء في أي صداقة." } },
         { en: "argue", ar: "يتجادل", pos: "verb", emoji: "💥", example: { en: "They sometimes argue about small things at home.", ar: "يتجادلان أحياناً حول أمور صغيرة في البيت." } },
@@ -501,3 +501,127 @@ export const LEVEL_B1 = {
     }
   ]
 };
+
+const B1_UNIT_ENRICHMENT = {
+  b1u1: {
+    phonetics: [
+      { id: "interview", en: "interview", ipa: "/ˈɪntəvjuː/", ar: "مقابلة", contrastPairs: [{ en: "work / walk", ar: "ميّز الحركة /ɜː/ في work عن /ɔː/ في walk." }], connectedSpeech: [{ en: "I've worked here for five years.", ar: "تُختزل I've إلى /aɪv/ مع بقاء have مساعدةً للمضارع التام." }], intonation: [{ en: "I led a team of six. ↘ | Six? ↗", ar: "هبوط في تقرير الخبرة، وصعود قصير لإظهار الاستيضاح أو طلب التأكيد." }] },
+      { id: "responsibility", en: "responsibility", ipa: "/rɪˌspɒnsəˈbɪləti/", ar: "مسؤولية", contrastPairs: [{ en: "ship / sheep", ar: "ميّز /ɪ/ القصيرة عن /iː/ الطويلة في مقاطع الكلمة." }], connectedSpeech: [{ en: "take on responsibility", ar: "يرتبط حرف الجر on بالفعل take مع إبقاء النبر على take وsponsibility." }], intonation: [{ en: "Although the deadline was tight, we finished on time. ↗ ... ↘", ar: "ارتفاع محدود في الجزء التمهيدي غير المكتمل، ثم هبوط عند النتيجة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "experience-count", incorrect: "I have many experiences in sales.", corrected: "I have a lot of experience in sales.", pattern: "جمع experience عند قصد الخبرة العامة", explanationAr: "تُستعمل experience غالباً اسماً غير معدود للخبرة العامة؛ أما experiences فتشير إلى تجارب منفصلة." },
+      { id: "apply-preposition", incorrect: "I applied the job.", corrected: "I applied for the job.", pattern: "حذف حرف الجر بعد apply", explanationAr: "نستخدم apply for عند التقدم لوظيفة أو فرصة." },
+    ],
+    academic_focus: [
+      { id: "achieve", term: "achieve", meaningAr: "يحقق أو ينجز", example: { en: "The team achieved its quarterly target.", ar: "حقق الفريق هدفه الفصلي." }, paraphrasing: [{ original: "We reached our target.", paraphrase: "We achieved our objective." }], idioms: [{ phrase: "go the extra mile", meaningAr: "يبذل جهداً إضافياً" }], readingAnalysis: [{ term: "objective", meaningAr: "هدف محدد تسعى جهة إلى تحقيقه" }] },
+      { id: "evaluate", term: "evaluate", meaningAr: "يقيّم", example: { en: "The manager evaluated the proposal using clear criteria.", ar: "قيّم المدير المقترح وفق معايير واضحة." }, paraphrasing: [{ original: "The manager looked carefully at the plan.", paraphrase: "The manager evaluated the plan." }] },
+    ],
+    vocabulary: {
+      opportunity: { collocations: [{ en: "a valuable opportunity", ar: "فرصة قيّمة" }] },
+      "take on": { collocations: [{ en: "take on responsibility", ar: "يتحمّل مسؤولية" }], phrasalVerbs: [{ en: "step up", ar: "يتولى دوراً أكبر عند الحاجة", example: { en: "She stepped up to lead the project.", ar: "تقدمت لتقود المشروع." } }] },
+    },
+  },
+  b1u2: {
+    phonetics: [
+      { id: "anxiety", en: "anxiety", ipa: "/æŋˈzaɪəti/", ar: "قلق", contrastPairs: [{ en: "think / sink", ar: "ميّز /θ/ عن /s/ ولا تستبدل th بسين." }], connectedSpeech: [{ en: "I've been trying to sleep better.", ar: "يُربط I've been في سلسلة خفيفة، ويقع النبر الرئيس على trying وbetter." }], intonation: [{ en: "I've been feeling stressed lately. ↘ | Really? ↗", ar: "هبوط عند الإفصاح، وصعود متعاطف عند الاستجابة." }] },
+      { id: "overcome", en: "overcome", ipa: "/ˌəʊvəˈkʌm/", ar: "يتغلب على", contrastPairs: [{ en: "full / fool", ar: "انتبه إلى اختلاف /ʊ/ و/uː/ في المقاطع المنبورة وغير المنبورة." }], connectedSpeech: [{ en: "a habit that is hard to give up", ar: "اربط that is مع اختزال is إلى /əz/ دون محو الحد الفاصل." }], intonation: [{ en: "If I take a short walk, I feel calmer. ↗ ... ↘", ar: "جزء الشرط يظل مفتوحاً بنبرة غير نهائية، ثم تهبط النبرة في النتيجة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "advice-count", incorrect: "She gave me an advice.", corrected: "She gave me some advice.", pattern: "معاملة advice كاسم معدود", explanationAr: "advice اسم غير معدود؛ قل some advice أو a piece of advice." },
+      { id: "habit-gerund", incorrect: "I am used to wake up early.", corrected: "I am used to waking up early.", pattern: "استخدام المصدر بعد be used to", explanationAr: "في be used to تكون to حرف جر، لذلك يتبعها اسم أو فعل منتهٍ بـ-ing." },
+    ],
+    academic_focus: [
+      { id: "affect", term: "affect", meaningAr: "يؤثر في", example: { en: "Regular sleep can affect concentration.", ar: "قد يؤثر النوم المنتظم في التركيز." }, paraphrasing: [{ original: "Stress changes how well I sleep.", paraphrase: "Stress affects my sleep quality." }], idioms: [{ phrase: "burn the candle at both ends", meaningAr: "يرهق نفسه بالعمل دون راحة كافية" }], readingAnalysis: [{ term: "factor", meaningAr: "عامل يسهم في نتيجة أو ظاهرة" }] },
+      { id: "maintain", term: "maintain", meaningAr: "يحافظ على", example: { en: "A steady routine helps maintain well-being.", ar: "يساعد الروتين الثابت على الحفاظ على العافية." }, paraphrasing: [{ original: "Keep a healthy balance.", paraphrase: "Maintain a healthy balance." }] },
+    ],
+    vocabulary: {
+      reduce: { collocations: [{ en: "reduce stress", ar: "يخفف التوتر" }] },
+      "give up": { phrasalVerbs: [{ en: "cut down on", ar: "يقلل من استهلاك شيء أو ممارسته", example: { en: "I am trying to cut down on coffee.", ar: "أحاول التقليل من القهوة." } }] },
+    },
+  },
+  b1u3: {
+    phonetics: [
+      { id: "environment", en: "environment", ipa: "/ɪnˈvaɪrənmənt/", ar: "البيئة", contrastPairs: [{ en: "vest / best", ar: "ميّز /v/ المجهورة عن /b/ الإطباقية." }], connectedSpeech: [{ en: "Plastic is recycled in many cities.", ar: "تُوصل is recycled مع بقاء نهاية /z/ قبل /r/ واضحة." }], intonation: [{ en: "We could improve recycling, couldn't we? ↘↗", ar: "هبوط في الرأي ثم صعود السؤال الذيلي لطلب الاتفاق." }] },
+      { id: "society", en: "society", ipa: "/səˈsaɪəti/", ar: "مجتمع", contrastPairs: [{ en: "thin / tin", ar: "ميّز /θ/ عن /t/ في كلمات البيئة الشائعة." }], connectedSpeech: [{ en: "reduce waste and save energy", ar: "اربط and بالكلمة التالية مع إبراز الفعلين المتوازيين." }], intonation: [{ en: "Although public transport is cheaper, it can be slow. ↗ ... ↘", ar: "تنغيم غير نهائي في التنازل ثم هبوط عند الفكرة الرئيسة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "despite-clause", incorrect: "Despite it was raining, we recycled.", corrected: "Although it was raining, we recycled.", pattern: "وضع جملة كاملة بعد despite", explanationAr: "يتبع despite اسم أو تركيب اسمي؛ أما although فيتبعها فاعل وفعل." },
+      { id: "damage-preposition", incorrect: "Plastic damages to the ocean.", corrected: "Plastic damages the ocean.", pattern: "إضافة حرف جر بعد damage", explanationAr: "damage فعل متعدٍ يأخذ المفعول مباشرة؛ الاسم damage قد يأتي بعده to في تراكيب أخرى." },
+    ],
+    academic_focus: [
+      { id: "impact", term: "impact", meaningAr: "أثر أو تأثير", example: { en: "The report examines the impact of traffic on air quality.", ar: "يدرس التقرير أثر حركة المرور في جودة الهواء." }, paraphrasing: [{ original: "Traffic affects air quality.", paraphrase: "Traffic has an impact on air quality." }], idioms: [{ phrase: "make a difference", meaningAr: "يحدث فرقاً أو أثراً" }], readingAnalysis: [{ term: "impact", meaningAr: "نتيجة أو أثر ملحوظ لسبب ما" }] },
+      { id: "approach", term: "approach", meaningAr: "نهج أو طريقة معالجة", example: { en: "The city adopted a new approach to waste reduction.", ar: "اعتمدت المدينة نهجاً جديداً للحد من النفايات." }, paraphrasing: [{ original: "The city tried a new method.", paraphrase: "The city adopted a new approach." }] },
+    ],
+    vocabulary: {
+      pollution: { collocations: [{ en: "air pollution", ar: "تلوث الهواء" }] },
+      recycle: { phrasalVerbs: [{ en: "cut down on", ar: "يقلل من استخدام شيء", example: { en: "We should cut down on single-use plastic.", ar: "ينبغي أن نقلل من البلاستيك أحادي الاستخدام." } }] },
+    },
+  },
+  b1u4: {
+    phonetics: [
+      { id: "reliable", en: "reliable", ipa: "/rɪˈlaɪəbəl/", ar: "موثوق", contrastPairs: [{ en: "source / resource", ar: "قارن /s/ المهموسة في source مع /z/ المجهورة في resource." }], connectedSpeech: [{ en: "The article has been shared widely.", ar: "تلتقي /z/ في has بنطق been مع بقاء النبر على shared وwidely." }], intonation: [{ en: "The source is reliable, isn't it? ↘↗", ar: "هبوط في التقييم ثم صعود السؤال الذيلي لطلب التحقق." }] },
+      { id: "actually", en: "actually", ipa: "/ˈæktʃuəli/", ar: "في الواقع", contrastPairs: [{ en: "choose / shoes", ar: "ميّز /tʃ/ عن /ʃ/ في نطق الكلمات المتقاربة." }], connectedSpeech: [{ en: "I actually agree with part of the report.", ar: "اربط actually agree دون حذف الحركة الأولى في الكلمة المنبورة." }], intonation: [{ en: "I see your point; however, the evidence is limited. ↘↗ ... ↘", ar: "هبوط جزئي بعد الاعتراف، ثم ارتفاع عند الاستدراك وهبوط في الخلاصة." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "actually-false-friend", incorrect: "Actually, I arrived at six.", corrected: "In fact, I arrived at six.", pattern: "استخدام actually بمعنى حالياً", explanationAr: "actually تعني في الحقيقة/واقع الأمر، ولا تعني عادةً حالياً؛ استخدم currently للمعنى الزمني." },
+      { id: "say-tell", incorrect: "The journalist said me the story.", corrected: "The journalist told me the story.", pattern: "الخلط بين say وtell", explanationAr: "tell يأخذ الشخص مباشرةً غالباً، أما say فيحتاج to قبل الشخص." },
+    ],
+    academic_focus: [
+      { id: "evidence", term: "evidence", meaningAr: "أدلة أو شواهد", example: { en: "The article provides evidence for its main claim.", ar: "يقدم المقال أدلة على فكرته الرئيسة." }, paraphrasing: [{ original: "The report supports this idea with facts.", paraphrase: "The report provides evidence for this claim." }], idioms: [{ phrase: "take something with a grain of salt", meaningAr: "يتعامل مع معلومة بشيء من التحفظ" }], readingAnalysis: [{ term: "claim", meaningAr: "الفكرة أو الادعاء الذي يسعى الكاتب إلى دعمه" }] },
+      { id: "indicate", term: "indicate", meaningAr: "يشير إلى أو يدل على", example: { en: "The survey indicates a change in public opinion.", ar: "يشير الاستطلاع إلى تغير في الرأي العام." }, paraphrasing: [{ original: "The results show a change.", paraphrase: "The results indicate a shift." }] },
+    ],
+    vocabulary: {
+      source: { collocations: [{ en: "reliable source", ar: "مصدر موثوق" }] },
+      consider: { phrasalVerbs: [{ en: "point out", ar: "يشير إلى معلومة أو يلفت الانتباه لها", example: { en: "The editor pointed out a missing source.", ar: "أشار المحرر إلى مصدر مفقود." } }] },
+    },
+  },
+  b1u5: {
+    phonetics: [
+      { id: "qualification", en: "qualification", ipa: "/ˌkwɒlɪfɪˈkeɪʃən/", ar: "مؤهل", contrastPairs: [{ en: "live / leave", ar: "ميّز /ɪ/ القصيرة عن /iː/ الطويلة." }], connectedSpeech: [{ en: "If I had more time, I would revise every day.", ar: "اربط had more وwould revise مع وضوح أدوات الشرط." }], intonation: [{ en: "If I receive the scholarship, I'll accept it. ↗ ... ↘", ar: "نبرة معلقة في الشرط وهبوط عند النتيجة." }] },
+      { id: "determined", en: "determined", ipa: "/dɪˈtɜːmɪnd/", ar: "مصمم", contrastPairs: [{ en: "degree / agree", ar: "قارن النبر وبداية /dʒ/ في degree مع /ə/ في agree." }], connectedSpeech: [{ en: "I plan to study abroad next year.", ar: "قد يختزل to إلى /tə/ في الكلام المتصل." }], intonation: [{ en: "I could study locally, or I could apply abroad. ↗ ... ↘", ar: "ارتفاع عند الخيار الأول وهبوط عند الخيار الأخير." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "study-preposition", incorrect: "I am studying in university.", corrected: "I am studying at university.", pattern: "اختيار حرف الجر مع المؤسسة", explanationAr: "يشيع at university للحديث عن الدراسة الجامعية كمؤسسة؛ وقد يتغير الحرف حسب المقصود والمكان." },
+      { id: "if-will", incorrect: "If I will pass, I will graduate.", corrected: "If I pass, I will graduate.", pattern: "استخدام will داخل شرط المستقبل", explanationAr: "في الشرط الأول نستخدم المضارع البسيط في جملة if، ثم will في النتيجة." },
+    ],
+    academic_focus: [
+      { id: "require", term: "require", meaningAr: "يتطلب", example: { en: "The programme requires a recognised qualification.", ar: "يتطلب البرنامج مؤهلاً معترفاً به." }, paraphrasing: [{ original: "You need a degree for this role.", paraphrase: "This role requires a degree." }], idioms: [{ phrase: "keep your options open", meaningAr: "يبقي خياراته مفتوحة" }], readingAnalysis: [{ term: "requirement", meaningAr: "شرط أو مؤهل مطلوب" }] },
+      { id: "benefit", term: "benefit", meaningAr: "فائدة أو منفعة", example: { en: "The course offers practical benefits for new graduates.", ar: "تقدم الدورة فوائد عملية للخريجين الجدد." }, paraphrasing: [{ original: "The course is useful for graduates.", paraphrase: "Graduates benefit from the course." }] },
+    ],
+    vocabulary: {
+      qualification: { collocations: [{ en: "academic qualification", ar: "مؤهل أكاديمي" }] },
+      prepare: { phrasalVerbs: [{ en: "sign up for", ar: "يسجل في دورة أو نشاط", example: { en: "I signed up for an evening course.", ar: "سجلت في دورة مسائية." } }] },
+    },
+  },
+  b1u6: {
+    phonetics: [
+      { id: "misunderstand", en: "misunderstand", ipa: "/ˌmɪsʌndəˈstænd/", ar: "يسيء الفهم", contrastPairs: [{ en: "think / this", ar: "ميّز /θ/ المهموسة عن /ð/ المجهورة." }], connectedSpeech: [{ en: "I should have listened more carefully.", ar: "قد تُنطق should have باختزال خفيف، مع بقاء معنى الندم على الماضي." }], intonation: [{ en: "I understand how you feel, but we need a solution. ↘↗ ... ↘", ar: "هبوط متعاطف ثم ارتفاع قبل الاستدراك وهبوط عند الاقتراح." }] },
+      { id: "compromise", en: "compromise", ipa: "/ˈkɒmprəmaɪz/", ar: "حل وسط", contrastPairs: [{ en: "advice / advise", ar: "تمييز نهاية /s/ في الاسم advice عن /z/ في الفعل advise." }], connectedSpeech: [{ en: "Let's talk it through before we decide.", ar: "اربط talk it مع تشديد النبر على through وdecide." }], intonation: [{ en: "Would you be willing to meet halfway? ↘↗", ar: "هبوط مهذب يتبعه ارتفاع خفيف لفتح باب التفاوض." }] },
+    ],
+    arabic_l1_transfers: [
+      { id: "apologize-preposition", incorrect: "I apologized from my friend.", corrected: "I apologized to my friend.", pattern: "نقل حرف الجر بعد الاعتذار", explanationAr: "نستخدم apologize to للشخص وapologize for للخطأ أو الفعل." },
+      { id: "look-forward-gerund", incorrect: "I look forward to meet you.", corrected: "I look forward to meeting you.", pattern: "استخدام المصدر بعد to في تعبير ثابت", explanationAr: "في look forward to تكون to حرف جر، لذلك يتبعها اسم أو فعل بـ-ing." },
+    ],
+    academic_focus: [
+      { id: "resolve", term: "resolve", meaningAr: "يحل أو يعالج (مشكلة)", example: { en: "The two colleagues resolved the disagreement calmly.", ar: "حل الزميلان الخلاف بهدوء." }, paraphrasing: [{ original: "They found an answer to the problem.", paraphrase: "They resolved the problem." }], idioms: [{ phrase: "clear the air", meaningAr: "يضع حداً للتوتر بإجراء نقاش صريح" }], readingAnalysis: [{ term: "resolution", meaningAr: "الطريقة أو النتيجة التي تنتهي بها المشكلة" }] },
+      { id: "communicate", term: "communicate", meaningAr: "يتواصل أو ينقل معنى", example: { en: "Clear language helps people communicate their needs.", ar: "تساعد اللغة الواضحة الناس على التعبير عن احتياجاتهم." }, paraphrasing: [{ original: "They talked openly about the issue.", paraphrase: "They communicated openly about the issue." }] },
+    ],
+    vocabulary: {
+      trust: { collocations: [{ en: "build trust", ar: "يبني الثقة" }] },
+      "get on with": { phrasalVerbs: [{ en: "work through", ar: "يعالج صعوبة أو مشكلة خطوة بخطوة", example: { en: "We worked through the disagreement together.", ar: "عالجنا الخلاف معاً." } }] },
+    },
+  },
+};
+
+for (const unit of LEVEL_B1.units) {
+  const enrichment = B1_UNIT_ENRICHMENT[unit.id];
+  Object.assign(unit, {
+    phonetics: enrichment.phonetics,
+    arabic_l1_transfers: enrichment.arabic_l1_transfers,
+    academic_focus: enrichment.academic_focus,
+  });
+  for (const word of unit.vocabulary) {
+    const addition = enrichment.vocabulary[word.en];
+    if (addition) Object.assign(word, addition);
+  }
+}

@@ -21,7 +21,7 @@ export function renderLessons(host) {
           <p>${esc(lv.summary || '')}</p>
           <div class="row row--wrap" style="gap:6px;margin-top:6px">
             <span class="chip">${lv.units.length} ${esc(t('lessons.units'))}</span>
-            <span class="chip">${lv.units.reduce((n, u) => n + u.vocab.length, 0)} ${esc(t('common.words'))}</span>
+            <span class="chip">${lv.units.reduce((n, u) => n + u.vocabulary.length, 0)} ${esc(t('common.words'))}</span>
           </div>
           <div class="progress" style="margin-top:10px;background:rgba(255,255,255,.28)"><i style="width:${p}%;background:#fff"></i></div>
           <span class="tiny">${p}% ${esc(t('common.done'))}</span>
@@ -67,7 +67,7 @@ export function renderLevel(host, levelId) {
             <div class="small muted">${esc(u.goal || '')}</div>
             <div class="unit-card__meta">
               <span class="chip">${u.grammar.length} ${esc(t('common.grammar'))}</span>
-              <span class="chip">${u.vocab.length} ${esc(t('common.words'))}</span>
+              <span class="chip">${u.vocabulary.length} ${esc(t('common.words'))}</span>
               <span class="chip chip--brand">${up}%</span>
             </div>
             <div style="margin-top:8px">${progressBar(up, up >= 100 ? 'progress--ok' : '')}</div>
@@ -136,9 +136,9 @@ export function renderUnit(host, unitId) {
     }).join('')}
 
     <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">🧠</span><h2>${t('common.vocab')} (${u.vocab.length})</h2></div>
+      <div class="card__title"><span class="ico">🧠</span><h2>${t('common.vocab')} (${u.vocabulary.length})</h2></div>
       <div class="vocab-grid">
-        ${u.vocab.map((v) => `<div class="vocab-card">
+        ${u.vocabulary.map((v) => `<div class="vocab-card">
           <span class="vocab-card__emoji">${v.emoji || '🔹'}</span>
           <span class="grow">
             <div class="row row--between" style="gap:6px">
@@ -252,4 +252,3 @@ export function renderLesson(host, unitId, index) {
     });
   });
 }
-

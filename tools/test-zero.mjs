@@ -264,11 +264,12 @@ describe('القراءات الأربع', () => {
 /* ============================================================
    2) المراحل
    ============================================================ */
-describe('المراحل الثمانية', () => {
-  it('8 مراحل بمعرّفات فريدة وبترتيب 1..8', () => {
-    eq(ZERO_STAGES.length, 8, 'عدد المراحل');
-    eq(new Set(ZERO_STAGES.map((s) => s.id)).size, 8, 'معرّفات فريدة');
-    eq(ZERO_STAGES.map((s) => s.n).join(','), '1,2,3,4,5,6,7,8', 'ترقيم المراحل');
+describe('مراحل A0 الأساسية الخمس', () => {
+  it('5 مراحل بمعرّفات فريدة وبترتيب 1..5', () => {
+    eq(ZERO_STAGES.length, 5, 'عدد المراحل');
+    eq(new Set(ZERO_STAGES.map((s) => s.id)).size, 5, 'معرّفات فريدة');
+    eq(ZERO_STAGES.map((s) => s.n).join(','), '1,2,3,4,5', 'ترقيم المراحل');
+    assert(!ZERO_STAGES.some((s) => ['digraphs', 'words', 'reading'].includes(s.id)), 'محتوى A1 ما زال في مسار A0');
   });
   it('كل مرحلة لها محتوى فعلي', () => {
     for (const s of ZERO_STAGES) {
@@ -279,13 +280,16 @@ describe('المراحل الثمانية', () => {
   });
   it('الإجماليات مطابقة لعدد العناصر الفعلي', () => {
     eq(ZERO_TOTALS.letters, 26, 'إجمالي الحروف');
-    eq(ZERO_TOTALS.digraphs, 12, 'إجمالي المركّبة');
-    eq(ZERO_TOTALS.words, 120, 'إجمالي الكلمات');
-    eq(ZERO_TOTALS.sentences, 40, 'إجمالي الجمل');
-    eq(ZERO_TOTALS.readings, 4, 'إجمالي القراءات');
+    eq(ZERO_TOTALS.digraphs, 0, 'الحروف المركبة منقولة إلى A1');
+    eq(ZERO_TOTALS.numbers, 21, 'الأرقام الأساسية من صفر إلى عشرين');
+    eq(ZERO_TOTALS.days, 7, 'أيام الأسبوع');
+    eq(ZERO_TOTALS.pronouns, 8, 'الضمائر الأساسية');
+    eq(ZERO_TOTALS.words, 0, 'الكلمات الموضوعية منقولة إلى A1');
+    eq(ZERO_TOTALS.sentences, 15, 'عبارات التحية والتعارف');
+    eq(ZERO_TOTALS.readings, 0, 'القراءات منقولة إلى A1');
     const sum = ZERO_STAGES.reduce((n, s) => n + zeroStageSize(s.id), 0);
     eq(ZERO_TOTALS.items, sum, 'إجمالي عناصر المراحل');
-    gte(ZERO_TOTALS.items, 300, 'إجمالي عناصر المرحلة');
+    gte(ZERO_TOTALS.items, 70, 'إجمالي عناصر المرحلة');
   });
   it('كل عنصر له معنى عربي (أو نطق) ومفتاح فريد', () => {
     for (const s of ZERO_STAGES) {
@@ -364,9 +368,9 @@ describe('الاختبار النهائي (~30 سؤالاً)', () => {
     eq(qs.length, 30, 'عدد أسئلة الاختبار');
     eq(new Set(qs.map((q) => q.id)).size, 30, 'أسئلة فريدة');
   });
-  it('يغطّي 6 مراحل مختلفة على الأقل', () => {
+  it('يغطي كل المراحل الخمس', () => {
     const topics = new Set(zeroExamQuestions(30).map((q) => q.topic));
-    gte(topics.size, 6, 'عدد المراحل المغطاة');
+    gte(topics.size, 5, 'عدد المراحل المغطاة');
   });
   it('كل سؤال سليم', () => {
     for (const q of zeroExamQuestions(30)) {
@@ -408,13 +412,13 @@ describe('إحصاءات التقدّم (zeroStats)', () => {
     for (const g of WORD_GROUPS) for (const w of g.words) zero.words[w.en] = true;
     const st = zeroStats({ zero });
     eq(st.percent, 100, 'نسبة الإتقان');
-    eq(st.doneStages, 8, 'المراحل');
+    eq(st.doneStages, 5, 'المراحل');
     eq(st.lettersMastered, 26, 'الحروف');
-    eq(st.wordsLearned, 120, 'الكلمات');
+    eq(st.wordsLearned, 0, 'الكلمات الموضوعية أصبحت ضمن A1');
     eq(st.readyForA1, true, 'الاستحقاق');
     assert(/A1/.test(zeroAdvice(st).text), 'التوصية يجب أن تذكر A1');
   });
-  it('نسبة 100% تتطلّب اختباراً كاملاً (96% تعطي 99%)', () => {
+  it('نسبة الإتقان تتطلب المراحل والحروف والاختبار', () => {
     const zero = { stages: {}, letters: {}, words: {}, exam: { best: 96 } };
     for (const s of ZERO_STAGES) zero.stages[s.id] = { seen: true, done: true };
     for (const l of LETTERS) zero.letters[l.id] = true;
@@ -426,7 +430,7 @@ describe('إحصاءات التقدّم (zeroStats)', () => {
   });
   it('النسبة تتقدّم بشكل رتيب مع المراحل', () => {
     let last = -1;
-    for (let k = 0; k <= 8; k++) {
+    for (let k = 0; k <= 5; k++) {
       const zero = { stages: {}, letters: {}, words: {}, exam: { best: 0 } };
       ZERO_STAGES.slice(0, k).forEach((s) => { zero.stages[s.id] = { done: true }; });
       const p = zeroStats({ zero }).percent;
@@ -442,9 +446,9 @@ describe('كتابة التقدّم (zeroflow)', () => {
     resetProgress();
     const st = flow.zeroSnapshot();
     eq(st.percent, 0, 'النسبة بعد التصفير');
-    eq(st.stageList.length, 8, 'قائمة المراحل');
-    eq(st.wordGroups.length, 8, 'قائمة مجموعات الكلمات');
-    eq(st.wordGroups.reduce((n, g) => n + g.words.length, 0), 120, 'كلمات اللقطة');
+    eq(st.stageList.length, 5, 'قائمة المراحل');
+    eq(st.wordGroups.length, 0, 'مفردات A0 المنقولة غير معروضة في هذا المسار');
+    eq(st.readingList.length, 0, 'قراءات A0 المنقولة غير معروضة في هذا المسار');
   });
   it('زيارة مرحلة وإتمامها يُسجّلان', () => {
     flow.markStageSeen('letters');
@@ -577,9 +581,9 @@ describe('كتابة التقدّم (zeroflow)', () => {
 });
 
 describe('شارات التأسيس', () => {
-  it('13 شارة A0 بمعرّفات a0-* وأوصاف عربية', () => {
+  it('11 شارة A0 بمعرّفات a0-* وأوصاف عربية', () => {
     const A0 = gamify.badgesWithState().filter((b) => b.id.startsWith('a0-'));
-    eq(A0.length, 13, 'عدد شارات A0');
+    eq(A0.length, 11, 'عدد شارات A0');
     for (const b of A0) {
       truthy(b.icon && b.ar && b.en && b.descAr && b.descEn, `شارة ناقصة: ${b.id}`);
       eq(typeof b.check, 'function', `شارة بلا دالة فحص: ${b.id}`);
@@ -589,9 +593,7 @@ describe('شارات التأسيس', () => {
     resetProgress();
     for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
     for (const l of LETTERS) flow.markLetter(l.id, true);
-    for (const d of DIGRAPHS) flow.markDigraph(d.id, true);
-    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
-    flow.markReadingDone('zr1', 4, 4);
+    for (const phrase of SENTENCES.filter((item) => ['greetings', 'polite', 'intro'].includes(item.group)).slice(0, 3)) flow.markSentence(phrase.en, true);
     flow.recordZeroExam(30, 30);
     flow.grantCertificate();
     gamify.evaluateBadges();
@@ -619,7 +621,6 @@ describe('التوصية بالانتقال إلى A1 (بلا قفل)', () => {
     resetProgress();
     for (const s of ZERO_STAGES) flow.markStageDone(s.id, 100);
     for (const l of LETTERS) flow.markLetter(l.id, true);
-    for (const g of WORD_GROUPS) for (const w of g.words) flow.markWord(w.en, true);
     flow.recordZeroExam(30, 30);
     const rec = flow.a1Recommendation();
     eq(rec.ready, true, 'جاهزة');
@@ -695,14 +696,14 @@ describe('لوح الكتابة التفاعلي', () => {
 });
 
 /* ============================================================
-   6) محتوى A0 وغلاف الأكاديمية المشترك
+   6) ملفات القسم وربطها بالموقع
    ============================================================ */
-describe('مسارات A0 المتكاملة مع غلاف الأكاديمية', () => {
+describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
   const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
   const zeroHtml = readFileSync(join(ROOT, 'zero.html'), 'utf8');
   const zeroMain = readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8');
-  const academyManifest = JSON.parse(readFileSync(join(ROOT, 'manifest.webmanifest'), 'utf8'));
+  const manZero = JSON.parse(readFileSync(join(ROOT, 'manifest-zero.webmanifest'), 'utf8'));
   const sw = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
   const shellJs = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
   const shellSrc = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
@@ -712,7 +713,7 @@ describe('مسارات A0 المتكاملة مع غلاف الأكاديمية'
   const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
   const entryJs = readFileSync(join(ROOT, 'assets/js/views/zero-entry.js'), 'utf8');
 
-  it('كل مسارات A0 مسجّلة في نقطة دخول محتوى التأسيس', () => {
+  it('كل مسارات A0 مسجّلة في نقطة دخول الصفحة المستقلة', () => {
     for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
       assert(zeroMain.includes(`route('${r}'`), `المسار ${r} غير مسجّل في zero-main.js`);
     }
@@ -720,43 +721,39 @@ describe('مسارات A0 المتكاملة مع غلاف الأكاديمية'
     assert(!/zero-(stage|exam|shell)\.js/.test(app), 'app.js يستورد واجهات A0');
     assert(/isAuthed\(\)/.test(zeroMain), 'صفحة A0 لا تحمي نفسها بجلسة الموقع');
   });
-  it('شاشة الاختيار تُستدعى مرة واحدة عند إقلاع الموقع', () => {
-    assert(/shouldShowZeroChoice\(\)/.test(app), 'لا استدعاء لشاشة الاختيار');
-    assert(/showZeroChoice\(\)/.test(app), 'لا عرض لشاشة الاختيار');
+  it('يفتح الموقع مباشرة على لوحة البدء دون شاشة اختيار أولية', () => {
+    assert(!/zero-entry\.js/.test(app), 'app.js ما زال يحمّل شاشة اختيار A0/A1');
+    assert(/route\('\/'/.test(app), 'الموقع لا يفتح لوحة البداية مباشرة');
   });
-  it('صفحة محتوى A0 تستخدم هيكل التنقّل وهوية التثبيت المشتركة', () => {
+  it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
     for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
       assert(zeroHtml.includes(id), `zero.html ينقصه ${id}`);
     }
     assert(/class="topbar" id="topbar"/.test(zeroHtml), 'شريط A0 لا يستخدم شريط الموقع نفسه');
     assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
     assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
-    assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يشغّل موجّه التطبيق العام وموجّه A0 معاً');
-    assert(!zeroHtml.includes('id="bottomnav"'), 'A0 ما زال يعرض شريط التنقّل السفلي المحذوف');
+    assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
+    for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
+      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
+    }
     for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
       assert(zeroHtml.includes(need), `zero.html ينقصه ${need} — الدرج المشترك`);
     }
-    assert(/rel="manifest" href="\.\/manifest\.webmanifest"/.test(zeroHtml), 'صفحة A0 لا تستخدم بيان الأكاديمية المشترك');
-    assert(academyManifest.start_url === './index.html#/', 'start_url لبيان الأكاديمية غير صحيح');
-    assert(!existsSync(join(ROOT, 'manifest-zero.webmanifest')), 'ما زال لقسم A0 بيان تثبيت منفصل');
+    assert(/manifest-zero\.webmanifest/.test(zeroHtml), 'zero.html بلا بيان تثبيت خاص');
+    assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
     assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
   });
-  it('قائمتا الواجهتين جانبيتان والتبديل بينهما بزر علوي مع طيّ الصفحة', () => {
+  it('تنقّل A0 = نفس درج الموقع (تنقّل واحد لكل الأجهزة)', () => {
     assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
     assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
-    for (const l of ['خريطة المراحل', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس']) {
+    for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
       assert(shellSrc.includes(l), `درج A0 ينقصه: ${l}`);
     }
-    assert(!/bottomnav|data-exit-zero|href=["']\.\/index\.html|إعدادات الأكاديمية|ابدأ المستوى A1/.test(shellSrc), 'درج A0 يحتوي تنقّلاً مكرراً بين الواجهتين');
-    assert(!zeroHtml.includes('id="bottomnav"') && !html.includes('id="bottomnav"'), 'إحدى الواجهتين ما زالت تعرض شريطاً سفلياً');
     const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
     assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');
-    assert(/id="btnMenu"/.test(topbarJs) && /toggleDrawer/.test(topbarJs), 'القائمة الجانبية لا تُفتح من الرأس');
-    assert(/id="btnChapterSwitch"/.test(topbarJs) && /data-destination-mode/.test(topbarJs), 'زر التبديل بين عالمي التعلّم غير موجود في الرأس');
-    assert(/is-page-folding/.test(topbarJs) && /page-fold__crease/.test(topbarJs), 'الانتقال بين الواجهتين لا يطوي الصفحة');
-    assert(!/data-chapter-range|chapter-slider/.test(topbarJs), 'ما زال شريط السحب السابق موجوداً في الرأس');
     assert(/renderTopbar/.test(zeroMain), 'صفحة A0 لا ترسم الشريط المشترك');
     assert(/renderTopbar/.test(app), 'صفحة الموقع لا ترسم الشريط المشترك');
+    assert(!/id="bottomnav"/.test(html) && !/class="bottomnav" id="bottomnav"/.test(html), 'الشريط السفلي ما زال في صفحة الموقع');
   });
   it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
     for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {
@@ -766,26 +763,23 @@ describe('مسارات A0 المتكاملة مع غلاف الأكاديمية'
       assert(!(homeJs + stageJs).includes(old), `ما زالت هناك مكوّنات A0 القديمة: ${old}`);
     }
   });
-  it('الدخول إلى A0 عبر زر الرأس دون تكرار في القائمة الجانبية', () => {
+  it('خيار واحد فقط للدخول إلى A0 (بطاقة القائمة الجانبية)', () => {
     assert(!/id="btnZero"/.test(html), 'index.html ما زال فيه زر A0 (خيار دخول ثانٍ)');
     assert(!/id="zbar"|id="znav"/.test(html), 'index.html يحتوي عناصر واجهة A0');
     const links = (shellJs.match(/href="\.\/zero\.html"/g) || []).length;
-    eq(links, 0, 'القائمة الجانبية يجب أن تترك التبديل للشريط العلوي');
+    eq(links, 1, 'عدد روابط الدخول إلى A0 في القائمة الجانبية');
     assert(!/zero\.html/.test(dash), 'لوحة التحكم فيها خيار دخول ثانٍ إلى A0');
-    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
-    assert(/\.\/zero\.html#\/zero/.test(topbarJs) && /\.\/index\.html#\/lessons/.test(topbarJs), 'زر التبديل لا يصل إلى الوجهتين');
-    assert(!html.includes('id="bottomnav"'), 'index.html ما زال يحتوي شريطاً سفلياً');
+    const bottomBlock = shellJs.slice(shellJs.indexOf('if (bottom)'));
+    assert(!/zero\.html/.test(bottomBlock), 'الشريط السفلي فيه خيار دخول ثانٍ إلى A0');
     assert(!/zero-pad\.css/.test(html), 'index.html يُحمّل أنماط لوح الكتابة');
-    assert(html.includes('./assets/css/zero.css'), 'أنماط شاشة الدخول غير مربوطة في index.html');
+    assert(html.includes('./assets/css/main.css'), 'نظام تصميم التطبيق غير مربوط في index.html');
+    assert(!/assets\/css\/(?:redesign|skins\/|zero\.css)/.test(html), 'index.html ما زال يحمّل أنماط A0 أو طبقات التصميم القديمة');
+    eq((html.match(/href="\.\/assets\/css\/[^"]+"/g) || []).length, 1, 'index.html لا يستخدم ملف تصميم موحداً');
     assert(/zero\.html/.test(entryJs), 'اختيار «من الصفر» لا ينقل إلى صفحة A0');
   });
-  it('تبديل الوجهة يحفظ وضع التطبيق المقصود قبل فتحه', () => {
+  it('زر الخروج من صفحة A0 يعيد إلى الموقع', () => {
     assert(/exitZeroMode/.test(shellSrc), 'لا زر خروج من صفحة A0');
-    assert(/setZeroFocus\('levels'\)/.test(shellSrc), 'الخروج لا يحفظ اختيار المستويات');
-    assert(/location\.href = target/.test(shellSrc), 'الخروج لا يفتح وجهة التطبيق المحددة');
-    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
-    assert(/setZeroFocus\(targetMode === 'zero' \? 'a0' : 'levels'\)/.test(topbarJs), 'زر التبديل لا يحفظ الوجهة قبل الانتقال');
-    assert(/href="\.\/index\.html#\/lessons" data-exit-zero/.test(readFileSync(join(ROOT, 'assets/js/views/zero-exam.js'), 'utf8')), 'شهادة A0 لا تنتقل مباشرة إلى دروس A1');
+    assert(/location\.href = '\.\/index\.html'/.test(shellSrc), 'الخروج لا ينقل إلى صفحة الموقع');
   });
   it('مشغّل الحروف: عنصر واحد واضح + شريط اختيار', () => {
     assert(/FOCUS_KINDS/.test(stageJs), 'لا وضع تركيز للحروف');
@@ -833,9 +827,9 @@ describe('مسارات A0 المتكاملة مع غلاف الأكاديمية'
     assert(hasRecordedSound('sound:th-voiced'), 'صوت th المجهور غير مربوط بتسجيله');
     assert(/sayDigraph/.test(stageJs), 'المشغّل لا ينطق الحروف المركّبة من التسجيل');
   });
-  it('أصول صفحة محتوى A0 مخزّنة في Service Worker', () => {
+  it('كل ملفات الصفحة المستقلة مخزّنة في Service Worker', () => {
     for (const p of [
-      './zero.html', './assets/js/zero-main.js', './manifest.webmanifest', './assets/js/core/pwa-install.js',
+      './zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest',
       './assets/js/data/zero.js', './assets/js/data/zero-letters.js', './assets/js/data/zero-time.js',
       './assets/js/data/zero-words.js', './assets/js/core/zeroflow.js', './assets/js/core/zero-pad.js',
       './assets/js/views/zero.js', './assets/js/views/zero-shell.js', './assets/js/views/zero-stage.js',
@@ -847,6 +841,13 @@ describe('مسارات A0 المتكاملة مع غلاف الأكاديمية'
   });
   it('نسخة الـ Service Worker رُفعت لتحديث الملفات المخزّنة', () => {
     assert(/VERSION\s*=\s*'v(?:[2-9]|[1-9]\d)\./.test(sw), 'لم تُرفع نسخة الـ Service Worker');
+  });
+  it('ملفات المنهج والصوتيات A1-C2 تُخزَّن مسبقاً للعمل دون اتصال', () => {
+    assert(sw.includes('./assets/js/data/curriculum-audio.js'), 'خريطة صوت المنهج غير مخزّنة');
+    assert(sw.includes('mapSource.matchAll') && sw.includes('audioUrls'), 'لا تُستخرج ملفات MP3 من خريطة الصوت');
+    assert(/cache\.addAll\(audioUrls\.slice/.test(sw), 'لا يتم تخزين ملفات MP3 مسبقاً على دفعات');
+    assert(/url2\.pathname\.includes\('\/assets\/audio\/'\)/.test(sw), 'لا يوجد مسار cache-first للتسجيلات');
+    assert(/if \(cached\) return cached/.test(sw), 'التسجيل المخزّن لا يُقدّم دون اتصال');
   });
 });
 

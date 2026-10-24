@@ -1,6 +1,6 @@
 {
   "name": "learn-english",
-  "version": "1.0.20",
+  "version": "1.0.18",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
@@ -14,9 +14,9 @@
     "serve": "python -m http.server 5173",
     "build:web": "node tools/build-web.mjs",
     "desktop:start": "electron .",
-    "desktop:dist": "electron-builder --win nsis",
+    "desktop:dist": "electron-builder",
     "check": "node tools/check.mjs",
-    "test": "node tools/check.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
+    "test": "node tools/check.mjs && node tools/validate-foundation-curriculum.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android"
   },
@@ -44,6 +44,7 @@
       "index.html",
       "zero.html",
       "manifest.webmanifest",
+      "manifest-zero.webmanifest",
       "service-worker.js"
     ],
     "directories": {
@@ -52,13 +53,23 @@
     "win": {
       "icon": "assets/img/icon-512.png",
       "target": [
-        "nsis"
+        "nsis",
+        "portable"
       ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "icon": "assets/img/icon-512.png",
+      "category": "Education",
+      "maintainer": "Ammar Charef <ammarcharef06@users.noreply.github.com>",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
     }
   }
 }
