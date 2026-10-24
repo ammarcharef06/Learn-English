@@ -1,9 +1,10 @@
 /* بطاقات الحفظ مع مراجعة متباعدة (SRS) */
 import { t } from '../core/i18n.js';
-import { esc, speakBtn, qs, toast, confetti } from '../core/utils.js';
+import { esc, qs, toast, confetti } from '../core/utils.js';
 import {
   vocabularyEntries,
   curriculumReviewEntries,
+  sentenceEntries,
   readingWordEntries,
   pronounEntries,
   connectorEntries,
@@ -13,7 +14,7 @@ import {
 import { getItem, gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
 import { recordAnswer } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
-import { speak } from '../core/speech.js';
+import { speak, stopSpeaking } from '../core/speech.js';
 
 const DECKS = [
   { id: 'all', ar: 'كل الكلمات', icon: '🌍' },
@@ -22,6 +23,9 @@ const DECKS = [
   { id: 'a1', ar: 'مفردات A1', icon: '🌱' },
   { id: 'a2', ar: 'مفردات A2', icon: '🌿' },
   { id: 'b1', ar: 'مفردات B1', icon: '🌳' },
+  { id: 'b2', ar: 'مفردات B2', icon: '🌲' },
+  { id: 'c1', ar: 'مفردات C1', icon: '📚' },
+  { id: 'c2', ar: 'مفردات C2', icon: '🏛️' },
   { id: 'pronouns', ar: 'الضمائر', icon: '🙋' },
   { id: 'connectors', ar: 'أدوات الربط', icon: '🔗' },
   { id: 'questions', ar: 'أدوات السؤال', icon: '❓' },
@@ -31,7 +35,8 @@ const DECKS = [
 function deckEntries(deck) {
   switch (deck) {
     case 'notebook': return notebookEntries();
-    case 'a1': case 'a2': case 'b1': return [...vocabularyEntries({ levels: [deck] }), ...curriculumReviewEntries({ levels: [deck] })];
+    case 'a1': case 'a2': case 'b1': case 'b2': case 'c1': case 'c2':
+      return [...vocabularyEntries({ levels: [deck] }), ...sentenceEntries({ levels: [deck] }), ...curriculumReviewEntries({ levels: [deck] })];
     case 'pronouns': return pronounEntries();
     case 'connectors': return connectorEntries();
     case 'questions': return questionEntries();
@@ -44,6 +49,7 @@ function deckEntries(deck) {
 function allEntries() {
   return [
     ...vocabularyEntries(),
+    ...sentenceEntries(),
     ...curriculumReviewEntries(),
     ...readingWordEntries(),
     ...pronounEntries(),
@@ -57,6 +63,7 @@ export function renderFlashcards(host) {
   const state = { deck: 'all', size: 15, session: [], mode: 'deck', index: 0, flipped: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
 
   function setup() {
+    stopSpeaking();
     state.session = [];
     const entries = deckEntries(state.deck);
     const st = srsStats(entries);
@@ -107,6 +114,7 @@ export function renderFlashcards(host) {
   }
 
   function startSession(entries, mode = 'deck') {
+    stopSpeaking();
     state.session = entries.slice();
     state.mode = mode;
     state.index = 0;
@@ -123,6 +131,19 @@ export function renderFlashcards(host) {
     const interval = it ? it.interval : 0;
     const easeFactor = it ? it.easeFactor : 2.5;
     const total = state.session.length;
+    const axisKey = ({
+      grammar: 'grammar',
+      word: 'vocabulary',
+      collocation: 'vocabulary',
+      'phrasal-verb': 'vocabulary',
+      phonetics: 'phonetics',
+      'l1-transfer': 'arabic_l1_transfers',
+      academic: 'academic_focus',
+    })[e.kind?.split(':')[0]] || 'other';
+    const axisLabel = t(`fc.axis.${axisKey}`);
+    const speakControl = (text, audioUrl, label = t('common.listen')) => text
+      ? `<button class="btn btn--sm fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}">🔊 ${esc(label)}</button>`
+      : '';
 
     host.innerHTML = `
       ${pageHead({
@@ -139,17 +160,19 @@ export function renderFlashcards(host) {
       <div class="fc-stage">
         <div class="fc ${state.flipped ? 'is-flipped' : ''}" id="fcCard">
           <div class="fc__face" id="fcFront" aria-hidden="false">
-            <span class="fc__label">${esc(e.emoji || '🔤')} ${t('common.listen')}</span>
+            <span class="fc__label">${esc(e.emoji || '🔤')} ${esc(axisLabel)}</span>
             <span class="fc__word">${esc(e.en)}</span>
-            ${speakBtn(e.en)}
+            ${e.ipa ? `<span class="fc__ipa" lang="en" dir="ltr">${esc(e.ipa)}</span>` : ''}
+            ${speakControl(e.en, e.audioUrl)}
+            ${e.ipaAudioUrl ? speakControl(e.en, e.ipaAudioUrl, t('fc.ipaAudio')) : ''}
             <span class="hint">${t('fc.flipHint')}</span>
           </div>
           <div class="fc__face fc__face--back" id="fcBack" aria-hidden="true" inert>
-            <span class="fc__label">${esc(t('common.word'))} ← ${esc(t('common.listen'))}</span>
+            <span class="fc__label">${esc(axisLabel)} · ${esc(t('common.word'))}</span>
             <span class="fc__word fc__word--ar">${esc(e.ar)}</span>
-            ${e.ex ? `<span class="fc__ex en">${esc(e.ex.en)}</span><span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}
+            ${e.ex ? `<span class="fc__ex en" lang="en" dir="ltr">${esc(e.ex.en)}</span>${e.ex.ar ? `<span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}${speakControl(e.ex.en, e.ex.audio_url || '', t('fc.exampleAudio'))}` : ''}
             ${e.note ? `<span class="fc__ex">${esc(e.note)}</span>` : ''}
-            ${speakBtn(e.en)}
+            ${speakControl(e.en, e.audioUrl)}
           </div>
         </div>
       </div>
@@ -185,6 +208,10 @@ export function renderFlashcards(host) {
       if (status) status.textContent = state.flipped ? t('fc.answerRevealed') : t('fc.flipBeforeGrade');
     };
     flipButton.addEventListener('click', flip);
+    host.querySelectorAll('[data-speak-text]').forEach((button) => button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      speak(button.dataset.speakText, { audioUrl: button.dataset.audioUrl || undefined });
+    }));
     if (!state.flipped) { /* لا ننطق تلقائياً لتجنب الإزعاج */ }
 
     host.querySelectorAll('[data-grade]').forEach((b) => b.addEventListener('click', () => grade(Number(b.dataset.grade))));
@@ -198,6 +225,7 @@ export function renderFlashcards(host) {
   function grade(q) {
     const e = state.session[state.index];
     if (!e) return;
+    stopSpeaking();
     gradeItem(e.itemId, [0, 3, 4, 5][q]);
     const res = recordAnswer({ correct: q > 0, itemId: e.itemId, type: 'flash', topic: e.topic, level: e.level, seconds: (Date.now() - state.startAt) / 1000 });
     if (q === 0) state.result.again++;

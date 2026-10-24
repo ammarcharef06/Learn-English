@@ -18,6 +18,9 @@ export function vocabularyEntries({ levels = null } = {}) {
       out.push({
         itemId: `v:${u.id}:${v.en.toLowerCase()}`,
         en: v.en, ar: v.ar, ex: v.example || null, emoji: v.emoji || '', pos: v.pos || '',
+        audioUrl: v.audio_url || '',
+        ipa: v.ipa || '',
+        ipaAudioUrl: v.ipa_audio_url || '',
         level: u.levelId, topic: u.id, topicTitle: u.title, kind: 'word', unitId: u.id,
       });
     }
@@ -67,6 +70,9 @@ export function reviewEntriesForUnit(unit) {
           en,
           ar,
           ex: record.example || null,
+          audioUrl: record.audio_url || '',
+          ipa: record.ipa || '',
+          ipaAudioUrl: record.ipa_audio_url || '',
           note: record.ipa || record.pattern || record.explanationAr || record.note || note,
           level: unit.levelId,
           topic: unit.id,
@@ -102,6 +108,7 @@ export function reviewEntriesForUnit(unit) {
           en,
           ar,
           ex: phrase.example || null,
+          audioUrl: phrase.audio_url || '',
           note: phrase.note || '',
           level: unit.levelId,
           topic: unit.id,
@@ -128,6 +135,7 @@ export function sentenceEntries({ levels = null } = {}) {
     (u.sentences || []).forEach((s, i) => out.push({
       itemId: `s:${u.id}:${i}`,
       en: s.en, ar: s.ar, ex: s,
+      audioUrl: s.audio_url || '',
       level: u.levelId, topic: u.id, topicTitle: u.title, kind: 'sentence', unitId: u.id,
     }));
     (u.grammar || []).forEach((gr, gi) => (gr.examples || []).forEach((e, ei) => out.push({

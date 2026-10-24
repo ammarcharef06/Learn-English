@@ -596,6 +596,8 @@
   .fc__word { font-size: clamp(1.6rem, 3vw, 2.2rem); font-family: var(--font-en); font-weight: 800; direction: ltr; overflow-wrap: anywhere; }
   .fc__word--ar { font-family: var(--font-ar); direction: rtl; font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
   .fc__ex { color: var(--text-2); font-size: .94rem; }
+  .fc__ipa { direction: ltr; font-family: var(--font-en); color: var(--brand-1); font-size: 1.05rem; }
+  .fc__speak { max-inline-size: 100%; }
   .fc-actions { display: flex; gap: var(--sp-2); justify-content: center; flex-wrap: wrap; margin-block-start: var(--sp-4); }
   .fc-meta { display: flex; justify-content: space-between; max-inline-size: 640px; margin-inline: auto; margin-block-end: var(--sp-3); color: var(--text-3); font-size: .84rem; font-weight: 700; }
 

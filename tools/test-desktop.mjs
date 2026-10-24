@@ -78,7 +78,7 @@ assert.match(shellView, /key: 'nav\.journey'/);
 assert.match(shellView, /key: 'nav\.conversations'/);
 assert.match(serviceWorker, /'\.\/assets\/js\/views\/journey\.js'/);
 assert.match(serviceWorker, /'\.\/assets\/js\/views\/conversations\.js'/);
-assert.match(serviceWorker, /const VERSION = 'v4\.12\.1'/);
+assert.match(serviceWorker, /const VERSION = 'v4\.12\.2'/);
 assert.match(serviceWorker, /'\.\/assets\/css\/skins\/atelier\.css'/);
 assert.match(progressStore, /const K_PROGRESS = 'lea\.progress\.v1'/);
 assert.match(journeyView, /weeklySummary/);

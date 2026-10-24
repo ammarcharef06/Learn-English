@@ -62,7 +62,43 @@ export function registerSoundBank(map = {}) {
 export function hasRecordedSound(text) {
   return soundBank.has(String(text || '').trim().toLowerCase());
 }
+
+export function normalizeAudioUrl(source) {
+  if (!source || typeof source !== 'string' || typeof location === 'undefined') return '';
+  try {
+    const currentUrl = new URL(location.href);
+    const url = new URL(source, document?.baseURI || currentUrl.href);
+    if (!['http:', 'https:'].includes(url.protocol) || url.origin !== currentUrl.origin) return '';
+    return url.href;
+  } catch {
+    return '';
+  }
+}
+
 export function speak(text, opts = {}) {
+  if (opts.audioUrl) {
+    const src = normalizeAudioUrl(opts.audioUrl);
+    if (!src) {
+      console.warn('Pronunciation audio URL must be a valid same-origin HTTP(S) URL', opts.audioUrl);
+      return false;
+    }
+    try {
+      audioEl = audioEl || new Audio();
+      audioEl.pause();
+      audioEl.src = src;
+      audioEl.currentTime = 0;
+      audioEl.onended = () => { try { opts?.onend?.(); } catch { /* تجاهل */ } };
+      audioEl.onerror = () => console.warn('Pronunciation audio failed to load', src, audioEl.error || '');
+      const pr = audioEl.play();
+      if (pr && typeof pr.catch === 'function') {
+        pr.catch((error) => console.warn('Pronunciation audio could not be played', src, error));
+      }
+      return true;
+    } catch (error) {
+      console.warn('Pronunciation audio could not be started', src, error);
+      return false;
+    }
+  }
   const src = soundBank.get(String(text || '').trim().toLowerCase());
   if (src) {
     try {

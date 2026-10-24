@@ -72,6 +72,13 @@ if (!b2Activation.valid) {
   throw new Error(`تعذر تفعيل منهج B2 المحقق: ${b2Activation.warnings.join(' ')}`);
 }
 
+for (const stagedLevel of [C1_STAGED_CURRICULUM, C2_STAGED_CURRICULUM]) {
+  const activation = activateStagedLevel(exportStagedLevel(stagedLevel));
+  if (!activation.valid) {
+    throw new Error(`تعذر تفعيل منهج ${stagedLevel.id.toUpperCase()} المحقق: ${activation.warnings.join(' ')}`);
+  }
+}
+
 export function getLevel(id) { return LEVELS.find((l) => l.id === id) || null; }
 export function getUnit(unitId) { return ALL_UNITS.find((u) => u.id === unitId) || null; }
 export function unitsOfLevel(levelId) { return ALL_UNITS.filter((u) => u.levelId === levelId); }

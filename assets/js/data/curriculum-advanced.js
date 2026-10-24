@@ -10,45 +10,14 @@ export const UNIT_COMPONENTS = [
 
 export const ADVANCED_UNIT_SCHEMA = {
   grammar: ['title', 'explain', 'examples', 'practice'],
-  vocabulary: ['en', 'ar', 'kind', 'example'],
-  phonetics: ['en', 'ipa', 'contrastPairs', 'connectedSpeech', 'intonation', 'audioKey'],
+  vocabulary: ['en', 'ar', 'kind', 'example', 'audio_url'],
+  phonetics: ['en', 'ipa', 'contrastPairs', 'connectedSpeech', 'intonation', 'audioKey', 'audio_url', 'ipa_audio_url'],
+  sentences: ['en', 'ar', 'audio_url'],
   arabic_l1_transfers: ['pattern', 'incorrect', 'corrected', 'explanationAr', 'practice'],
   academic_focus: ['term', 'meaningAr', 'paraphrasing', 'idioms', 'readingAnalysis'],
 };
 
-const LEVEL_DIMENSIONS = {
-  b2: {
-    languageUse: 'إبداء الرأي والدفاع عنه والمشاركة باستقلالية في نقاشات متنوعة.',
-    grammarAndLexis: 'تراكيب مركبة، متلازمات شائعة، أفعال مركبة، وإعادة صياغة المعنى.',
-    phoneticsAndSpeech: 'الوصل في الكلام، النبر، والتنغيم في الحديث المتصل.',
-    arabicTransfer: 'تمييز أنماط النقل من العربية التي تؤثر في التراكيب وحروف الجر.',
-    discourseAndAutonomy: 'فهم نصوص أطول وبناء حجج مترابطة مع اختيار الأسلوب المناسب.',
-  },
-  c1: {
-    languageUse: 'استخدام مرن ودقيق للغة في الدراسة والعمل والمواقف الاجتماعية.',
-    grammarAndLexis: 'مفردات أكاديمية، تعبيرات اصطلاحية، ودقة في الفروق الأسلوبية.',
-    phoneticsAndSpeech: 'وضوح الكلام والطلاقة والتنغيم الملائم للمقصد والسياق.',
-    arabicTransfer: 'مراجعة أخطاء النقل اللغوي في الصياغة الرسمية والأكاديمية.',
-    discourseAndAutonomy: 'تحليل الحجج والمقالات وتلخيص الأفكار المعقدة بنبرة مناسبة.',
-  },
-  c2: {
-    languageUse: 'التعبير الدقيق والطبيعي وفهم المعنى الضمني في سياقات متعددة.',
-    grammarAndLexis: 'اختيار دقيق للمفردات والتراكيب والتعبيرات بحسب المقام.',
-    phoneticsAndSpeech: 'فهم الفروق الدقيقة في النبر والتنغيم والأساليب المنطوقة.',
-    arabicTransfer: 'تحرير آثار النقل من العربية للوصول إلى تعبير إنجليزي طبيعي.',
-    discourseAndAutonomy: 'قراءة نقدية وتركيب مصادر وأفكار مع الحفاظ على صوت الكاتب.',
-  },
-};
-
-export const PLANNED_LEVELS = [
-  { id: 'c1', label: 'C1 — متقدم', labelEn: 'Advanced (C1)', icon: '📚', color: '#7c3aed' },
-  { id: 'c2', label: 'C2 — إتقان', labelEn: 'Proficiency (C2)', icon: '🏛️', color: '#b45309' },
-].map((level) => ({
-  ...level,
-  status: 'planned',
-  units: [],
-  dimensions: LEVEL_DIMENSIONS[level.id],
-}));
+export const PLANNED_LEVELS = [];
 
 export const B2_STAGED_CURRICULUM = {
   id: 'b2',
@@ -271,7 +240,7 @@ export const C1_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'synthesize', ar: 'يركب أفكاراً أو مصادر في خلاصة', example: { en: 'The review synthesizes evidence from three studies.', ar: 'تركب المراجعة أدلة من ثلاث دراسات.' }, collocations: [{ en: 'synthesize evidence', ar: 'يركب الأدلة' }] },
-        { en: 'account for', ar: 'يفسر أو يشكل نسبة من', example: { en: 'The model accounts for most of the observed variation.', ar: 'يفسر النموذج معظم التباين الملحوظ.' }, phrasalVerbs: [{ en: 'draw on', ar: 'يستند إلى مصدر أو خبرة', example: { en: 'The chapter draws on recent survey data.', ar: 'يستند الفصل إلى بيانات استطلاع حديثة.' } }] },
+        { en: 'account for', ar: 'يفسر أو يشكل نسبة من', example: { en: 'The model can account for most of the observed variation.', ar: 'يمكن للنموذج تفسير معظم التباين الملحوظ.' }, phrasalVerbs: [{ en: 'draw on', ar: 'يستند إلى مصدر أو خبرة', example: { en: 'The chapter draws on recent survey data.', ar: 'يستند الفصل إلى بيانات استطلاع حديثة.' } }] },
         { en: 'notwithstanding', ar: 'على الرغم من', example: { en: 'Notwithstanding these limitations, the study offers useful evidence.', ar: 'على الرغم من هذه القيود، تقدم الدراسة أدلة مفيدة.' }, collocations: [{ en: 'notwithstanding the evidence', ar: 'على الرغم من الأدلة' }] },
         { en: 'robust', ar: 'متين أو قوي (منهجياً)', example: { en: 'The authors used a robust sampling method.', ar: 'استخدم المؤلفون طريقة أخذ عينات متينة.' }, phrasalVerbs: [{ en: 'build on', ar: 'يطور انطلاقاً من عمل سابق', example: { en: 'This study builds on earlier findings.', ar: 'تطور هذه الدراسة انطلاقاً من نتائج سابقة.' } }] },
       ],
@@ -325,7 +294,7 @@ export const C1_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'ambivalent', ar: 'متردد أو يحمل مشاعر متناقضة', example: { en: 'The narrator remains ambivalent about returning home.', ar: 'يظل الراوي متردداً بشأن العودة إلى الوطن.' }, collocations: [{ en: 'ambivalent attitude', ar: 'موقف متردد' }] },
-        { en: 'draw out', ar: 'يستخرج أو يبرز معنى', example: { en: 'The critic draws out the tension between the two voices.', ar: 'يبرز الناقد التوتر بين الصوتين.' }, phrasalVerbs: [{ en: 'allude to', ar: 'يلمح إلى', example: { en: 'The poem alludes to an earlier myth.', ar: 'تلمح القصيدة إلى أسطورة سابقة.' } }] },
+        { en: 'draw out', ar: 'يستخرج أو يبرز معنى', example: { en: 'The critic aims to draw out the tension between the two voices.', ar: 'يسعى الناقد إلى إبراز التوتر بين الصوتين.' }, phrasalVerbs: [{ en: 'allude to', ar: 'يلمح إلى', example: { en: 'The poem alludes to an earlier myth.', ar: 'تلمح القصيدة إلى أسطورة سابقة.' } }] },
         { en: 'juxtapose', ar: 'يضع عنصرين جنباً إلى جنب للمقارنة', example: { en: 'The novel juxtaposes public memory with private grief.', ar: 'تضع الرواية الذاكرة العامة إلى جانب الحزن الخاص.' }, collocations: [{ en: 'juxtapose contrasting images', ar: 'يضع صوراً متضادة للمقارنة' }] },
         { en: 'elusive', ar: 'مراوغ أو عسير التحديد', example: { en: 'The text gives an elusive definition of freedom.', ar: 'يقدم النص تعريفاً مراوغاً للحرية.' }, phrasalVerbs: [{ en: 'read into', ar: 'يحمّل النص معنى ضمنياً', example: { en: 'Do not read too much into the final image.', ar: 'لا تحمّل الصورة الختامية أكثر مما تحتمل.' } }] },
       ],
@@ -379,7 +348,7 @@ export const C1_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'disseminate', ar: 'ينشر المعرفة أو النتائج', example: { en: 'The institute disseminates findings through public briefings.', ar: 'ينشر المعهد النتائج عبر إحاطات عامة.' }, collocations: [{ en: 'disseminate findings', ar: 'ينشر النتائج' }] },
-        { en: 'spell out', ar: 'يوضح صراحةً', example: { en: 'The guide spells out the limits of the evidence.', ar: 'يوضح الدليل حدود الأدلة صراحةً.' }, phrasalVerbs: [{ en: 'boil down to', ar: 'يختزل في', example: { en: 'The disagreement boils down to different definitions.', ar: 'يختزل الخلاف في اختلاف التعريفات.' } }] },
+        { en: 'spell out', ar: 'يوضح صراحةً', example: { en: 'The guide will spell out the limits of the evidence.', ar: 'سيوضح الدليل حدود الأدلة صراحةً.' }, phrasalVerbs: [{ en: 'boil down to', ar: 'يختزل في', example: { en: 'The disagreement boils down to different definitions.', ar: 'يختزل الخلاف في اختلاف التعريفات.' } }] },
         { en: 'salient', ar: 'بارز أو ذو صلة', example: { en: 'The most salient finding was a regional difference.', ar: 'كانت النتيجة الأبرز اختلافاً إقليمياً.' }, collocations: [{ en: 'salient finding', ar: 'نتيجة بارزة' }] },
         { en: 'accessible', ar: 'سهل الفهم أو الوصول', example: { en: 'The summary makes the research accessible to families.', ar: 'يجعل الملخص البحث مفهوماً للأسر.' }, phrasalVerbs: [{ en: 'break down', ar: 'يبسط إلى أجزاء مفهومة', example: { en: 'The presenter broke down the complex process.', ar: 'بسط مقدم العرض العملية المعقدة.' } }] },
       ],
@@ -441,7 +410,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'corroborate', ar: 'يعزز أو يؤيد بدليل مستقل', example: { en: 'An independent dataset corroborates the initial estimate.', ar: 'تعزز مجموعة بيانات مستقلة التقدير الأولي.' }, collocations: [{ en: 'corroborate a finding', ar: 'يؤيد نتيجة بدليل' }] },
-        { en: 'account for', ar: 'يفسر أو يعلل', example: { en: 'The model accounts for the discrepancy between samples.', ar: 'يفسر النموذج التباين بين العينتين.' }, phrasalVerbs: [{ en: 'follow through on', ar: 'يتم ما التزم به', example: { en: 'The team followed through on its data-sharing commitment.', ar: 'وفى الفريق بالتزامه بمشاركة البيانات.' } }] },
+        { en: 'account for', ar: 'يفسر أو يعلل', example: { en: 'The model can account for the discrepancy between samples.', ar: 'يمكن للنموذج تفسير التباين بين العينتين.' }, phrasalVerbs: [{ en: 'follow through on', ar: 'يتم ما التزم به', example: { en: 'The team followed through on its data-sharing commitment.', ar: 'وفى الفريق بالتزامه بمشاركة البيانات.' } }] },
         { en: 'ostensibly', ar: 'ظاهرياً أو بحسب الظاهر', example: { en: 'The ostensibly neutral measure had unequal effects.', ar: 'كان للمقياس المحايد ظاهرياً آثار غير متساوية.' }, collocations: [{ en: 'ostensibly neutral', ar: 'محايد ظاهرياً' }] },
         { en: 'intrinsic', ar: 'جوهري أو متأصل', example: { en: 'Uncertainty is intrinsic to this type of forecast.', ar: 'عدم اليقين متأصل في هذا النوع من التنبؤ.' }, phrasalVerbs: [{ en: 'bear out', ar: 'يؤكد أو يسند (الدليل)', example: { en: 'The replication bears out the original pattern.', ar: 'تؤكد إعادة التجربة النمط الأصلي.' } }] },
       ],
@@ -468,7 +437,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'equivocal', ar: 'ملتبس أو يحتمل أكثر من معنى', example: { en: 'The minister gave an equivocal response.', ar: 'قدم الوزير إجابة ملتبسة.' }, collocations: [{ en: 'equivocal response', ar: 'إجابة ملتبسة' }] },
-        { en: 'play down', ar: 'يقلل من أهمية', example: { en: 'The statement played down the scale of the disruption.', ar: 'قلل البيان من حجم الاضطراب.' }, phrasalVerbs: [{ en: 'read into', ar: 'يستنتج معنى ضمنياً من', example: { en: 'It is easy to read too much into a pause.', ar: 'يسهل استنتاج أكثر مما تحتمل وقفة.' } }] },
+        { en: 'play down', ar: 'يقلل من أهمية', example: { en: 'The statement may play down the scale of the disruption.', ar: 'قد يقلل البيان من حجم الاضطراب.' }, phrasalVerbs: [{ en: 'read into', ar: 'يستنتج معنى ضمنياً من', example: { en: 'It is easy to read too much into a pause.', ar: 'يسهل استنتاج أكثر مما تحتمل وقفة.' } }] },
         { en: 'laconic', ar: 'مقتضب', example: { en: 'Her laconic reply left the audience uncertain.', ar: 'ترك ردها المقتضب الجمهور غير متأكد.' }, collocations: [{ en: 'laconic remark', ar: 'ملاحظة مقتضبة' }] },
         { en: 'deadpan', ar: 'جاف التعبير (قد يخفي سخرية)', example: { en: 'He delivered the punchline in a deadpan voice.', ar: 'ألقى خاتمة النكتة بصوت جامد.' }, phrasalVerbs: [{ en: 'come off as', ar: 'يبدو للآخرين على أنه', example: { en: 'The irony came off as criticism.', ar: 'بدت المفارقة وكأنها نقد.' } }] },
       ],
@@ -495,7 +464,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'mitigate', ar: 'يخفف من أثر سلبي', example: { en: 'The redesign mitigated the risk of data loss.', ar: 'خفف التصميم الجديد خطر فقدان البيانات.' }, collocations: [{ en: 'mitigate risk', ar: 'يخفف المخاطر' }] },
-        { en: 'weed out', ar: 'يستبعد تدريجياً ما لا يلائم', example: { en: 'The review weeds out unsupported claims.', ar: 'تستبعد المراجعة الادعاءات غير المدعومة.' }, phrasalVerbs: [{ en: 'boil down to', ar: 'يختزل في أو جوهره', example: { en: 'The dispute boils down to a question of access.', ar: 'يختزل الخلاف في مسألة الوصول.' } }] },
+        { en: 'weed out', ar: 'يستبعد تدريجياً ما لا يلائم', example: { en: 'The review can weed out unsupported claims.', ar: 'يمكن للمراجعة استبعاد الادعاءات غير المدعومة.' }, phrasalVerbs: [{ en: 'boil down to', ar: 'يختزل في أو جوهره', example: { en: 'The dispute boils down to a question of access.', ar: 'يختزل الخلاف في مسألة الوصول.' } }] },
         { en: 'intransigent', ar: 'متعنت لا يلين', example: { en: 'An intransigent stance can obstruct negotiation.', ar: 'قد تعرقل المواقف المتعنتة التفاوض.' }, collocations: [{ en: 'intransigent position', ar: 'موقف متعنت' }] },
         { en: 'by the same token', ar: 'وبالمنطق نفسه', example: { en: 'By the same token, transparency requires clear limits.', ar: 'وبالمنطق نفسه، تتطلب الشفافية حدوداً واضحة.' }, phrasalVerbs: [{ en: 'set out', ar: 'يعرض أو يحدد بوضوح', example: { en: 'The report sets out three competing explanations.', ar: 'يعرض التقرير ثلاثة تفسيرات متنافسة.' } }] },
       ],
@@ -522,7 +491,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'obfuscate', ar: 'يحجب الوضوح أو يعتم المعنى', example: { en: 'Unnecessary jargon can obfuscate a straightforward finding.', ar: 'قد تحجب المصطلحات غير الضرورية نتيجة واضحة.' }, collocations: [{ en: 'obfuscate an issue', ar: 'يعتم مسألة' }] },
-        { en: 'boil down to', ar: 'يختزل في أو يعود جوهره إلى', example: { en: 'The disagreement boils down to different assumptions.', ar: 'يعود الخلاف إلى افتراضات مختلفة.' }, phrasalVerbs: [{ en: 'spell out', ar: 'يشرح بوضوح وتفصيل', example: { en: 'The introduction spells out the scope of the review.', ar: 'توضح المقدمة نطاق المراجعة.' } }] },
+        { en: 'boil down to', ar: 'يختزل في أو يعود جوهره إلى', example: { en: 'The disagreement may boil down to different assumptions.', ar: 'قد يعود الخلاف إلى افتراضات مختلفة.' }, phrasalVerbs: [{ en: 'spell out', ar: 'يشرح بوضوح وتفصيل', example: { en: 'The introduction spells out the scope of the review.', ar: 'توضح المقدمة نطاق المراجعة.' } }] },
         { en: 'idiosyncratic', ar: 'خاص أو مميز بطريقة فردية', example: { en: 'The author retains an idiosyncratic but consistent voice.', ar: 'يحافظ الكاتب على صوت فردي مميز ومتسق.' }, collocations: [{ en: 'idiosyncratic style', ar: 'أسلوب فردي مميز' }] },
         { en: 'all things considered', ar: 'بعد أخذ كل الأمور في الحسبان', example: { en: 'All things considered, the cautious approach is warranted.', ar: 'بعد أخذ كل الأمور في الحسبان، يكون النهج الحذر مبرراً.' }, phrasalVerbs: [{ en: 'pare down', ar: 'يختصر إلى الضروري', example: { en: 'The editor pared down the abstract without losing its argument.', ar: 'اختصر المحرر الملخص دون أن يفقد حجته.' } }] },
       ],
@@ -549,7 +518,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'reconcile', ar: 'يوفق بين أمرين', example: { en: 'The panel reconciled the competing objectives.', ar: 'وفق الفريق بين الأهداف المتنافسة.' }, collocations: [{ en: 'reconcile competing priorities', ar: 'يوفق بين الأولويات المتنافسة' }] },
-        { en: 'hammer out', ar: 'يتفاوض حتى يتوصل إلى اتفاق', example: { en: 'The parties hammered out a workable agreement.', ar: 'توصل الطرفان بالتفاوض إلى اتفاق عملي.' }, phrasalVerbs: [{ en: 'hold to', ar: 'يلتزم بوعد أو مبدأ', example: { en: 'Both parties held to the agreed safeguards.', ar: 'التزم الطرفان بالضمانات المتفق عليها.' } }] },
+        { en: 'hammer out', ar: 'يتفاوض حتى يتوصل إلى اتفاق', example: { en: 'The parties need to hammer out a workable agreement.', ar: 'يحتاج الطرفان إلى التفاوض للتوصل إلى اتفاق عملي.' }, phrasalVerbs: [{ en: 'hold to', ar: 'يلتزم بوعد أو مبدأ', example: { en: 'Both parties held to the agreed safeguards.', ar: 'التزم الطرفان بالضمانات المتفق عليها.' } }] },
         { en: 'intransigent', ar: 'متعنت لا يلين', example: { en: 'An intransigent position can foreclose useful compromise.', ar: 'قد يغلق الموقف المتعنت باب التسوية المفيدة.' }, collocations: [{ en: 'intransigent stance', ar: 'موقف متعنت' }] },
         { en: 'convergence', ar: 'تقارب أو التقاء', example: { en: 'The discussions revealed a convergence of interests.', ar: 'كشفت المناقشات عن تقارب المصالح.' }, phrasalVerbs: [{ en: 'come around to', ar: 'يقتنع تدريجياً بـ', example: { en: 'The panel came around to a narrower proposal.', ar: 'اقتنع الفريق تدريجياً بمقترح أضيق.' } }] },
       ],
@@ -576,7 +545,7 @@ export const C2_STAGED_CURRICULUM = {
       ],
       vocabulary: [
         { en: 'quintessential', ar: 'نموذجي أو يجسد جوهر الشيء', example: { en: 'The scene is a quintessential example of restrained irony.', ar: 'المشهد مثال نموذجي على المفارقة المنضبطة.' }, collocations: [{ en: 'quintessential example', ar: 'مثال نموذجي' }] },
-        { en: 'let on', ar: 'يفصح أو يظهر ما يعرفه', example: { en: 'The speaker never lets on what she already knows.', ar: 'لا تفصح المتحدثة عما تعرفه مسبقاً.' }, phrasalVerbs: [{ en: 'give away', ar: 'يكشف دون قصد', example: { en: 'A brief pause gave away his uncertainty.', ar: 'كشفت وقفة قصيرة عن عدم يقينه.' } }] },
+        { en: 'let on', ar: 'يفصح أو يظهر ما يعرفه', example: { en: 'The speaker refused to let on what she already knew.', ar: 'رفضت المتحدثة الإفصاح عما كانت تعرفه مسبقاً.' }, phrasalVerbs: [{ en: 'give away', ar: 'يكشف دون قصد', example: { en: 'A brief pause gave away his uncertainty.', ar: 'كشفت وقفة قصيرة عن عدم يقينه.' } }] },
         { en: 'tacit', ar: 'ضمني أو غير مصرح به', example: { en: 'The exchange relies on a tacit understanding.', ar: 'يعتمد الحوار على تفاهم ضمني.' }, collocations: [{ en: 'tacit assumption', ar: 'افتراض ضمني' }] },
         { en: 'inadvertent', ar: 'غير مقصود', example: { en: 'The speaker’s inadvertent pause altered the implication.', ar: 'غيرت وقفة المتحدث غير المقصودة الدلالة.' }, phrasalVerbs: [{ en: 'pass over', ar: 'يتجاوز نقطة دون مناقشتها', example: { en: 'The reviewer passed over a central ambiguity.', ar: 'تجاوز المراجع التباساً محورياً دون مناقشته.' } }] },
       ],
@@ -597,6 +566,95 @@ export const C2_STAGED_CURRICULUM = {
     },
   ],
 };
+
+const ADVANCED_VOCABULARY = {
+  c1: [
+    [
+      ['triangulate', 'يقارن أدلة من مصادر متعددة', 'Researchers triangulate interview data with survey results.'],
+      ['provenance', 'مصدر الشيء وتاريخه', 'The provenance of each source is recorded in the review.'],
+      ['longitudinal', 'طولي يتتبع التغير عبر الزمن', 'A longitudinal study can reveal changes that a short survey misses.'],
+      ['inference', 'استدلال مبني على الأدلة', 'The inference should remain proportionate to the available evidence.'],
+    ],
+    [
+      ['rebuttal', 'تفنيد حجة أو ادعاء', 'The rebuttal addresses the strongest counterclaim.'],
+      ['premise', 'مقدمة أو افتراض تقوم عليه الحجة', 'The argument depends on a premise that requires further support.'],
+      ['deliberation', 'مداولة متأنية', 'Public deliberation can expose trade-offs in the proposal.'],
+      ['credibility', 'مصداقية', 'Transparent methods strengthen the credibility of the report.'],
+    ],
+    [
+      ['allegory', 'رمز قصصي يحمل معنى أوسع', 'The allegory links the characters to a broader political debate.'],
+      ['dissonance', 'تنافر أو تعارض', 'The dissonance between the two voices remains unresolved.'],
+      ['canonical', 'معتمد أو راسخ في تقليد أدبي', 'The essay questions a canonical interpretation of the novel.'],
+      ['symbolism', 'استخدام الرموز للدلالة', 'The symbolism of the final scene is deliberately ambiguous.'],
+    ],
+    [
+      ['rapport', 'علاقة ودية تسهّل التواصل', 'The facilitator built rapport before raising the difficult issue.'],
+      ['deference', 'إظهار الاحترام أو التقدير', 'The response showed deference without surrendering the speaker’s position.'],
+      ['diplomacy', 'لباقة في إدارة العلاقات والخلاف', 'Diplomacy helped the teams resolve the disagreement.'],
+      ['reciprocity', 'المعاملة بالمثل', 'Reciprocity is central to the partnership agreement.'],
+    ],
+    [
+      ['literacy', 'إلمام أو قدرة على الفهم', 'Scientific literacy helps readers evaluate public health claims.'],
+      ['outreach', 'تواصل منظم مع الجمهور', 'The outreach programme brought the findings to local communities.'],
+      ['uptake', 'مدى تبني فكرة أو استخدام نتيجة', 'The team measured uptake of the guidance after publication.'],
+      ['dissemination', 'نشر المعلومات على نطاق واسع', 'Responsible dissemination includes the limits of the evidence.'],
+    ],
+    [
+      ['mediation', 'وساطة لتقريب وجهات النظر', 'Mediation gave both teams space to clarify their expectations.'],
+      ['perspective', 'وجهة نظر أو منظور', 'The report considers the issue from more than one perspective.'],
+      ['inclusivity', 'الشمول وإتاحة المشاركة', 'Inclusivity requires consultation with under-represented groups.'],
+      ['consensus', 'اتفاق عام', 'The group reached consensus on the principles, not every detail.'],
+    ],
+  ],
+  c2: [
+    [
+      ['triangulation', 'مقارنة أدلة من مصادر أو طرق متعددة', 'Triangulation can reveal where independent sources converge.'],
+      ['replicability', 'إمكان تكرار الدراسة وفحص نتائجها', 'Replicability depends on a sufficiently clear account of the method.'],
+      ['confounder', 'عامل مربك يؤثر في تفسير العلاقة', 'The analysis controls for a confounder that could distort the estimate.'],
+      ['caveat', 'تحفظ أو قيد ينبغي مراعاته', 'The conclusion includes a caveat about the sample size.'],
+    ],
+    [
+      ['implicature', 'معنى يستنتج من السياق ولا يقال حرفياً', 'The implicature changes when the speaker stresses entirely.'],
+      ['incongruity', 'عدم اتساق يخلق مفارقة أو أثراً بلاغياً', 'The incongruity between praise and outcome signals possible irony.'],
+      ['understatement', 'تقليل مقصود من وصف أمر ما', 'The understatement makes the criticism sound more restrained.'],
+      ['sardonic', 'ساخر بمرارة', 'A sardonic delivery can reverse the apparent force of the compliment.'],
+    ],
+    [
+      ['alleviate', 'يخفف ألماً أو أثراً', 'The revised process may alleviate pressure on smaller teams.'],
+      ['precipitate', 'يسبب أو يعجل حدوث شيء', 'A sudden change could precipitate a wider disagreement.'],
+      ['contingent', 'متوقف على شرط أو ظرف', 'The recommendation is contingent on access to reliable data.'],
+      ['salient', 'بارز وذو صلة', 'The most salient distinction concerns who bears the cost.'],
+    ],
+    [
+      ['concision', 'الإيجاز مع الحفاظ على المعنى', 'Concision makes the conclusion easier to evaluate.'],
+      ['coherence', 'ترابط الأفكار منطقياً', 'Clear signposting improves coherence across the section.'],
+      ['redundancy', 'تكرار لا يضيف معنى جديداً', 'The editor removed redundancy without weakening the argument.'],
+      ['exactitude', 'دقة شديدة', 'Exactitude matters when the terms define the scope of a claim.'],
+    ],
+    [
+      ['concession', 'إقرار محدود بنقطة للطرف الآخر', 'The concession acknowledges the cost before defending the proposal.'],
+      ['stipulate', 'يشترط أو ينص بوضوح', 'The agreement stipulates how unresolved concerns will be reviewed.'],
+      ['arbitration', 'تحكيم للفصل في نزاع', 'Arbitration remains an option if negotiation reaches an impasse.'],
+      ['compromise', 'حل وسط أو تنازل متبادل', 'A durable compromise protects the essential safeguards.'],
+    ],
+    [
+      ['prosody', 'خصائص النبر والإيقاع والتنغيم', 'Prosody can distinguish a sincere response from a reluctant one.'],
+      ['enunciation', 'وضوح نطق الكلمات', 'Careful enunciation makes the qualification easier to hear.'],
+      ['cadence', 'إيقاع الكلام أو الجملة', 'The cadence signals that the speaker has not finished the thought.'],
+      ['equivocation', 'مراوغة لغوية أو غموض مقصود', 'The answer relies on equivocation rather than addressing the question.'],
+    ],
+  ],
+};
+
+for (const level of [C1_STAGED_CURRICULUM, C2_STAGED_CURRICULUM]) {
+  level.units.forEach((unit, index) => {
+    unit.vocabulary.push(...ADVANCED_VOCABULARY[level.id][index].map(([en, ar, exampleEn]) => ({
+      en,
+      ar,
+      example: { en: exampleEn },
+    })));
+  });
+}
 
 function nonEmptyArray(value) {
   return Array.isArray(value) && value.length > 0;

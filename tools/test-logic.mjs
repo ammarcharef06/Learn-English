@@ -147,6 +147,9 @@ check('التسجيل المسجّل يُختار للتشغيل', speech.speak(
 await new Promise((resolve) => setTimeout(resolve, 0));
 check('فشل التسجيل لا يشغّل صوت المتصفح بديلاً', synthesized === 0);
 check('النص غير المسجّل يبقى قابلاً للنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+check('مسار الصوت النسبي يُقبل ضمن نفس النطاق', speech.normalizeAudioUrl('./audio/word.mp3') === 'https://example.com/Learn-English/audio/word.mp3');
+check('مصدر صوت خارجي أو مخطط غير آمن يُرفض', speech.normalizeAudioUrl('https://other.example/audio.mp3') === ''
+  && speech.normalizeAudioUrl('javascript:alert(1)') === '');
 console.warn = savedWarn;
 if (savedAudio === undefined) delete globalThis.Audio;
 else globalThis.Audio = savedAudio;
@@ -466,20 +469,19 @@ theme.applyAccessibility();
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
 const cur = await mod('assets/js/data/curriculum.js');
-check('أربعة مستويات نشطة بعد تفعيل B2', cur.LEVELS.length === 4);
-check('٢٤ وحدة نشطة إجمالاً', cur.ALL_UNITS.length === 24);
+check('المستويات الستة A1–C2 نشطة بعد التحقق والاستيراد', cur.LEVELS.length === 6
+  && ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].every((level) => cur.getLevel(level)));
+check('٣٦ وحدة نشطة إجمالاً', cur.ALL_UNITS.length === 36);
 check('١٢ مطالعة', cur.READINGS.length === 12);
 check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
 check('المطالعات موزعة على المستويات', ['a1', 'a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
 check('اقتراح الدرس التالي يعمل', cur.nextLessonSuggestion() !== null);
 check('إحصاءات المنهج صحيحة', cur.curriculumStats().vocab >= 280);
-check('المستويان C1 وC2 لهما مخطط خماسي الأبعاد', cur.PLANNED_LEVELS.map((l) => l.id).join(',') === 'c1,c2'
-  && cur.PLANNED_LEVELS.every(cur.isPlannedLevel));
-check('C1 وC2 لا يدخلان المنهج النشط قبل اكتمال مراجعتهما', cur.LEVELS.length === 4
-  && cur.PLANNED_LEVELS.every((l) => !cur.LEVELS.some((active) => active.id === l.id)));
 check('مخطط الوحدات يشمل النطق IPA وأخطاء النقل من العربية', cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa')
   && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('incorrect')
-  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('corrected'));
+  && cur.ADVANCED_UNIT_SCHEMA.arabic_l1_transfers.includes('corrected')
+  && cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('audio_url')
+  && cur.ADVANCED_UNIT_SCHEMA.phonetics.includes('ipa_audio_url'));
 check('الوحدات النشطة تعرض الحقول الخمسة مباشرة', cur.ALL_UNITS.every((u) =>
   Array.isArray(u.grammar) && Array.isArray(u.vocabulary) && Array.isArray(u.phonetics)
   && Array.isArray(u.arabic_l1_transfers) && Array.isArray(u.academic_focus) && !('vocab' in u)));
@@ -533,11 +535,11 @@ check('SRS يراجع مفردات B2 النشطة إلى جانب أبعاده�
     && b2ReviewEntries.some((entry) => entry.kind === 'phrasal-verb')
     && b2Imported.valid && b2Imported.level.units.length === 6);
 const cLevelData = [cur.C1_STAGED_CURRICULUM, cur.C2_STAGED_CURRICULUM];
-check('C1 وC2 يتضمنان وحدات خماسية الأبعاد صالحة وتبقى مرحلية',
+check('C1 وC2 اجتازا التحقق والاستيراد وأصبحا نشطين',
   cLevelData.every((level) => level.units.length === 6 && cur.validateLevel(level).valid
-    && cur.isPlannedLevel(cur.PLANNED_LEVELS.find((planned) => planned.id === level.id))
-    && !cur.getLevel(level.id)
-    && level.units.every((unit) => unit.grammar.length >= 2 && unit.vocabulary.length >= 4
+    && cur.getLevel(level.id)?.status === 'ready'
+    && cur.unitsOfLevel(level.id).length === 6
+    && level.units.every((unit) => unit.grammar.length >= 2 && unit.vocabulary.length >= 8
       && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
         && item.accentNote && item.connectedSpeech?.length && item.intonation?.length)
       && unit.arabic_l1_transfers.length >= 2 && unit.academic_focus.length >= 2)));
@@ -557,9 +559,10 @@ const stagedFixture = {
   id: 'b2-test', label: 'B2 test', labelEn: 'B2 test', icon: '🧭', color: '#000',
   units: [{
     id: 'b2-test-u1', title: 'Test unit', grammar: [{ title: 'Grammar' }],
-    vocabulary: [{ en: 'decision', ar: 'قرار', collocations: [{ en: 'make a decision', ar: 'يتخذ قراراً' }], phrasalVerbs: [{ en: 'carry out', ar: 'ينفذ' }] }],
+    sentences: [{ en: 'We should make a decision.', ar: 'ينبغي أن نتخذ قراراً.', audio_url: 'audio/sentence.mp3' }],
+    vocabulary: [{ en: 'decision', ar: 'قرار', audio_url: 'audio/decision.mp3', ipa: '/dɪˈsɪʒən/', ipa_audio_url: 'audio/decision-ipa.mp3', collocations: [{ en: 'make a decision', ar: 'يتخذ قراراً' }], phrasalVerbs: [{ en: 'carry out', ar: 'ينفذ' }] }],
     phonetics: [{
-      id: 'ipa', en: 'think', ipa: '/θɪŋk/', ar: 'ثِنك',
+      id: 'ipa', en: 'think', ipa: '/θɪŋk/', ar: 'ثِنك', audio_url: 'audio/think.mp3', ipa_audio_url: 'audio/think-ipa.mp3',
       contrastPairs: [{ id: 'pair', en: 'pat / bat', ar: '/p/ مقابل /b/' }],
       connectedSpeech: [{ en: 'want to → wanna', ar: 'وصل واختزال في الكلام' }],
       intonation: [{ en: 'rising tone', ar: 'تنغيم صاعد' }],
@@ -584,6 +587,7 @@ check('خط أنابيب التصدير والاستيراد يحافظ على �
 const componentReviewEntries = qg.reviewEntriesForUnit({
   ...stagedFixture.units[0], levelId: 'b2-test', levelLabel: 'B2 test',
 });
+const activatedFixture = cur.activateStagedLevel(stagedExport);
 check('بطاقات SRS تشمل القواعد وIPA والنقل والمتلازمات والأفعال المركبة', [
   'grammar', 'phonetics', 'l1-transfer', 'academic', 'collocation', 'phrasal-verb',
 ].every((kind) => componentReviewEntries.some((entry) => entry.kind === kind))
@@ -592,7 +596,16 @@ check('SRS يراجع الأزواج الصوتية والوصل والتنغي�
   ['phonetics:contrastPairs', 'phonetics:connectedSpeech', 'phonetics:intonation',
     'academic:paraphrasing', 'academic:idioms', 'academic:readingAnalysis']
     .every((kind) => componentReviewEntries.some((entry) => entry.kind === kind)));
-const activatedFixture = cur.activateStagedLevel(stagedExport);
+const audioVocabEntry = qg.vocabularyEntries({ levels: ['b2-test'] }).find((entry) => entry.en === 'decision');
+const audioSentenceEntry = qg.sentenceEntries({ levels: ['b2-test'] }).find((entry) => entry.en === 'We should make a decision.');
+const audioPhoneticsEntry = componentReviewEntries.find((entry) => entry.kind === 'phonetics');
+check('بطاقات SRS تحمل مسارات صوت الكلمة وIPA مع إبقاء IPA نصاً منفصلاً',
+  audioVocabEntry?.audioUrl === 'audio/decision.mp3'
+    && audioVocabEntry.ipa === '/dɪˈsɪʒən/'
+    && audioVocabEntry.ipaAudioUrl === 'audio/decision-ipa.mp3'
+    && audioSentenceEntry?.audioUrl === 'audio/sentence.mp3'
+    && audioPhoneticsEntry?.audioUrl === 'audio/think.mp3'
+    && audioPhoneticsEntry.ipaAudioUrl === 'audio/think-ipa.mp3');
 check('تفعيل المستوى المراجع يضيفه إلى المنهج النشط مرة واحدة', activatedFixture.valid
   && cur.getLevel('b2-test') === activatedFixture.level
   && cur.unitsOfLevel('b2-test').length === 1
