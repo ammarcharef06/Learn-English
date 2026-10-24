@@ -1,6 +1,6 @@
 {
   "name": "learn-english",
-  "version": "1.0.18",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
