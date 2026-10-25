@@ -11,11 +11,12 @@ import {
   questionEntries,
   notebookEntries,
 } from '../core/quizgen.js';
-import { getItem, gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
+import { gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries } from '../core/srs.js';
 import { recordAnswer } from '../core/gamify.js';
-import { pageHead, renderSidebarStats } from './shell.js';
+import { renderSidebarStats } from './shell.js';
 import { speak, stopSpeaking } from '../core/speech.js';
 import { ALL_UNITS } from '../data/curriculum.js';
+import { settings, saveSettings } from '../core/store.js';
 
 const DECKS = [
   { id: 'all', ar: 'كل الكلمات', icon: '🌍' },
@@ -129,59 +130,64 @@ function renderDepthDetails(entry) {
 }
 
 export function renderFlashcards(host) {
-  const state = { deck: 'all', size: 15, session: [], mode: 'deck', index: 0, flipped: false, sheetOpen: false, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
+  const reviewSize = [10, 15, 20, 30, 50].includes(Number(settings.reviewSize)) ? Number(settings.reviewSize) : 15;
+  const state = { deck: 'all', size: reviewSize, session: [], mode: 'smart', index: 0, flipped: false, sheetOpen: false, transitioning: false, advanceTimer: null, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
 
   function setup() {
-    document.body.classList.remove('fc-focus-mode');
+    document.body.classList.add('fc-focus-mode');
     document.onkeydown = null;
+    clearTimeout(state.advanceTimer);
+    state.advanceTimer = null;
+    state.transitioning = false;
     stopSpeaking();
     state.session = [];
     const entries = deckEntries(state.deck);
     const st = srsStats(entries);
     const dueSession = buildSession(entries, state.size);
     const smartPlan = smartReviewPlan(entries, state.size);
+    const suggestedSession = state.deck === 'all' ? smartPlan.entries : dueSession;
+    const startMode = state.deck === 'all' ? 'smart' : 'deck';
+    const deckLabel = DECKS.find((deck) => deck.id === state.deck)?.ar || '';
     host.innerHTML = `
-      ${pageHead({ icon: '🃏', title: t('fc.title'), subtitle: t('fc.subtitle') })}
-      <section class="card smart-review" aria-labelledby="smartReviewTitle">
-        <div class="card__title"><span class="ico" aria-hidden="true">🧠</span><h2 id="smartReviewTitle">${t('fc.smartTitle')}</h2></div>
-        <p>${t('fc.smartDesc')}</p>
-        <p class="small muted" role="status">${t('fc.smartSummary')} · ${smartPlan.dueCount} ${t('fc.due')}, ${smartPlan.weakCount} ${t('common.weak')}, ${smartPlan.newCount} ${t('fc.smartNew')}</p>
-        <button class="btn btn--primary" type="button" id="fcSmart" ${smartPlan.entries.length ? '' : 'disabled'}>${t('fc.smartStart')} · ${smartPlan.entries.length}</button>
-      </section>
-      <div class="grid grid--4">
-        <div class="stat"><div class="stat__label">${t('fc.due')}</div><div class="stat__value">${st.due}</div><div class="stat__foot">${st.total} ${t('common.cards')}</div></div>
-        <div class="stat"><div class="stat__label">جديدة</div><div class="stat__value">${st.new}</div><div class="stat__foot">لم تُراجع بعد</div></div>
-        <div class="stat"><div class="stat__label">قيد التعلّم</div><div class="stat__value">${st.learning}</div><div class="stat__foot">أقل من ٣ تكرارات و٢١ يوماً</div></div>
-        <div class="stat stat--ok"><div class="stat__label">متقنة</div><div class="stat__value">${st.mature}</div><div class="stat__foot">٣ تكرارات وفاصل ٢١ يوماً فأكثر</div></div>
-      </div>
-
-      <div class="card" style="margin-top:18px">
-        <div class="card__title"><span class="ico">🗂️</span><h3>${t('fc.deck')}</h3></div>
-        <div class="row row--wrap" style="gap:8px">
-          ${DECKS.map((d) => `<button class="btn btn--sm ${d.id === state.deck ? 'btn--primary' : ''}" type="button" data-deck="${d.id}" aria-pressed="${d.id === state.deck}">${esc(d.ar)}</button>`).join('')}
+      <section class="fc-entry" aria-labelledby="fcEntryTitle">
+        <button class="fc-entry__close" type="button" id="fcEntryClose" aria-label="${esc(t('common.close'))}">×</button>
+        <div class="fc-entry__intro">
+          <span class="fc-entry__eyebrow">${esc(t('fc.title'))}</span>
+          <h1 id="fcEntryTitle">${esc(t('fc.ready'))}</h1>
+          <p>${esc(t('fc.readyHint'))}</p>
         </div>
-        <div class="grid grid--2" style="margin-top:16px">
-          <div class="field">
-            <label for="fcSize">${t('drills.count')}</label>
+        <div class="fc-entry__count" aria-live="polite">
+          <strong>${suggestedSession.length}</strong>
+          <span>${esc(t('common.cards'))} ${esc(deckLabel)}</span>
+        </div>
+        <button class="fc-entry__start" type="button" id="fcStart" ${suggestedSession.length ? '' : 'disabled'}>
+          <span>${esc(t('fc.startNow'))}</span><span aria-hidden="true">↗</span>
+        </button>
+        ${suggestedSession.length ? '' : `<p class="fc-entry__empty">${esc(t('fc.noCards'))}</p>`}
+        <details class="fc-entry__options">
+          <summary>${esc(t('fc.customize'))}</summary>
+          <div class="fc-entry__options-content">
+            <label for="fcDeck">${esc(t('fc.deck'))}</label>
+            <select class="select" id="fcDeck">
+              ${DECKS.map((deck) => `<option value="${deck.id}" ${deck.id === state.deck ? 'selected' : ''}>${esc(deck.ar)}</option>`).join('')}
+            </select>
+            <label for="fcSize">${esc(t('drills.count'))}</label>
             <select class="select" id="fcSize">
               ${[10, 15, 20, 30, 50].map((n) => `<option value="${n}" ${n === state.size ? 'selected' : ''}>${n}</option>`).join('')}
             </select>
+            <p class="fc-entry__stats">${st.due} ${esc(t('fc.due'))} · ${st.new} ${esc(t('fc.newCards'))}</p>
           </div>
-          <div class="field">
-            <label>${t('fc.remaining')}</label>
-            <div class="row" style="gap:8px">
-              <button class="btn btn--primary" type="button" id="fcStart" ${dueSession.length ? '' : 'disabled'}>▶ ${t('common.start')}</button>
-              <span class="chip chip--brand">${dueSession.length} ${t('common.cards')}</span>
-            </div>
-          </div>
-        </div>
-        ${dueSession.length ? '' : '<div class="tip-box">لا توجد بطاقات في هذه المجموعة — جرّب مجموعة أخرى.</div>'}
-      </div>`;
+        </details>
+      </section>`;
 
-    host.querySelectorAll('[data-deck]').forEach((b) => b.addEventListener('click', () => { state.deck = b.dataset.deck; setup(); }));
-    qs('#fcSmart', host)?.addEventListener('click', () => startSession(smartPlan.entries, 'smart'));
-    qs('#fcSize', host)?.addEventListener('change', (e) => { state.size = Number(e.target.value); setup(); });
-    qs('#fcStart', host)?.addEventListener('click', () => startSession(dueSession, 'deck'));
+    qs('#fcEntryClose', host)?.addEventListener('click', () => { location.hash = '#/'; });
+    qs('#fcStart', host)?.addEventListener('click', () => startSession(suggestedSession, startMode));
+    qs('#fcDeck', host)?.addEventListener('change', (event) => { state.deck = event.target.value; setup(); });
+    qs('#fcSize', host)?.addEventListener('change', (e) => {
+      state.size = Number(e.target.value);
+      saveSettings({ reviewSize: state.size });
+      setup();
+    });
   }
 
   function startSession(entries, mode = 'deck') {
@@ -199,25 +205,29 @@ export function renderFlashcards(host) {
     if (state.index >= state.session.length) return renderEnd();
     document.body.classList.add('fc-focus-mode');
     state.sheetOpen = false;
+    state.transitioning = false;
     const e = state.session[state.index];
-    const it = getItem(e.itemId);
-    const interval = it ? it.interval : 0;
-    const easeFactor = it ? it.easeFactor : 2.5;
     const total = state.session.length;
-    const depthDetails = renderDepthDetails(e);
     const speakControl = (text, audioUrl, label = t('common.listen')) => text
-      ? `<button class="btn fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}" aria-pressed="false"><svg class="fc__speak-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 10v4h4l5 4V6l-5 4H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 9a5 5 0 0 1 0 6m2.5-8.5a8.5 8.5 0 0 1 0 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>${esc(label)}</span></button>`
+      ? `<button class="btn fc__speak" type="button" data-speak-text="${esc(text)}" data-audio-url="${esc(audioUrl || '')}" aria-label="${esc(label)}" aria-pressed="false"><svg class="fc__speak-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 10v4h4l5 4V6l-5 4H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 9a5 5 0 0 1 0 6m2.5-8.5a8.5 8.5 0 0 1 0 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="sr-only">${esc(label)}</span></button>`
       : '';
+    const exampleDetails = e.ex ? `<section class="fc-depth__group">
+      <h3>${esc(t('fc.example'))}</h3>
+      <p class="fc-depth__item"><span class="en" lang="en" dir="ltr">${esc(e.ex.en)}</span></p>
+      ${e.ex.ar ? `<p class="fc-depth__item">${esc(e.ex.ar)}</p>` : ''}
+      ${speakControl(e.ex.en, e.ex.audio_url || '', t('fc.exampleAudio'))}
+    </section>` : '';
+    const depthDetails = `${renderDepthDetails(e)}${exampleDetails}`;
 
     host.innerHTML = `
       <section class="fc-focus" aria-label="${esc(t('fc.title'))}">
         <header class="fc-focus__top">
           <button class="fc-focus__close" type="button" id="fcQuit" aria-label="${esc(t('common.close'))}">×</button>
-          <div class="fc-focus__progress" aria-label="${state.index + 1} / ${total}">
+          <div class="fc-focus__progress" role="progressbar" aria-label="${state.index + 1} / ${total}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.index + 1}">
             <span>${state.index + 1}<i>/</i>${total}</span>
             <div class="progress"><i style="width:${Math.round(((state.index + 1) / total) * 100)}%"></i></div>
           </div>
-          <span class="fc-focus__interval">${interval}d · EF ${easeFactor.toFixed(2)}</span>
+          <span class="fc-focus__streak">${esc(t('fc.cardOf', { current: state.index + 1, total }))}</span>
         </header>
 
         <div class="fc-stage">
@@ -225,25 +235,24 @@ export function renderFlashcards(host) {
             <div class="fc__face fc__face--front" id="fcFront" aria-hidden="false">
               <span class="fc__word" lang="en" dir="ltr">${esc(e.en)}</span>
               <div class="fc-front-actions">${speakControl(e.en, e.audioUrl)}</div>
-              <button class="fc-flip-prompt" type="button" id="fcFlipFront" aria-controls="fcCard" aria-expanded="false">${esc(t('fc.flip'))}<span aria-hidden="true">↗</span></button>
             </div>
             <div class="fc__face fc__face--back" id="fcBack" aria-hidden="true" inert>
               <div class="fc__answer">
                 <span class="fc__word fc__word--ar">${esc(e.ar)}</span>
-                ${e.ex ? `<div class="fc__example"><span class="fc__ex en" lang="en" dir="ltr">${esc(e.ex.en)}</span>${e.ex.ar ? `<span class="fc__ex">${esc(e.ex.ar)}</span>` : ''}${speakControl(e.ex.en, e.ex.audio_url || '', t('fc.exampleAudio'))}</div>` : ''}
               </div>
-              ${depthDetails ? `<button class="fc-depth-trigger" type="button" data-depth-open aria-expanded="false" aria-controls="fcDepthSheet"><span class="fc-sheet-grip" aria-hidden="true"></span><span>${esc(t('fc.deepDetails'))}</span><span aria-hidden="true">⌃</span></button>` : ''}
-              <div class="fc-actions" aria-hidden="false">
-                <button class="btn fc-grade fc-grade--again" type="button" data-grade="0">${t('fc.again')} <span class="kbd">1</span></button>
-                <button class="btn fc-grade fc-grade--hard" type="button" data-grade="1">${t('fc.hard')} <span class="kbd">2</span></button>
-                <button class="btn fc-grade fc-grade--good" type="button" data-grade="2">${t('fc.good')} <span class="kbd">3</span></button>
-                <button class="btn fc-grade fc-grade--easy" type="button" data-grade="3">${t('fc.easy')} <span class="kbd">4</span></button>
-              </div>
-              <button class="fc-flip-again" type="button" id="fcFlipBack" aria-controls="fcCard" aria-expanded="true">${esc(t('fc.hideAnswer'))}</button>
             </div>
           </div>
         </div>
-        <p class="fc-focus__status" id="fcFlipStatus" role="status" aria-live="polite">${t('fc.flipBeforeGrade')}</p>
+        <footer class="fc-focus__actions">
+          <button class="fc-flip-prompt" type="button" id="fcFlip" aria-controls="fcCard" aria-expanded="false">${esc(t('fc.flip'))}<span aria-hidden="true">↗</span></button>
+          <div class="fc-actions" id="fcGradeActions" ${state.flipped ? '' : 'hidden'}>
+            <button class="btn fc-grade fc-grade--hard" type="button" data-grade="1" aria-label="${esc(t('fc.hard'))}">${esc(t('fc.hard'))}<span class="kbd">1</span></button>
+            <button class="btn fc-grade fc-grade--good" type="button" data-grade="2" aria-label="${esc(t('fc.good'))}">${esc(t('fc.good'))}<span class="kbd">2</span></button>
+            <button class="btn fc-grade fc-grade--easy" type="button" data-grade="3" aria-label="${esc(t('fc.easy'))}">${esc(t('fc.easy'))}<span class="kbd">3</span></button>
+          </div>
+          ${depthDetails ? `<button class="fc-depth-trigger" type="button" data-depth-open aria-expanded="false" aria-controls="fcDepthSheet"><span class="fc-sheet-grip" aria-hidden="true"></span><span>${esc(t('fc.deepDetails'))}</span><span aria-hidden="true">⌃</span></button>` : ''}
+          <p class="fc-focus__status sr-only" id="fcFlipStatus" role="status" aria-live="polite">${t('fc.flipBeforeGrade')}</p>
+        </footer>
       </section>
 
       ${depthDetails ? `
@@ -262,11 +271,12 @@ export function renderFlashcards(host) {
         </div>` : ''}`;
 
     const card = qs('#fcCard', host);
-    const flipButtons = [...host.querySelectorAll('#fcFlipFront, #fcFlipBack')];
+    const flipButton = qs('#fcFlip', host);
+    const gradeActions = qs('#fcGradeActions', host);
     const sheetLayer = qs('#fcDepthSheet', host);
     const sheet = qs('.fc-sheet', host);
     const sheetOpener = qs('[data-depth-open]', host);
-    let touchStartY = null;
+    let pointerStart = null;
     const closeSheet = (restoreFocus = true) => {
       if (!sheetLayer || sheetLayer.hidden) return;
       sheetLayer.hidden = true;
@@ -284,6 +294,7 @@ export function renderFlashcards(host) {
       requestAnimationFrame(() => qs('.fc-sheet__close', sheetLayer)?.focus());
     };
     const flip = () => {
+      if (state.transitioning) return;
       if (state.sheetOpen) closeSheet(false);
       state.flipped = !state.flipped;
       card.classList.toggle('is-flipped', state.flipped);
@@ -293,29 +304,48 @@ export function renderFlashcards(host) {
       front.toggleAttribute('inert', state.flipped);
       back.setAttribute('aria-hidden', String(!state.flipped));
       back.toggleAttribute('inert', !state.flipped);
-      flipButtons.forEach((button) => button.setAttribute('aria-expanded', String(state.flipped)));
-      host.querySelectorAll('[data-grade]').forEach((b) => { b.disabled = !state.flipped; });
-      sheetOpener?.setAttribute('aria-expanded', 'false');
-      requestAnimationFrame(() => qs(state.flipped ? '#fcFlipBack' : '#fcFlipFront', host)?.focus());
+      gradeActions.hidden = !state.flipped;
+      flipButton.hidden = state.flipped;
+      flipButton.setAttribute('aria-expanded', String(state.flipped));
+      if (sheetOpener) sheetOpener.hidden = !state.flipped;
+      requestAnimationFrame(() => (state.flipped ? qs('[data-grade]', host) : flipButton)?.focus());
       const status = qs('#fcFlipStatus', host);
       if (status) status.textContent = state.flipped ? t('fc.answerRevealed') : t('fc.flipBeforeGrade');
     };
-    flipButtons.forEach((button) => button.addEventListener('click', flip));
+    flipButton.addEventListener('click', flip);
     sheetOpener?.addEventListener('click', openSheet);
     host.querySelectorAll('[data-sheet-close]').forEach((button) => button.addEventListener('click', () => closeSheet()));
-    const bindSwipeUp = (element, onSwipe) => {
+    const bindVerticalSwipe = (element, onSwipeUp, onSwipeDown = null) => {
       element?.addEventListener('pointerdown', (event) => {
-        if (event.pointerType === 'touch') touchStartY = event.clientY;
+        if (event.pointerType === 'touch') pointerStart = { x: event.clientX, y: event.clientY };
       }, { passive: true });
       element?.addEventListener('pointerup', (event) => {
-        if (touchStartY !== null && touchStartY - event.clientY > 48) onSwipe();
-        touchStartY = null;
+        if (!pointerStart) return;
+        const deltaY = pointerStart.y - event.clientY;
+        const deltaX = Math.abs(pointerStart.x - event.clientX);
+        if (deltaX < Math.abs(deltaY) && deltaY > 52) onSwipeUp?.();
+        else if (deltaX < Math.abs(deltaY) && deltaY < -52) onSwipeDown?.();
+        pointerStart = null;
       }, { passive: true });
-      element?.addEventListener('pointercancel', () => { touchStartY = null; }, { passive: true });
+      element?.addEventListener('pointercancel', () => { pointerStart = null; }, { passive: true });
     };
-    bindSwipeUp(sheetOpener, openSheet);
-    bindSwipeUp(qs('#fcBack', host), openSheet);
-    bindSwipeUp(qs('[data-sheet-handle]', host), () => closeSheet());
+    bindVerticalSwipe(sheetOpener, openSheet);
+    bindVerticalSwipe(qs('#fcBack', host), openSheet);
+    bindVerticalSwipe(qs('[data-sheet-handle]', host), () => {}, () => closeSheet());
+    card.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'touch' || event.target.closest('button')) return;
+      pointerStart = { x: event.clientX, y: event.clientY };
+    }, { passive: true });
+    card.addEventListener('pointerup', (event) => {
+      if (!pointerStart || event.target.closest('button')) return;
+      const start = pointerStart;
+      pointerStart = null;
+      if (state.flipped) return;
+      const deltaX = start.x - event.clientX;
+      const deltaY = Math.abs(start.y - event.clientY);
+      if (Math.abs(deltaX) > 64 && Math.abs(deltaX) > deltaY * 1.25) flip();
+    }, { passive: true });
+    card.addEventListener('pointercancel', () => { pointerStart = null; }, { passive: true });
     sheet?.addEventListener('keydown', (event) => {
       if (event.key !== 'Tab') return;
       const focusable = [...sheet.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]')];
@@ -341,7 +371,13 @@ export function renderFlashcards(host) {
     }));
     if (!state.flipped) { /* لا ننطق تلقائياً لتجنب الإزعاج */ }
 
-    host.querySelectorAll('[data-grade]').forEach((b) => b.addEventListener('click', () => grade(Number(b.dataset.grade))));
+    host.querySelectorAll('[data-grade]').forEach((button) => button.addEventListener('click', () => {
+      const quality = Number(button.dataset.grade);
+      if (state.transitioning) return;
+      state.transitioning = true;
+      card.classList.add(quality === 1 ? 'is-swipe-left' : quality === 3 ? 'is-swipe-right' : 'is-swipe-up');
+      state.advanceTimer = setTimeout(() => grade(quality), 190);
+    }));
     qs('#fcQuit', host)?.addEventListener('click', () => setup());
     document.onkeydown = (ev) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
@@ -349,11 +385,18 @@ export function renderFlashcards(host) {
         if (ev.key === 'Escape') closeSheet();
         return;
       }
-      if (['1', '2', '3', '4'].includes(ev.key) && state.flipped) grade(Number(ev.key) - 1);
+      if (ev.key === 'Escape') { setup(); return; }
+      if (ev.key === 'Enter' && !state.flipped) { flip(); return; }
+      if (['1', '2', '3'].includes(ev.key) && state.flipped) {
+        const button = qs(`[data-grade="${ev.key}"]`, host);
+        button?.click();
+      }
     };
   }
 
   function grade(q) {
+    clearTimeout(state.advanceTimer);
+    state.advanceTimer = null;
     const e = state.session[state.index];
     if (!e) return;
     stopSpeaking();
@@ -373,24 +416,17 @@ export function renderFlashcards(host) {
   function renderEnd() {
     document.body.classList.remove('fc-focus-mode');
     document.onkeydown = null;
+    state.transitioning = false;
     const total = state.session.length;
     const remembered = state.result.good + state.result.easy;
     host.innerHTML = `
-      ${pageHead({ icon: '🎉', title: t('fc.finished'), subtitle: `${total} ${t('common.word')} · ${Math.round((remembered / Math.max(1, total)) * 100)}% حفظ جيد` })}
-      <div class="grid grid--4">
-        <div class="stat stat--bad"><div class="stat__label">لم أتذكر</div><div class="stat__value">${state.result.again}</div></div>
-        <div class="stat"><div class="stat__label">صعب</div><div class="stat__value">${state.result.hard}</div></div>
-        <div class="stat stat--ok"><div class="stat__label">جيد</div><div class="stat__value">${state.result.good}</div></div>
-        <div class="stat stat--brand"><div class="stat__label">سهل</div><div class="stat__value">${state.result.easy}</div></div>
-      </div>
-      <div class="card" style="margin-top:18px">
-        <p class="muted">تُجدول البطاقات تلقائياً للرجوع إليها: التي لم تتذكرها تعود قريباً، والتي أتقنتها تعود بعد أسابيع.</p>
-        <div class="row row--wrap" style="gap:8px">
-          <button class="btn btn--primary" type="button" id="fcAgain">${t('common.retry')}</button>
-          <button class="btn" type="button" id="fcSetup">${t('fc.deck')}</button>
-          <a class="btn" href="#/drills">${t('nav.drills')}</a>
-        </div>
-      </div>`;
+      <section class="fc-results" aria-labelledby="fcResultTitle">
+        <span class="fc-entry__eyebrow">${esc(t('fc.finished'))}</span>
+        <h1 id="fcResultTitle">${Math.round((remembered / Math.max(1, total)) * 100)}%</h1>
+        <p>${total} ${esc(t('common.cards'))} · ${state.result.hard} ${esc(t('fc.hard'))} · ${state.result.good} ${esc(t('fc.good'))} · ${state.result.easy} ${esc(t('fc.easy'))}</p>
+        <button class="fc-entry__start" type="button" id="fcAgain">${esc(t('common.retry'))}<span aria-hidden="true">↗</span></button>
+        <button class="fc-results__secondary" type="button" id="fcSetup">${esc(t('fc.customize'))}</button>
+      </section>`;
     confetti(total >= 5 ? 80 : 30);
     qs('#fcAgain', host)?.addEventListener('click', () => {
       const entries = deckEntries(state.deck);

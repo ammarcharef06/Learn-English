@@ -1,9 +1,6 @@
 /* ============================================================
-   الشريط العلوي المشترك + الدرج
-   صفحة الموقع (index.html) وصفحة A0 (zero.html) تستخدمان هذا الملف
-   نفسه: نفس الشعار ونفس الأزرار ونفس الدرج — تنقّل واحد لكل الأجهزة.
-   التنقّل الوحيد الآن: زر ☰ يفتح درجاً جانبياً (لا شريط سفلي ولا
-   قائمة جانبية ثابتة).
+   شريط مشترك للموقع وصفحة A0؛ الموقع يستخدم قائمة هاتف وشريطاً جانبياً
+   قابلاً للطي على سطح المكتب، بينما تحتفظ صفحة A0 بتنقلها المستقل.
    ============================================================ */
 import { qs, esc } from '../core/utils.js';
 import { settings, saveSettings } from '../core/store.js';
@@ -51,7 +48,7 @@ export function topbarHTML(mode = 'site') {
   const name = isZero ? 'من الصفر — تأسيس A0' : t('brand.name');
   const tag = isZero ? 'الحروف · الأرقام · التحيات' : t('brand.tag');
   return `
-    <button class="icon-btn topbar__menu" id="btnMenu" type="button" title="القائمة" aria-label="القائمة" aria-expanded="false" aria-controls="sidebar">
+    <button class="icon-btn topbar__menu" id="btnMenu" type="button" title="${t('nav.toggle')}" aria-label="${t('nav.toggle')}" aria-expanded="false" aria-controls="sidebar">
       <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
     </button>
 
@@ -76,7 +73,22 @@ export function renderTopbar(root, mode = 'site', { onRerender = null } = {}) {
   root.innerHTML = topbarHTML(mode);
   const rerender = () => (typeof onRerender === 'function' ? onRerender() : window.__leaRenderAll?.());
 
-  root.querySelector('#btnMenu')?.addEventListener('click', toggleDrawer);
+  const menuButton = root.querySelector('#btnMenu');
+  try {
+    const collapsed = localStorage.getItem('lea.shell.sidebar-collapsed') === 'true';
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+    menuButton?.setAttribute('aria-expanded', String(!collapsed));
+  } catch { /* Shell preferences remain usable when storage is unavailable. */ }
+  menuButton?.addEventListener('click', () => {
+    if (window.matchMedia('(min-width: 900px)').matches) {
+      const collapsed = !document.body.classList.contains('sidebar-collapsed');
+      document.body.classList.toggle('sidebar-collapsed', collapsed);
+      menuButton.setAttribute('aria-expanded', String(!collapsed));
+      try { localStorage.setItem('lea.shell.sidebar-collapsed', String(collapsed)); } catch { /* Optional preference. */ }
+      return;
+    }
+    toggleDrawer();
+  });
 
   root.querySelector('#btnLang')?.addEventListener('click', () => {
     saveSettings({ uiLang: settings.uiLang === 'en' ? 'ar' : 'en' });

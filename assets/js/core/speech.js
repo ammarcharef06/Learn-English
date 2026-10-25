@@ -3,6 +3,7 @@ import { settings } from './store.js';
 
 let voices = [];
 let ready = false;
+let voicesChangedBound = false;
 
 export function isSpeechSupported() {
   return typeof window !== 'undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
@@ -18,7 +19,10 @@ function loadVoices() {
 export function initSpeech() {
   if (!isSpeechSupported()) return;
   loadVoices();
-  window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+  if (!voicesChangedBound) {
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+    voicesChangedBound = true;
+  }
 }
 
 export function getVoices() { return ready ? voices : loadVoices(); }
@@ -67,6 +71,39 @@ function startPlayback(opts = {}) {
   return id;
 }
 
+function playRecorded(src, opts, label) {
+  try {
+    audioEl = audioEl || new Audio();
+    audioEl.preload = 'auto';
+    audioEl.setAttribute?.('playsinline', '');
+    const id = startPlayback(opts);
+    audioEl.onplay = () => {
+      if (activePlayback?.id !== id) return;
+      try { opts?.onstart?.(); } catch { /* Ignore presentation callback failures. */ }
+    };
+    audioEl.onended = () => finishPlayback(id);
+    audioEl.onerror = () => {
+      if (activePlayback?.id !== id) return;
+      console.warn(`${label} failed to load`, src, audioEl.error || '');
+      finishPlayback(id);
+    };
+    audioEl.src = src;
+    audioEl.currentTime = 0;
+    const promise = audioEl.play();
+    if (promise && typeof promise.catch === 'function') {
+      promise.catch((error) => {
+        if (activePlayback?.id !== id) return;
+        console.warn(`${label} could not be played`, src, error);
+        finishPlayback(id);
+      });
+    }
+    return true;
+  } catch (error) {
+    console.warn(`${label} could not be started`, src, error);
+    return false;
+  }
+}
+
 export function registerSoundBank(map = {}) {
   for (const [k, v] of Object.entries(map)) {
     const key = String(k || '').trim().toLowerCase();
@@ -98,62 +135,10 @@ export function speak(text, opts = {}) {
       console.warn('Pronunciation audio URL must be a valid same-origin HTTP(S) URL', opts.audioUrl);
       return false;
     }
-    try {
-      audioEl = audioEl || new Audio();
-      const id = startPlayback(opts);
-      audioEl.src = src;
-      audioEl.currentTime = 0;
-      audioEl.onplay = () => {
-        if (activePlayback?.id !== id) return;
-        try { opts?.onstart?.(); } catch { /* تجاهل */ }
-      };
-      audioEl.onended = () => finishPlayback(id);
-      audioEl.onerror = () => {
-        console.warn('Pronunciation audio failed to load', src, audioEl.error || '');
-        finishPlayback(id);
-      };
-      const pr = audioEl.play();
-      if (pr && typeof pr.catch === 'function') {
-        pr.catch((error) => {
-          console.warn('Pronunciation audio could not be played', src, error);
-          finishPlayback(id);
-        });
-      }
-      return true;
-    } catch (error) {
-      console.warn('Pronunciation audio could not be started', src, error);
-      return false;
-    }
+    return playRecorded(src, opts, 'Pronunciation audio');
   }
   const src = soundBank.get(String(text || '').trim().toLowerCase());
-  if (src) {
-    try {
-      audioEl = audioEl || new Audio();
-      const id = startPlayback(opts);
-      audioEl.src = src;
-      audioEl.currentTime = 0;
-      audioEl.onplay = () => {
-        if (activePlayback?.id !== id) return;
-        try { opts?.onstart?.(); } catch { /* تجاهل */ }
-      };
-      audioEl.onended = () => finishPlayback(id);
-      audioEl.onerror = () => {
-        console.warn('Recorded pronunciation failed to load', src, audioEl.error || '');
-        finishPlayback(id);
-      };
-      const pr = audioEl.play();
-      if (pr && typeof pr.catch === 'function') {
-        pr.catch((error) => {
-          console.warn('Recorded pronunciation could not be played', src, error);
-          finishPlayback(id);
-        });
-      }
-      return true;
-    } catch (error) {
-      console.warn('Recorded pronunciation could not be started', src, error);
-      return false;
-    }
-  }
+  if (src) return playRecorded(src, opts, 'Recorded pronunciation');
   return speakBuiltIn(text, opts);
 }
 
@@ -179,7 +164,9 @@ export function speakBuiltIn(text, opts = {}) {
 }
 
 export function stopSpeaking() {
-  if (audioEl) { try { audioEl.pause(); } catch { /* تجاهل */ } }
+  if (audioEl) {
+    try { audioEl.pause(); audioEl.currentTime = 0; } catch { /* Ignore media reset failures. */ }
+  }
   if (isSpeechSupported()) {
     try { window.speechSynthesis.cancel(); } catch {}
   }

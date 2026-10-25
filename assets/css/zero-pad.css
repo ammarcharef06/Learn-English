@@ -140,7 +140,7 @@
   inline-size: 100%;
   min-inline-size: 0;
   direction: ltr;      /* النص الإنجليزي دائماً من اليسار لليمين */
-  text-align: left;
+  text-align: start;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   background:
@@ -166,7 +166,7 @@
 .zpad__hint,
 .zpad__info {
   direction: ltr;
-  text-align: left;
+  text-align: start;
   font-family: var(--font-en);
   margin: 0;
 }

@@ -733,9 +733,10 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
     assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
     assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
-    for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
+    for (const chrome of ['assets/js/app.js']) {
       assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
     }
+    assert(zeroHtml.includes('class="mobile-nav" id="bottomnav"'), 'غلاف A0 لا يحتوي تنقّلاً سفلياً للهاتف');
     for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
       assert(zeroHtml.includes(need), `zero.html ينقصه ${need} — الدرج المشترك`);
     }
@@ -743,7 +744,7 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
     assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
   });
-  it('تنقّل A0 = نفس درج الموقع (تنقّل واحد لكل الأجهزة)', () => {
+  it('صفحة A0 تستخدم درجها المستقل والموقع يضيف تنقّلاً سفلياً للهاتف', () => {
     assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
     assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
     for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
@@ -753,7 +754,8 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');
     assert(/renderTopbar/.test(zeroMain), 'صفحة A0 لا ترسم الشريط المشترك');
     assert(/renderTopbar/.test(app), 'صفحة الموقع لا ترسم الشريط المشترك');
-    assert(!/id="bottomnav"/.test(html) && !/class="bottomnav" id="bottomnav"/.test(html), 'الشريط السفلي ما زال في صفحة الموقع');
+    assert(/class="mobile-nav" id="bottomnav"/.test(html), 'تنقّل الهاتف غير موجود في غلاف الموقع');
+    assert(/id="bottomnav"/.test(zeroHtml) && /MOBILE_NAV/.test(shellSrc), 'التنقّل السفلي لا يظهر في غلاف A0 المستقل');
   });
   it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
     for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {

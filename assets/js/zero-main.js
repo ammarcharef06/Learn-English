@@ -1,7 +1,7 @@
 ﻿/* ============================================================
    نقطة دخول محتوى A0 بموجّه مستقل وغلاف الأكاديمية المشترك.
    ============================================================ */
-import { initRouter, route, setNotFound, resolve, onRouteRendered } from './core/router.js';
+import { initRouter, route, setNotFound, resolve, onRouteChange, onRouteRendered } from './core/router.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { isAuthed, extendSession, startIdleSessionGuard } from './core/auth.js';
 import { flush } from './core/store.js';
@@ -9,6 +9,7 @@ import { qs, toast, focusMainHeading } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
 import { applyAccessibility } from './core/theme.js';
+import { bindSwipeBack, createRouteHistory } from './core/navigation-gesture.js';
 import { renderTopbar, openDrawer, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
 import { registerZeroSounds } from './core/zero-audio.js';
@@ -85,6 +86,15 @@ async function main() {
   window.addEventListener('hashchange', closeDrawer);
 
   setupRoutes();
+  const routeHistory = createRouteHistory();
+  onRouteChange(({ path }) => routeHistory.remember(path));
+  bindSwipeBack({
+    canGoBack: () => routeHistory.canGoBack(),
+    onBack: () => {
+      const path = routeHistory.back();
+      if (path) location.hash = `#${path}`;
+    },
+  });
   onRouteRendered(() => {
     applyZeroShell(location.hash);
     requestAnimationFrame(() => focusMainHeading(view()));

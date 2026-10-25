@@ -6,7 +6,7 @@ import { READINGS, getReading, readingsOfLevel } from '../data/curriculum.js';
 import { recordReading } from '../core/gamify.js';
 import { runQuiz, readingQuestions } from './quiz-runner.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
-import { speak } from '../core/speech.js';
+import { speak, stopSpeaking } from '../core/speech.js';
 
 const LEVEL_META = {
   a1: { label: 'A1 — المبتدئ', icon: '🌱', color: '#22c55e' },
@@ -118,7 +118,7 @@ function renderOne(host, id) {
     e.currentTarget.textContent = box.hidden ? t('read.showAr') : t('read.hideAr');
   });
   qs('#readAloud', host)?.addEventListener('click', () => speak(String(r.text).replace(/\n/g, ' '), { rate: 0.95 }));
-  qs('#stopAloud', host)?.addEventListener('click', () => window.speechSynthesis?.cancel());
+  qs('#stopAloud', host)?.addEventListener('click', stopSpeaking);
   qs('#nbWhole', host)?.addEventListener('click', () => {
     import('../core/gamify.js').then(({ addNotebook }) => {
       addNotebook({ en: r.title, ar: r.titleAr, note: `نص مطالعة (${meta.label})` });

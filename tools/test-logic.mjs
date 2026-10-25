@@ -74,20 +74,20 @@ window.Capacitor = { isNativePlatform: () => true, getPlatform: () => 'android' 
 globalThis.fetch = async () => ({
   ok: true,
   json: async () => ({
-    tag_name: 'v1.1.1',
-    name: 'English Academy v1.1.1',
+    tag_name: 'v1.1.2',
+    name: 'English Academy v1.1.2',
     body: 'Release notes',
     assets: [
       { ...updateAssets[0], size: 8000000, digest: `sha256:${'a'.repeat(64)}` },
       { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.1.1/SHA256SUMS.txt' },
+      { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.1.2/SHA256SUMS.txt' },
     ],
   }),
 });
 try {
   const releaseCheck = await updater.checkForUpdate({ force: true });
   check('فحص GitHub يكتشف الإصدار الأحدث مع بصمة SHA موثوقة', releaseCheck.update
-    && releaseCheck.latestVersion === '1.1.1' && releaseCheck.release.asset.digest.startsWith('sha256:'));
+    && releaseCheck.latestVersion === '1.1.2' && releaseCheck.release.asset.digest.startsWith('sha256:'));
 } finally {
   globalThis.fetch = oldFetch;
   if (oldCapacitor === undefined) delete window.Capacitor;
@@ -129,6 +129,7 @@ const savedUtterance = window.SpeechSynthesisUtterance;
 const savedGlobalUtterance = globalThis.SpeechSynthesisUtterance;
 const savedWarn = console.warn;
 let synthesized = 0;
+let voicesChangedSubscriptions = 0;
 globalThis.Audio = class {
   pause() {}
   play() { return Promise.reject(new Error('recording unavailable')); }
@@ -136,12 +137,15 @@ globalThis.Audio = class {
 window.speechSynthesis = {
   cancel() {},
   getVoices: () => [],
-  addEventListener() {},
+  addEventListener(event) { if (event === 'voiceschanged') voicesChangedSubscriptions++; },
   speak(utterance) { synthesized++; utterance.onstart?.(); },
 };
 window.SpeechSynthesisUtterance = class {};
 globalThis.SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
 console.warn = () => {};
+speech.initSpeech();
+speech.initSpeech();
+check('تسجيل voiceschanged مرة واحدة رغم تكرار تهيئة محرك الصوت', voicesChangedSubscriptions === 1);
 speech.registerSoundBank({ 'test:recorded': './missing-recording.mp3' });
 check('التسجيل المسجّل يُختار للتشغيل', speech.speak('test:recorded') === true);
 await new Promise((resolve) => setTimeout(resolve, 0));
@@ -394,27 +398,27 @@ try {
   globalThis.fetch = async () => ({
     ok: true,
     json: async () => ({
-      tag_name: 'v1.1.1',
-      name: 'English Academy v1.1.1',
+      tag_name: 'v1.1.2',
+      name: 'English Academy v1.1.2',
       body: 'Release notes',
-      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.1.1',
+      html_url: 'https://github.com/ammarcharef06/Learn-English/releases/tag/v1.1.2',
       assets: [
         { ...updateAssets[1], size: 8000000, digest: `sha256:${'b'.repeat(64)}` },
-        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.1.1/SHA256SUMS.txt' },
+        { name: 'SHA256SUMS.txt', browser_download_url: 'https://github.com/ammarcharef06/Learn-English/releases/download/v1.1.2/SHA256SUMS.txt' },
       ],
     }),
   });
   await updater.checkForUpdateInBackground();
   check('Background update check stores a new release even when notification display fails',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.1.1'
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.1.2'
     && !localStorage.getItem('lea.update.notified'));
   showUpdateNotification = true;
   localStorage.setItem('lea.update.backgroundCheck', String(Date.now()));
   await updater.checkForUpdateInBackground();
   check('Failed update notification is retried and only marked after display succeeds',
-    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.1.1');
+    updateNotificationAttempts >= 2 && localStorage.getItem('lea.update.notified') === '1.1.2');
   check('Pending update is preserved when background check is throttled',
-    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.1.1');
+    JSON.parse(localStorage.getItem('lea.update.pending') || 'null')?.version === '1.1.2');
 } finally {
   globalThis.fetch = oldFetch;
   if (priorNavigator) Object.defineProperty(globalThis, 'navigator', priorNavigator);
@@ -510,8 +514,8 @@ check('واجهة المزامنة تعلن حالة الانشغال وإكما
     && syncSettingsSource.includes('window.requestAnimationFrame'));
 const responsiveCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
 check('بطاقات الهاتف توفر أزرار تقييم ولمس صوتية واسعة',
-  responsiveCss.includes('.fc-actions .btn { min-block-size: 56px;')
-    && responsiveCss.includes('.fc__speak { min-inline-size: 56px; min-block-size: 56px;'));
+  responsiveCss.includes('.fc-actions .btn { min-block-size: 62px;')
+    && responsiveCss.includes('inline-size: 72px; min-inline-size: 72px; block-size: 72px; min-block-size: 72px;'));
 check('حركات الانتقال تحترم تفضيلات تقليل الحركة',
   responsiveCss.includes('::view-transition-old(root)')
     && responsiveCss.includes('html[data-reduce-motion="true"] ::view-transition-new(root)'));
@@ -527,8 +531,12 @@ store.saveSettings({ highContrast: true, reduceAnimations: true });
 theme.applyAccessibility();
 check('التباين المرتفع يُطبّق على الواجهة', document.documentElement.dataset.contrast === 'high');
 check('تقليل الحركة يُطبّق على الواجهة', document.documentElement.dataset.reduceMotion === 'true');
-store.saveSettings({ highContrast: false, reduceAnimations: false });
+store.saveSettings({ highContrast: false, reduceAnimations: false, accent: 'violet' });
 theme.applyAccessibility();
+theme.applyAccent();
+check('لون التفاعل المختار يُطبّق عبر سمة واجهة صالحة', document.documentElement.dataset.accent === 'violet');
+store.saveSettings({ accent: 'blue' });
+theme.applyAccent();
 
 /* ================= 9. المنهج ================= */
 section('المنهج والمطالعات');
@@ -547,28 +555,95 @@ check('زر الصوت في البطاقات يعرض حالة تشغيل مرئ
 check('الوجه الأمامي للبطاقة يعرض العبارة وزر النطق فقط',
   Boolean(flashcardFront) && !flashcardFront.includes('e.ipa') && !flashcardFront.includes('e.note')
     && flashcardFront.includes('fc-front-actions'));
+const flashcardBack = flashcardSource.match(/<div class="fc__face fc__face--back"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/)?.[1] || '';
+check('وجه الإجابة يقتصر على الترجمة، وتنتقل الأمثلة إلى الدرج الأكاديمي',
+  Boolean(flashcardBack) && flashcardBack.includes('e.ar') && !flashcardBack.includes('e.ex')
+    && flashcardSource.includes("t('fc.example')") && flashcardSource.includes('const exampleDetails'));
+check('تدفق البطاقات يبدأ بإجراء واحد ويعرض ثلاثة تقييمات فقط بعد كشف الإجابة',
+  flashcardSource.includes('id="fcStart"')
+    && flashcardSource.includes('<details class="fc-entry__options">')
+    && ['hard', 'good', 'easy'].every((grade) => flashcardSource.includes(`t('fc.${grade}')`))
+    && !flashcardSource.includes('data-grade="0"')
+    && flashcardSource.includes('id="fcGradeActions" ${state.flipped ? \'\' : \'hidden\'}')
+    && flashcardSource.includes('gradeItem(e.itemId, [0, 3, 4, 5][q])'));
 check('تفاصيل البطاقة قابلة للتوسيع وتغطي المحاور الخمسة',
   flashcardSource.includes('id="fcDepthSheet"')
     && flashcardSource.includes('data-depth-open')
-    && flashcardSource.includes('bindSwipeUp(qs(\'#fcBack\', host), openSheet)')
+    && flashcardSource.includes('bindVerticalSwipe(qs(\'#fcBack\', host), openSheet)')
     && !flashcardSource.includes('<details class="fc-depth">')
     && ['grammar', 'vocabulary', 'phonetics', 'arabic_l1_transfers', 'academic_focus'].every((axis) => flashcardSource.includes(`key: '${axis}'`)));
 check('الدرج السفلي يعرض المحاور الخمسة بعناوين مترجمة حتى عند غياب بيانات إضافية',
   flashcardSource.includes("t('fc.noAxisDetail')")
     && ['fc.axis.grammar', 'fc.axis.vocabulary', 'fc.axis.phonetics', 'fc.axis.arabic_l1_transfers', 'fc.axis.academic_focus'].every((key) => flashcardSource.includes(key)));
 check('ثيم Slate الداكن يستخدم ألواناً حيوية وخطوطاً تحريرية حديثة',
-  mainCss.includes('--bg: #0b1220;')
+  mainCss.includes('--bg: #0a0a0a;')
     && mainCss.includes('--accent: #78aaff;')
     && mainCss.includes('"IBM Plex Sans Arabic"')
     && mainCss.includes('"Manrope"'));
-check('لوحة البدء تعرض الحلقة وزر التعلم وحدهما وتخفي إطار التطبيق',
-  dashboardSource.includes('href="#/drill?mode=goal"')
-    && dashboardSource.includes('dashboard-home__progress')
-    && dashboardSource.includes('dashboard-home__start')
-    && mainCss.includes('body.home-focus-mode #topbar')
-    && mainCss.includes('.dashboard-home__arc'));
-check('الواجهة الجديدة تبدأ افتراضياً بالوضع الداكن',
-  store.DEFAULT_SETTINGS.theme === 'dark' && (await readFile(join(ROOT, 'index.html'), 'utf8')).includes('var theme = s.theme || \'dark\''));
+check('لوحة التقدم تعرض نشاط ٢٨ يوماً والسلسلة وزر الدخول إلى التدفق',
+  dashboardSource.includes('activityHeatmap()')
+    && dashboardSource.includes('dash.streakCount')
+    && dashboardSource.includes('href="#/flashcards"')
+    && dashboardSource.includes('flow-launch__progress')
+    && mainCss.includes('.activity-heatmap__cell[data-level="4"]'));
+const lessonsSource = await readFile(join(ROOT, 'assets/js/views/lessons.js'), 'utf8');
+check('خريطة المنهج تعرض A0 ثم مستويات A1-C2 وتقيّد فتح المستويات التالية',
+  lessonsSource.includes('skill-node--foundation')
+    && lessonsSource.includes('LEVELS.map((level, index)')
+    && lessonsSource.includes('isLevelUnlocked(index)')
+    && lessonsSource.includes('skill-level__path')
+    && mainCss.includes('.skill-unit.is-locked'));
+const readingSource = await readFile(join(ROOT, 'assets/js/views/reading.js'), 'utf8');
+check('زر إيقاف القراءة يوقف التسجيلات وSpeechSynthesis عبر المحرك الموحد',
+  readingSource.includes('import { speak, stopSpeaking }')
+    && /#stopAloud[^;]*addEventListener\('click', stopSpeaking\)/.test(readingSource));
+const shellSource = await readFile(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
+const topbarSource = await readFile(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
+const appHtml = await readFile(join(ROOT, 'index.html'), 'utf8');
+check('غلاف التطبيق يوفر تنقلاً سفلياً للهاتف وشريطاً جانبياً قابلاً للطي لسطح المكتب',
+  appHtml.includes('class="mobile-nav" id="bottomnav"')
+    && shellSource.includes('const MOBILE_NAV')
+    && topbarSource.includes('sidebar-collapsed')
+    && mainCss.includes('.mobile-nav {')
+    && mainCss.includes('body.sidebar-collapsed .layout'));
+const navigation = await mod('assets/js/core/navigation-gesture.js');
+const routeHistory = navigation.createRouteHistory();
+routeHistory.remember('/');
+routeHistory.remember('/lessons');
+routeHistory.remember('/unit/first');
+check('سجل التنقل يعيد الرجوع داخل التطبيق فقط دون الخروج من الموقع',
+  routeHistory.canGoBack() && routeHistory.back() === '/lessons'
+    && routeHistory.back() === '/'
+    && routeHistory.back() === null);
+check('سجل التنقل يتعرّف على رجوع المتصفح ولا يكرر المسار',
+  (() => {
+    const history = navigation.createRouteHistory();
+    history.remember('/');
+    history.remember('/lessons');
+    history.remember('/');
+    return history.back() === null && !history.canGoBack();
+  })());
+check('حركة الرجوع تستثني وضع البطاقات وحقول الإدخال والرسم',
+  (await readFile(join(ROOT, 'assets/js/core/navigation-gesture.js'), 'utf8'))
+    .includes('.fc-shell, .fc-sheet, .zero-pad, [data-no-back-swipe]'));
+check('الغلاف يحترم Safe Areas ويعرض مؤشرات تركيز مخصصة للمفاتيح',
+  mainCss.includes('env(safe-area-inset-top)')
+    && mainCss.includes('env(safe-area-inset-bottom)')
+    && mainCss.includes(':focus-visible')
+    && mainCss.includes('@media (pointer: coarse)'));
+const appSettingsSource = await readFile(join(ROOT, 'assets/js/views/settings.js'), 'utf8');
+check('مركز التحكم يحفظ ألوان التفاعل ويعرض حالة المزامنة والتخزين المحلي',
+  appSettingsSource.includes('data-accent-choice')
+    && appSettingsSource.includes('applyAccent()')
+    && appSettingsSource.includes('id="syncQueueStatus"')
+    && appSettingsSource.includes('exportAll')
+    && appSettingsSource.includes('id="reviewLoad"')
+      && appSettingsSource.includes('saveSettings({ reviewSize: size })')
+      && flashcardSource.includes('settings.reviewSize'));
+check('الواجهة الجديدة تبدأ افتراضياً بالوضع الداكن مع إعداد مراجعة متوازن',
+  store.DEFAULT_SETTINGS.theme === 'dark' && store.DEFAULT_SETTINGS.accent === 'blue'
+    && store.DEFAULT_SETTINGS.reviewSize === 15
+    && appHtml.includes('var theme = s.theme || \'dark\''));
 const audioFixture = [{
   vocabulary: [{ en: 'A New Word' }, { en: 'Hello', audio_url: './assets/audio/existing.mp3' }],
   sentences: [{ en: 'A sample sentence.' }],

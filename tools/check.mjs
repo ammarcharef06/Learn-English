@@ -377,10 +377,11 @@ try {
   }
   if (!zeroHtml.includes('./assets/js/zero-main.js')) bad('zero.html لا يُحمّل نقطة دخول A0 (zero-main.js)');
   if (/assets\/js\/app\.js/.test(zeroHtml)) bad('zero.html يُحمّل app.js — يجب أن تكون صفحة مستقلة تماماً');
-  /* نفس هيكل الموقع (topbar/view) لكن بلا أي عنصر من تنقّل المستويات */
-  for (const chrome of ['id="bottomnav"', 'assets/js/app.js']) {
+  /* يظل A0 مستقلاً عن موجّه الموقع، ويستخدم تنقّله السفلي الخاص به. */
+  for (const chrome of ['assets/js/app.js']) {
     if (zeroHtml.includes(chrome)) bad(`zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
   }
+  if (!/class="mobile-nav" id="bottomnav"/.test(zeroHtml)) bad('zero.html بلا تنقّل هاتفي خاص بقسم A0');
   if (!/class="topbar" id="topbar"/.test(zeroHtml)) bad('zero.html لا يستخدم شريط الموقع نفسه (topbar)');
   for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
     if (!zeroHtml.includes(need)) bad(`zero.html ينقصه ${need} — الدرج المشترك`);
@@ -397,6 +398,7 @@ try {
   if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
   const zeroShell = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
   if (!/renderZeroDrawer/.test(zeroShell) || !/sidenav/.test(zeroShell)) bad('درج A0 غير مربوط بالقائمة الجانبية');
+  if (!/MOBILE_NAV/.test(zeroShell) || !/id="bottomnav"/.test(zeroHtml)) bad('تنقّل A0 السفلي غير مربوط بغلافه');
   for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
     if (!zeroShell.includes(l)) bad(`درج A0 ينقصه: ${l}`);
   }

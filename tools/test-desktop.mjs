@@ -89,7 +89,7 @@ assert.match(settingsView, /id="themeSeg"/);
 assert.doesNotMatch(settingsView, /id="skinSeg"/);
 assert.match(settingsView, /id="highContrast"/);
 assert.match(settingsView, /id="reduceMotion"/);
-assert.match(mainStyles, /--bg: #0b1220/);
+assert.match(mainStyles, /--bg: #0a0a0a/);
 assert.match(mainStyles, /\.fc__face--front/);
 assert.match(mainStyles, /\.fc-sheet-layer/);
 assert.doesNotMatch(mainStyles, /data-skin="(?:atelier|gnome|kali)"/);

@@ -21,6 +21,13 @@ export const NAV_ITEMS = [
   { href: '#/settings', key: 'nav.settings', icon: '⚙️', group: 'nav.group.me', bottom: true },
 ];
 
+const MOBILE_NAV = [
+  { href: '#/', key: 'nav.home', icon: '⌂' },
+  { href: '#/flashcards', key: 'nav.flow', icon: '↗' },
+  { href: '#/lessons', key: 'nav.lessons', icon: '◇' },
+  { href: '#/settings', key: 'nav.settings', icon: '⚙' },
+];
+
 export function renderNav() {
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
@@ -61,8 +68,11 @@ export function renderNav() {
     side.innerHTML = html;
   }
 
-  /* تنقّل واحد لكل الأجهزة: لا شريط سفلي — الدرج وحده */
-  if (bottom) bottom.innerHTML = '';
+  if (bottom) {
+    bottom.innerHTML = MOBILE_NAV.map((item) =>
+      `<a href="${item.href}" data-nav data-route="${item.href}"><span aria-hidden="true">${item.icon}</span><small>${t(item.key)}</small></a>`,
+    ).join('');
+  }
 }
 
 /* درج التنقّل: تنفيذ واحد مشترك بين الصفحتين (views/topbar.js) */

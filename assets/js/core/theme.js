@@ -17,7 +17,13 @@ export function applyTheme() {
 export function applySkin() {
   document.documentElement.dataset.skin = 'nocturne';
   applyTheme();
+  applyAccent();
   return 'nocturne';
+}
+
+export function applyAccent() {
+  const accents = ['blue', 'mint', 'violet'];
+  document.documentElement.dataset.accent = accents.includes(settings.accent) ? settings.accent : 'blue';
 }
 
 export function applyAccessibility() {
@@ -39,7 +45,7 @@ export function applyLang() {
 /** يُزامن لون شريط حالة النظام مع المظهر الحالي (يعمل عند التثبيت على الجوال) */
 export function syncThemeColor() {
   const dark = document.documentElement.dataset.theme === 'dark';
-  const color = dark ? '#050607' : '#f4f6f4';
+  const color = dark ? '#0a0a0a' : '#f4f6f4';
   document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
     m.setAttribute('content', color);
   });

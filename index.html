@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>أكاديمية الإنجليزية — Learn English</title>
   <meta name="description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
-  <meta name="theme-color" content="#050607" />
+  <meta name="theme-color" content="#0a0a0a" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="English Academy" />
@@ -73,6 +73,7 @@
         document.documentElement.dataset.skin = 'nocturne';
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         document.documentElement.dataset.uiLang = s.uiLang === 'en' ? 'en' : 'ar';
+        document.documentElement.dataset.accent = ['blue', 'mint', 'violet'].includes(s.accent) ? s.accent : 'blue';
         document.documentElement.dir = s.uiLang === 'en' ? 'ltr' : 'rtl';
         document.documentElement.lang = s.uiLang === 'en' ? 'en' : 'ar';
         document.documentElement.dataset.contrast = s.highContrast ? 'high' : 'normal';
@@ -113,6 +114,8 @@
         </noscript>
       </main>
     </div>
+
+    <nav class="mobile-nav" id="bottomnav" aria-label="التنقل الرئيسي"></nav>
 
     <footer class="footer">
       <span data-i18n="footer.made">صُنع لتعلّم الإنجليزية خطوة بخطوة</span>

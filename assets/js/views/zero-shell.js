@@ -19,6 +19,7 @@ const NAV = [
   { hash: '#/zero/pad', icon: '✍️', label: 'لوح الكتابة', key: 'pad' },
   { hash: '#/zero/settings', icon: '⚙️', label: 'إعدادات التأسيس', key: 'settings' },
 ];
+const MOBILE_NAV = NAV.filter(({ key }) => ['stages', 'exam', 'pad', 'settings'].includes(key));
 
 function activeKey(hash) {
   const h = String(hash || '').replace(/^#/, '');
@@ -57,6 +58,15 @@ export function renderZeroDrawer(hash = null) {
     const a = nav.querySelector(`[data-route="#/zero/stage/${s.id}"]`);
     if (a && done[s.id]?.done) a.classList.add('is-done');
   });
+
+  const mobileNav = qs('#bottomnav');
+  if (mobileNav) {
+    mobileNav.innerHTML = MOBILE_NAV.map((item) => `
+      <a href="${item.hash}" data-nav data-route="${item.hash}" class="${item.key === key ? 'is-active' : ''}"
+        ${item.key === key ? 'aria-current="page"' : ''} aria-label="${esc(item.label)}">
+        <span aria-hidden="true">${item.icon}</span><small>${esc(item.label)}</small>
+      </a>`).join('');
+  }
 }
 
 /** يُستدعى عند كل رسم/تنقّل: يثبّت وضع A0 ويرسم الدرج */

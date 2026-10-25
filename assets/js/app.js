@@ -32,8 +32,10 @@ import { renderSupport } from './views/support.js';
 import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
 import { APP_VERSION } from './core/app-version.js';
+import { bindSwipeBack, createRouteHistory } from './core/navigation-gesture.js';
 
 const view = () => qs('#view');
+const routeHistory = createRouteHistory();
 
 /* ---------------- التوجيه ---------------- */
 function setupRoutes() {
@@ -90,6 +92,14 @@ function bindGlobalEvents() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeDrawer();
+  });
+
+  bindSwipeBack({
+    canGoBack: () => routeHistory.canGoBack(),
+    onBack: () => {
+      const path = routeHistory.back();
+      if (path) location.hash = `#${path}`;
+    },
   });
 
   window.addEventListener('online', () => { const b = qs('#offlineBar'); if (b) b.hidden = true; });
@@ -251,7 +261,8 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
-    document.body.classList.remove('home-focus-mode', 'fc-focus-mode');
+    routeHistory.remember(route.path);
+    document.body.classList.remove('fc-focus-mode');
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();

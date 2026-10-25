@@ -11,6 +11,7 @@ export const KEYS = { K_SETTINGS, K_PROGRESS, K_AUTH, K_SESSION, K_SYNC_QUEUE };
 export const DEFAULT_SETTINGS = {
   v: 1,
   theme: 'dark',            // auto | light | dark
+  accent: 'blue',           // blue | mint | violet
   skin: 'atelier',          // atelier | kali | gnome | classic
   uiLang: 'ar',             // ar | en
   fontSize: 100,            // 85..130
@@ -19,6 +20,7 @@ export const DEFAULT_SETTINGS = {
   autoSpeak: false,         // نطق تلقائي لكلمة السؤال
   tts: { voice: '', rate: 0.92, pitch: 1, lang: 'en-US' },
   dailyGoal: 20,            // عدد الأسئلة اليومية
+  reviewSize: 15,           // حجم جلسة المراجعة؛ لا يغيّر ثوابت SM-2
   reminder: {
     enabled: false,
     time: '19:00',

@@ -34,6 +34,14 @@ export function renderSettings(host, query = {}) {
         </div>
       </div>
       <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.accent')}</b><span>${t('set.accentDesc')}</span></div>
+        <div class="setting-row__control accent-picker" role="group" aria-label="${t('set.accent')}">
+          ${['blue', 'mint', 'violet'].map((accent) => `<button type="button" class="accent-picker__option" data-accent-choice="${accent}" aria-pressed="${(s.accent || 'blue') === accent}" aria-label="${t(`set.accent${accent[0].toUpperCase()}${accent.slice(1)}`)}">
+            <i class="accent-picker__swatch" data-accent="${accent}" aria-hidden="true"></i><span>${t(`set.accent${accent[0].toUpperCase()}${accent.slice(1)}`)}</span>
+          </button>`).join('')}
+        </div>
+      </div>
+      <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.uiLang')}</b><span>لغة أزرار الموقع وقوائمه (المحتوى التعليمي يبقى كما هو).</span></div>
         <div class="setting-row__control seg" id="langSeg">
           <button type="button" data-lang="ar" class="${s.uiLang !== 'en' ? 'is-active' : ''}">العربية</button>
@@ -105,6 +113,14 @@ export function renderSettings(host, query = {}) {
         <div class="setting-row__text"><b>${t('set.dailyGoal')}</b><span>عدد الأسئلة التي تريد إنجازها يومياً.</span></div>
         <div class="setting-row__control">
           <input class="input" type="number" min="5" max="200" step="5" value="${s.dailyGoal}" id="goalInput" style="width:110px" />
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-row__text"><b>${t('set.reviewLoad')}</b><span>${t('set.reviewLoadDesc')}</span></div>
+        <div class="setting-row__control">
+          <select class="select" id="reviewLoad">
+            ${[10, 15, 20, 30, 50].map((size) => `<option value="${size}" ${Number(s.reviewSize || 15) === size ? 'selected' : ''}>${size} ${t('common.cards')}</option>`).join('')}
+          </select>
         </div>
       </div>
       <div class="setting-row">
@@ -210,6 +226,12 @@ export function renderSettings(host, query = {}) {
     qsa('#themeSeg button', host).forEach((x) => x.classList.toggle('is-active', x === b));
     toast(t('set.saved'), 'ok');
   }));
+  qsa('[data-accent-choice]', host).forEach((button) => button.addEventListener('click', () => {
+    saveSettings({ accent: button.dataset.accentChoice });
+    applyAccent();
+    qsa('[data-accent-choice]', host).forEach((option) => option.setAttribute('aria-pressed', String(option === button)));
+    toast(t('set.saved'), 'ok');
+  }));
   if ((settings.skin || 'atelier') === 'kali') {
     const themeHint = qs('#themeHint', host);
     if (themeHint) themeHint.textContent = 'ستايل كالي داكن دائماً — اختر «GNOME» لتتمكن من التبديل بين الفاتح والداكن.';
@@ -263,6 +285,11 @@ export function renderSettings(host, query = {}) {
     saveSettings({ dailyGoal: v });
     e.target.value = v;
     toast(`هدفك اليومي: ${v} سؤال`, 'ok');
+  });
+  qs('#reviewLoad', host)?.addEventListener('change', (event) => {
+    const size = [10, 15, 20, 30, 50].includes(Number(event.target.value)) ? Number(event.target.value) : 15;
+    saveSettings({ reviewSize: size });
+    toast(t('set.saved'), 'ok');
   });
   qs('#nameInput', host)?.addEventListener('change', (e) => { saveSettings({ learnerName: e.target.value.trim() }); toast(t('set.saved'), 'ok'); });
 
@@ -511,5 +538,5 @@ function confirmAction(title, body, onOk) {
 }
 
 /* المظهر واللغة: منطق مشترك بين الصفحتين (انظر core/theme.js) */
-import { applyTheme, applySkin, applyLang, applyAccessibility } from '../core/theme.js';
-export { applyTheme, applySkin, applyLang, applyAccessibility };
+import { applyTheme, applySkin, applyLang, applyAccessibility, applyAccent } from '../core/theme.js';
+export { applyTheme, applySkin, applyLang, applyAccessibility, applyAccent };

@@ -7,37 +7,48 @@ import { markLessonRead, completeUnit, levelStats } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
 import { navigate } from '../core/router.js';
 import { maybeShowInterstitial } from '../core/ads.js';
+import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 
 /* ---------- قائمة المستويات ---------- */
 export function renderLessons(host) {
-  host.innerHTML = `
-    ${pageHead({ icon: '📚', title: t('lessons.title'), subtitle: t('lessons.subtitle') })}
-    <div class="grid grid--3">
-      ${LEVELS.map((lv, i) => {
-        const p = levelPercent(lv.id);
-        return `<a class="level-card" href="#/level/${lv.id}" style="background:linear-gradient(135deg, ${lv.color}, ${lv.color}bb)">
-          <span class="ico">${lv.icon}</span>
-          <h3>${esc(lv.label)}</h3>
-          <p>${esc(lv.summary || '')}</p>
-          <div class="row row--wrap" style="gap:6px;margin-top:6px">
-            <span class="chip">${lv.units.length} ${esc(t('lessons.units'))}</span>
-            <span class="chip">${lv.units.reduce((n, u) => n + u.vocabulary.length, 0)} ${esc(t('common.words'))}</span>
-          </div>
-          <div class="progress" style="margin-top:10px;background:rgba(255,255,255,.28)"><i style="width:${p}%;background:#fff"></i></div>
-          <span class="tiny">${p}% ${esc(t('common.done'))}</span>
-        </a>`;
-      }).join('')}
-    </div>
+  const foundation = zeroStats(progress);
+  const foundationNode = `<a class="skill-node skill-node--foundation" href="./zero.html">
+    <span class="skill-node__orb">A0</span>
+    <span class="skill-node__copy"><b>${esc(t('dash.foundation'))}</b><small>${foundation.percent}% · ${foundation.doneStages}/${ZERO_TOTALS.stages}</small></span>
+    <span class="skill-node__state" aria-hidden="true">↗</span>
+  </a>`;
+  const levelNodes = LEVELS.map((level, index) => {
+    const unlocked = isLevelUnlocked(index);
+    const percent = levelPercent(level.id);
+    const units = unitsOfLevel(level.id);
+    const nodes = units.map((unit, unitIndex) => {
+      const unitProgress = unitPercent(unit.id);
+      const done = !!progress.units?.[unit.id]?.done;
+      return unlocked ? `<a class="skill-unit ${done ? 'is-complete' : ''}" href="#/unit/${unit.id}" aria-label="${esc(unit.title)} · ${unitProgress}%">
+        <span class="skill-unit__orb">${done ? '✓' : esc(unit.icon || String(unitIndex + 1))}</span>
+        <span>${esc(unit.title)}</span>
+      </a>` : `<span class="skill-unit is-locked" aria-label="${esc(unit.title)} · ${esc(t('dash.levelLocked'))}">
+        <span class="skill-unit__orb">${esc(unit.icon || String(unitIndex + 1))}</span>
+        <span>${esc(unit.title)}</span>
+      </span>`;
+    }).join('');
+    return `<section class="skill-level ${unlocked ? '' : 'is-locked'}" aria-labelledby="skill-${level.id}">
+      <header class="skill-level__head">
+        <span class="skill-level__badge">${esc(level.id.toUpperCase())}</span>
+        <div><h2 id="skill-${level.id}">${esc(level.label)}</h2><p>${esc(level.summary || '')}</p></div>
+        <span class="skill-level__progress">${percent}%</span>
+      </header>
+      ${unlocked ? `<div class="skill-level__path">${nodes}</div>` : `<div class="skill-level__locked" role="note">${esc(t('dash.levelLocked'))}</div>`}
+    </section>`;
+  }).join('');
 
-    <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">🗺️</span><h2>كيف تدرس المنهج؟</h2></div>
-      <ol class="small muted" style="margin:0;padding-inline-start:1.2rem">
-        <li>افتح وحدة، اقرأ دروس القواعد واستمع للأمثلة بالصوت.</li>
-        <li>راجع بطاقات المفردات في نفس الوحدة، وأضف الصعب منها إلى دفترك.</li>
-        <li>شغّل «اختبار الوحدة» حتى تتقن ٨٠٪ أو أكثر، فيُعتبر الدرس مكتملاً.</li>
-        <li>انتقل للوحدة التالية، وكرّر أسبوعياً مع «التدريب الذكي» على أخطائك.</li>
-      </ol>
-    </div>`;
+  host.innerHTML = `
+    ${pageHead({ icon: '◇', title: t('dash.skillTree'), subtitle: t('dash.levelPath') })}
+    <section class="skill-tree" aria-label="${esc(t('dash.skillTree'))}">
+      ${foundationNode}
+      <div class="skill-tree__connector" aria-hidden="true"></div>
+      ${levelNodes}
+    </section>`;
 }
 
 /* ---------- صفحة مستوى ---------- */
