@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* ============================================================
    اختيار البداية في موقع المستويات — بمكوّنات الأكاديمية
    اختيار «من الصفر» يفتح محتوى A0 عبر نقطة دخوله الخاصة (zero.html)
@@ -76,8 +77,8 @@ export function showZeroChoice({ force = false, onDone = null } = {}) {
     completeOnboarding(choice);
     if (choice === 'later') setZeroPrefs({ focus: 'levels' });
     close();
-    if (choice === 'a0') { toast('جارٍ فتح قسم «من الصفر» 🌱', 'ok'); location.href = ZERO_PAGE; }
-    else if (choice === 'a1') { toast('المستويات جاهزة 📚', 'ok'); navigate('/'); }
+    if (choice === 'a0') { toast(uiText('ui.literal.4441f82e'), 'ok'); location.href = ZERO_PAGE; }
+    else if (choice === 'a1') { toast(uiText('ui.literal.f1a16ade'), 'ok'); navigate('/'); }
     else window.__leaRefreshChrome?.();
     onDone?.(choice);
   };

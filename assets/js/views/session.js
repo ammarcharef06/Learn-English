@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* جلسة اليوم: مسار موجّه فوق أنشطة الأكاديمية الفعلية، مع حفظ تقدّم كل نشاط في مكانه الأصلي. */
 import { t } from '../core/i18n.js';
 import { arNum, esc } from '../core/utils.js';
@@ -10,7 +11,7 @@ import { pageHead } from './shell.js';
 
 const durationText = (minutes) => settings.uiLang === 'en'
   ? `${minutes} min`
-  : `${arNum(minutes)} ${minutes === 2 ? 'دقيقتان' : 'دقائق'}`;
+  : `${arNum(minutes)} ${minutes === 2 ? uiText('ui.literal.174cf9cf') : uiText('ui.literal.3f44946d')}`;
 
 export function renderSession(host) {
   const mission = dailyMission();

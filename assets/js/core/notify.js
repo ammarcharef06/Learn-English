@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* Local reminders shared by the web, Android, and desktop app. */
 import { settings, saveSettings, progress } from './store.js';
 import { todayKey, prettyTimeAr, dateKey } from './utils.js';
@@ -94,8 +95,8 @@ export async function showNotification(title, body, opts = {}) {
   if (native) {
     await native.createChannel({
       id: CHANNEL_ID,
-      name: settings.uiLang === 'en' ? 'Study reminders' : 'تذكيرات الدراسة',
-      description: settings.uiLang === 'en' ? 'Daily English study reminders' : 'تذكيرات يومية لتعلّم الإنجليزية',
+      name: settings.uiLang === 'en' ? 'Study reminders' : uiText('ui.literal.ebecfcd8'),
+      description: settings.uiLang === 'en' ? 'Daily English study reminders' : uiText('ui.literal.df1fa51e'),
       importance: 4,
       vibration: true,
       sound: 'notification',
@@ -142,15 +143,15 @@ export function reminderBody() {
   const goal = settings?.dailyGoal || 20;
   const remaining = Math.max(0, goal - (activity.q || 0));
   const streak = progress?.streak || 0;
-  const base = settings?.reminder?.body || 'جلسة قصيرة اليوم تحافظ على سلسلتك!';
+  const base = settings?.reminder?.body || uiText('ui.literal.919c41f3');
   const word = wordOfTheDay();
-  const wordLine = word ? `\n📘 كلمة اليوم: ${word.en} = ${word.ar}` : '';
-  return `${base}\nباقي ${remaining} سؤالاً لهدف اليوم${streak ? ` · سلسلتك ${streak} يوم 🔥` : ''}${wordLine}`;
+  const wordLine = word ? `\n📘 ${uiText('ui.literal.0cb41b1e')} ${word.en} = ${word.ar}` : '';
+  return `${base}\n${uiText('ui.literal.4df7af54')} ${remaining} ${uiText('ui.literal.0ffc32e8')}${streak ? ` · ${uiText('ui.literal.160b608a')} ${streak} ${uiText('ui.literal.554034cd')}` : ''}${wordLine}`;
 }
 
 export async function fireReminder({ test = false } = {}) {
-  const title = settings?.reminder?.title || 'حان وقت الإنجليزية 🇬🇧';
-  const body = test ? 'هذا إشعار تجريبي من أكاديمية الإنجليزية ✅' : reminderBody();
+  const title = settings?.reminder?.title || uiText('ui.literal.e050124f');
+  const body = test ? uiText('ui.literal.faea1d1b') : reminderBody();
   const platform = notificationPlatform();
   if (platform === 'unsupported') {
     if (!test) {
@@ -158,7 +159,7 @@ export async function fireReminder({ test = false } = {}) {
       saveSettings({ reminder: { lastFired: todayKey() } });
       return { ok: true, mode: 'in-app' };
     }
-    return { ok: false, error: 'هذا الجهاز لا يدعم إشعارات النظام.' };
+    return { ok: false, error: uiText('ui.literal.c63f58c0') };
   }
   try {
     if (platform === 'browser' && Notification.permission !== 'granted') {
@@ -168,15 +169,15 @@ export async function fireReminder({ test = false } = {}) {
         return { ok: true, mode: 'in-app' };
       }
       const permission = await ensurePermission();
-      if (permission !== 'granted') return { ok: false, error: 'لم يتم منح إذن الإشعارات.' };
+      if (permission !== 'granted') return { ok: false, error: uiText('ui.literal.edf7a73c') };
     }
     const sent = await showNotification(title, body, { tag: test ? 'lea-test' : 'lea-daily' });
-    if (!sent) return { ok: false, error: 'تعذّر عرض الإشعار.' };
+    if (!sent) return { ok: false, error: uiText('ui.literal.34113003') };
     if (!test && !reminderFiredToday()) saveSettings({ reminder: { lastFired: todayKey() } });
     return { ok: true, mode: platform };
   } catch (error) {
     console.warn('Could not show reminder', error);
-    return { ok: false, error: error.message || 'تعذّر عرض الإشعار.' };
+    return { ok: false, error: error.message || uiText('ui.literal.34113003') };
   }
 }
 
@@ -201,8 +202,8 @@ export async function syncReminderSchedule({ requestPermission = false } = {}) {
     }
     await native.createChannel({
       id: CHANNEL_ID,
-      name: settings.uiLang === 'en' ? 'Study reminders' : 'تذكيرات الدراسة',
-      description: settings.uiLang === 'en' ? 'Daily English study reminders' : 'تذكيرات يومية لتعلّم الإنجليزية',
+      name: settings.uiLang === 'en' ? 'Study reminders' : uiText('ui.literal.ebecfcd8'),
+      description: settings.uiLang === 'en' ? 'Daily English study reminders' : uiText('ui.literal.df1fa51e'),
       importance: 4,
       vibration: true,
       sound: 'notification',
@@ -214,8 +215,8 @@ export async function syncReminderSchedule({ requestPermission = false } = {}) {
       await native.schedule({
         notifications: days.map((day) => ({
           id: REMINDER_IDS[day],
-          title: reminder.title || 'حان وقت الإنجليزية 🇬🇧',
-          body: reminder.body || 'جلسة قصيرة اليوم تحافظ على سلسلتك!',
+          title: reminder.title || uiText('ui.literal.e050124f'),
+          body: reminder.body || uiText('ui.literal.919c41f3'),
           channelId: CHANNEL_ID,
           schedule: { on: { weekday: day + 1, hour, minute }, allowWhileIdle: true },
           extra: { url: './index.html#/' },
@@ -230,7 +231,7 @@ export async function syncReminderSchedule({ requestPermission = false } = {}) {
     enabled: true,
     time: reminder.time || '19:00',
     days: reminderDays(),
-    title: reminder.title || 'حان وقت الإنجليزية 🇬🇧',
+    title: reminder.title || uiText('ui.literal.e050124f'),
     body: reminderBody(),
     launchAtLogin: reminder.launchAtLogin === true,
   });
@@ -268,11 +269,11 @@ export function nextReminderText() {
         : target.toLocaleDateString('en', { weekday: 'long' });
       return `${label} ${reminder.time}`;
     }
-    const label = offset === 0 ? 'اليوم' : offset === 1 ? 'غداً'
+    const label = offset === 0 ? uiText('ui.literal.ff8256b3') : offset === 1 ? uiText('ui.literal.a553e748')
       : target.toLocaleDateString('ar', { weekday: 'long' });
     return `${label} ${prettyTimeAr(reminder.time)}`;
   }
-  return settings.uiLang === 'en' ? 'No day selected' : 'لا يوجد يوم محدد';
+  return settings.uiLang === 'en' ? 'No day selected' : uiText('ui.literal.62a13442');
 }
 
 export function todayKeyString() { return dateKey(new Date()); }

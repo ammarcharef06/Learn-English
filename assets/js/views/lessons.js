@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 ﻿/* الدروس والمنهج: المستويات ← الوحدات ← الدروس */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs, pct } from '../core/utils.js';
@@ -54,7 +55,7 @@ export function renderLessons(host) {
 /* ---------- صفحة مستوى ---------- */
 export function renderLevel(host, levelId) {
   const lv = getLevel(levelId);
-  if (!lv) { host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>المستوى غير موجود.</p></div>`; return; }
+  if (!lv) { host.innerHTML = uiText('ui.literal.0362ab6e'); return; }
   const units = unitsOfLevel(lv.id);
   const p = levelPercent(lv.id);
   host.innerHTML = `
@@ -91,7 +92,7 @@ export function renderLevel(host, levelId) {
 /* ---------- صفحة وحدة ---------- */
 export function renderUnit(host, unitId) {
   const u = getUnit(unitId);
-  if (!u) { host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>الوحدة غير موجودة.</p></div>`; return; }
+  if (!u) { host.innerHTML = uiText('ui.literal.f69a57a1'); return; }
   const up = unitPercent(u.id);
   const done = !!progress.units?.[u.id]?.done;
 
@@ -138,7 +139,7 @@ export function renderUnit(host, unitId) {
           </div>`).join('')}</div>
           ${(g.tips || []).length ? `<div class="tip-box" style="margin-top:14px"><b>${t('common.tips')}</b><ul style="margin:0;padding-inline-start:1.1rem">${g.tips.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
           <div class="row" style="margin-top:14px;gap:8px;flex-wrap:wrap">
-            <a class="btn btn--sm btn--primary" href="#/lesson/${u.id}/${i}">فتح الدرس كاملاً ←</a>
+            <a class="btn btn--sm btn--primary" href="#/lesson/${u.id}/${i}">${uiText('ui.literal.59ecc3fe')} </a>
             <button class="btn btn--sm" type="button" data-read="${i}">${read ? '✅ ' + t('lessons.read') : t('lessons.markRead')}</button>
           </div>
           </div>
@@ -167,7 +168,7 @@ export function renderUnit(host, unitId) {
     </div>
 
     ${(u.sentences || []).length ? `<div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">✍️</span><h2>جمل نموذجية (${u.sentences.length})</h2></div>
+      <div class="card__title"><span class="ico">✍️</span><h2>${uiText('ui.literal.bee92b60')} ${u.sentences.length})</h2></div>
       ${u.sentences.map((s) => `<div class="example-line">
         <div class="grow"><div class="en">${esc(s.en)}</div><div class="ar">${esc(s.ar)}</div></div>
         ${speakBtn(s.en)}
@@ -200,7 +201,7 @@ export function renderUnit(host, unitId) {
     renderSidebarStats();
     renderUnit(host, unitId);
     if (res.first) import('../core/utils.js').then(({ toast, confetti }) => {
-      confetti(70); toast(`أكملت وحدة «${u.title}» — +60 نقطة 🎉`, 'ok', 'وحدة مكتملة');
+      confetti(70); toast(`${uiText('ui.literal.64ad3806')} ${u.title}» — +60 ${uiText('ui.literal.b6490fde')} `, 'ok', uiText('ui.literal.3cffb128'));
     });
     if (res.first) maybeShowInterstitial(`unit:${u.id}`).catch((error) => console.warn('Interstitial ad unavailable.', error));
   });
@@ -209,7 +210,7 @@ export function renderUnit(host, unitId) {
     // يُفتح في صفحة مستقلة كاملة (بدل واجهة مدمجة)
     navigate('/drill', {
       source: `unit:${u.id}`, unit: u.id, count: '8', timed: '1',
-      title: `اختبار: ${u.title}`,
+      title: `${uiText('ui.literal.095dd0e8')} ${u.title}`,
     });
   });
 }
@@ -217,7 +218,7 @@ export function renderUnit(host, unitId) {
 /* ---------- صفحة درس قواعد ---------- */
 export function renderLesson(host, unitId, index) {
   const u = getUnit(unitId);
-  if (!u) { host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>الدرس غير موجود.</p></div>`; return; }
+  if (!u) { host.innerHTML = uiText('ui.literal.5284e642'); return; }
   const i = Math.max(0, Math.min(u.grammar.length - 1, Number(index) || 0));
   const g = u.grammar[i];
   markLessonRead(`${u.id}:${i}`);
@@ -248,7 +249,7 @@ export function renderLesson(host, unitId, index) {
       <div class="row row--between row--wrap lesson-nav">
         ${i > 0 ? `<a class="btn btn--sm" href="#/lesson/${u.id}/${i - 1}">→ ${t('common.prev')}</a>` : '<span></span>'}
         <div class="row" style="gap:8px">
-          <button class="btn btn--sm btn--primary" type="button" id="lessonQuiz">🎯 تمرين سريع</button>
+          <button class="btn btn--sm btn--primary" type="button" id="lessonQuiz">🎯 ${uiText('ui.literal.b19d0928')} </button>
           ${i < u.grammar.length - 1
             ? `<a class="btn btn--sm" href="#/lesson/${u.id}/${i + 1}">${t('common.next')} ←</a>`
             : `<a class="btn btn--sm btn--ok" href="#/unit/${u.id}">${t('lessons.unitQuiz')} ←</a>`}
@@ -259,7 +260,7 @@ export function renderLesson(host, unitId, index) {
   qs('#lessonQuiz', host)?.addEventListener('click', () => {
     navigate('/drill', {
       source: `unit:${u.id}`, unit: u.id, count: '5',
-      title: `${g.title} — تمرين سريع`,
+      title: `${g.title} — ${uiText('ui.literal.b19d0928')} `,
     });
   });
 }

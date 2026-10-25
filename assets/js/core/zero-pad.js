@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* لوح كتابة تفاعلي (مطبوع / متصل) — HTML + تهيئة Canvas باللمس والقلم والفأرة */
 import { esc, qs, qsa } from './utils.js';
 import { speak } from './speech.js';
@@ -75,7 +76,7 @@ export function letterForm(ch, mode = 'print') {
 
 /* وصف مختصر لكل حرف: يُستعمل في عنوان الشكل (a11y) وفي الشرح */
 export function formLabelAr(mode = 'print') {
-  return mode === 'cursive' ? 'متصل' : 'مطبوع';
+  return mode === 'cursive' ? uiText('ui.literal.99b6722f') : uiText('ui.literal.f9e0eb6c');
 }
 
 function cssVar(canvas, name, fallback) {
@@ -93,40 +94,40 @@ function cssVar(canvas, name, fallback) {
 export function writingPadHTML(opts = {}) {
   const o = normalize(opts);
   const id = uid();
-  const label = `لوح كتابة تفاعلي — تتبّع الحروف ${formLabelAr(o.mode)}`;
+  const label = `${uiText('ui.literal.a4ce4110')} ${formLabelAr(o.mode)}`;
   const info = [o.pron, o.ar, o.word].filter(Boolean);
 
   const buttons = [
-    `<button class="zpad__btn" type="button" data-zpad="hear" aria-label="اسمع النطق" title="اسمع النطق"><span aria-hidden="true">🔊</span><span class="zpad__btn-t">اسمع</span></button>`,
-    `<button class="zpad__btn" type="button" data-zpad="undo" aria-label="تراجع عن آخر خط" title="تراجع"><span aria-hidden="true">↶</span><span class="zpad__btn-t">تراجع</span></button>`,
-    `<button class="zpad__btn" type="button" data-zpad="clear" aria-label="مسح اللوح" title="مسح"><span aria-hidden="true">🗑</span><span class="zpad__btn-t">مسح</span></button>`,
-    `<button class="zpad__btn" type="button" data-zpad="pen" data-size="thin" aria-label="قلم رفيع" aria-pressed="true" title="قلم رفيع"><span aria-hidden="true">✎</span><span class="zpad__btn-t">قلم</span></button>`,
-    `<button class="zpad__btn" type="button" data-zpad="pen" data-size="thick" aria-label="قلم عريض" aria-pressed="false" title="قلم عريض"><span aria-hidden="true">🖊</span><span class="zpad__btn-t">عريض</span></button>`,
-    `<button class="zpad__btn" type="button" data-zpad="tool" data-tool="eraser" aria-label="ممحاة" aria-pressed="false" title="ممحاة"><span aria-hidden="true">🧽</span><span class="zpad__btn-t">ممحاة</span></button>`,
+    uiText('ui.literal.00406604'),
+    uiText('ui.literal.59bb681a'),
+    uiText('ui.literal.e65249c3'),
+    uiText('ui.literal.1658a0bf'),
+    uiText('ui.literal.cdf84f1f'),
+    uiText('ui.literal.8bb9168e'),
   ].join('');
 
   const modeToggle = o.allowModeToggle ? `
-        <div class="zpad__modes" role="group" aria-label="شكل الحروف: مطبوع أو متصل">
-          <button class="zpad__mode" type="button" data-zpad-mode="print" aria-label="شكل مطبوع" aria-pressed="${o.mode === 'print'}">مطبوع</button>
-          <button class="zpad__mode" type="button" data-zpad-mode="cursive" aria-label="شكل متصل" aria-pressed="${o.mode === 'cursive'}">متصل</button>
+        <div class="zpad__modes" role="group" aria-label="${uiText('ui.literal.5423f650')}">
+          <button class="zpad__mode" type="button" data-zpad-mode="print" aria-label="${uiText('ui.literal.af3ee5cf')}" aria-pressed="${o.mode === 'print'}">${uiText('ui.literal.f9e0eb6c')}</button>
+          <button class="zpad__mode" type="button" data-zpad-mode="cursive" aria-label="${uiText('ui.literal.c9e6f8ea')}" aria-pressed="${o.mode === 'cursive'}">${uiText('ui.literal.99b6722f')}</button>
         </div>` : '';
 
   return `
     <section class="zpad" id="${id}" data-zpad-root dir="ltr" aria-label="${esc(label)}">
       <div class="zpad__head">
         <span class="zpad__legend" aria-hidden="true">
-          <i class="zpad__swatch zpad__swatch--ghost"></i>دليل
-          <i class="zpad__swatch zpad__swatch--ink"></i>قلمك
+          <i class="zpad__swatch zpad__swatch--ghost"></i>${uiText('ui.literal.76c062b8')}
+          <i class="zpad__swatch zpad__swatch--ink"></i>${uiText('ui.literal.b84a38b3')}
         </span>
-        <span class="zpad__state" data-zpad-state>${o.mode === 'cursive' ? 'متصل' : 'مطبوع'}</span>
+        <span class="zpad__state" data-zpad-state>${o.mode === 'cursive' ? uiText('ui.literal.99b6722f') : uiText('ui.literal.f9e0eb6c')}</span>
       </div>
-      <div class="zpad__bar" role="toolbar" aria-label="أدوات لوح الكتابة" dir="rtl">
+      <div class="zpad__bar" role="toolbar" aria-label="${uiText('ui.literal.0ba05b33')}" dir="rtl">
         ${buttons}
         <span class="zpad__spacer"></span>
         ${modeToggle}
       </div>
       <div class="zpad__wrap" dir="ltr">
-        <label class="sr-only" for="${id}-canvas">لوح الكتابة — ارسم بإصبعك أو قلمك لتتبّع الحروف</label>
+        <label class="sr-only" for="${id}-canvas">${uiText('ui.literal.aad024dd')}</label>
         <canvas class="zpad__canvas" id="${id}-canvas" data-zpad-canvas role="img"
           aria-label="${esc(label)}" aria-describedby="${id}-hint"></canvas>
       </div>

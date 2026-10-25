@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* حول الموقع */
 import { t } from '../core/i18n.js';
 import { esc } from '../core/utils.js';
@@ -13,57 +14,57 @@ export function renderAbout(host) {
     ${pageHead({ icon: 'ℹ️', title: t('about.title'), subtitle: t('about.p1') })}
 
     <div class="grid grid--4">
-      <div class="stat"><div class="stat__label">الضمائر</div><div class="stat__value">${pronounsCount}</div><div class="stat__foot">في ${PRONOUN_GROUPS.length} مجموعة</div></div>
-      <div class="stat"><div class="stat__label">أدوات الربط</div><div class="stat__value">${CONNECTORS.length}</div><div class="stat__foot">مع أمثلة ناطقة</div></div>
-      <div class="stat"><div class="stat__label">أدوات السؤال</div><div class="stat__value">${QUESTION_WORDS.length}</div><div class="stat__foot">أساسية ومركّبة</div></div>
-      <div class="stat"><div class="stat__label">أمثلة للحفظ</div><div class="stat__value">${KEY_EXAMPLES.length}</div><div class="stat__foot">جاهزة للحفظ</div></div>
+      <div class="stat"><div class="stat__label">${uiText('ui.literal.32632f31')} </div><div class="stat__value">${pronounsCount}</div><div class="stat__foot">في ${PRONOUN_GROUPS.length} ${uiText('ui.literal.f1ca39d3')} </div></div>
+      <div class="stat"><div class="stat__label">${uiText('ui.literal.5dada98b')} </div><div class="stat__value">${CONNECTORS.length}</div><div class="stat__foot">${uiText('ui.literal.8439e950')} </div></div>
+      <div class="stat"><div class="stat__label">${uiText('ui.literal.0976905b')} </div><div class="stat__value">${QUESTION_WORDS.length}</div><div class="stat__foot">${uiText('ui.literal.36a1e775')} </div></div>
+      <div class="stat"><div class="stat__label">${uiText('ui.literal.c74c6f53')} </div><div class="stat__value">${KEY_EXAMPLES.length}</div><div class="stat__foot">${uiText('ui.literal.0a5d109e')} </div></div>
     </div>
 
     <div class="card" style="margin-top:18px">
       <div class="card__title"><span class="ico">🎒</span><h2>${t('about.features')}</h2></div>
       <div class="grid grid--2">
         <ul class="muted" style="margin:0;padding-inline-start:1.2rem">
-          <li>منهج متدرّج: ${LEVELS.map((l) => l.label).join(' · ')}</li>
-          <li>${cs.units} وحدة و${cs.grammar} درس قواعد و${cs.vocab} كلمة و${cs.sentences} جملة نموذجية.</li>
-          <li>${cs.readings} نص مطالعة مع ترجمة كاملة وأسئلة فهم.</li>
-          <li>٨ أنواع من التدريبات التفاعلية مع تصحيح فوري وشرح.</li>
+          <li>${uiText('ui.literal.23dcc069')} ${LEVELS.map((l) => l.label).join(' · ')}</li>
+          <li>${cs.units} ${uiText('ui.literal.52e161c6')} ${cs.grammar} ${uiText('ui.literal.3128d76d')} ${cs.vocab} ${uiText('ui.literal.1807d2ec')} ${cs.sentences} ${uiText('ui.literal.fa51ae7b')} </li>
+          <li>${cs.readings} ${uiText('ui.literal.265deee0')} </li>
+          <li>${uiText('ui.literal.ac9fd003')} </li>
         </ul>
         <ul class="muted" style="margin:0;padding-inline-start:1.2rem">
-          <li>بطاقات حفظ بنظام المراجعة المتباعدة (SRS).</li>
-          <li>اختبارات مؤقتة وشهادة نتيجة قابلة للطباعة.</li>
-          <li>نقاط وسلاسل أيام وشارات وأهداف يومية وإحصائيات بيانية.</li>
-          <li>مهمة يومية شخصية وخريطة تُظهر تقدمك في كل وحدة.</li>
-          <li>محادثات قصيرة من مواقف الحياة اليومية مع نطق وتصحيح وتقدم محفوظ محلياً.</li>
-          <li>ملخص أسبوعي يقارن نشاطك بالأسبوع السابق، دون إرسال بياناتك.</li>
-          <li>نطق صوتي لكل كلمة وجملة (Speech Synthesis).</li>
+          <li>${uiText('ui.literal.a63db17c')} SRS).</li>
+          <li>${uiText('ui.literal.0f11607c')} </li>
+          <li>${uiText('ui.literal.06657c54')} </li>
+          <li>${uiText('ui.literal.e7f3a409')} </li>
+          <li>${uiText('ui.literal.07ade162')} </li>
+          <li>${uiText('ui.literal.a48867c8')} </li>
+          <li>${uiText('ui.literal.dcfeab37')} Speech Synthesis).</li>
         </ul>
       </div>
     </div>
 
     <div class="grid grid--2" style="margin-top:18px">
       <div class="card">
-        <div class="card__title"><span class="ico">📶</span><h2>يعمل بلا إنترنت</h2></div>
-        <p class="muted">${t('about.offline')} يُثبَّت كتطبيق على الهاتف وسطح المكتب عبر تقنية PWA، ويحتفظ بمحتواه في الذاكرة المؤقتة للجهاز.</p>
+        <div class="card__title"><span class="ico">📶</span><h2>${uiText('ui.literal.fef77f22')} </h2></div>
+        <p class="muted">${t('about.offline')} ${uiText('ui.literal.d2c874ad')} PWA${uiText('ui.literal.f3c69468')} </p>
       </div>
       <div class="card">
-        <div class="card__title"><span class="ico">🔐</span><h2>الخصوصية</h2></div>
-        <p class="muted">${t('about.privacy')} كلمة المرور تُخزَّن كبصمة SHA-256 داخل جهازك، ولا توجد أي قاعدة بيانات خارجية.</p>
+        <div class="card__title"><span class="ico">🔐</span><h2>${uiText('ui.literal.c6a11afd')} </h2></div>
+        <p class="muted">${t('about.privacy')} ${uiText('ui.literal.53a56992')} SHA-256 ${uiText('ui.literal.8e1ab38c')} </p>
       </div>
     </div>
 
     <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">🛠️</span><h2>معلومات تقنية</h2></div>
+      <div class="card__title"><span class="ico">🛠️</span><h2>${uiText('ui.literal.f38850fc')} </h2></div>
       <div class="table-wrap"><table class="tbl">
         <tbody>
-          <tr><td>الاستضافة</td><td class="en-cell">GitHub Pages</td></tr>
-          <tr><td>المستودع</td><td class="en-cell">github.com/ammarcharef06/Learn-English</td></tr>
-          <tr><td>التقنيات</td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Capacitor Local Notifications · Electron</td></tr>
-          <tr><td>التخزين</td><td class="en-cell">LocalStorage (محلي بالكامل)</td></tr>
+          <tr><td>${uiText('ui.literal.9a10d617')} </td><td class="en-cell">GitHub Pages</td></tr>
+          <tr><td>${uiText('ui.literal.9d4ee970')} </td><td class="en-cell">github.com/ammarcharef06/Learn-English</td></tr>
+          <tr><td>${uiText('ui.literal.355c068f')} </td><td class="en-cell">HTML · CSS · JavaScript (ES Modules) · Capacitor Local Notifications · Electron</td></tr>
+          <tr><td>${uiText('ui.literal.5b847884')} </td><td class="en-cell">LocalStorage (${uiText('ui.literal.6fa950b4')} </td></tr>
           <tr><td>${t('common.version')}</td><td class="en-cell">${esc(APP_VERSION)}</td></tr>
         </tbody>
       </table></div>
       <div class="tip-box tip-box--brand" style="margin-top:14px">
-        <b>نصيحة أخيرة</b>الاستمرارية أهم من الكمّية: ١٥ دقيقة كل يوم أفضل من ٣ ساعات مرة واحدة في الأسبوع.
+        <b>${uiText('ui.literal.08a45d23')} </b>${uiText('ui.literal.d7b76000')}
       </div>
     </div>`;
 }

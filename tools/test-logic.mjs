@@ -4,7 +4,7 @@
  */
 import { pathToFileURL } from 'node:url';
 import { join, dirname, resolve } from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -488,8 +488,28 @@ store.saveSettings({ security: { lockEnabled: false } });
 /* ================= 8. الترجمة ================= */
 section('الترجمة (عربي/إنجليزي)');
 const i18n = await mod('assets/js/core/i18n.js');
+const arabicCatalog = JSON.parse(await readFile(join(ROOT, 'assets/js/core/ar.json'), 'utf8'));
 i18n.setUiLang('ar');
 check('العربية هي الافتراضية', i18n.t('nav.home') === 'الرئيسية');
+check('ملف ar.json مركزي ويحمل النصوص العربية المقابلة لمفاتيح الواجهة',
+  Object.keys(arabicCatalog).length >= 430
+    && i18n.t('nav.home') === arabicCatalog['nav.home']
+    && i18n.t('fc.deck.due') === arabicCatalog['fc.deck.due']);
+const uiSourceFiles = [
+  ...(await readdir(join(ROOT, 'assets/js/views'))).filter((name) => name.endsWith('.js')).map((name) => join(ROOT, 'assets/js/views', name)),
+  ...(await readdir(join(ROOT, 'assets/js/core'))).filter((name) => name.endsWith('.js') && name !== 'i18n.js').map((name) => join(ROOT, 'assets/js/core', name)),
+  join(ROOT, 'assets/js/data/badges.js'),
+  join(ROOT, 'assets/js/app.js'),
+  join(ROOT, 'assets/js/zero-main.js'),
+];
+const uiSource = (await Promise.all(uiSourceFiles.map((file) => readFile(file, 'utf8')))).join('\n');
+const uiKeys = [...uiSource.matchAll(/(?:ui\.literal\.[a-f0-9]{8}|badge\.[a-z0-9-]+\.(?:title|description)|tip\.\d+\.[a-f0-9]{8})/g)]
+  .map((match) => match[0]);
+check('كل مفاتيح النصوص المنقولة من الواجهات موجودة في كتالوج العربية',
+  uiKeys.length > 0 && uiKeys.every((key) => typeof arabicCatalog[key] === 'string'));
+check('مفاتيح الصفحة الثابتة قابلة للتبديل بين العربية والإنجليزية',
+  ['html.title', 'html.description', 'zero.htmlTitle', 'zero.htmlDescription']
+    .every((key) => arabicCatalog[key] && i18n.t(key) === arabicCatalog[key]));
 check('إعدادات المزامنة تعرض تنبيهاً صريحاً بالحفظ المحلي فقط',
   i18n.t('set.syncProgress') === 'مزامنة التقدّم'
     && i18n.t('set.syncLocalOnly').includes('لن تُرسل أي بيانات عبر الشبكة'));
@@ -514,7 +534,7 @@ check('واجهة المزامنة تعلن حالة الانشغال وإكما
     && syncSettingsSource.includes('window.requestAnimationFrame'));
 const responsiveCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
 check('بطاقات الهاتف توفر أزرار تقييم ولمس صوتية واسعة',
-  responsiveCss.includes('.fc-actions .btn { min-block-size: 62px;')
+  responsiveCss.includes('.fc-actions .btn { min-block-size: 76px;')
     && responsiveCss.includes('inline-size: 72px; min-inline-size: 72px; block-size: 72px; min-block-size: 72px;'));
 check('حركات الانتقال تحترم تفضيلات تقليل الحركة',
   responsiveCss.includes('::view-transition-old(root)')
@@ -566,6 +586,22 @@ check('تدفق البطاقات يبدأ بإجراء واحد ويعرض ثل�
     && !flashcardSource.includes('data-grade="0"')
     && flashcardSource.includes('id="fcGradeActions" ${state.flipped ? \'\' : \'hidden\'}')
     && flashcardSource.includes('gradeItem(e.itemId, [0, 3, 4, 5][q])'));
+check('واجهة البطاقات لا تحتوي نصوصاً عربية مضمّنة وتقرأ أسماء المجموعات من قاموس الترجمة',
+  !/[\u0600-\u06FF]/.test(flashcardSource)
+    && ['all', 'due', 'notebook', 'a1', 'a2', 'b1', 'b2', 'c1', 'c2', 'pronouns', 'connectors', 'questions', 'reading']
+      .every((deck) => arabicCatalog[`fc.deck.${deck}`] && flashcardSource.includes(`fc.deck.${deck}`)));
+check('واجهة المراجعة تخفي عناصر التنقل وتبقي زر خروج ومؤشر تقدم مختصراً',
+  flashcardSource.includes('class="fc-focus__top"')
+    && flashcardSource.includes('class="fc-focus__close"')
+    && flashcardSource.includes('fc-focus__progress')
+    && !flashcardSource.includes('fc-focus__streak')
+    && mainCss.includes('body.fc-focus-mode #sidebar')
+    && mainCss.includes('body.fc-focus-mode #topbar'));
+check('تقييم البطاقة يوفر أزراراً كبيرة بلمسة مرئية وخلفية موحدة بلا تدرجات',
+  mainCss.includes('min-block-size: clamp(72px, 10vh, 92px)')
+    && mainCss.includes('.fc-grade:active, .fc-grade.is-pressed')
+    && mainCss.includes('background: #0a0a0a;')
+    && !mainCss.includes('background: radial-gradient(ellipse at 50% 45%'));
 check('تفاصيل البطاقة قابلة للتوسيع وتغطي المحاور الخمسة',
   flashcardSource.includes('id="fcDepthSheet"')
     && flashcardSource.includes('data-depth-open')

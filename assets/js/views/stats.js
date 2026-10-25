@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* الإحصائيات والرسوم البيانية */
 import { t } from '../core/i18n.js';
 import { esc, qs, pct, todayKey, addDays, dateKey, dayNameAr, fmtDuration, speakBtn } from '../core/utils.js';
@@ -10,10 +11,10 @@ import { pageHead, progressBar, statCard } from './shell.js';
 import { weeklySummary } from '../core/journey.js';
 
 const TYPE_LABELS = {
-  mcq: 'اختيار من متعدد', fill: 'ملء الفراغ', order: 'ترتيب الكلمات',
-  match: 'توصيل ومطابقة', translate: 'ترجمة', listen: 'استماع', flash: 'بطاقات الحفظ',
+  mcq: uiText('ui.literal.a4d6a027'), fill: uiText('ui.literal.2b1b1831'), order: uiText('ui.literal.f924a842'),
+  match: uiText('ui.literal.026d522a'), translate: uiText('ui.literal.e208480a'), listen: uiText('ui.literal.7adc3716'), flash: uiText('ui.literal.4408d387'),
 };
-const LEVEL_LABELS = { a1: 'A1 مبتدئ', a2: 'A2 ما قبل المتوسط', b1: 'B1 متوسط', ref: 'المراجع' };
+const LEVEL_LABELS = { a1: uiText('ui.literal.d66530c7'), a2: uiText('ui.literal.f7850462'), b1: uiText('ui.literal.4495158b'), ref: uiText('ui.literal.c4b3413e') };
 
 export function renderStats(host) {
   const totals = progress.totals || {};
@@ -44,7 +45,7 @@ export function renderStats(host) {
     <div class="grid grid--4">
       ${statCard({ label: t('common.points'), value: progress.points || 0, foot: `⭐ ${earned.length} ${t('stats.earned')}`, variant: 'stat--brand' })}
       ${statCard({ label: t('stats.accuracy'), value: `${acc}%`, foot: `${totals.correct || 0} / ${totals.questions || 0}`, variant: acc >= 70 ? 'stat--ok' : acc ? 'stat--bad' : '' })}
-      ${statCard({ label: t('common.streak'), value: st.streak, foot: `أفضل سلسلة: ${st.best}` })}
+      ${statCard({ label: t('common.streak'), value: st.streak, foot: `${uiText('ui.literal.26434056')} ${st.best}` })}
       ${statCard({ label: t('stats.studyTime'), value: `${minutes} د`, foot: `${(totals.sessions || 0)} ${t('stats.sessions')}` })}
     </div>
 
@@ -66,16 +67,16 @@ export function renderStats(host) {
       <div class="card__title"><span class="ico">📈</span><h2>${t('stats.last14')}</h2></div>
       ${days.every((d) => d.q === 0) ? `<div class="empty"><span class="ico">🌱</span><p>${t('stats.noData')}</p></div>` : `
       <div class="bars">
-        ${days.map((d) => `<div class="bars__col" title="${d.q} سؤال · ${d.minutes} دقيقة">
+        ${days.map((d) => `<div class="bars__col" title="${d.q} ${uiText('ui.literal.360f3b31')} · ${d.minutes} ${uiText('ui.literal.09e23213')} ">
           <span class="tiny muted">${d.q || ''}</span>
           <div class="bars__bar ${d.q ? '' : 'bars__bar--empty'}" style="height:${Math.max(4, (d.q / maxQ) * 100)}%"></div>
           <span class="bars__label">${dayNameAr(d.key).slice(0, 3)}</span>
         </div>`).join('')}
       </div>`}
       <div class="row row--wrap" style="gap:8px;margin-top:12px">
-        <span class="chip">إجمالي: ${totals.questions || 0} سؤال</span>
-        <span class="chip">صحيحة: ${totals.correct || 0}</span>
-        <span class="chip">أفضل تتابع: ${progress.bestCombo || 0} 🔥</span>
+        <span class="chip">${uiText('ui.literal.659eedf4')} ${totals.questions || 0} ${uiText('ui.literal.360f3b31')} </span>
+        <span class="chip">${uiText('ui.literal.c739e9ad')} ${totals.correct || 0}</span>
+        <span class="chip">${uiText('ui.literal.9ba8754d')} ${progress.bestCombo || 0} 🔥</span>
       </div>
     </div>
 
@@ -118,15 +119,15 @@ export function renderStats(host) {
           const it = progress.items[e.itemId];
           return `<div class="item-row">
             <span class="item-row__en">${esc(e.en)}</span>
-            <span class="item-row__ar">${esc(e.ar)}<div class="tiny muted">أخطأت ${it.wrong} مرة · أصبت ${it.correct}</div></span>
+            <span class="item-row__ar">${esc(e.ar)}<div class="tiny muted">${uiText('ui.literal.c7f44ccc')} ${it.wrong} ${uiText('ui.literal.bb8d4d3e')} · ${uiText('ui.literal.8fe558a7')} ${it.correct}</div></span>
             ${speakBtn(e.en)}
           </div>`;
         }).join('') + `<a class="btn btn--primary btn--sm" style="margin-top:12px" href="#/drills?source=smart">🧠 ${t('dash.smartDrill')}</a>`
-        : `<p class="muted small">لا أخطاء مسجّلة — استمر! ✨</p>`}
+        : uiText('ui.literal.2f12dcb3')}
       </div>
 
       <div class="card">
-        <div class="card__title"><span class="ico">📚</span><h2>تقدّم الوحدات</h2></div>
+        <div class="card__title"><span class="ico">📚</span><h2>${uiText('ui.literal.d5469a88')} </h2></div>
         ${LEVELS.map((lv) => {
           const s = levelStats(lv.id);
           return `<div style="margin-bottom:12px">
@@ -135,8 +136,8 @@ export function renderStats(host) {
           </div>`;
         }).join('')}
         <div class="divider"></div>
-        <div class="row row--between"><span>دروس القواعد المقروءة</span><b>${o.grammarDone} / ${o.grammarTotal}</b></div>
-        <div class="row row--between" style="margin-top:6px"><span>المطالعات المكتملة</span><b>${Object.values(progress.readings || {}).filter((r) => r?.done).length}</b></div>
+        <div class="row row--between"><span>${uiText('ui.literal.41371a3d')} </span><b>${o.grammarDone} / ${o.grammarTotal}</b></div>
+        <div class="row row--between" style="margin-top:6px"><span>${uiText('ui.literal.a0a2c86a')} </span><b>${Object.values(progress.readings || {}).filter((r) => r?.done).length}</b></div>
       </div>
     </div>`;
 }

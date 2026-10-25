@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>أكاديمية الإنجليزية — Learn English</title>
-  <meta name="description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
+  <title data-i18n="html.title">أكاديمية الإنجليزية — Learn English</title>
+  <meta name="description" data-i18n-content="html.description" content="موقع تعليمي شخصي لتعلّم اللغة الإنجليزية: الضمائر، أدوات الربط، أدوات السؤال، دروس متدرجة A1 إلى B1، تدريبات تفاعلية، بطاقات حفظ، مطالعات واختبارات." />
   <meta name="theme-color" content="#0a0a0a" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -84,18 +84,18 @@
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#view">تخطَّ إلى المحتوى</a>
+  <a class="skip-link" href="#view" data-i18n="html.skip">تخطَّ إلى المحتوى</a>
 
   <div id="boot" class="boot">
     <img class="boot__logo" src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
-    <div class="boot__text">جارٍ تحضير أكاديمية الإنجليزية…</div>
+    <div class="boot__text" data-i18n="html.boot">جارٍ تحضير أكاديمية الإنجليزية…</div>
   </div>
 
   <div id="app" class="app is-hidden">
     <header class="topbar" id="topbar"></header>
 
     <div class="layout">
-      <aside class="sidebar" id="sidebar" aria-label="القائمة الجانبية">
+      <aside class="sidebar" id="sidebar" aria-label="القائمة الجانبية" data-i18n-aria="html.sidebar">
         <div class="sidebar__inner">
           <div class="streak-card" id="streakCard"></div>
           <nav class="sidenav" id="sidenav"></nav>
@@ -110,12 +110,12 @@
 
       <main class="view" id="view" tabindex="-1">
         <noscript>
-          <p class="card">هذا الموقع يحتاج تشغيل JavaScript في المتصفح.</p>
+          <p class="card" data-i18n="html.noscript">هذا الموقع يحتاج تشغيل JavaScript في المتصفح.</p>
         </noscript>
       </main>
     </div>
 
-    <nav class="mobile-nav" id="bottomnav" aria-label="التنقل الرئيسي"></nav>
+    <nav class="mobile-nav" id="bottomnav" aria-label="التنقل الرئيسي" data-i18n-aria="html.mobileNav"></nav>
 
     <footer class="footer">
       <span data-i18n="footer.made">صُنع لتعلّم الإنجليزية خطوة بخطوة</span>
@@ -123,7 +123,7 @@
       <span data-app-version class="tiny"></span>
     </footer>
 
-    <div class="offline-bar" id="offlineBar" hidden>أنت غير متصل بالإنترنت — الموقع يعمل من الذاكرة المؤقتة ✅</div>
+    <div class="offline-bar" id="offlineBar" hidden data-i18n="html.offline">أنت غير متصل بالإنترنت — الموقع يعمل من الذاكرة المؤقتة ✅</div>
   </div>
 
   <div class="lock" id="lockScreen" hidden></div>

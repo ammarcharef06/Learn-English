@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* شاشة القفل (تسجيل الدخول بكلمة المرور) */
 import { qs, esc, toast } from '../core/utils.js';
 import { t } from '../core/i18n.js';
@@ -27,8 +28,8 @@ export function renderLock(onSuccess) {
       <section class="lock-card" aria-labelledby="lockTitle">
         <div class="lock-card__top">
           <span class="lock-card__eyebrow">${esc(t('auth.welcome'))}</span>
-          <button class="lock-language" id="lockLang" type="button" aria-label="${settings.uiLang === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية'}">
-            ${settings.uiLang === 'en' ? 'عربي' : 'EN'}
+          <button class="lock-language" id="lockLang" type="button" aria-label="${settings.uiLang === 'en' ? 'Switch to Arabic' : uiText('ui.literal.dfbe8bc4')}">
+            ${settings.uiLang === 'en' ? uiText('ui.literal.31fe63cd') : 'EN'}
           </button>
         </div>
         <div class="lock-card__heading">
@@ -86,7 +87,7 @@ export function renderLock(onSuccess) {
     e.preventDefault();
     const wait = lockRemainingMs();
     if (wait > 0) {
-      errorEl.textContent = `محاولات كثيرة. انتظر ${Math.ceil(wait / 1000)} ثانية.`;
+      errorEl.textContent = `${uiText('ui.literal.c0797909')} ${Math.ceil(wait / 1000)} ${uiText('ui.literal.a46c3438')} `;
       return;
     }
     submitBtn.disabled = true;
@@ -118,7 +119,7 @@ export function hideLock() {
 export function lockSite() {
   hideLock();
   renderLock(() => {
-    toast('تم فتح الموقع من جديد', 'ok');
+    toast(uiText('ui.literal.540d05ea'), 'ok');
     // إعادة رسم كاملة بدل الاعتماد على دالة داشبورد قد تشير إلى عنصر مُتلَف
     if (typeof window.__leaRenderAll === 'function') window.__leaRenderAll();
   });

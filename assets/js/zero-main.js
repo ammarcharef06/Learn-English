@@ -1,3 +1,4 @@
+import { t as uiText } from './core/i18n.js';
 ﻿/* ============================================================
    نقطة دخول محتوى A0 بموجّه مستقل وغلاف الأكاديمية المشترك.
    ============================================================ */
@@ -8,7 +9,7 @@ import { flush } from './core/store.js';
 import { qs, toast, focusMainHeading } from './core/utils.js';
 import { addNotebook } from './core/gamify.js';
 import { applyZeroShell, exitZeroMode } from './views/zero-shell.js';
-import { applyAccessibility } from './core/theme.js';
+import { applyAccessibility, applyLang } from './core/theme.js';
 import { bindSwipeBack, createRouteHistory } from './core/navigation-gesture.js';
 import { renderTopbar, openDrawer, closeDrawer } from './views/topbar.js';
 import { setZeroFocus } from './core/zeroflow.js';
@@ -31,9 +32,7 @@ function setupRoutes() {
   route('/zero/exam', () => renderZeroExam(view()));
   route('/zero/certificate', () => renderZeroCertificate(view()));
   setNotFound(() => {
-    view().innerHTML = `<section class="card"><div class="empty"><span class="ico" aria-hidden="true">⌖</span>
-      <h2>هذا المسار غير موجود</h2><p>اختر محطة من رحلة التأسيس وتابع من هناك.</p>
-      <a class="btn btn--primary" href="#/zero">خريطة المراحل</a></div></section>`;
+    view().innerHTML = uiText('ui.literal.e2c1b974');
   });
 }
 
@@ -60,7 +59,7 @@ function bindGlobalEvents() {
     const nb = e.target.closest('[data-nb]');
     if (nb) {
       const added = addNotebook({ en: nb.dataset.en || '', ar: nb.dataset.ar || '' });
-      toast(added ? 'أُضيفت إلى دفترك 📒' : 'موجودة في دفترك مسبقاً', added ? 'ok' : 'info');
+      toast(added ? uiText('ui.literal.72cfce1c') : uiText('ui.literal.ebcf022b'), added ? 'ok' : 'info');
       if (added) nb.textContent = '✅';
     }
   });
@@ -69,6 +68,7 @@ function bindGlobalEvents() {
 /* ---------------- الإقلاع ---------------- */
 async function main() {
   applyAccessibility();
+  applyLang();
   initSpeech();
   registerZeroSounds();
   bindGlobalEvents();
@@ -116,9 +116,7 @@ main().catch((err) => {
   console.error('zero boot failed', err);
   const v = view();
   if (v) {
-    v.innerHTML = `<section class="card"><div class="empty"><span class="ico" aria-hidden="true">!</span>
-      <h2>تعذّر فتح قسم التأسيس</h2><p>أعد تحميل الصفحة. إذا استمرت المشكلة، أعد تشغيل الأكاديمية.</p>
-      <a class="btn btn--primary" href="./index.html#/">العودة إلى الأكاديمية</a></div></section>`;
+    v.innerHTML = uiText('ui.literal.fe15c29f');
   }
 });
 

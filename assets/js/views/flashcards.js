@@ -1,4 +1,4 @@
-/* بطاقات الحفظ مع مراجعة متباعدة (SRS) */
+/* Spaced-repetition flashcard review. */
 import { t } from '../core/i18n.js';
 import { esc, qs, toast, confetti } from '../core/utils.js';
 import {
@@ -19,19 +19,19 @@ import { ALL_UNITS } from '../data/curriculum.js';
 import { settings, saveSettings } from '../core/store.js';
 
 const DECKS = [
-  { id: 'all', ar: 'كل الكلمات', icon: '🌍' },
-  { id: 'due', ar: 'المستحقة اليوم فقط', icon: '⏰' },
-  { id: 'notebook', ar: 'دفتر كلماتي', icon: '📒' },
-  { id: 'a1', ar: 'مفردات A1', icon: '🌱' },
-  { id: 'a2', ar: 'مفردات A2', icon: '🌿' },
-  { id: 'b1', ar: 'مفردات B1', icon: '🌳' },
-  { id: 'b2', ar: 'مفردات B2', icon: '🌲' },
-  { id: 'c1', ar: 'مفردات C1', icon: '📚' },
-  { id: 'c2', ar: 'مفردات C2', icon: '🏛️' },
-  { id: 'pronouns', ar: 'الضمائر', icon: '🙋' },
-  { id: 'connectors', ar: 'أدوات الربط', icon: '🔗' },
-  { id: 'questions', ar: 'أدوات السؤال', icon: '❓' },
-  { id: 'reading', ar: 'كلمات المطالعات', icon: '📖' },
+  { id: 'all', labelKey: 'fc.deck.all', icon: '🌍' },
+  { id: 'due', labelKey: 'fc.deck.due', icon: '⏰' },
+  { id: 'notebook', labelKey: 'fc.deck.notebook', icon: '📒' },
+  { id: 'a1', labelKey: 'fc.deck.a1', icon: '🌱' },
+  { id: 'a2', labelKey: 'fc.deck.a2', icon: '🌿' },
+  { id: 'b1', labelKey: 'fc.deck.b1', icon: '🌳' },
+  { id: 'b2', labelKey: 'fc.deck.b2', icon: '🌲' },
+  { id: 'c1', labelKey: 'fc.deck.c1', icon: '📚' },
+  { id: 'c2', labelKey: 'fc.deck.c2', icon: '🏛️' },
+  { id: 'pronouns', labelKey: 'fc.deck.pronouns', icon: '🙋' },
+  { id: 'connectors', labelKey: 'fc.deck.connectors', icon: '🔗' },
+  { id: 'questions', labelKey: 'fc.deck.questions', icon: '❓' },
+  { id: 'reading', labelKey: 'fc.deck.reading', icon: '📖' },
 ];
 
 function deckEntries(deck) {
@@ -147,7 +147,7 @@ export function renderFlashcards(host) {
     const smartPlan = smartReviewPlan(entries, state.size);
     const suggestedSession = state.deck === 'all' ? smartPlan.entries : dueSession;
     const startMode = state.deck === 'all' ? 'smart' : 'deck';
-    const deckLabel = DECKS.find((deck) => deck.id === state.deck)?.ar || '';
+    const deckLabel = t(DECKS.find((deck) => deck.id === state.deck)?.labelKey || 'fc.deck.all');
     host.innerHTML = `
       <section class="fc-entry" aria-labelledby="fcEntryTitle">
         <button class="fc-entry__close" type="button" id="fcEntryClose" aria-label="${esc(t('common.close'))}">×</button>
@@ -169,7 +169,7 @@ export function renderFlashcards(host) {
           <div class="fc-entry__options-content">
             <label for="fcDeck">${esc(t('fc.deck'))}</label>
             <select class="select" id="fcDeck">
-              ${DECKS.map((deck) => `<option value="${deck.id}" ${deck.id === state.deck ? 'selected' : ''}>${esc(deck.ar)}</option>`).join('')}
+              ${DECKS.map((deck) => `<option value="${deck.id}" ${deck.id === state.deck ? 'selected' : ''}>${esc(t(deck.labelKey))}</option>`).join('')}
             </select>
             <label for="fcSize">${esc(t('drills.count'))}</label>
             <select class="select" id="fcSize">
@@ -223,11 +223,9 @@ export function renderFlashcards(host) {
       <section class="fc-focus" aria-label="${esc(t('fc.title'))}">
         <header class="fc-focus__top">
           <button class="fc-focus__close" type="button" id="fcQuit" aria-label="${esc(t('common.close'))}">×</button>
-          <div class="fc-focus__progress" role="progressbar" aria-label="${state.index + 1} / ${total}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.index + 1}">
-            <span>${state.index + 1}<i>/</i>${total}</span>
+          <div class="fc-focus__progress" role="progressbar" aria-label="${esc(t('fc.cardOf', { current: state.index + 1, total }))}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${state.index + 1}">
             <div class="progress"><i style="width:${Math.round(((state.index + 1) / total) * 100)}%"></i></div>
           </div>
-          <span class="fc-focus__streak">${esc(t('fc.cardOf', { current: state.index + 1, total }))}</span>
         </header>
 
         <div class="fc-stage">
@@ -369,12 +367,11 @@ export function renderFlashcards(host) {
         },
       });
     }));
-    if (!state.flipped) { /* لا ننطق تلقائياً لتجنب الإزعاج */ }
-
     host.querySelectorAll('[data-grade]').forEach((button) => button.addEventListener('click', () => {
       const quality = Number(button.dataset.grade);
       if (state.transitioning) return;
       state.transitioning = true;
+      button.classList.add('is-pressed');
       card.classList.add(quality === 1 ? 'is-swipe-left' : quality === 3 ? 'is-swipe-right' : 'is-swipe-up');
       state.advanceTimer = setTimeout(() => grade(quality), 190);
     }));

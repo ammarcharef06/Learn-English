@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 ﻿/* التدريبات التفاعلية — ثمانية أنواع */
 import { t } from '../core/i18n.js';
 import { esc, qs, toast } from '../core/utils.js';
@@ -27,7 +28,7 @@ export function drillTypeById(id) {
 function notebookEntries() {
   return (progress.notebook || []).map((n) => ({
     itemId: `nb:${String(n.en).toLowerCase().replace(/\s+/g, '_')}`,
-    en: n.en, ar: n.ar, ex: null, kind: 'word', level: 'ref', topic: 'notebook', topicTitle: 'دفتر كلماتي', emoji: '📒',
+    en: n.en, ar: n.ar, ex: null, kind: 'word', level: 'ref', topic: 'notebook', topicTitle: uiText('ui.literal.a5f8878f'), emoji: '📒',
   }));
 }
 
@@ -50,7 +51,7 @@ export function renderDrills(host, query = {}) {
     adaptive: true,
   };
 
-  const opts = SOURCES.concat([{ id: 'notebook', ar: 'دفتر كلماتي', en: 'My notebook' }]);
+  const opts = SOURCES.concat([{ id: 'notebook', ar: uiText('ui.literal.a5f8878f'), en: 'My notebook' }]);
 
   host.innerHTML = `
     ${pageHead({ icon: '🎯', title: t('drills.title'), subtitle: t('drills.subtitle') })}
@@ -82,14 +83,14 @@ export function renderDrills(host, query = {}) {
           <label class="switch" style="height:44px">
             <input type="checkbox" id="drillTimed" />
             <span class="switch__track"></span>
-            <span class="small">تحدٍّ زمني (٣٠ ثانية لكل سؤال)</span>
+            <span class="small">${uiText('ui.literal.0f41cc76')} </span>
           </label>
         </div>
       </div>
 
       <div class="row row--wrap" style="gap:10px;margin-top:6px">
         <button class="btn btn--primary btn--lg" type="button" id="startDrill">▶ ${t('drills.start')}</button>
-        <button class="btn" type="button" id="startGoal">🎯 أكمل هدف اليوم</button>
+        <button class="btn" type="button" id="startGoal">🎯 ${uiText('ui.literal.bd48febb')} </button>
         <span class="chip chip--brand" id="drillPreview"></span>
       </div>
     </div>
@@ -117,7 +118,7 @@ export function renderDrills(host, query = {}) {
     const count = countOverride || state.count;
     const source = state.source;
     if (source === 'notebook' && !notebookEntries().length) {
-      toast('دفترك فارغ — أضف كلمات أثناء الدروس 📒', 'warn');
+      toast(uiText('ui.literal.19694439'), 'warn');
       return;
     }
     const timed = qs('#drillTimed', host).checked ? '1' : '0';

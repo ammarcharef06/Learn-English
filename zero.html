@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>من الصفر — تأسيس A0 · أكاديمية الإنجليزية</title>
-  <meta name="description" content="قسم «من الصفر» (A0): الأبجدية، والأرقام الأساسية، وأيام الأسبوع، والضمائر، والتحيات البسيطة — مع نطق عربي ولوح كتابة واختبار وشهادة." />
+  <title data-i18n="zero.htmlTitle">من الصفر — تأسيس A0 · أكاديمية الإنجليزية</title>
+  <meta name="description" data-i18n-content="zero.htmlDescription" content="قسم «من الصفر» (A0): الأبجدية، والأرقام الأساسية، وأيام الأسبوع، والضمائر، والتحيات البسيطة — مع نطق عربي ولوح كتابة واختبار وشهادة." />
   <meta name="theme-color" content="#050607" />
   <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="من الصفر A0" />
+  <meta name="apple-mobile-web-app-title" data-i18n-content="zero.htmlShortTitle" content="من الصفر A0" />
 
   <!-- تطبيق مستقل: بيان التثبيت خاص بهذه الصفحة -->
   <link rel="manifest" href="./manifest-zero.webmanifest" />
@@ -46,27 +46,27 @@
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#view">تخطَّ إلى المحتوى</a>
+  <a class="skip-link" href="#view" data-i18n="html.skip">تخطَّ إلى المحتوى</a>
 
   <!-- نفس هيكل الموقع: شريط علوي + محتوى — بلا قائمة مستويات ولا أي عنصر من موقع المستويات -->
   <div id="app" class="app">
     <header class="topbar" id="topbar"></header>
 
     <div class="layout">
-      <aside class="sidebar" id="sidebar" aria-label="قائمة قسم من الصفر">
+      <aside class="sidebar" id="sidebar" aria-label="قائمة قسم من الصفر" data-i18n-aria="zero.htmlSidebar">
         <div class="sidebar__inner">
           <nav class="sidenav" id="sidenav"></nav>
         </div>
       </aside>
 
       <main class="view" id="view" tabindex="-1">
-        <div class="card"><div class="empty"><span class="ico">🌱</span><p>جارٍ تحضير قسم «من الصفر»…</p></div></div>
+        <div class="card"><div class="empty"><span class="ico">🌱</span><p data-i18n="zero.htmlBoot">جارٍ تحضير قسم «من الصفر»…</p></div></div>
         <noscript><div class="card">هذه الصفحة تحتاج تشغيل JavaScript في المتصفح.</div></noscript>
       </main>
     </div>
 
     <div class="scrim" id="scrim" hidden></div>
-    <nav class="mobile-nav" id="bottomnav" aria-label="التنقل في قسم التأسيس"></nav>
+    <nav class="mobile-nav" id="bottomnav" aria-label="التنقل في قسم التأسيس" data-i18n-aria="zero.htmlNav"></nav>
   </div>
 
   <div class="toasts" id="toasts" role="status" aria-live="polite"></div>

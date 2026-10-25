@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* الاختبارات: تحديد المستوى، اختبارات المراجع، اختبارات الوحدات، شهادة نتيجة */
 import { t } from '../core/i18n.js';
 import { esc, qs, toast, confetti, fmtDuration, pct } from '../core/utils.js';
@@ -10,28 +11,28 @@ import { runQuiz } from './quiz-runner.js';
 import { maybeShowInterstitial } from '../core/ads.js';
 
 const EXAMS = [
-  { id: 'placement', icon: '🧭', title: 'اختبار تحديد المستوى', desc: '٣٠ سؤالاً متدرّجاً من A1 حتى B1 لمعرفة مستواك الحقيقي الآن.', count: 30, minutes: 20, source: 'all', types: ['mcq', 'fill', 'translate'] },
-  { id: 'pronouns', icon: '🙋', title: 'اختبار الضمائر الشامل', desc: 'كل أنواع الضمائر: الفاعل، المفعول، الملكية، الانعكاسية، الإشارة، الوصل وغير المحددة.', count: 20, minutes: 12, source: 'pronouns', types: ['mcq', 'fill', 'order', 'match', 'translate'] },
-  { id: 'connectors', icon: '🔗', title: 'اختبار أدوات الربط', desc: '٤٠ أداة ربط: المعنى والاستخدام في الجملة.', count: 20, minutes: 12, source: 'connectors', types: ['mcq', 'fill', 'order', 'translate'] },
-  { id: 'questions', icon: '❓', title: 'اختبار أدوات السؤال', desc: 'أدوات السؤال وتراكيبها: HOW MUCH / HOW MANY / HOW OFTEN…', count: 20, minutes: 12, source: 'questions', types: ['mcq', 'fill', 'order', 'translate'] },
-  { id: 'listening', icon: '🎧', title: 'اختبار الاستماع', desc: '٢٠ سؤالاً سمعياً للتدريب على الأذن.', count: 20, minutes: 12, source: 'all', types: ['listen'] },
-  { id: 'mixed', icon: '🏆', title: 'الاختبار الشامل', desc: '٢٥ سؤالاً من كل الأنواع والمصادر — التحدي الأكبر.', count: 25, minutes: 15, source: 'all', types: ['mcq', 'fill', 'order', 'translate', 'listen'] },
+  { id: 'placement', icon: '🧭', title: uiText('ui.literal.59e6f4cf'), desc: uiText('ui.literal.d2d39bae'), count: 30, minutes: 20, source: 'all', types: ['mcq', 'fill', 'translate'] },
+  { id: 'pronouns', icon: '🙋', title: uiText('ui.literal.6c51ef63'), desc: uiText('ui.literal.b2936d46'), count: 20, minutes: 12, source: 'pronouns', types: ['mcq', 'fill', 'order', 'match', 'translate'] },
+  { id: 'connectors', icon: '🔗', title: uiText('ui.literal.c3142d26'), desc: uiText('ui.literal.6631807f'), count: 20, minutes: 12, source: 'connectors', types: ['mcq', 'fill', 'order', 'translate'] },
+  { id: 'questions', icon: '❓', title: uiText('ui.literal.d7064108'), desc: uiText('ui.literal.05ca60a8'), count: 20, minutes: 12, source: 'questions', types: ['mcq', 'fill', 'order', 'translate'] },
+  { id: 'listening', icon: '🎧', title: uiText('ui.literal.8838f2a6'), desc: uiText('ui.literal.7b28bcbc'), count: 20, minutes: 12, source: 'all', types: ['listen'] },
+  { id: 'mixed', icon: '🏆', title: uiText('ui.literal.c36f0384'), desc: uiText('ui.literal.28cd9f57'), count: 25, minutes: 15, source: 'all', types: ['mcq', 'fill', 'order', 'translate', 'listen'] },
 ];
 
 function grade(percent) {
-  if (percent >= 90) return { label: 'ممتاز', icon: '🏆', variant: 'ok' };
-  if (percent >= 80) return { label: 'جيد جداً', icon: '🎉', variant: 'ok' };
-  if (percent >= 70) return { label: 'جيد', icon: '👍', variant: 'brand' };
-  if (percent >= 60) return { label: 'مقبول', icon: '🙂', variant: 'warn' };
-  if (percent >= 50) return { label: 'ضعيف', icon: '💪', variant: 'bad' };
-  return { label: 'يحتاج مراجعة', icon: '📚', variant: 'bad' };
+  if (percent >= 90) return { label: uiText('ui.literal.1acdecde'), icon: '🏆', variant: 'ok' };
+  if (percent >= 80) return { label: uiText('ui.literal.d52e5e0f'), icon: '🎉', variant: 'ok' };
+  if (percent >= 70) return { label: uiText('ui.literal.731c8e74'), icon: '👍', variant: 'brand' };
+  if (percent >= 60) return { label: uiText('ui.literal.998fdac6'), icon: '🙂', variant: 'warn' };
+  if (percent >= 50) return { label: uiText('ui.literal.d489833d'), icon: '💪', variant: 'bad' };
+  return { label: uiText('ui.literal.d5f154dc'), icon: '📚', variant: 'bad' };
 }
 
 function placementRecommendation(percent) {
-  if (percent >= 85) return { level: 'b1', text: 'مستواك قريب من B1 — انتقل إلى وحدات B1 وركّز على القواعد المتقدمة.' };
-  if (percent >= 65) return { level: 'a2', text: 'مستواك A2 — أكمل وحدات A2 ثم انتقل إلى B1.' };
-  if (percent >= 40) return { level: 'a1', text: 'مستواك A1 — ابدأ من وحدات A1 مع التدريب اليومي على الضمائر.' };
-  return { level: 'a1', text: 'ابدأ من الصفر: وحدات A1 ثم الضمائر ثم أدوات الربط، ١٥ دقيقة يومياً.' };
+  if (percent >= 85) return { level: 'b1', text: uiText('ui.literal.1cd4c507') };
+  if (percent >= 65) return { level: 'a2', text: uiText('ui.literal.8d9d8639') };
+  if (percent >= 40) return { level: 'a1', text: uiText('ui.literal.5a6d413b') };
+  return { level: 'a1', text: uiText('ui.literal.b2da83d3') };
 }
 
 export function renderExams(host, id) {
@@ -58,27 +59,27 @@ export function renderExams(host, id) {
     </div>
 
     <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">📘</span><h3>اختبار وحدة معيّنة</h3></div>
+      <div class="card__title"><span class="ico">📘</span><h3>${uiText('ui.literal.1181687d')} </h3></div>
       <div class="row row--wrap" style="gap:10px">
         <select class="select" id="unitSelect" style="max-width:420px">
           ${LEVELS.map((lv) => `<optgroup label="${esc(lv.label)}">
             ${lv.units.map((u) => `<option value="${u.id}">${esc(u.title)}</option>`).join('')}
           </optgroup>`).join('')}
         </select>
-        <button class="btn btn--primary" type="button" id="unitExamBtn">▶ ابدأ اختبار الوحدة</button>
+        <button class="btn btn--primary" type="button" id="unitExamBtn">▶ ${uiText('ui.literal.89569719')} </button>
       </div>
     </div>
 
     <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">⚡</span><h3>اختبار سريع (٥ أسئلة)</h3></div>
-      <p class="small muted">خمسة أسئلة عشوائية من كل الموقع — مثالي في وقت الفراغ.</p>
-      <button class="btn" type="button" id="quickExam">▶ ابدأ</button>
+      <div class="card__title"><span class="ico">⚡</span><h3>${uiText('ui.literal.67658864')} </h3></div>
+      <p class="small muted">${uiText('ui.literal.f52db407')} </p>
+      <button class="btn" type="button" id="quickExam">▶ ${uiText('ui.literal.a8669e34')} </button>
     </div>
 
     ${history.length ? `<div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">🗂️</span><h3>سجل الاختبارات</h3></div>
+      <div class="card__title"><span class="ico">🗂️</span><h3>${uiText('ui.literal.6aca4bf7')} </h3></div>
       <div class="table-wrap"><table class="tbl">
-        <thead><tr><th>التاريخ</th><th>النوع</th><th>النتيجة</th><th>النسبة</th><th>الزمن</th></tr></thead>
+        <thead><tr><th>${uiText('ui.literal.3b14c4e8')} </th><th>${uiText('ui.literal.a2a12893')} </th><th>${uiText('ui.literal.f709f5bb')} </th><th>${uiText('ui.literal.0b4bab0e')} </th><th>${uiText('ui.literal.cbd281c7')} </th></tr></thead>
         <tbody>
           ${history.slice(0, 12).map((h) => `<tr>
             <td class="small">${esc(new Date(h.at).toLocaleDateString('ar-DZ'))}</td>
@@ -102,14 +103,14 @@ function labelForExam(id) {
   const found = EXAMS.find((e) => e.id === id);
   if (found) return found.title;
   const u = getUnit(id);
-  if (u) return `وحدة: ${u.title}`;
-  if (id === 'quick') return 'اختبار سريع';
-  return id === 'mixed' ? 'شامل' : String(id);
+  if (u) return `${uiText('ui.literal.a516d61c')} ${u.title}`;
+  if (id === 'quick') return uiText('ui.literal.210c1e4b');
+  return id === 'mixed' ? uiText('ui.literal.30c82e7d') : String(id);
 }
 
 function startExam(host, examId) {
   const def = examId === 'quick'
-    ? { id: 'quick', icon: '⚡', title: 'اختبار سريع', count: 5, minutes: 5, source: 'all', types: ['mcq', 'fill', 'translate'] }
+    ? { id: 'quick', icon: '⚡', title: uiText('ui.literal.210c1e4b'), count: 5, minutes: 5, source: 'all', types: ['mcq', 'fill', 'translate'] }
     : EXAMS.find((e) => e.id === examId);
   if (!def) return;
   const examHost = qs('#examHost', host);
@@ -122,26 +123,26 @@ function startUnitExam(host, unitId) {
   const u = getUnit(unitId);
   if (!u) return;
   const examHost = qs('#examHost', host);
-  if (!examHost) { toast('تعذّر تجهيز الاختبار — أعد فتح الصفحة', 'bad'); return; }
+  if (!examHost) { toast(uiText('ui.literal.5919df87'), 'bad'); return; }
   const questions = buildQuestions({ source: `unit:${u.id}`, types: ['mcq', 'fill', 'order', 'translate'], count: 12, adaptive: false, mode: 'exam' });
   runTimedExam(examHost, {
     questions, examId: u.id,
-    def: { icon: u.icon, title: `اختبار: ${u.title}`, count: 12, minutes: 10 },
+    def: { icon: u.icon, title: `${uiText('ui.literal.095dd0e8')} ${u.title}`, count: 12, minutes: 10 },
   });
 }
 
 function runTimedExam(examHost, { questions, def, examId }) {
-  if (!examHost) { toast('تعذّر تجهيز الاختبار — أعد فتح الصفحة', 'bad'); return; }
-  if (!questions.length) { toast('لا توجد بيانات كافية لهذا الاختبار', 'warn'); return; }
+  if (!examHost) { toast(uiText('ui.literal.5919df87'), 'bad'); return; }
+  if (!questions.length) { toast(uiText('ui.literal.7139624f'), 'warn'); return; }
   examHost.innerHTML = `
     <div class="card card--brand">
       <div class="card__title"><span class="ico">${def.icon}</span><h2>${esc(def.title)}</h2></div>
       <div class="row row--wrap" style="gap:8px">
         <span class="chip">${questions.length} ${esc(t('common.questionsShort'))}</span>
         <span class="chip">⏱ ${t('exam.timeLimit')}: ${def.minutes} ${esc(t('common.minutes'))}</span>
-        <span class="chip chip--warn">لا يمكن إيقاف المؤقت بعد البدء</span>
+        <span class="chip chip--warn">${uiText('ui.literal.ac9f9e3a')} </span>
       </div>
-      <p class="small muted" style="margin-top:10px">سيبدأ الاختبار فوراً. سجّل نتيجتك في السجل عند الانتهاء.</p>
+      <p class="small muted" style="margin-top:10px">${uiText('ui.literal.713da01d')} </p>
       <button class="btn btn--primary btn--lg" type="button" id="examGo">▶ ${esc(t('exam.start'))}</button>
     </div>
     <div id="examRunner" style="margin-top:16px"></div>`;
@@ -167,7 +168,7 @@ function runTimedExam(examHost, { questions, def, examId }) {
 function renderExamResult(container, res, def, examId) {
   const percent = res.accuracy;
   const g = grade(percent);
-  const name = settings.learnerName || 'طالب الأكاديمية';
+  const name = settings.learnerName || uiText('ui.literal.08723bba');
   const recommendation = examId === 'placement' ? placementRecommendation(percent) : null;
   const wrong = res.answers.filter((a) => !a.correct);
 
@@ -181,14 +182,14 @@ function renderExamResult(container, res, def, examId) {
         <p class="muted small" style="margin-top:10px">${esc(def.title)} · ${esc(t('common.time'))}: ${fmtDuration(res.seconds)}</p>
 
         <div class="cert" style="margin-top:18px">
-          <h2>شهادة نتيجة</h2>
-          <p class="muted">تشهد أكاديمية الإنجليزية أن</p>
+          <h2>${uiText('ui.literal.1a75b0d8')} </h2>
+          <p class="muted">${uiText('ui.literal.77e56d39')} </p>
           <div class="cert__name">${esc(name)}</div>
-          <p>قد أتمّ <b>${esc(def.title)}</b> بتقدير <b>${esc(g.label)}</b></p>
+          <p>${uiText('ui.literal.c4252019')} <b>${esc(def.title)}</b> ${uiText('ui.literal.f425424d')} <b>${esc(g.label)}</b></p>
           <div class="row row--wrap" style="justify-content:center;gap:10px;margin-top:10px">
-            <span class="chip">النتيجة: ${res.correct} / ${res.total}</span>
-            <span class="chip">النسبة: ${percent}%</span>
-            <span class="chip">الزمن: ${fmtDuration(res.seconds)}</span>
+            <span class="chip">${uiText('ui.literal.65ad7a13')} ${res.correct} / ${res.total}</span>
+            <span class="chip">${uiText('ui.literal.fc1e82dc')} ${percent}%</span>
+            <span class="chip">${uiText('ui.literal.d962a147')} ${fmtDuration(res.seconds)}</span>
           </div>
           <div class="cert__seal">${percent}%</div>
           <p class="tiny muted" style="margin-top:10px">${esc(new Date().toLocaleDateString('ar-DZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))}</p>
@@ -203,9 +204,9 @@ function renderExamResult(container, res, def, examId) {
       </div>
 
       ${recommendation ? `<div class="card card--brand" style="margin-top:16px">
-        <div class="card__title"><span class="ico">🧭</span><h3>توصية المستوى</h3></div>
+        <div class="card__title"><span class="ico">🧭</span><h3>${uiText('ui.literal.1d3ba717')} </h3></div>
         <p>${esc(recommendation.text)}</p>
-        <a class="btn btn--primary btn--sm" href="#/level/${recommendation.level}">ابدأ من هذا المستوى ←</a>
+        <a class="btn btn--primary btn--sm" href="#/level/${recommendation.level}">${uiText('ui.literal.32ee8dbf')} </a>
       </div>` : ''}
 
       ${wrong.length ? `<div class="card" style="margin-top:16px">
@@ -214,8 +215,8 @@ function renderExamResult(container, res, def, examId) {
           <span class="item-row__en">${esc(a.q.answerText || (a.q.correctOrder ? a.q.correctOrder.join(' ') : ''))}</span>
           <span class="item-row__ar">${esc(a.q.explain || '')}</span>
         </div>`).join('')}
-        <a class="btn btn--sm" style="margin-top:12px" href="#/drills?source=smart">🧠 تدرّب على أخطائك</a>
-      </div>` : `<div class="tip-box tip-box--ok" style="margin-top:16px"><b>${esc(t('exam.noMistakes'))}</b>أداء مثالي — جرّب مستوى أصعب.</div>`}
+        <a class="btn btn--sm" style="margin-top:12px" href="#/drills?source=smart">🧠 ${uiText('ui.literal.bcfd9104')} </a>
+      </div>` : `<div class="tip-box tip-box--ok" style="margin-top:16px"><b>${esc(t('exam.noMistakes'))}</b>${uiText('ui.literal.521ed6f2')} </div>`}
     </div>`;
 
   container.querySelector('#printCert')?.addEventListener('click', () => window.print());
@@ -246,23 +247,23 @@ function renderUnitExamIntro(host, unit) {
   host.innerHTML = `
     ${pageHead({
       icon: unit.icon,
-      title: `اختبار: ${unit.title}`,
-      subtitle: `${unit.levelLabel} · اختبار مؤقت على مفردات وجمل هذه الوحدة.`,
+      title: `${uiText('ui.literal.095dd0e8')} ${unit.title}`,
+      subtitle: `${unit.levelLabel} · ${uiText('ui.literal.8007faf9')} `,
       actionsHtml: `<a class="btn btn--sm" href="#/exams">← ${t('nav.exams')}</a>
-        <a class="btn btn--sm" href="#/unit/${unit.id}">مراجعة الوحدة</a>`,
+        <a class="btn btn--sm" href="#/unit/${unit.id}">${uiText('ui.literal.eaa9e5ca')} </a>`,
     })}
     <div class="grid grid--4">
-      <div class="stat"><div class="stat__label">${t('common.questionsShort')}</div><div class="stat__value">12</div><div class="stat__foot">من مفردات وجمل الوحدة</div></div>
+      <div class="stat"><div class="stat__label">${t('common.questionsShort')}</div><div class="stat__value">12</div><div class="stat__foot">${uiText('ui.literal.10a0750a')} </div></div>
       <div class="stat"><div class="stat__label">${t('exam.timeLimit')}</div><div class="stat__value">10</div><div class="stat__foot">${t('common.minutes')}</div></div>
-      <div class="stat"><div class="stat__label">مفردات الوحدة</div><div class="stat__value">${unit.vocabulary.length}</div><div class="stat__foot">${unit.sentences.length} جملة</div></div>
-      <div class="stat ${st ? 'stat--brand' : ''}"><div class="stat__label">محاولاتك السابقة</div><div class="stat__value">${st ? Math.round((st.c / Math.max(1, st.q)) * 100) + '%' : '—'}</div><div class="stat__foot">${st ? `${st.c} / ${st.q}` : 'لم تختبر هذه الوحدة بعد'}</div></div>
+      <div class="stat"><div class="stat__label">${uiText('ui.literal.c6039776')} </div><div class="stat__value">${unit.vocabulary.length}</div><div class="stat__foot">${unit.sentences.length} ${uiText('ui.literal.0acb25d9')} </div></div>
+      <div class="stat ${st ? 'stat--brand' : ''}"><div class="stat__label">${uiText('ui.literal.4cde79a8')} </div><div class="stat__value">${st ? Math.round((st.c / Math.max(1, st.q)) * 100) + '%' : '—'}</div><div class="stat__foot">${st ? `${st.c} / ${st.q}` : uiText('ui.literal.1d1c3309')}</div></div>
     </div>
     <div class="card card--brand" style="margin-top:16px">
-      <div class="card__title"><span class="ico">🧪</span><h2>جاهز للاختبار؟</h2></div>
-      <p class="small muted">سيبدأ المؤقت فور الضغط على الزر. النتيجة تُسجّل في سجل الاختبارات وتمنحك شهادة قابلة للطباعة.</p>
+      <div class="card__title"><span class="ico">🧪</span><h2>${uiText('ui.literal.dfdfb115')} </h2></div>
+      <p class="small muted">${uiText('ui.literal.72449949')} </p>
       <div class="row row--wrap" style="gap:8px">
         <button class="btn btn--primary btn--lg" type="button" id="unitExamGo">▶ ${esc(t('exam.start'))}</button>
-        <a class="btn" href="#/unit/${unit.id}">📘 مراجعة الوحدة أولاً</a>
+        <a class="btn" href="#/unit/${unit.id}">📘 ${uiText('ui.literal.91272f2d')} </a>
       </div>
     </div>
     <div id="examHost" style="margin-top:16px"></div>`;

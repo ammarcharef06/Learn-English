@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* ============================================================
    شريط مشترك للموقع وصفحة A0؛ الموقع يستخدم قائمة هاتف وشريطاً جانبياً
    قابلاً للطي على سطح المكتب، بينما تحتفظ صفحة A0 بتنقلها المستقل.
@@ -45,8 +46,8 @@ const ICON = {
 export function topbarHTML(mode = 'site') {
   const isZero = mode === 'zero';
   const brandHref = isZero ? '#/zero' : '#/';
-  const name = isZero ? 'من الصفر — تأسيس A0' : t('brand.name');
-  const tag = isZero ? 'الحروف · الأرقام · التحيات' : t('brand.tag');
+  const name = isZero ? uiText('ui.literal.454f7262') : t('brand.name');
+  const tag = isZero ? uiText('ui.literal.fd190e5d') : t('brand.tag');
   return `
     <button class="icon-btn topbar__menu" id="btnMenu" type="button" title="${t('nav.toggle')}" aria-label="${t('nav.toggle')}" aria-expanded="false" aria-controls="sidebar">
       <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -61,7 +62,7 @@ export function topbarHTML(mode = 'site') {
 
     <div class="topbar__actions">
       <button class="icon-btn" id="btnInstall" type="button" hidden title="${t('set.install')}" aria-label="${t('set.install')}">${ICON.install}</button>
-      <button class="icon-btn" id="btnLang" type="button" title="تبديل لغة الواجهة" aria-label="تبديل لغة الواجهة">
+      <button class="icon-btn" id="btnLang" type="button" title="${uiText('ui.literal.57707b8d')} " aria-label="${uiText('ui.literal.57707b8d')} ">
         <span class="icon-btn__text" id="langLabel">${settings.uiLang === 'en' ? 'ع' : 'EN'}</span>
       </button>
     </div>`;

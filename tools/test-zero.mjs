@@ -747,8 +747,15 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
   it('صفحة A0 تستخدم درجها المستقل والموقع يضيف تنقّلاً سفلياً للهاتف', () => {
     assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
     assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
-    for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
-      assert(shellSrc.includes(l), `درج A0 ينقصه: ${l}`);
+    for (const [label, key] of [
+      ['المراحل الخمس', 'ui.literal.6574c53b'],
+      ['الاختبار النهائي', 'ui.literal.cea94354'],
+      ['شهادة التأسيس', 'ui.literal.07e8f3c3'],
+      ['لوح الكتابة', 'ui.literal.cc3d1c0c'],
+      ['إعدادات التأسيس', 'ui.literal.462965d1'],
+      ['المستويات A1–B1', 'ui.literal.112885cf'],
+    ]) {
+      assert(shellSrc.includes(key) && (label === 'المستويات A1–B1' ? shellSrc.includes('A1–B1') : true), `درج A0 ينقصه: ${label}`);
     }
     const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
     assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');

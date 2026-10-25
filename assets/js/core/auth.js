@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* قفل اختياري محلي؛ كلمة المرور لا تُرسل إلى خادم. */
 
 const ITER = 12000;                 // تكرار التجزئة لتقليل جدوى التخمين
@@ -107,16 +108,16 @@ export function lockRemainingMs() {
 }
 
 export async function login(password, remember = true) {
-  if (!hasPassword()) return { ok: false, error: 'أنشئ كلمة مرور من الإعدادات أولاً.' };
+  if (!hasPassword()) return { ok: false, error: uiText('ui.literal.5d2e34cd') };
   const wait = lockRemainingMs();
-  if (wait > 0) return { ok: false, error: `محاولات كثيرة. انتظر ${Math.ceil(wait / 1000)} ثانية.` };
+  if (wait > 0) return { ok: false, error: `${uiText('ui.literal.c0797909')} ${Math.ceil(wait / 1000)} ${uiText('ui.literal.a46c3438')}` };
   const ok = await verify(password);
   if (!ok) {
     const a = attempts();
     a.n = (a.n || 0) + 1;
     if (a.n >= 5) { a.until = Date.now() + Math.min(300000, 15000 * (a.n - 4)); a.n = 0; }
     setAttempts(a);
-    return { ok: false, error: 'كلمة المرور غير صحيحة.' };
+    return { ok: false, error: uiText('ui.literal.912705ff') };
   }
   setAttempts({ n: 0, until: 0 });
   const days = remember ? (settings?.session?.rememberDays || 30) : 1 / 24; // ساعة واحدة
@@ -195,9 +196,9 @@ export function startIdleSessionGuard(onExpired) {
 }
 
 export async function setPassword(next, current = '') {
-  if (String(next || '').length < 4) return { ok: false, error: 'كلمة المرور الجديدة قصيرة جداً (4 أحرف على الأقل).' };
+  if (String(next || '').length < 4) return { ok: false, error: uiText('ui.literal.56702dff') };
   if (lockEnabled() && hasPassword() && !(await verify(current))) {
-    return { ok: false, error: 'كلمة المرور الحالية غير صحيحة.' };
+    return { ok: false, error: uiText('ui.literal.03e13cb3') };
   }
   const salt = Math.random().toString(36).slice(2, 10);
   const hash = await hashPassword(next, salt);
@@ -210,7 +211,7 @@ export async function changePassword(current, next) {
 }
 
 export function setLockEnabled(enabled) {
-  if (enabled && !hasPassword()) return { ok: false, error: 'أنشئ كلمة مرور خاصة بك قبل تفعيل القفل.' };
+  if (enabled && !hasPassword()) return { ok: false, error: uiText('ui.literal.e7ae91b2') };
   saveSettings({ security: { lockEnabled: !!enabled } });
   if (enabled) {
     const days = settings?.session?.rememberDays || 30;

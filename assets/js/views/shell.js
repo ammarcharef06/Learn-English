@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 ﻿/* الهيكل العام: التنقل، الشريط الجانبي، الإحصاءات المصغّرة */
 import { t } from '../core/i18n.js';
 import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
@@ -38,13 +39,13 @@ export function renderNav() {
     let html = `
       <div class="sidenav__brand">
         <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
-        <span><b>English Academy</b><small>رحلتك نحو إتقان الإنجليزية</small></span>
+        <span><b>English Academy</b><small>${uiText('ui.literal.70104948')} </small></span>
       </div>
-      <a class="zero-nav" href="./zero.html" title="من الصفر — تأسيس A0 (صفحة مستقلة)">
+      <a class="zero-nav" href="./zero.html" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
         <span class="zero-nav__badge" aria-hidden="true">A0</span>
         <span class="zero-nav__txt">
-          <b>من الصفر — تأسيس A0</b>
-          <small>${zs.percent ? `${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} مراحل` : 'ابدأ من الحرف الأول'}</small>
+          <b>${uiText('ui.literal.ef3e7371')} A0</b>
+          <small>${zs.percent ? `${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} ${uiText('ui.literal.000ac055')} ` : uiText('ui.literal.0c94e627')}</small>
           <span class="progress"><i style="width:${zs.percent}%"></i></span>
         </span>
         <span class="zero-nav__arrow" aria-hidden="true">←</span>
@@ -108,12 +109,12 @@ export function renderSidebarStats() {
     const s = streakInfo();
     if (s.streak > 0) {
       host.className = 'streak-card';
-      host.innerHTML = `<b>${s.streak} 🔥</b><span>${t('common.streak')} · أفضل سلسلة: ${s.best}</span>
+      host.innerHTML = `<b>${s.streak} 🔥</b><span>${t('common.streak')} · ${uiText('ui.literal.26434056')} ${s.best}</span>
         <div class="progress" style="margin-top:8px;background:rgba(255,255,255,.25)"><i style="width:${pct(s.streak % 7 || 7, 7)}%;background:#fff"></i></div>
-        <span class="tiny">${s.today ? 'درست اليوم ✅' : 'لم تدرس اليوم بعد'}</span>`;
+        <span class="tiny">${s.today ? uiText('ui.literal.bf79bb2b') : uiText('ui.literal.fa0c57b1')}</span>`;
     } else {
       host.className = 'streak-card streak-card--empty';
-      host.innerHTML = `<b>0</b><span>ابدأ سلسلتك اليوم — أول جلسة تفتح السلسلة 🔥</span>`;
+      host.innerHTML = uiText('ui.literal.540f5a83');
     }
   }
   const mini = qs('#miniProgress');
@@ -124,7 +125,7 @@ export function renderSidebarStats() {
       <b>${t('dash.courseProgress')}</b>
       <div class="progress"><i style="width:${o.percent}%"></i></div>
       <div class="small muted" style="margin-top:6px">${o.unitsDone} / ${o.unitsTotal} ${t('lessons.units')} · ${o.percent}%</div>
-      <div class="small muted">🌱 التأسيس A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} مراحل</div>
+      <div class="small muted">🌱 ${uiText('ui.literal.e4013531')} A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} ${uiText('ui.literal.000ac055')} </div>
       <div class="small muted">⭐ ${progress.points || 0} ${t('common.points')}</div>`;
   }
 }

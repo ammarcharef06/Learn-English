@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 import { APP_VERSION } from './app-version.js';
 import { settings } from './store.js';
 
@@ -197,8 +198,8 @@ async function announcePendingUpdate() {
   try {
     const { showNotification } = await import('./notify.js');
     const shown = await showNotification(
-      'تحديث جديد لأكاديمية الإنجليزية',
-      `الإصدار ${pending.version} متاح الآن. اضغط لعرض التفاصيل والتحديث.`,
+      uiText('ui.literal.93bc78e1'),
+      `${uiText('ui.literal.d089b6c9')} ${pending.version} ${uiText('ui.literal.fbbdb18b')}`,
       { tag: 'lea-update', url: './index.html#/settings/updates' },
     );
     if (!shown) return false;

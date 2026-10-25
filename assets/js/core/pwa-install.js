@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* إدارة تثبيت PWA مرة واحدة لكل صفحة تستخدم غلاف الأكاديمية المشترك. */
 import { qs, toast } from './utils.js';
 
@@ -21,7 +22,7 @@ export function setupPwaInstall() {
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
       if (choice?.outcome === 'accepted') {
-        toast('تم تثبيت التطبيق 🎉', 'ok');
+        toast(uiText('ui.literal.f7f826da'), 'ok');
         if (button) button.hidden = true;
       }
       deferredPrompt = null;
@@ -29,10 +30,10 @@ export function setupPwaInstall() {
     }
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    if (isIOS) toast('على الآيفون: زر المشاركة ← «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
-    else toast('افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
+    if (isIOS) toast(uiText('ui.literal.b11a774b'), 'info', uiText('ui.literal.c81ff41e'));
+    else toast(uiText('ui.literal.094a4dcf'), 'info', uiText('ui.literal.c81ff41e'));
     return false;
   };
 
-  window.addEventListener('appinstalled', () => toast('التطبيق مثبّت على جهازك ✅', 'ok'));
+  window.addEventListener('appinstalled', () => toast(uiText('ui.literal.872ef2a6'), 'ok'));
 }

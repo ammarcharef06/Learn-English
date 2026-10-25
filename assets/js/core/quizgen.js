@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* ============================================================
    مولّد الأسئلة الذكي: يبني ثمانية أنواع من التمارين
    من نفس بيانات المنهج والمراجع، مع تكييف حسب الأخطاء السابقة.
@@ -164,7 +165,7 @@ export function connectorEntries() {
   return CONNECTORS.map((it, i) => ({
     itemId: `c:${i}:${String(it.en).toLowerCase().replace(/\s+/g, '_')}`,
     en: it.en, ar: it.ar, ex: it.ex, kind: 'connector',
-    level: 'ref', topic: 'connectors', topicTitle: 'أدوات الربط', emoji: '🔗',
+    level: 'ref', topic: 'connectors', topicTitle: uiText('ui.literal.5dada98b'), emoji: '🔗',
   }));
 }
 
@@ -172,7 +173,7 @@ export function questionEntries() {
   return QUESTION_WORDS.map((it, i) => ({
     itemId: `q:${i}:${String(it.en).toLowerCase().replace(/\s+/g, '_')}`,
     en: it.en, ar: it.ar, ex: it.ex, kind: 'qword',
-    level: 'ref', topic: 'questions', topicTitle: 'أدوات السؤال', emoji: '❓',
+    level: 'ref', topic: 'questions', topicTitle: uiText('ui.literal.0976905b'), emoji: '❓',
   }));
 }
 
@@ -193,14 +194,14 @@ export function notebookEntries() {
   return (progress.notebook || []).map((n, i) => ({
     itemId: `nb:${String(n.en).toLowerCase().replace(/\s+/g, '_')}`,
     en: n.en, ar: n.ar, ex: null, kind: 'word',
-    level: 'ref', topic: 'notebook', topicTitle: 'دفتر كلماتي', emoji: '📒',
+    level: 'ref', topic: 'notebook', topicTitle: uiText('ui.literal.a5f8878f'), emoji: '📒',
   }));
 }
 
 export function keyExampleEntries() {
   return KEY_EXAMPLES.map((k, i) => ({
     itemId: `k:${i}`, en: k.en, ar: k.ar, ex: null, kind: 'sentence',
-    level: 'ref', topic: 'key-examples', topicTitle: 'أمثلة للحفظ', emoji: '⭐', note: k.note || '',
+    level: 'ref', topic: 'key-examples', topicTitle: uiText('ui.literal.c74c6f53'), emoji: '⭐', note: k.note || '',
   }));
 }
 
@@ -240,17 +241,17 @@ export function entriesForSource(source = 'all') {
 }
 
 export const SOURCES = [
-  { id: 'all', ar: 'الكل (منهج + مراجع)', en: 'Everything' },
-  { id: 'pronouns', ar: 'الضمائر', en: 'Pronouns' },
-  { id: 'connectors', ar: 'أدوات الربط', en: 'Connectors' },
-  { id: 'questions', ar: 'أدوات السؤال', en: 'Question words' },
-  { id: 'vocab', ar: 'مفردات المنهج', en: 'Curriculum vocabulary' },
-  { id: 'sentences', ar: 'جمل المنهج', en: 'Curriculum sentences' },
-  { id: 'reading', ar: 'كلمات المطالعات', en: 'Reading words' },
-  { id: 'key', ar: 'أمثلة للحفظ', en: 'Key examples' },
-  { id: 'level:a1', ar: 'مستوى A1', en: 'Level A1' },
-  { id: 'level:a2', ar: 'مستوى A2', en: 'Level A2' },
-  { id: 'level:b1', ar: 'مستوى B1', en: 'Level B1' },
+  { id: 'all', ar: uiText('ui.literal.9468b22f'), en: 'Everything' },
+  { id: 'pronouns', ar: uiText('ui.literal.32632f31'), en: 'Pronouns' },
+  { id: 'connectors', ar: uiText('ui.literal.5dada98b'), en: 'Connectors' },
+  { id: 'questions', ar: uiText('ui.literal.0976905b'), en: 'Question words' },
+  { id: 'vocab', ar: uiText('ui.literal.d1a2c6f1'), en: 'Curriculum vocabulary' },
+  { id: 'sentences', ar: uiText('ui.literal.2aed5dd1'), en: 'Curriculum sentences' },
+  { id: 'reading', ar: uiText('ui.literal.ed0dd4ba'), en: 'Reading words' },
+  { id: 'key', ar: uiText('ui.literal.c74c6f53'), en: 'Key examples' },
+  { id: 'level:a1', ar: uiText('ui.literal.271f2bb0'), en: 'Level A1' },
+  { id: 'level:a2', ar: uiText('ui.literal.2a1f3069'), en: 'Level A2' },
+  { id: 'level:b1', ar: uiText('ui.literal.b717bf9b'), en: 'Level B1' },
 ];
 
 /* ---------------- أدوات مساعدة ---------------- */
@@ -317,7 +318,7 @@ function optionSet(correct, wrongs) {
 }
 
 function baseExplain(entry) {
-  const ex = entry.ex ? ` — مثال: ${entry.ex.en}` : '';
+  const ex = entry.ex ? ` — ${uiText('ui.literal.6e00b5f8')} ${entry.ex.en}` : '';
   return `${entry.en} = ${entry.ar}${ex}`;
 }
 
@@ -329,7 +330,7 @@ export function qMeaningOut(entry, pool) {
   return {
     id: uid('q'), type: 'mcq', ui: 'choice', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'ما معنى هذه الكلمة أو العبارة؟',
+    instruction: uiText('ui.literal.53d6fe75'),
     stemHtml: `<div class="q-main">${escapeHtml(entry.en)}</div>`,
     speakText: entry.en,
     options: optionSet(entry.ar, wrongs),
@@ -344,7 +345,7 @@ export function qMeaningIn(entry, pool) {
   return {
     id: uid('q'), type: 'mcq', ui: 'choice', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'اختر المقابل الإنجليزي الصحيح',
+    instruction: uiText('ui.literal.f9fc8ce2'),
     stemHtml: `<div class="q-main q-main--ar">${escapeHtml(entry.ar)}</div>`,
     speakText: null,
     options: optionSet(entry.en, wrongs).map((o) => ({ ...o, ltr: true })),
@@ -366,11 +367,11 @@ export function qFill(entry, pool) {
   return {
     id: uid('q'), type: 'fill', ui: 'choice', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'أكمل الفراغ بالكلمة الصحيحة',
+    instruction: uiText('ui.literal.5b8a149f'),
     stemHtml: `<div class="q-main">${escapeHtml(blanked)}</div>`,
     speakText: null,
     options: optionSet(target, wrongs).map((o) => ({ ...o, ltr: true })),
-    explain: `الإجابة: ${target} = ${entry.ar}\n${entry.ex.en} — ${entry.ex.ar}`,
+    explain: `${uiText('ui.literal.474ce3f3')} ${target} = ${entry.ar}\n${entry.ex.en} — ${entry.ex.ar}`,
     showExample: entry.ex,
   };
 }
@@ -385,7 +386,7 @@ export function qOrder(entry) {
   return {
     id: uid('q'), type: 'order', ui: 'order', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'رتّب الكلمات لتكوين جملة صحيحة',
+    instruction: uiText('ui.literal.55d04f7c'),
     stemHtml: `<div class="q-hint">${escapeHtml(entry.ar)}</div>`,
     speakText: sentence,
     tokens: shuffled,
@@ -400,11 +401,11 @@ export function qTranslateOut(entry) {
   return {
     id: uid('q'), type: 'translate', ui: 'input', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'اكتب معنى هذه الكلمة بالعربية',
+    instruction: uiText('ui.literal.cfc9bf7c'),
     stemHtml: `<div class="q-main">${escapeHtml(entry.en)}</div>`,
     speakText: entry.en,
     inputDir: 'rtl',
-    placeholder: 'اكتب الإجابة بالعربية…',
+    placeholder: uiText('ui.literal.d6615391'),
     accept: arVariants(entry.ar).map(normAr),
     answerText: entry.ar,
     explain: baseExplain(entry),
@@ -417,7 +418,7 @@ export function qTranslateIn(entry) {
   return {
     id: uid('q'), type: 'translate', ui: 'input', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'اكتب هذه الكلمة بالإنجليزية',
+    instruction: uiText('ui.literal.c51c7388'),
     stemHtml: `<div class="q-main q-main--ar">${escapeHtml(entry.ar)}</div>`,
     speakText: null,
     inputDir: 'ltr',
@@ -436,12 +437,12 @@ export function qListen(entry, pool) {
   return {
     id: uid('q'), type: 'listen', ui: 'choice', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'اسمع ثم اختر ما سمعته',
-    stemHtml: `<div class="q-main"><button class="btn btn--primary btn--lg" type="button" data-replay>🔊 اسمع مرة أخرى</button></div>`,
+    instruction: uiText('ui.literal.ac2f932f'),
+    stemHtml: uiText('ui.literal.73726c86'),
     speakText: answer,
     autoSpeak: true,
     options: optionSet(answer, wrongs).map((o) => ({ ...o, ltr: true })),
-    explain: `ما سمعته: ${answer}\n${entry.ex ? entry.ex.ar : ''}`,
+    explain: `${uiText('ui.literal.0c307661')} ${answer}\n${entry.ex ? entry.ex.ar : ''}`,
     showExample: entry.ex,
   };
 }
@@ -451,15 +452,15 @@ export function qListenType(entry) {
   return {
     id: uid('q'), type: 'listen', ui: 'input', itemId: entry.itemId,
     level: entry.level, topic: entry.topic, topicTitle: entry.topicTitle,
-    instruction: 'اسمع واكتب ما سمعته',
-    stemHtml: `<div class="q-main"><button class="btn btn--primary btn--lg" type="button" data-replay>🔊 اسمع مرة أخرى</button></div>`,
+    instruction: uiText('ui.literal.0267a18b'),
+    stemHtml: uiText('ui.literal.73726c86'),
     speakText: answer,
     autoSpeak: true,
     inputDir: 'ltr',
     placeholder: 'Type what you hear…',
     accept: [normEn(answer)],
     answerText: answer,
-    explain: `الصيغة الصحيحة: ${answer}`,
+    explain: `${uiText('ui.literal.ddf8050b')} ${answer}`,
     showExample: entry.ex,
   };
 }
@@ -471,13 +472,13 @@ export function qRelation(row, from, to, pool) {
   const uniqueWrongs = [...new Set(wrongs)];
   if (uniqueWrongs.length < 3) return null;
   const fieldNames = {
-    subject: 'ضمير الفاعل', object: 'ضمير المفعول', det: 'صفة الملكية',
-    poss: 'ضمير الملكية', refl: 'الضمير الانعكاسي',
+    subject: uiText('ui.literal.4267f939'), object: uiText('ui.literal.4067617d'), det: uiText('ui.literal.5ad77790'),
+    poss: uiText('ui.literal.47a4c98f'), refl: uiText('ui.literal.72393f38'),
   };
   return {
     id: uid('q'), type: 'mcq', ui: 'choice', itemId: `rel:${row.subject}:${to}`,
-    level: 'ref', topic: 'pronouns-table', topicTitle: 'جدول الضمائر',
-    instruction: `ما ${fieldNames[to]} المقابل لـ «${row.person}»؟`,
+    level: 'ref', topic: 'pronouns-table', topicTitle: uiText('ui.literal.cec5030a'),
+    instruction: `ما ${fieldNames[to]} ${uiText('ui.literal.2f89e9f3')}${row.person}»؟`,
     stemHtml: `<div class="q-main">${escapeHtml(row[from])}</div>`,
     speakText: row[from],
     options: optionSet(correct, sample(uniqueWrongs, 3)).map((o) => ({ ...o, ltr: true })),
@@ -492,7 +493,7 @@ export function qMatch(entries, size = 4) {
   return {
     id: uid('q'), type: 'match', ui: 'match', itemId: picked[0].itemId,
     level: picked[0].level, topic: picked[0].topic, topicTitle: picked[0].topicTitle,
-    instruction: 'طابق كل كلمة إنجليزية مع معناها العربي',
+    instruction: uiText('ui.literal.032bfd57'),
     stemHtml: '',
     speakText: null,
     pairs: picked.map((e) => ({ en: e.en, ar: e.ar, itemId: e.itemId })),
@@ -508,8 +509,8 @@ function escapeHtml(s) {
 /* ---------------- الموزّع الرئيسي ---------------- */
 
 export const TYPE_LABELS = {
-  mcq: 'اختيار من متعدد', fill: 'ملء الفراغ', order: 'ترتيب الكلمات',
-  match: 'توصيل ومطابقة', translate: 'ترجمة', listen: 'استماع',
+  mcq: uiText('ui.literal.a4d6a027'), fill: uiText('ui.literal.2b1b1831'), order: uiText('ui.literal.f924a842'),
+  match: uiText('ui.literal.026d522a'), translate: uiText('ui.literal.e208480a'), listen: uiText('ui.literal.7adc3716'),
 };
 
 const ORDER_TYPES = ['mcq', 'fill', 'order', 'match', 'translate', 'listen'];

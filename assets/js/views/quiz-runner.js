@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* ============================================================
    محرّك تشغيل الأسئلة — يُستخدم في التدريبات والاختبارات والمطالعات
    ============================================================ */
@@ -72,7 +73,7 @@ export function stopActiveQuizzes() {
 
 /* ---------- الواجهة ---------- */
 export function runQuiz(host, opts = {}) {
-  if (!host) { console.warn('runQuiz: لم يتم العثور على حاوية الأسئلة'); return null; }
+  if (!host) { console.warn(uiText('ui.literal.70d998f4')); return null; }
   const questions = opts.questions || [];
   if (!questions.length) {
     host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>${esc(t('drills.noSource'))}</p></div>`;
@@ -258,7 +259,7 @@ export function runQuiz(host, opts = {}) {
       input.disabled = true;
       checkBtn.disabled = true;
       record(q, res.ok, (Date.now() - state.qStart) / 1000);
-      const extra = res.near && res.ok ? '<div class="tiny">إملاؤك قريب جداً من الصحيح 👌</div>' : '';
+      const extra = res.near && res.ok ? uiText('ui.literal.11708028') : '';
       qhost.querySelector('[data-fb]').innerHTML = feedbackHTML(q, res.ok, extra);
       qhost.querySelector('[data-reveal]')?.remove();
       qhost.insertAdjacentHTML('beforeend', nextButtonHTML(state.i + 1 >= questions.length ? t('common.finish') : t('common.next')));
@@ -294,7 +295,7 @@ export function runQuiz(host, opts = {}) {
         <div class="word-bank" data-bank></div>
         <div class="row" style="justify-content:center;gap:8px">
           <button class="btn btn--primary" type="button" data-check>${esc(t('common.check'))}</button>
-          <button class="btn btn--ghost btn--sm" type="button" data-undo>↺ تراجع</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-undo>↺ ${uiText('ui.literal.51c02bc2')} </button>
         </div>
         <div data-fb></div>
         ${state.allowReveal ? `<div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn btn--ghost btn--sm" type="button" data-reveal>${esc(t('drills.reveal'))}</button></div>` : ''}
@@ -340,7 +341,7 @@ export function runQuiz(host, opts = {}) {
       const target = q.correctOrder.join(' ');
       const ok = normEnPublic(attempt) === normEnPublic(target);
       record(q, ok, (Date.now() - state.qStart) / 1000);
-      qhost.querySelector('[data-fb]').innerHTML = feedbackHTML(q, ok, `<div class="tiny" style="margin-top:6px">جملتك: <span class="en">${esc(attempt)}</span></div>`);
+      qhost.querySelector('[data-fb]').innerHTML = feedbackHTML(q, ok, `<div class="tiny" style="margin-top:6px">${uiText('ui.literal.0dde6559')} <span class="en">${esc(attempt)}</span></div>`);
       qhost.querySelector('[data-reveal]')?.remove();
       qhost.insertAdjacentHTML('beforeend', nextButtonHTML(state.i + 1 >= questions.length ? t('common.finish') : t('common.next')));
       bindCommon(q);
@@ -412,7 +413,7 @@ export function runQuiz(host, opts = {}) {
         selected = null;
         done += 1;
         if (done >= total) {
-          qhost.querySelector('[data-fb]').innerHTML = feedbackHTML(q, true, `<div class="tiny">أتممت مطابقة ${total} عناصر ✅</div>`);
+          qhost.querySelector('[data-fb]').innerHTML = feedbackHTML(q, true, `<div class="tiny">${uiText('ui.literal.553073ce')} ${total} ${uiText('ui.literal.4d179bca')} </div>`);
           qhost.insertAdjacentHTML('beforeend', nextButtonHTML(state.i + 1 >= questions.length ? t('common.finish') : t('common.next')));
           bindCommon(q);
         }

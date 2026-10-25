@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* أدوات مساعدة عامة */
 
 export const qs = (sel, root = document) => root.querySelector(sel);
@@ -61,8 +62,8 @@ export function daysBetween(aKey, bKey) {
   const a = new Date(aKey + 'T00:00:00'), b = new Date(bKey + 'T00:00:00');
   return Math.round((b - a) / 86400000);
 }
-const AR_DAYS = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-const AR_MONTHS = ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+const AR_DAYS = [uiText('ui.literal.8215f21b'), uiText('ui.literal.0e895458'), uiText('ui.literal.28a30847'), uiText('ui.literal.bafd26ed'), uiText('ui.literal.6cb22eec'), uiText('ui.literal.e16147b3'), uiText('ui.literal.2b9da5dd')];
+const AR_MONTHS = [uiText('ui.literal.5131edfd'), uiText('ui.literal.4ddb8a86'), uiText('ui.literal.0b8a961d'), uiText('ui.literal.a0150f46'), uiText('ui.literal.2274577d'), uiText('ui.literal.6ed35134'), uiText('ui.literal.c1c857aa'), uiText('ui.literal.24ab55cc'), uiText('ui.literal.b5e17ce8'), uiText('ui.literal.b2fd4a36'), uiText('ui.literal.0db3e736'), uiText('ui.literal.c451fd43')];
 export const dayNameAr = (d) => AR_DAYS[new Date(d).getDay()];
 export const monthNameAr = (d) => AR_MONTHS[new Date(d).getMonth()];
 export function prettyDateAr(key) {
@@ -71,7 +72,7 @@ export function prettyDateAr(key) {
 }
 export function prettyTimeAr(hhmm) {
   const [h, m] = String(hhmm || '19:00').split(':').map(Number);
-  const period = h < 12 ? 'صباحاً' : h < 17 ? 'بعد الزوال' : h < 20 ? 'مساءً' : 'ليلاً';
+  const period = h < 12 ? uiText('ui.literal.be75b23a') : h < 17 ? uiText('ui.literal.eb7c2817') : h < 20 ? uiText('ui.literal.737c336e') : uiText('ui.literal.a98ba94f');
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${String(m).padStart(2, '0')} ${period}`;
 }
@@ -135,7 +136,7 @@ export function openModal({ title = '', body = '', actions = [], onMount = null,
     <div class="modal" role="dialog" aria-modal="true" style="${wide ? 'width:min(920px,100%)' : ''}">
       <div class="modal__head">
         <h3>${esc(title)}</h3>
-        <button class="icon-btn" data-modal-close type="button" aria-label="إغلاق">✕</button>
+        <button class="icon-btn" data-modal-close type="button" aria-label="${uiText('ui.literal.7d6d03fb')}">✕</button>
       </div>
       <div class="modal__body">${body}</div>
       <div class="modal__actions row row--wrap" style="margin-top:16px;justify-content:flex-end">
@@ -186,7 +187,7 @@ export function confetti(count = 60) {
 /* ---------- الصوت (زر النطق) ---------- */
 export const SPEAK_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
 export function speakBtn(text, extraClass = '') {
-  return `<button class="speak-btn ${extraClass}" type="button" data-say="${esc(text)}" title="اسمع النطق" aria-label="اسمع النطق: ${esc(text)}">${SPEAK_ICON}</button>`;
+  return `<button class="speak-btn ${extraClass}" type="button" data-say="${esc(text)}" title="${uiText('ui.literal.999f5913')}" aria-label="${uiText('ui.literal.fed95b8b')} ${esc(text)}">${SPEAK_ICON}</button>`;
 }
 
 export function ringHTML(percent, label) {

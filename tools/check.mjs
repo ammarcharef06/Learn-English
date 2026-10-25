@@ -397,10 +397,21 @@ try {
   }
   if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
   const zeroShell = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
+  const arCatalog = JSON.parse(readFileSync(join(ROOT, 'assets/js/core/ar.json'), 'utf8'));
   if (!/renderZeroDrawer/.test(zeroShell) || !/sidenav/.test(zeroShell)) bad('درج A0 غير مربوط بالقائمة الجانبية');
   if (!/MOBILE_NAV/.test(zeroShell) || !/id="bottomnav"/.test(zeroHtml)) bad('تنقّل A0 السفلي غير مربوط بغلافه');
-  for (const l of ['المراحل الخمس', 'الاختبار النهائي', 'شهادة التأسيس', 'لوح الكتابة', 'إعدادات التأسيس', 'المستويات A1–B1']) {
-    if (!zeroShell.includes(l)) bad(`درج A0 ينقصه: ${l}`);
+  for (const [label, key] of [
+    ['المراحل الخمس', 'ui.literal.6574c53b'],
+    ['الاختبار النهائي', 'ui.literal.cea94354'],
+    ['شهادة التأسيس', 'ui.literal.07e8f3c3'],
+    ['لوح الكتابة', 'ui.literal.cc3d1c0c'],
+    ['إعدادات التأسيس', 'ui.literal.462965d1'],
+    ['المستويات A1–B1', 'ui.literal.112885cf'],
+  ]) {
+    const expectedText = label === 'المستويات A1–B1' ? 'المستويات' : label;
+    if (!zeroShell.includes(key) || arCatalog[key] !== expectedText || (label === 'المستويات A1–B1' && !zeroShell.includes('A1–B1'))) {
+      bad(`درج A0 ينقصه: ${label}`);
+    }
   }
   const appSrc = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
   const topbar = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');

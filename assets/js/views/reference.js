@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* المراجع السريعة: الضمائر، أدوات الربط، أدوات السؤال، جدول الضمائر، أمثلة للحفظ */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs } from '../core/utils.js';
@@ -49,7 +50,7 @@ export function renderReference(host, section) {
   if (sec === 'index') return renderIndex(host);
   if (sec === 'pronouns') return renderPronouns(host);
   if (sec === 'connectors') return renderList(host, {
-    icon: '🔗', title: t('ref.connectors'), subtitle: '٤٠ أداة ربط مع المعنى والاستخدام ومثال ناطق.',
+    icon: '🔗', title: t('ref.connectors'), subtitle: uiText('ui.literal.971b58e6'),
     rows: CONNECTORS.map((c, i) => ({ en: c.en, ar: `${c.ar}  ·  ${c.kind}`, ex: c.ex })),
     drillSource: 'connectors',
   });
@@ -57,11 +58,11 @@ export function renderReference(host, section) {
     const groups = [...new Set(QUESTION_WORDS.map((q) => q.group))];
     host.innerHTML = `
       ${pageHead({
-        icon: '❓', title: t('ref.questionWords'), subtitle: 'أدوات السؤال الأساسية وتراكيب السؤال مع أمثلة ناطقة.',
+        icon: '❓', title: t('ref.questionWords'), subtitle: uiText('ui.literal.d4fd7ef0'),
         actionsHtml: `<a class="btn btn--sm btn--primary" href="#/drills?source=questions">🎯 ${t('common.practice')}</a>
           <a class="btn btn--sm" href="#/reference">← ${t('nav.reference')}</a>`,
       })}
-      ${searchBar('ابحث عن أداة سؤال أو معنى…')}
+      ${searchBar(uiText('ui.literal.3c833eed'))}
       ${groups.map((g) => `<div class="card" style="margin-bottom:16px">
         <div class="card__title"><span class="ico">🔎</span><h3>${esc(g)}</h3></div>
         ${QUESTION_WORDS.filter((q) => q.group === g).map((q) => itemRow(q.en, q.ar, q.ex)).join('')}
@@ -80,41 +81,41 @@ function renderIndex(host) {
     <div class="grid grid--3">
       <a class="card" href="#/reference/pronouns" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">🙋</span><h3>${t('ref.pronouns')}</h3></div>
-        <p class="small muted">١١ مجموعة: الفاعل، المفعول، الملكية، الانعكاسية، الإشارة، الاستفهام، الوصل، غير المحددة، التبادلية…</p>
-        <span class="chip chip--brand">${PRONOUN_GROUPS.reduce((n, g) => n + g.items.length, 0)} عنصر</span>
+        <p class="small muted">${uiText('ui.literal.f6e7498d')} </p>
+        <span class="chip chip--brand">${PRONOUN_GROUPS.reduce((n, g) => n + g.items.length, 0)} ${uiText('ui.literal.d2a1d9d8')} </span>
       </a>
       <a class="card" href="#/reference/connectors" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">🔗</span><h3>${t('ref.connectors')}</h3></div>
-        <p class="small muted">AND, OR, BUT, BECAUSE, ALTHOUGH, HOWEVER… مع المعنى والاستخدام.</p>
-        <span class="chip chip--brand">${CONNECTORS.length} عنصر</span>
+        <p class="small muted">AND, OR, BUT, BECAUSE, ALTHOUGH, HOWEVER… ${uiText('ui.literal.5e71ed05')} </p>
+        <span class="chip chip--brand">${CONNECTORS.length} ${uiText('ui.literal.d2a1d9d8')} </span>
       </a>
       <a class="card" href="#/reference/questions" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">❓</span><h3>${t('ref.questionWords')}</h3></div>
         <p class="small muted">WHAT, WHERE, WHEN, WHO… و HOW MUCH / HOW MANY / HOW OFTEN…</p>
-        <span class="chip chip--brand">${QUESTION_WORDS.length} عنصر</span>
+        <span class="chip chip--brand">${QUESTION_WORDS.length} ${uiText('ui.literal.d2a1d9d8')} </span>
       </a>
       <a class="card" href="#/reference/table" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">🧮</span><h3>${t('ref.personTable')}</h3></div>
-        <p class="small muted">كل أشكال الضمير في جدول واحد: الفاعل، المفعول، الملكية، الانعكاسي.</p>
+        <p class="small muted">${uiText('ui.literal.14c0c377')} </p>
       </a>
       <a class="card" href="#/reference/examples" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">⭐</span><h3>${t('ref.keyExamples')}</h3></div>
-        <p class="small muted">أمثلة مختصرة تُحفظ كما هي لتثبيت التركيب.</p>
-        <span class="chip chip--brand">${KEY_EXAMPLES.length} مثالاً</span>
+        <p class="small muted">${uiText('ui.literal.4fa27d18')} </p>
+        <span class="chip chip--brand">${KEY_EXAMPLES.length} ${uiText('ui.literal.c1463eac')} </span>
       </a>
       <a class="card" href="#/drills" style="text-decoration:none;color:inherit">
         <div class="card__title"><span class="ico">🎯</span><h3>${t('nav.drills')}</h3></div>
-        <p class="small muted">حوّل كل ما تقرأه هنا إلى تدريب تفاعلي فوري.</p>
+        <p class="small muted">${uiText('ui.literal.0f71ac9e')} </p>
       </a>
     </div>
 
     <div class="card" style="margin-top:18px">
-      <div class="card__title"><span class="ico">🧭</span><h2>ترتيب الحفظ المقترح</h2></div>
+      <div class="card__title"><span class="ico">🧭</span><h2>${uiText('ui.literal.48306983')} </h2></div>
       ${STUDY_ORDER.map((s) => `<div class="item-row">
         <span class="chip chip--brand">${s.step}</span>
         <span class="item-row__ar">${esc(s.ar)}</span>
       </div>`).join('')}
-      <div class="tip-box tip-box--ok" style="margin-top:12px"><b>نصيحة عملية</b>ابدأ بحفظ ضمائر الفاعل، ثم ضمائر المفعول به، ثم الملكية، وبعدها بقية الأنواع.</div>
+      <div class="tip-box tip-box--ok" style="margin-top:12px"><b>${uiText('ui.literal.0e849b7f')} </b>${uiText('ui.literal.f8ac6e66')} </div>
     </div>`;
 }
 
@@ -122,11 +123,11 @@ function renderPronouns(host) {
   host.innerHTML = `
     ${pageHead({
       icon: '🙋', title: t('ref.pronouns'),
-      subtitle: 'كل مجموعات الضمائر مع النطق والترجمة والمثال، إضافة إلى جدول الضمائر الكامل.',
+      subtitle: uiText('ui.literal.51cb0875'),
       actionsHtml: `<a class="btn btn--sm btn--primary" href="#/drills?source=pronouns">🎯 ${t('common.practice')}</a>
         <a class="btn btn--sm" href="#/reference">← ${t('nav.reference')}</a>`,
     })}
-    ${searchBar('ابحث عن ضمير أو معنى…')}
+    ${searchBar(uiText('ui.literal.00864f21'))}
     ${PRONOUN_GROUPS.map((g, idx) => `<section class="acc ${idx === 0 ? 'is-open' : ''}" data-acc>
       <button class="acc__head" type="button" data-acc-head>
         <span class="ico">${g.icon}</span>
@@ -152,7 +153,7 @@ function renderList(host, { icon, title, subtitle, rows, drillSource }) {
       actionsHtml: `<a class="btn btn--sm btn--primary" href="#/drills?source=${drillSource}">🎯 ${t('common.practice')}</a>
         <a class="btn btn--sm" href="#/reference">← ${t('nav.reference')}</a>`,
     })}
-    ${searchBar('ابحث عن أداة أو معنى…')}
+    ${searchBar(uiText('ui.literal.dd55bf6f'))}
     <div class="card">
       ${rows.map((r) => itemRow(r.en, r.ar, r.ex)).join('')}
     </div>`;
@@ -163,7 +164,7 @@ function renderTable(host) {
   host.innerHTML = `
     ${pageHead({
       icon: '🧮', title: t('ref.personTable'),
-      subtitle: 'عمود واحد لكل نوع من الضمائر، وصف واحد لكل شخص.',
+      subtitle: uiText('ui.literal.efd8661b'),
       actionsHtml: `<a class="btn btn--sm btn--primary" href="#/drills?source=pronouns">🎯 ${t('common.practice')}</a>
         <a class="btn btn--sm" href="#/reference">← ${t('nav.reference')}</a>`,
     })}
@@ -179,14 +180,14 @@ function renderTable(host) {
       </table>
     </div>
     <div class="tip-box tip-box--brand" style="margin-top:14px">
-      <b>ملاحظة مهمة</b>لا يوجد ضمير ملكية مستقل شائع لكلمة ITS، وهذا هو الفراغ الوحيد في الجدول.
+      <b>${uiText('ui.literal.2597329b')} </b>${uiText('ui.literal.efd804cf')} ITS${uiText('ui.literal.f012653a')}
     </div>
     <div class="card" style="margin-top:16px">
-      <div class="card__title"><span class="ico">🧠</span><h3>كيف تستخدم الجدول؟</h3></div>
+      <div class="card__title"><span class="ico">🧠</span><h3>${uiText('ui.literal.af01c575')} </h3></div>
       <ul class="small muted" style="margin:0;padding-inline-start:1.2rem">
-        <li>حدّد الشخص أولاً (متكلم / مخاطب / غائب)، ثم اختر العمود الذي تحتاجه.</li>
-        <li>بعد الفعل استخدم عمود «ضمير المفعول»، وقبل الاسم استخدم «صفة الملكية».</li>
-        <li>إذا كان الفاعل والمفعول نفس الشخص، استخدم العمود الانعكاسي.</li>
+        <li>${uiText('ui.literal.07ffc381')} / ${uiText('ui.literal.8dc9ba78')} / ${uiText('ui.literal.8fe0e597')} </li>
+        <li>${uiText('ui.literal.2e29fe08')} </li>
+        <li>${uiText('ui.literal.6ef0b9ff')} </li>
       </ul>
     </div>`;
 }
@@ -196,12 +197,12 @@ function renderExamples(host) {
   host.innerHTML = `
     ${pageHead({
       icon: '⭐', title: t('ref.keyExamples'),
-      subtitle: 'أمثلة قصيرة تُحفظ كما هي — اضغط 🔊 لتسمعها وتثبيتها.',
+      subtitle: uiText('ui.literal.5194669b'),
       actionsHtml: `<a class="btn btn--sm btn--primary" href="#/drills?source=key">🎯 ${t('common.practice')}</a>
         <a class="btn btn--sm" href="#/reference">← ${t('nav.reference')}</a>`,
     })}
     ${tags.map((tag) => `<div class="card" style="margin-bottom:16px">
-      <div class="card__title"><span class="ico">${tag === 'ضمائر' ? '🙋' : tag === 'ربط' ? '🔗' : '❓'}</span><h3>أمثلة ${esc(tag)}</h3></div>
+      <div class="card__title"><span class="ico">${tag === uiText('ui.literal.d631d334') ? '🙋' : tag === uiText('ui.literal.b7b5e1f1') ? '🔗' : '❓'}</span><h3>${uiText('ui.literal.03dbe0c9')} ${esc(tag)}</h3></div>
       ${KEY_EXAMPLES.filter((k) => k.tag === tag).map((k) => `<div class="example-line" data-row data-search="${esc((k.en + ' ' + k.ar).toLowerCase())}">
         <div class="grow">
           <div class="en">${esc(k.en)}</div>

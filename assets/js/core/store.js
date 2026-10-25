@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* إدارة الحالة والتخزين المحلي */
 import { todayKey, debounce } from './utils.js';
 
@@ -25,8 +26,8 @@ export const DEFAULT_SETTINGS = {
     enabled: false,
     time: '19:00',
     days: [0, 1, 2, 3, 4, 5, 6],
-    title: 'حان وقت الإنجليزية 🇬🇧',
-    body: 'جلسة قصيرة اليوم تحافظ على سلسلتك! افتح الأكاديمية وتدرّب 10 دقائق.',
+    title: uiText('ui.literal.e050124f'),
+    body: uiText('ui.literal.cb879bed'),
     lastFired: '',
     launchAtLogin: false,
   },
@@ -221,7 +222,7 @@ export function exportCloudProgress() {
 
 export function importAll(json) {
   const data = JSON.parse(json);
-  if (!data || typeof data !== 'object') throw new Error('ملف غير صالح');
+  if (!data || typeof data !== 'object') throw new Error(uiText('ui.literal.76f1bb2f'));
   if (data.settings) {
     const importedSettings = { ...data.settings, security: settings.security };
     delete importedSettings.push;

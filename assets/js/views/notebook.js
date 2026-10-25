@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* دفتر كلماتي */
 import { t } from '../core/i18n.js';
 import { esc, qs, speakBtn, download, toast } from '../core/utils.js';
@@ -11,12 +12,11 @@ export function renderNotebook(host) {
     ${pageHead({
       icon: '📒', title: t('nb.title'), subtitle: t('nb.subtitle'),
       actionsHtml: `<span class="chip chip--brand">${items.length} ${t('common.words')}</span>
-        ${items.length ? `<button class="btn btn--sm" type="button" id="nbExport">⬇ تصدير</button>
-        <a class="btn btn--sm btn--primary" href="#/drills?source=notebook">🎯 تدرّب على دفتري</a>` : ''}`,
+        ${items.length ? uiText('ui.literal.c6a54fad') : ''}`,
     })}
     ${items.length ? `
       <div class="field" style="max-width:420px">
-        <input class="input" type="search" placeholder="ابحث في دفترك…" id="nbSearch" />
+        <input class="input" type="search" placeholder="${uiText('ui.literal.da6ff343')} " id="nbSearch" />
       </div>
       <div class="card" id="nbList">
         ${items.map((n, i) => `<div class="item-row" data-nb-row data-search="${esc((n.en + ' ' + n.ar).toLowerCase())}">
@@ -24,7 +24,7 @@ export function renderNotebook(host) {
           <span class="item-row__ar">${esc(n.ar)}${n.note ? `<div class="tiny muted">${esc(n.note)}</div>` : ''}</span>
           <span class="row" style="gap:4px">
             ${speakBtn(n.en)}
-            <button class="btn btn--ghost btn--sm" type="button" data-del="${i}" title="حذف">🗑</button>
+            <button class="btn btn--ghost btn--sm" type="button" data-del="${i}" title="${uiText('ui.literal.287cbb9b')} ">🗑</button>
           </span>
         </div>`).join('')}
       </div>`
@@ -46,7 +46,7 @@ export function renderNotebook(host) {
     const idx = Number(b.dataset.del);
     const item = items[idx];
     removeNotebook(item.en);
-    toast('حُذفت من الدفتر', 'info');
+    toast(uiText('ui.literal.ee796d1b'), 'info');
     renderNotebook(host);
   }));
 

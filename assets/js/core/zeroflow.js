@@ -1,3 +1,4 @@
+import { t as uiText } from './i18n.js';
 /* ============================================================
    قسم «من الصفر» (A0): حفظ التقدّم، الإتقان، الاختبار، الشهادة
    ============================================================
@@ -331,25 +332,25 @@ export function a1Recommendation() {
     return {
       tone: 'ok',
       ready: true,
-      title: 'أتقنتَ التأسيس — انتقل إلى A1 بثقة',
-      text: `أنهيت ${ZERO_STAGES.length} مراحل، وأتقنت ${LETTERS.length} حرفاً، ونتيجتك في الاختبار النهائي ${st.examBest}%. المستوى A1 مفتوح لك الآن — ونصيحتنا أن تبدأه.`,
+      title: uiText('ui.literal.a6d9e563'),
+      text: `${uiText('ui.literal.20bd7fc1')} ${ZERO_STAGES.length} ${uiText('ui.literal.ac88562c')} ${LETTERS.length} ${uiText('ui.literal.d4a74d05')} ${st.examBest}%. ${uiText('ui.literal.0709ab2f')} A1 ${uiText('ui.literal.a080a9c7')}`,
     };
   }
   const st2 = zeroStats(progress);
   return {
     tone: 'brand',
     ready: false,
-    title: 'توصية (وليس شرطاً)',
+    title: uiText('ui.literal.914c6a31'),
     text: zeroAdviceText(st2),
   };
 }
 
 function zeroAdviceText(st) {
   const parts = [];
-  if (st.remaining.stages) parts.push(`${st.remaining.stages} مرحلة لم تُكملها بعد`);
-  if (st.remaining.letters) parts.push(`${st.remaining.letters} حرفاً لم تُتقنه`);
-  if (st.remaining.exam) parts.push(`نتيجة الاختبار النهائي أقل من 90% (تحتاج ${st.remaining.exam}% إضافية)`);
-  if (!parts.length) return 'أكمل ما تبقّى ثم عد لتستلم شهادة التأسيس.';
+  if (st.remaining.stages) parts.push(`${st.remaining.stages} ${uiText('ui.literal.0e83b6ff')}`);
+  if (st.remaining.letters) parts.push(`${st.remaining.letters} ${uiText('ui.literal.65c72f95')}`);
+  if (st.remaining.exam) parts.push(`${uiText('ui.literal.416f8933')} 90% (${uiText('ui.literal.e9184fc5')} ${st.remaining.exam}% ${uiText('ui.literal.58a0a696')}`);
+  if (!parts.length) return uiText('ui.literal.2e7d03ea');
   // المستويات الأخرى مفتوحة دائماً: التوصية إرشادية فقط
-  return `لإتمام شهادة التأسيس: ${parts.join(' · ')}. ومع ذلك فكل المستويات الأخرى مفتوحة لك الآن بلا أي قفل.`;
+  return `${uiText('ui.literal.b2960853')} ${parts.join(' · ')}. ${uiText('ui.literal.4e75fbff')}`;
 }

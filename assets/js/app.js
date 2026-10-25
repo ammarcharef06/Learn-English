@@ -1,3 +1,4 @@
+import { t as uiText } from './core/i18n.js';
 /* ============================================================
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
@@ -61,8 +62,7 @@ function setupRoutes() {
   route('/conversations', () => renderConversations(view()));
   route('/about', () => renderAbout(view()));
   setNotFound(() => {
-    view().innerHTML = `<div class="empty"><span class="ico">🧭</span><h2>الصفحة غير موجودة</h2>
-      <p>الرابط الذي طلبته غير متاح.</p><a class="btn btn--primary" href="#/">إلى الرئيسية</a></div>`;
+    view().innerHTML = uiText('ui.literal.fed272b0');
   });
 }
 
@@ -78,7 +78,7 @@ function bindGlobalEvents() {
     const nb = e.target.closest('[data-nb]');
     if (nb) {
       const added = addNotebook({ en: nb.dataset.en || '', ar: nb.dataset.ar || '' });
-      toast(added ? 'أُضيفت إلى دفترك 📒' : 'موجودة في دفترك مسبقاً', added ? 'ok' : 'info');
+      toast(added ? uiText('ui.literal.72cfce1c') : uiText('ui.literal.ebcf022b'), added ? 'ok' : 'info');
       if (added) nb.textContent = '✅';
       return;
     }
@@ -107,7 +107,7 @@ function bindGlobalEvents() {
 
   document.addEventListener('lea:reminder-inapp', (e) => {
     const d = e.detail || {};
-    toast(d.body || '', 'warn', d.title || 'تذكير');
+    toast(d.body || '', 'warn', d.title || uiText('ui.literal.cb654be9'));
   });
 
   document.addEventListener('lea:answered', () => { renderSidebarStats(); });
@@ -126,7 +126,7 @@ function bindGlobalEvents() {
       if (deepLink.hostname === 'updates') navigate('/settings', { section: 'updates' });
     } catch (error) {
       console.error('Could not process the app link.', error);
-      toast(error.message || 'تعذّر إكمال تأكيد البريد داخل التطبيق.', 'warn');
+      toast(error.message || uiText('ui.literal.ce17af8e'), 'warn');
     }
   };
   Promise.resolve(capacitorApp?.addListener?.('appUrlOpen', ({ url } = {}) => handleAppLink(url)))
@@ -158,19 +158,19 @@ function setupInstall() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
-      if (choice?.outcome === 'accepted') { toast('تم تثبيت التطبيق 🎉', 'ok'); if (btn) btn.hidden = true; }
+      if (choice?.outcome === 'accepted') { toast(uiText('ui.literal.f7f826da'), 'ok'); if (btn) btn.hidden = true; }
       deferredPrompt = null;
       return true;
     }
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     if (isIOS) {
-      toast('على الآيفون: زر المشاركة ← «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
+      toast(uiText('ui.literal.b11a774b'), 'info', uiText('ui.literal.c81ff41e'));
     } else {
-      toast('افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»', 'info', 'تثبيت التطبيق');
+      toast(uiText('ui.literal.094a4dcf'), 'info', uiText('ui.literal.c81ff41e'));
     }
     return false;
   };
-  window.addEventListener('appinstalled', () => toast('التطبيق مثبّت على جهازك ✅', 'ok'));
+  window.addEventListener('appinstalled', () => toast(uiText('ui.literal.872ef2a6'), 'ok'));
 }
 
 /* ---------------- Service Worker ---------------- */
@@ -301,7 +301,7 @@ async function main() {
     qs('#boot')?.classList.add('is-hidden');
     window.__leaBooted = true;
     renderLock(async () => {
-      toast('أهلاً بك في أكاديميتك 👋', 'ok');
+      toast(uiText('ui.literal.9b670934'), 'ok');
       await startApp();
     });
     return;
@@ -321,5 +321,5 @@ async function main() {
 main().catch((err) => {
   console.error('boot failed', err);
   const boot = qs('#boot');
-  if (boot) boot.innerHTML = `<div class="boot__logo">!</div><div class="boot__text">تعذّر تشغيل الموقع. افتح وحدة تحكم المتصفح لمعرفة الخطأ.</div>`;
+  if (boot) boot.innerHTML = uiText('ui.literal.2a6d54ca');
 });

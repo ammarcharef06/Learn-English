@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* صفحة التمرين المستقلة (#/drill) — واجهة كاملة بلا أي عناصر مدمجة */
 import { t } from '../core/i18n.js';
 import { esc, qs, toast } from '../core/utils.js';
@@ -21,7 +22,7 @@ export function renderDrillPage(host, query = {}) {
     count = Math.min(30, Math.max(5, g.target - g.done));
   }
   if (source === 'notebook' && !(progress.notebook || []).length) {
-    toast('دفترك فارغ — أضف كلمات أثناء الدروس 📒', 'warn');
+    toast(uiText('ui.literal.19694439'), 'warn');
     navigate('/drills');
     return;
   }
@@ -46,8 +47,8 @@ export function renderDrillPage(host, query = {}) {
       <div class="row wrap" style="gap:6px">
         <span class="chip chip--brand">${questions.length} ${esc(t('common.questionsShort'))}</span>
         ${timed ? `<span class="chip">⏱ ${Math.round((count * 30) / 60)} ${esc(t('common.minutes'))}</span>` : ''}
-        ${mode === 'smart' ? '<span class="chip chip--warn">🧠 أسئلة أخطائك</span>' : ''}
-        ${mode === 'goal' ? '<span class="chip chip--ok">🎯 هدف اليوم</span>' : ''}
+        ${mode === 'smart' ? uiText('ui.literal.618874d4') : ''}
+        ${mode === 'goal' ? uiText('ui.literal.b2411ca1') : ''}
       </div>
     </div>
     <div id="drillRun"></div>`;

@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* ============================================================
    قسم «من الصفر» (A0) — الاختبار النهائي + شهادة التأسيس
    بمكوّنات الموقع: .page-head · .card · .grid · .stat · .btn · .chip
@@ -21,9 +22,9 @@ function reqList(snap) {
     <span class="${ok ? '' : 'muted'}">${text}</span>
   </div>`;
   return `<div class="stack" style="gap:10px">
-    ${row(snap.doneStages === ZERO_TOTALS.stages, `إتمام المراحل الخمس <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b>`)}
-    ${row(snap.lettersMastered === ZERO_TOTALS.letters, `إتقان الحروف الستة والعشرين <b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b>`)}
-    ${row(snap.examBest >= PASS, `النتيجة في الاختبار <b>${arNum(snap.examBest)}٪</b> من ${arNum(PASS)}٪`)}
+    ${row(snap.doneStages === ZERO_TOTALS.stages, `${uiText('ui.literal.cb5a7e65')} <b>${arNum(snap.doneStages)}/${arNum(ZERO_TOTALS.stages)}</b>`)}
+    ${row(snap.lettersMastered === ZERO_TOTALS.letters, `${uiText('ui.literal.7a053de9')} <b>${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}</b>`)}
+    ${row(snap.examBest >= PASS, `${uiText('ui.literal.5c8094be')} <b>${arNum(snap.examBest)}٪</b> من ${arNum(PASS)}٪`)}
   </div>`;
 }
 
@@ -37,25 +38,25 @@ export function renderZeroExam(host) {
   host.innerHTML = `
     <div class="page-head">
       <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>الاختبار النهائي</h1></div>
-        <p>${arNum(EXAM_SIZE)} سؤالاً من المراحل الخمس. أسئلة جديدة في كل محاولة، وبلا حدّ للمحاولات.</p>
+        <div class="page-title"><span class="ico" aria-hidden="true">🧪</span><h1>${uiText('ui.literal.cea94354')} </h1></div>
+        <p>${arNum(EXAM_SIZE)} ${uiText('ui.literal.eefc663c')} </p>
       </div>
-      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← المراحل</a></div>
+      <div class="row row--wrap"><a class="btn btn--sm" href="#/zero">← ${uiText('ui.literal.0bb7be6c')} </a></div>
     </div>
 
     <div class="grid grid--3 mt-4">
-      ${stat('أفضل نتيجة', `${arNum(snap.examBest)}٪`, '', snap.examBest >= PASS ? 'stat--ok' : 'stat--brand')}
-      ${stat('المحاولات', arNum(snap.raw.exam?.attempts || 0))}
-      ${stat('الشهادة', certificate().earned ? 'مُستلَمة ✓' : ready ? 'جاهزة' : 'لم تُستحق بعد')}
+      ${stat(uiText('ui.literal.68208d86'), `${arNum(snap.examBest)}٪`, '', snap.examBest >= PASS ? 'stat--ok' : 'stat--brand')}
+      ${stat(uiText('ui.literal.b152632c'), arNum(snap.raw.exam?.attempts || 0))}
+      ${stat(uiText('ui.literal.56de3ef0'), certificate().earned ? uiText('ui.literal.5c9ec1b9') : ready ? uiText('ui.literal.6959b0a8') : uiText('ui.literal.0f7b650b'))}
     </div>
 
     <div class="card mt-4">
-      <div class="card__title"><span class="ico" aria-hidden="true">🎯</span><h3>شروط شهادة التأسيس</h3></div>
+      <div class="card__title"><span class="ico" aria-hidden="true">🎯</span><h3>${uiText('ui.literal.86240f73')} </h3></div>
       <div class="zstatus">${reqList(snap)}</div>
-      <p class="small muted mt-3">هذه شروط الشهادة فقط — لا شروط دخول. كل المستويات مفتوحة دائماً.</p>
+      <p class="small muted mt-3">${uiText('ui.literal.1726f276')} </p>
       <div class="row row--wrap mt-3" style="gap:8px">
-        <button class="btn btn--primary" type="button" id="zeroExamStart">ابدأ الاختبار (${arNum(EXAM_SIZE)} سؤالاً)</button>
-        ${ready ? '<a class="btn" href="#/zero/certificate">🎓 إلى الشهادة</a>' : ''}
+        <button class="btn btn--primary" type="button" id="zeroExamStart">${uiText('ui.literal.b2580414')} ${arNum(EXAM_SIZE)} ${uiText('ui.literal.647fd4c6')} </button>
+        ${ready ? uiText('ui.literal.27e9b4b5') : ''}
       </div>
     </div>
 
@@ -71,7 +72,7 @@ function bindStart(host) {
     runHost.scrollIntoView({ block: 'start', behavior: 'smooth' });
     const questions = zeroExamQuestions(EXAM_SIZE);
     if (!questions.length) {
-      runHost.innerHTML = '<div class="card"><div class="empty"><span class="ico">🤷</span><p>تعذّر توليد الأسئلة.</p></div></div>';
+      runHost.innerHTML = uiText('ui.literal.dde5e05f');
       return;
     }
     runQuiz(runHost, {
@@ -83,12 +84,12 @@ function bindStart(host) {
         if (certificateReady()) {
           const g = grantCertificate();
           confetti(120);
-          toast(g.granted ? '🎓 استحققت شهادة التأسيس!' : 'ما زلت مستحقاً للشهادة ✓', 'ok');
+          toast(g.granted ? uiText('ui.literal.dddf30f8') : uiText('ui.literal.42655d79'), 'ok');
         }
-        toast(`اختبار مكتمل: ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 70 ? 'ok' : 'warn');
+        toast(`${uiText('ui.literal.8e8e13e5')} ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 70 ? 'ok' : 'warn');
         window.__leaRefreshChrome?.();
       },
-      extraActionsHtml: '<a class="btn" href="#/zero">المراحل</a><a class="btn" href="#/zero/certificate">الشهادة</a>',
+      extraActionsHtml: uiText('ui.literal.f89a49c5'),
     });
   });
 }
@@ -105,19 +106,19 @@ export function renderZeroCertificate(host) {
   host.innerHTML = `
     <div class="page-head">
       <div>
-        <div class="page-title"><span class="ico" aria-hidden="true">🎓</span><h1>شهادة التأسيس</h1></div>
-        <p>${cert.earned ? 'مُستلَمة. اكتب اسمك ثم اطبعها أو احفظها PDF.' : 'أكمل الشروط الثلاثة ثم ستُمنح تلقائياً.'}</p>
+        <div class="page-title"><span class="ico" aria-hidden="true">🎓</span><h1>${uiText('ui.literal.07e8f3c3')} </h1></div>
+        <p>${cert.earned ? uiText('ui.literal.557a98db') : uiText('ui.literal.addf82e5')}</p>
       </div>
       <div class="row row--wrap">
-        <a class="btn btn--sm" href="#/zero">← المراحل</a>
-        <button class="btn btn--sm" type="button" id="certCopy">📋 انسخ ملخّص تقدّمي</button>
+        <a class="btn btn--sm" href="#/zero">← ${uiText('ui.literal.0bb7be6c')} </a>
+        <button class="btn btn--sm" type="button" id="certCopy">📋 ${uiText('ui.literal.3462012d')} </button>
       </div>
     </div>
 
     <div class="card mt-4">
       <div class="card__title">
-        <span class="ico" aria-hidden="true">🎯</span><h3>شروط الاستحقاق</h3>
-        <span class="spacer chip ${ready ? 'chip--ok' : 'chip--brand'}">${ready ? 'مستحق ✓' : 'أكمل ثم عد'}</span>
+        <span class="ico" aria-hidden="true">🎯</span><h3>${uiText('ui.literal.7234f990')} </h3>
+        <span class="spacer chip ${ready ? 'chip--ok' : 'chip--brand'}">${ready ? uiText('ui.literal.d8e02287') : uiText('ui.literal.342503ca')}</span>
       </div>
       <div class="zstatus">${reqList(snap)}</div>
     </div>
@@ -126,44 +127,44 @@ export function renderZeroCertificate(host) {
       <div class="zcert print-area" id="zeroCert">
         <div class="zcert__top">
           <img class="zcert__mark" src="./assets/img/favicon.svg" alt="" />
-          <span class="zcert__brand">أكاديمية الإنجليزية<small dir="ltr">English Academy</small></span>
+          <span class="zcert__brand">${uiText('ui.literal.0704ffae')} <small dir="ltr">English Academy</small></span>
         </div>
-        <h2 class="zcert__title">شهادة إتمام التأسيس</h2>
+        <h2 class="zcert__title">${uiText('ui.literal.c0d5c8a1')} </h2>
         <p class="zcert__sub" dir="ltr">Foundation Certificate — Level A0</p>
 
         <div class="zcert__field">
-          <label for="certName">الاسم على الشهادة</label>
-          <input class="input" id="certName" type="text" maxlength="60" autocomplete="name" placeholder="اكتب اسمك هنا" value="${esc(cert.name || '')}" />
+          <label for="certName">${uiText('ui.literal.cae8b39c')} </label>
+          <input class="input" id="certName" type="text" maxlength="60" autocomplete="name" placeholder="${uiText('ui.literal.12ff3b2f')} " value="${esc(cert.name || '')}" />
         </div>
         <div class="zcert__name" id="certNameOut" aria-live="polite">${esc(cert.name || '................................')}</div>
 
         <p class="zcert__body">
-          أتمّ المتعلّم المراحل الخمس لقسم «من الصفر»: الحروف الستة والعشرين، والأرقام من صفر إلى عشرين،
-          وأيام الأسبوع، والضمائر الأساسية، والتحيات البسيطة.
+          ${uiText('ui.literal.515dd45b')}
+          ${uiText('ui.literal.1b465547')}
         </p>
 
         <div class="grid grid--4">
-          ${stat('الإتقان', `${arNum(snap.percent)}٪`)}
-          ${stat('الاختبار', `${arNum(snap.examBest)}٪`)}
-          ${stat('الحروف', `${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}`)}
-          ${stat('أيام الأسبوع', arNum(ZERO_TOTALS.days))}
+          ${stat(uiText('ui.literal.5ef0eeec'), `${arNum(snap.percent)}٪`)}
+          ${stat(uiText('ui.literal.a466c65d'), `${arNum(snap.examBest)}٪`)}
+          ${stat(uiText('ui.literal.81f2297b'), `${arNum(snap.lettersMastered)}/${arNum(ZERO_TOTALS.letters)}`)}
+          ${stat(uiText('ui.literal.4ea53050'), arNum(ZERO_TOTALS.days))}
         </div>
 
         <div class="zcert__foot">
           <div>
-            <div>رقم الشهادة: <b dir="ltr">${esc(cert.code || '—')}</b></div>
-            <div>تاريخ الاستحقاق: ${esc(cert.at ? prettyDateAr(dateKey(new Date(cert.at))) : '—')}</div>
+            <div>${uiText('ui.literal.c66dbbac')} <b dir="ltr">${esc(cert.code || '—')}</b></div>
+            <div>${uiText('ui.literal.bacb4bac')} ${esc(cert.at ? prettyDateAr(dateKey(new Date(cert.at))) : '—')}</div>
           </div>
-          <div class="zcert__seal">🎓<span>شهادة<br>شخصية</span></div>
+          <div class="zcert__seal">🎓<span>${uiText('ui.literal.1d56bd89')} <br>${uiText('ui.literal.bcd19ad7')} </span></div>
         </div>
-        <p class="zcert__note">شهادة شخصية من موقعك التعليمي، محفوظة على جهازك. المستوى A1 مفتوح بلا أي قفل.</p>
+        <p class="zcert__note">${uiText('ui.literal.b5e4d8c5')} A1 ${uiText('ui.literal.e75aaf7d')} </p>
       </div>
     </div>
 
     <div class="row row--wrap mt-4" style="gap:10px">
-      <button class="btn btn--primary" type="button" id="certPrint" aria-describedby="certPrintHint" ${cert.earned ? '' : 'disabled'}>🖨️ طباعة / حفظ PDF</button>
-      <span class="sr-only" id="certPrintHint">تُطبع الشهادة وحدها على صفحة أفقية؛ اختر حفظ كملف PDF إذا أردت نسخة رقمية.</span>
-      <a class="btn" href="./index.html">📚 ابدأ المستوى A1</a>
+      <button class="btn btn--primary" type="button" id="certPrint" aria-describedby="certPrintHint" ${cert.earned ? '' : 'disabled'}>🖨️ ${uiText('ui.literal.51c39f29')} / ${uiText('ui.literal.768db979')} PDF</button>
+      <span class="sr-only" id="certPrintHint">${uiText('ui.literal.7bbbc2e4')} PDF ${uiText('ui.literal.782000df')} </span>
+      <a class="btn" href="./index.html">📚 ${uiText('ui.literal.6e06552c')} A1</a>
     </div>`;
 
   const nameInput = qs('#certName', host);
@@ -181,8 +182,8 @@ export function renderZeroCertificate(host) {
 
   qs('#certCopy', host)?.addEventListener('click', async () => {
     const c = certificate();
-    const text = `شهادة تأسيس A0 — أكاديمية الإنجليزية\nالاسم: ${c.name || '—'}\nرقم الشهادة: ${c.code || '—'}\nالإتقان: ${snap.percent}%\nالاختبار: ${snap.examBest}%\nالمراحل: ${snap.doneStages}/${ZERO_TOTALS.stages}\nالحروف: ${snap.lettersMastered}/${ZERO_TOTALS.letters}\nالأيام: ${ZERO_TOTALS.days}\nالضمائر: ${ZERO_TOTALS.pronouns}`;
-    try { await navigator.clipboard.writeText(text); toast('نُسخ ملخّص تقدّمك 📋', 'ok'); }
-    catch { toast('تعذّر النسخ — انسخه يدوياً', 'warn'); }
+    const text = `${uiText('ui.literal.b81a1a0e')} A0 — ${uiText('ui.literal.0704ffae')} \n${uiText('ui.literal.e05b10df')} ${c.name || '—'}\n${uiText('ui.literal.c66dbbac')} ${c.code || '—'}\n${uiText('ui.literal.4b47fae2')} ${snap.percent}%\n${uiText('ui.literal.34ca5425')} ${snap.examBest}%\n${uiText('ui.literal.c840a162')} ${snap.doneStages}/${ZERO_TOTALS.stages}\n${uiText('ui.literal.d136f153')} ${snap.lettersMastered}/${ZERO_TOTALS.letters}\n${uiText('ui.literal.ee5e3087')} ${ZERO_TOTALS.days}\n${uiText('ui.literal.5d230e51')} ${ZERO_TOTALS.pronouns}`;
+    try { await navigator.clipboard.writeText(text); toast(uiText('ui.literal.56d90cf5'), 'ok'); }
+    catch { toast(uiText('ui.literal.0c9d7274'), 'warn'); }
   });
 }

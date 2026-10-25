@@ -1,3 +1,4 @@
+import { t as uiText } from '../core/i18n.js';
 /* المطالعات: نصوص متدرجة + ترجمة + أسئلة فهم */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs, toast, pct } from '../core/utils.js';
@@ -9,9 +10,9 @@ import { pageHead, progressBar, renderSidebarStats } from './shell.js';
 import { speak, stopSpeaking } from '../core/speech.js';
 
 const LEVEL_META = {
-  a1: { label: 'A1 — المبتدئ', icon: '🌱', color: '#22c55e' },
-  a2: { label: 'A2 — ما قبل المتوسط', icon: '🌿', color: '#f59e0b' },
-  b1: { label: 'B1 — المتوسط', icon: '🌳', color: '#8b5cf6' },
+  a1: { label: uiText('ui.literal.c2934f72'), icon: '🌱', color: '#22c55e' },
+  a2: { label: uiText('ui.literal.48702bf6'), icon: '🌿', color: '#f59e0b' },
+  b1: { label: uiText('ui.literal.f7edd9aa'), icon: '🌳', color: '#8b5cf6' },
 };
 
 export function renderReading(host, id) {
@@ -41,7 +42,7 @@ export function renderReading(host, id) {
                 <h3>${esc(r.titleAr)} ${st?.done ? '✅' : ''}</h3>
                 <div class="small muted en">${esc(r.title)}</div>
                 <div class="unit-card__meta">
-                  <span class="chip">${words} كلمة</span>
+                  <span class="chip">${words} ${uiText('ui.literal.a8426e04')} </span>
                   <span class="chip">${r.questions.length} ${esc(t('common.questions'))}</span>
                   <span class="chip">${(r.words || []).length} ${esc(t('common.words'))}</span>
                   ${st?.done ? `<span class="chip chip--ok">${esc(t('common.score'))}: ${st.score}/${st.total}</span>` : ''}
@@ -56,7 +57,7 @@ export function renderReading(host, id) {
 
 function renderOne(host, id) {
   const r = getReading(id);
-  if (!r) { host.innerHTML = `<div class="empty"><span class="ico">🤷</span><p>النص غير موجود.</p></div>`; return; }
+  if (!r) { host.innerHTML = uiText('ui.literal.460b8364'); return; }
   const meta = LEVEL_META[r.level] || LEVEL_META.a1;
   const paragraphs = String(r.text).split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
   const arParagraphs = String(r.textAr || '').split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
@@ -67,12 +68,12 @@ function renderOne(host, id) {
       icon: r.emoji || '📄', title: r.titleAr, subtitle: `${meta.label} · ${r.title}`,
       actionsHtml: `<a class="btn btn--sm" href="#/reading">← ${t('nav.reading')}</a>`,
     })}
-    ${st?.done ? `<div class="tip-box tip-box--ok" style="margin-bottom:14px"><b>${t('read.done')} ✅</b>أفضل نتيجة لك: ${st.best || st.score} / ${st.total}</div>` : ''}
+    ${st?.done ? `<div class="tip-box tip-box--ok" style="margin-bottom:14px"><b>${t('read.done')} ✅</b>${uiText('ui.literal.d98efa2b')} ${st.best || st.score} / ${st.total}</div>` : ''}
 
     <div class="card">
       <div class="reading-toolbar">
-        <button class="btn btn--sm btn--primary" type="button" id="readAloud">🔊 اقرأ لي النص</button>
-        <button class="btn btn--sm" type="button" id="stopAloud">⏹ إيقاف</button>
+        <button class="btn btn--sm btn--primary" type="button" id="readAloud">🔊 ${uiText('ui.literal.92bfee08')} </button>
+        <button class="btn btn--sm" type="button" id="stopAloud">⏹ ${uiText('ui.literal.bceab998')} </button>
         <button class="btn btn--sm" type="button" id="toggleAr">${esc(t('read.showAr'))}</button>
         ${speakBtn(r.text.slice(0, 200))}
       </div>
@@ -80,13 +81,13 @@ function renderOne(host, id) {
         ${paragraphs.map((p, i) => `<p data-p="${i}">${esc(p)}</p>`).join('')}
       </div>
       <div class="reading-ar lesson-explain" id="arBox" hidden>
-        <b>الترجمة العربية</b>
+        <b>${uiText('ui.literal.6823a6c9')} </b>
         ${(arParagraphs.length ? arParagraphs : [r.textAr || '']).map((p) => `<p>${esc(p)}</p>`).join('')}
       </div>
       <div class="row row--wrap" style="gap:8px;margin-top:12px">
-        <span class="chip">${String(r.text).trim().split(/\s+/).length} كلمة</span>
+        <span class="chip">${String(r.text).trim().split(/\s+/).length} ${uiText('ui.literal.a8426e04')} </span>
         <span class="chip">${r.questions.length} ${esc(t('common.questions'))}</span>
-        <button class="btn btn--sm" type="button" id="nbWhole">📒 احفظ النص في دفتري</button>
+        <button class="btn btn--sm" type="button" id="nbWhole">📒 ${uiText('ui.literal.b7069df8')} </button>
       </div>
     </div>
 
@@ -121,8 +122,8 @@ function renderOne(host, id) {
   qs('#stopAloud', host)?.addEventListener('click', stopSpeaking);
   qs('#nbWhole', host)?.addEventListener('click', () => {
     import('../core/gamify.js').then(({ addNotebook }) => {
-      addNotebook({ en: r.title, ar: r.titleAr, note: `نص مطالعة (${meta.label})` });
-      toast('أُضيف النص إلى دفترك 📒', 'ok');
+      addNotebook({ en: r.title, ar: r.titleAr, note: `${uiText('ui.literal.62354ae9')} ${meta.label})` });
+      toast(uiText('ui.literal.e119b240'), 'ok');
     });
   });
 
@@ -133,7 +134,7 @@ function renderOne(host, id) {
     onSummary: (res) => {
       recordReading(r.id, res.correct, res.total);
       renderSidebarStats();
-      toast(`نتيجة الفهم: ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 60 ? 'ok' : 'warn', t('read.result'));
+      toast(`${uiText('ui.literal.14be0e92')} ${res.correct}/${res.total} (${res.accuracy}%)`, res.accuracy >= 60 ? 'ok' : 'warn', t('read.result'));
     },
     extraActionsHtml: `<a class="btn" href="#/reading">${t('nav.reading')}</a>`,
   });
