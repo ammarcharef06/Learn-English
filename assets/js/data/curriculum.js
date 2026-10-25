@@ -59,6 +59,7 @@ export function activateStagedLevel(payload) {
   }
 
   const level = imported.level;
+  attachCurriculumAudio(level.units);
   LEVELS.push(level);
   ALL_UNITS.push(...level.units.map((unit) => ({
     ...unit,

@@ -150,7 +150,18 @@ speech.registerSoundBank({ 'test:recorded': './missing-recording.mp3' });
 check('التسجيل المسجّل يُختار للتشغيل', speech.speak('test:recorded') === true);
 await new Promise((resolve) => setTimeout(resolve, 0));
 check('فشل التسجيل لا يشغّل صوت المتصفح بديلاً', synthesized === 0);
-check('النص غير المسجّل يبقى قابلاً للنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+check('العناصر التي لا تملك تسجيلاً تستمر بالنطق المدمج', speech.speak('ordinary word') === true && synthesized === 1);
+const zeroAudio = await mod('assets/js/core/zero-audio.js');
+zeroAudio.registerZeroSounds();
+const unrecordedA0Items = [
+  'you are my friend.', 'he is a teacher.', 'she is my sister.',
+  'it is a nice city.', 'you are students.', 'they are at home.',
+  'am', 'is', 'are',
+];
+const beforeUnrecordedA0 = synthesized;
+check('نصوص A0 التسعة غير المسجلة تستخدم TTS دون تعطيل التدفق',
+  unrecordedA0Items.every((text) => speech.speak(text) === true)
+    && synthesized === beforeUnrecordedA0 + unrecordedA0Items.length);
 const playbackEvents = [];
 speech.speak('active word', { onstart: () => playbackEvents.push('start'), onend: () => playbackEvents.push('end') });
 speech.stopSpeaking();
@@ -564,6 +575,12 @@ const cur = await mod('assets/js/data/curriculum.js');
 const audioLinks = await mod('assets/js/data/curriculum-audio.js');
 check('خريطة الصوت تضم تسجيلات المنهج وتستخدم مسارات محلية', Object.keys(audioLinks.CURRICULUM_AUDIO).length === 754
   && Object.values(audioLinks.CURRICULUM_AUDIO).every((url) => /^\.\/assets\/audio\/curriculum\/[a-f0-9]{64}\.mp3$/.test(url)));
+const curriculumAudioFiles = new Set(await readdir(join(ROOT, 'assets/audio/curriculum')));
+const curriculumSpeechTargets = cur.ALL_UNITS.flatMap((unit) =>
+  [...unit.vocabulary, ...unit.sentences].map((item) => item.audio_url));
+check('كل مفردة وجملة في A1–C2 مربوطة بملف MP3 موجود',
+  curriculumSpeechTargets.length === 774
+    && curriculumSpeechTargets.every((url) => url && curriculumAudioFiles.has(url.split('/').at(-1))));
 const flashcardSource = await readFile(join(ROOT, 'assets/js/views/flashcards.js'), 'utf8');
 const dashboardSource = await readFile(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
 const mainCss = await readFile(join(ROOT, 'assets/css/main.css'), 'utf8');
