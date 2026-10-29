@@ -3,7 +3,7 @@ import { t as uiText } from './core/i18n.js';
    نقطة الدخول: التهيئة، التوجيه، الأحداث العامة
    ============================================================ */
 import { initRouter, route, setNotFound, resolve, currentRoute, navigate, onRouteChange, onRouteRendered } from './core/router.js';
-import { settings, saveSettings, subscribe, progress, flush } from './core/store.js';
+import { settings, saveSettings, subscribe, progress, flush, isEshSandbox } from './core/store.js';
 import { setUiLang, applyI18n, t } from './core/i18n.js';
 import { initSpeech, speak, stopSpeaking } from './core/speech.js';
 import { registerZeroSounds } from './core/zero-audio.js';
@@ -34,6 +34,9 @@ import { renderJourney } from './views/journey.js';
 import { renderConversations } from './views/conversations.js';
 import { APP_VERSION } from './core/app-version.js';
 import { bindSwipeBack, createRouteHistory } from './core/navigation-gesture.js';
+import { activateEshCurriculum } from './data/curriculum.js';
+import { getEshProfile } from '../../curriculum/esh/personalization.js';
+import { renderEshOnboarding } from './views/esh-onboarding.js';
 
 const view = () => qs('#view');
 const routeHistory = createRouteHistory();
@@ -41,6 +44,7 @@ const routeHistory = createRouteHistory();
 /* ---------------- التوجيه ---------------- */
 function setupRoutes() {
   route('/', () => renderDashboard(view()));
+  route('/onboarding', () => renderEshOnboarding(view()));
   route('/lessons', () => renderLessons(view()));
   route('/level/:levelId', (p) => renderLevel(view(), p.levelId));
   route('/unit/:unitId', (p) => renderUnit(view(), p.unitId));
@@ -246,6 +250,30 @@ function boot() {
 }
 
 async function main() {
+  if (isEshSandbox) {
+    try {
+      const { levels, units } = await activateEshCurriculum();
+      document.documentElement.dataset.curriculum = 'esh';
+      if (settings.uiLang !== 'ar') saveSettings({ uiLang: 'ar' });
+      if (!document.querySelector('link[data-esh-arabic-font]')) {
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;600;700;800&display=swap';
+        fontLink.dataset.eshArabicFont = '';
+        document.head.append(fontLink);
+      }
+      console.info(`ESH sandbox loaded: ${levels} levels, ${units} units.`);
+    } catch (error) {
+      console.error('Could not load ESH curriculum sandbox.', error);
+      const bootScreen = qs('#boot');
+      if (bootScreen) {
+        bootScreen.classList.remove('is-hidden');
+        bootScreen.innerHTML = `<div role="alert" class="card"><h1>تعذر تحميل منهج ESH</h1><p>${esc(error.message || String(error))}</p></div>`;
+      }
+      return;
+    }
+  }
+
   applySkin();
   applyAccessibility();
   applyLang();
@@ -261,18 +289,22 @@ async function main() {
 
   // عند كل تنقل: تمييز الرابط النشط + إغلاق الدرج + إيقاف ما يجب إيقافه + العودة لأعلى الصفحة
   onRouteChange((route) => {
+    if (isEshSandbox && !getEshProfile() && route.path !== '/onboarding') {
+      location.hash = '#/onboarding';
+      return;
+    }
     routeHistory.remember(route.path);
     document.body.classList.remove('fc-focus-mode');
     setActiveNav(route.path);
     closeDrawer();
     renderSidebarStats();
-    updateBannerForRoute(route.path).catch((error) => console.warn('Could not update the banner ad.', error));
+    if (!isEshSandbox) updateBannerForRoute(route.path).catch((error) => console.warn('Could not update the banner ad.', error));
     /* شبكة أمان: لا تبقَ شاشة الاختيار مقفلة للتمرير إن أُزيلت بلا إغلاق */
     if (!qs('#zeroChoice')) document.body.classList.remove('zero-choice-open');
     document.onkeydown = null;      // لا تبقَ اختصارات صفحة سابقة فعّالة
     stopActiveQuizzes();            // لا مؤقّتات أسئلة تعمل في الخلفية
     stopSpeaking();                 // لا نطق يستمر بعد مغادرة الصفحة
-    showQueuedInterstitial().catch((error) => console.warn('Interstitial ad unavailable.', error));
+    if (!isEshSandbox) showQueuedInterstitial().catch((error) => console.warn('Interstitial ad unavailable.', error));
     try { window.scrollTo({ top: 0, behavior: 'auto' }); } catch {}
   });
   onRouteRendered(() => requestAnimationFrame(() => focusMainHeading(view())));
@@ -289,12 +321,19 @@ async function main() {
     started = true;
     boot();
     window.__leaBooted = true;
+    if (isEshSandbox) {
+      const currentPath = location.hash.replace(/^#/, '').split('?')[0];
+      if (!getEshProfile() && currentPath !== '/onboarding') location.replace('#/onboarding');
+      else if (getEshProfile() && !location.hash) location.replace('#/lessons');
+    }
     await initRouter();
-    startReminderLoop();
-    scheduleBackgroundUpdateChecks();
-    syncReminderSchedule().then((result) => {
-      if (!result.ok && settings.reminder.enabled) console.warn('Reminder schedule is not active.', result.error);
-    }).catch((error) => console.error('Could not restore reminder schedule.', error));
+    if (!isEshSandbox) {
+      startReminderLoop();
+      scheduleBackgroundUpdateChecks();
+      syncReminderSchedule().then((result) => {
+        if (!result.ok && settings.reminder.enabled) console.warn('Reminder schedule is not active.', result.error);
+      }).catch((error) => console.error('Could not restore reminder schedule.', error));
+    }
   };
 
   if (!isAuthed()) {

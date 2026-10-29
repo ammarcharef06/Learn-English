@@ -2,7 +2,7 @@ import { t as uiText } from '../core/i18n.js';
 /* الإعدادات: المظهر، الصوت، الإشعارات، الأمان، البيانات */
 import { t, setUiLang, applyI18n } from '../core/i18n.js';
 import { esc, qs, qsa, toast, openModal, download, readFileText, prettyTimeAr } from '../core/utils.js';
-import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, exportCloudProgress, importAll, progress } from '../core/store.js';
+import { settings, saveSettings, resetProgress, resetSettings, wipeEverything, exportAll, exportCloudProgress, importAll, progress, isEshSandbox } from '../core/store.js';
 import { hasPassword, lockEnabled, setLockEnabled, setPassword, lockNow } from '../core/auth.js';
 import { englishVoices, speak } from '../core/speech.js';
 import { ensurePermission, fireReminder, nextReminderText, syncReminderSchedule } from '../core/notify.js';
@@ -42,13 +42,13 @@ export function renderSettings(host, query = {}) {
           </button>`).join('')}
         </div>
       </div>
-      <div class="setting-row">
+      ${isEshSandbox ? '' : `<div class="setting-row">
         <div class="setting-row__text"><b>${t('set.uiLang')}</b><span>${uiText('ui.literal.dea7a57d')} </span></div>
         <div class="setting-row__control seg" id="langSeg">
           <button type="button" data-lang="ar" class="${s.uiLang !== 'en' ? 'is-active' : ''}">${uiText('ui.literal.a76ce029')} </button>
           <button type="button" data-lang="en" class="${s.uiLang === 'en' ? 'is-active' : ''}">English</button>
         </div>
-      </div>
+      </div>`}
       <div class="setting-row">
         <div class="setting-row__text"><b>${t('set.fontSize')}</b><span id="fontSizeHint">${t('set.fontSizeDesc')}</span></div>
         <div class="setting-row__control" style="min-width:220px">
@@ -70,14 +70,14 @@ export function renderSettings(host, query = {}) {
       </div>
     </section>
 
-    <div class="card" style="margin-top:16px" id="syncCard">
+    ${isEshSandbox ? '' : `<div class="card" style="margin-top:16px" id="syncCard">
       <div class="card__title"><span class="ico">☁️</span><h2>${t('set.syncProgress')}</h2></div>
       <p class="small muted">${t('set.syncLocalOnly')}</p>
       <div class="row row--wrap" style="gap:8px">
         <button class="btn btn--primary" type="button" id="queueSyncBtn">☁️ ${t('set.syncProgress')}</button>
         <span class="chip" id="syncQueueStatus" role="status" aria-live="polite">${syncStatus.pending ? t('set.syncQueued', { count: syncStatus.cardCount }) : t('set.syncNoPending')}</span>
       </div>
-    </div>
+    </div>`}
 
     <div class="card" style="margin-top:16px">
       <div class="card__title"><span class="ico">🔊</span><h2>${uiText('ui.literal.5470f9a7')} </h2></div>

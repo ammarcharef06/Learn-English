@@ -1,0 +1,517 @@
+{
+  "level": "B1",
+  "title": "B1 — Intermediate",
+  "units": [
+    {
+      "id": "B1.U01",
+      "title": "Experiences and narratives",
+      "order": 1
+    },
+    {
+      "id": "B1.U02",
+      "title": "Opinions and reasons",
+      "order": 2
+    },
+    {
+      "id": "B1.U03",
+      "title": "Problem solving and advice",
+      "order": 3
+    },
+    {
+      "id": "B1.U04",
+      "title": "Work and study contexts",
+      "order": 4
+    },
+    {
+      "id": "B1.U05",
+      "title": "Society and public issues",
+      "order": 5
+    },
+    {
+      "id": "B1.U06",
+      "title": "Media and technology",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "B1.U01.L01",
+      "title": "Tell a personal story with time order",
+      "lesson_type": "role_play",
+      "scenario": "complete: When we ___ (arrive), the museum ___ (already close).",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Tell a personal story with time order”?",
+          "answer": "narrate a short personal event in sequence using at least four past forms and three sequence markers.",
+          "phonetic": "",
+          "id": "B1.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "at least four correct past forms and a clear chronological order."
+      ],
+      "unit_id": "B1.U01",
+      "order": 1,
+      "source": "levels/b1.md",
+      "source_line": 53,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B1.U01.L02",
+      "title": "Describe change and experience",
+      "lesson_type": "role_play",
+      "scenario": "“Before I moved to this city, I lived with my parents. I had never worked full-time, and I was nervous at first. Now I feel more confident.” Which idea is the strongest result?",
+      "flashcards": [
+        {
+          "question": "Now I feel more confident.” Which idea is the strongest result?",
+          "answer": "the speaker feels more confident now",
+          "phonetic": "",
+          "id": "B1.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "one past habit, one contrast, one present result."
+      ],
+      "unit_id": "B1.U01",
+      "order": 2,
+      "source": "levels/b1.md",
+      "source_line": 63,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U01.L03",
+      "title": "Summarize a personal experience",
+      "lesson_type": "role_play",
+      "scenario": "“I was nervous before the interview. I had prepared my answers, but I still felt unsure. After the first question, I relaxed and spoke more naturally. In the end, I got the job.”",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Summarize a personal experience”?",
+          "answer": "give a short spoken summary of an experience with reason, result, and reflection.",
+          "phonetic": "",
+          "id": "B1.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "reason, steps, outcome, and reflection are all present."
+      ],
+      "unit_id": "B1.U01",
+      "order": 3,
+      "source": "levels/b1.md",
+      "source_line": 75,
+      "scenario_source": "listening_script"
+    },
+    {
+      "id": "B1.U02.L01",
+      "title": "Express an opinion clearly",
+      "lesson_type": "role_play",
+      "scenario": "“Online learning is flexible, but it can feel isolating. I prefer a mixed model because it combines independence with teacher support.” Which word introduces contrast?",
+      "flashcards": [
+        {
+          "question": "I prefer a mixed model because it combines independence with teacher support.” Which word introduces contrast?",
+          "answer": "but",
+          "phonetic": "",
+          "id": "B1.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "3 clear reasons and one contrast or example."
+      ],
+      "unit_id": "B1.U02",
+      "order": 4,
+      "source": "levels/b1.md",
+      "source_line": 91,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U02.L02",
+      "title": "Build a paragraph with reasons and examples",
+      "lesson_type": "essay_analysis",
+      "scenario": "“I believe students should have more project-based learning. It helps them apply theory to real problems. For example, a class can design a school campaign or a small business plan. This method also improves cooperation. Therefore, it prepares students better for work.”",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Build a paragraph with reasons and examples”?",
+          "answer": "write a 120–150-word opinion paragraph with a clear point, reasons, and a conclusion.",
+          "phonetic": "",
+          "id": "B1.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "clear topic sentence, at least two reasons, one example, and a closing sentence."
+      ],
+      "unit_id": "B1.U02",
+      "order": 5,
+      "source": "levels/b1.md",
+      "source_line": 103,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B1.U02.L03",
+      "title": "Respond to a counterargument",
+      "lesson_type": "essay_analysis",
+      "scenario": "discuss whether school uniforms are a good idea. Partner A argues in favour. Partner B opposes. Switch roles after 90 seconds.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Respond to a counterargument”?",
+          "answer": "acknowledge an opposing view and still defend a position with evidence or experience.",
+          "phonetic": "",
+          "id": "B1.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "one concession, one counterargument, and one justification."
+      ],
+      "unit_id": "B1.U02",
+      "order": 6,
+      "source": "levels/b1.md",
+      "source_line": 115,
+      "scenario_source": "role-play"
+    },
+    {
+      "id": "B1.U03.L01",
+      "title": "Define the problem and the cause",
+      "lesson_type": "role_play",
+      "scenario": "each learner chooses a local issue and explains its cause and one effect.",
+      "flashcards": [
+        {
+          "question": "The main reason is limited staffing.” Which is the main cause?",
+          "answer": "limited staffing",
+          "phonetic": "",
+          "id": "B1.U03.L01-FC01"
+        },
+        {
+          "question": "What is the direct effect?",
+          "answer": "students cannot finish group work after six",
+          "phonetic": "",
+          "id": "B1.U03.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "clear problem statement, cause, and effect; no invented evidence."
+      ],
+      "unit_id": "B1.U03",
+      "order": 7,
+      "source": "levels/b1.md",
+      "source_line": 125,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B1.U03.L02",
+      "title": "Recommend a solution and weigh a trade-off",
+      "lesson_type": "role_play",
+      "scenario": "“The city should test a later bus service for three months and publish the results.” Which part is the recommendation?",
+      "flashcards": [
+        {
+          "question": "Reading:** “The city should test a later bus service for three months and publish the results.” Which part is the recommendation?",
+          "answer": "test a later bus service and publish results",
+          "phonetic": "",
+          "id": "B1.U03.L02-FC01"
+        },
+        {
+          "question": "What is the trade-off?",
+          "answer": "cost / service resources / reduced parking etc",
+          "phonetic": "",
+          "id": "B1.U03.L02-FC02"
+        }
+      ],
+      "assessment": [
+        "problem, proposal, reason, trade-off, and conclusion."
+      ],
+      "unit_id": "B1.U03",
+      "order": 8,
+      "source": "levels/b1.md",
+      "source_line": 137,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U03.L03",
+      "title": "Discuss alternatives and choose one",
+      "lesson_type": "role_play",
+      "scenario": "“Residents say the buses are unreliable at peak times. A dedicated lane could reduce delays, but it would require removing some parking spaces. The city should test the lane for three months and publish the results before deciding whether to expand it.”",
+      "flashcards": [
+        {
+          "question": "What action does the writer recommend?",
+          "answer": "unreliable peak-time buses; loss of some parking; a three-month test with published results",
+          "phonetic": "",
+          "id": "B1.U03.L03-FC01"
+        },
+        {
+          "question": "What evidence is needed?",
+          "answer": "evening students; a later bus; evidence of sufficient use",
+          "phonetic": "",
+          "id": "B1.U03.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "all members speak, at least one reason and one drawback are named, and the final decision is supported by the group.",
+        "4-point checklist, one point each for clear problem, relevant reason, feasible action, and limitation/result. At least 3/4 plus understandable linking is the local mastery threshold; it is not a CEFR certification."
+      ],
+      "unit_id": "B1.U03",
+      "order": 9,
+      "source": "levels/b1.md",
+      "source_line": 149,
+      "scenario_source": "reading",
+      "workshop_source_id": "B1.W03.L02"
+    },
+    {
+      "id": "B1.U03.L04",
+      "title": "Explain a problem and recommend a solution",
+      "lesson_type": "role_play",
+      "scenario": "“Residents say the buses are unreliable at peak times. A dedicated lane could reduce delays, but it would require removing some parking spaces. The city should test the lane for three months and publish the results before deciding whether to expand it.”",
+      "flashcards": [
+        {
+          "question": "What action does the writer recommend?",
+          "answer": "unreliable peak-time buses; loss of some parking; a three-month test with published results",
+          "phonetic": "",
+          "id": "B1.U03.L04-FC01"
+        },
+        {
+          "question": "What evidence is needed?",
+          "answer": "evening students; a later bus; evidence of sufficient use",
+          "phonetic": "",
+          "id": "B1.U03.L04-FC02"
+        }
+      ],
+      "assessment": [
+        "4-point checklist, one point each for clear problem, relevant reason, feasible action, and limitation/result. At least 3/4 plus understandable linking is the local mastery threshold; it is not a CEFR certification."
+      ],
+      "unit_id": "B1.U03",
+      "order": 10,
+      "source": "levels/b1.md",
+      "source_line": 157,
+      "scenario_source": "reading",
+      "workshop_source_id": "B1.W03.L02"
+    },
+    {
+      "id": "B1.U04.L01",
+      "title": "Describe responsibilities and routine work",
+      "lesson_type": "role_play",
+      "scenario": "choose the correct form: At the moment, I (manage / am managing) a small team.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Describe responsibilities and routine work”?",
+          "answer": "describe work or study responsibilities using present simple and adverbs of frequency.",
+          "phonetic": "",
+          "id": "B1.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "at least three correct verbs and clear time language."
+      ],
+      "unit_id": "B1.U04",
+      "order": 11,
+      "source": "levels/b1.md",
+      "source_line": 163,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B1.U04.L02",
+      "title": "Write a short report or summary",
+      "lesson_type": "essay_analysis",
+      "scenario": "“The project started late because training was delayed. By week three, the team had completed most of the research, but one department still needed support. The final report recommended clearer deadlines and regular check-ins.” What caused the delay?",
+      "flashcards": [
+        {
+          "question": "The final report recommended clearer deadlines and regular check-ins.” What caused the delay?",
+          "answer": "training was delayed",
+          "phonetic": "",
+          "id": "B1.U04.L02-FC01"
+        },
+        {
+          "question": "What remedy was recommended?",
+          "answer": "clearer deadlines and regular check-ins",
+          "phonetic": "",
+          "id": "B1.U04.L02-FC02"
+        }
+      ],
+      "assessment": [
+        "time order, one cause, one result, and one recommendation."
+      ],
+      "unit_id": "B1.U04",
+      "order": 12,
+      "source": "levels/b1.md",
+      "source_line": 173,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U04.L03",
+      "title": "Explain a difficult situation and a plan",
+      "lesson_type": "role_play",
+      "scenario": "manager and employee discuss a delay. Candidate language: We need an updated plan., If we reduce the scope, we can finish on time., By Friday, we should have a revised schedule.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Explain a difficult situation and a plan”?",
+          "answer": "explain a problem, suggest a plan, and give a realistic timeline.",
+          "phonetic": "",
+          "id": "B1.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "plan, timeline, and reason are all clear."
+      ],
+      "unit_id": "B1.U04",
+      "order": 13,
+      "source": "levels/b1.md",
+      "source_line": 191,
+      "scenario_source": "role-play"
+    },
+    {
+      "id": "B1.U05.L01",
+      "title": "Discuss benefits and drawbacks",
+      "lesson_type": "role_play",
+      "scenario": "“Many cities encourage cycling. A bike lane reduces congestion and improves health, but it may reduce parking space. The main challenge is that drivers need time to adapt.” What are the benefits?",
+      "flashcards": [
+        {
+          "question": "The main challenge is that drivers need time to adapt.” What are the benefits?",
+          "answer": "reduces congestion and improves health",
+          "phonetic": "",
+          "id": "B1.U05.L01-FC01"
+        },
+        {
+          "question": "What is the disadvantage?",
+          "answer": "less parking space",
+          "phonetic": "",
+          "id": "B1.U05.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "benefit, drawback, and a conclusion."
+      ],
+      "unit_id": "B1.U05",
+      "order": 14,
+      "source": "levels/b1.md",
+      "source_line": 201,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U05.L02",
+      "title": "Write a balanced paragraph",
+      "lesson_type": "essay_analysis",
+      "scenario": "“Public transport is often cheaper and more sustainable, but many commuters still prefer cars. The main advantage is lower pollution and lower cost. However, cars are often seen as more comfortable and convenient. In my view, better bus services and cleaner stations would reduce the gap.”",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a balanced paragraph”?",
+          "answer": "write a 150–180-word paragraph that presents a problem, two sides, and a recommendation.",
+          "phonetic": "",
+          "id": "B1.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "clear statement, two side points, conclusion, and at least four connectors."
+      ],
+      "unit_id": "B1.U05",
+      "order": 15,
+      "source": "levels/b1.md",
+      "source_line": 213,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B1.U05.L03",
+      "title": "Speak and mediate on a public issue",
+      "lesson_type": "role_play",
+      "scenario": "summarize a discussion and relay a position neutrally to another person.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Speak and mediate on a public issue”?",
+          "answer": "summarize a discussion and relay a position neutrally to another person.",
+          "phonetic": "",
+          "id": "B1.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "the spokesperson restates the recommendation, the reason, and one objection."
+      ],
+      "unit_id": "B1.U05",
+      "order": 16,
+      "source": "levels/b1.md",
+      "source_line": 225,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "B1.U06.L01",
+      "title": "Evaluate information and source quality",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A news site reports that smartphone use among teenagers has increased, but it does not mention how the survey was conducted. A second article includes charts and a clear method, but it covers only one region.” Which is more reliable?",
+      "flashcards": [
+        {
+          "question": "A second article includes charts and a clear method, but it covers only one region.” Which is more reliable?",
+          "answer": "the second article because it gives method and scope",
+          "phonetic": "",
+          "id": "B1.U06.L01-FC01"
+        },
+        {
+          "question": "What is the limitation?",
+          "answer": "only one region",
+          "phonetic": "",
+          "id": "B1.U06.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "at least one claim and one reliability point."
+      ],
+      "unit_id": "B1.U06",
+      "order": 17,
+      "source": "levels/b1.md",
+      "source_line": 235,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B1.U06.L02",
+      "title": "Compare digital and face-to-face learning",
+      "lesson_type": "role_play",
+      "scenario": "discuss and justify a preference between two learning modes.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Compare digital and face-to-face learning”?",
+          "answer": "discuss and justify a preference between two learning modes.",
+          "phonetic": "",
+          "id": "B1.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "contrast, at least two reasons, conclusion."
+      ],
+      "unit_id": "B1.U06",
+      "order": 18,
+      "source": "levels/b1.md",
+      "source_line": 249,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "B1.U06.L03",
+      "title": "Write and relay a recommendation about media or technology",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a short recommendation about digital habits or online study and relay it clearly to another person.",
+      "flashcards": [
+        {
+          "question": "What is the writer’s opinion?",
+          "answer": "delays and congestion; comfort; invest more in buses and trains; governments should reduce pollution and save time",
+          "phonetic": "",
+          "id": "B1.U06.L03-FC01"
+        },
+        {
+          "question": "What is the problem described?",
+          "answer": "Why do people still prefer cars",
+          "phonetic": "",
+          "id": "B1.U06.L03-FC02"
+        },
+        {
+          "question": "What is the proposed solution?",
+          "answer": "What is the writer’s opinion",
+          "phonetic": "",
+          "id": "B1.U06.L03-FC03"
+        }
+      ],
+      "assessment": [
+        "issue, action, reason, and conclusion.",
+        "What is the problem described?",
+        "Why do people still prefer cars?",
+        "What is the proposed solution?",
+        "What is the writer’s opinion?"
+      ],
+      "unit_id": "B1.U06",
+      "order": 19,
+      "source": "levels/b1.md",
+      "source_line": 257,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

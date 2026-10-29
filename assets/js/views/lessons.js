@@ -2,7 +2,7 @@ import { t as uiText } from '../core/i18n.js';
 ﻿/* الدروس والمنهج: المستويات ← الوحدات ← الدروس */
 import { t } from '../core/i18n.js';
 import { esc, speakBtn, qs, pct } from '../core/utils.js';
-import { progress, settings, saveProgress } from '../core/store.js';
+import { progress, settings, saveProgress, isEshSandbox } from '../core/store.js';
 import { LEVELS, getLevel, getUnit, unitsOfLevel, unitPercent, levelPercent, isLevelUnlocked } from '../data/curriculum.js';
 import { markLessonRead, completeUnit, levelStats } from '../core/gamify.js';
 import { pageHead, progressBar, renderSidebarStats } from './shell.js';
@@ -13,13 +13,13 @@ import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 /* ---------- قائمة المستويات ---------- */
 export function renderLessons(host) {
   const foundation = zeroStats(progress);
-  const foundationNode = `<a class="skill-node skill-node--foundation" href="./zero.html">
+  const foundationNode = isEshSandbox ? '' : `<a class="skill-node skill-node--foundation" href="./zero.html">
     <span class="skill-node__orb">A0</span>
     <span class="skill-node__copy"><b>${esc(t('dash.foundation'))}</b><small>${foundation.percent}% · ${foundation.doneStages}/${ZERO_TOTALS.stages}</small></span>
     <span class="skill-node__state" aria-hidden="true">↗</span>
   </a>`;
   const levelNodes = LEVELS.map((level, index) => {
-    const unlocked = isLevelUnlocked(index);
+    const unlocked = isEshSandbox || isLevelUnlocked(index);
     const percent = levelPercent(level.id);
     const units = unitsOfLevel(level.id);
     const nodes = units.map((unit, unitIndex) => {

@@ -1,0 +1,457 @@
+{
+  "level": "A1",
+  "title": "A1 — Beginner",
+  "units": [
+    {
+      "id": "A1.U01",
+      "title": "Meeting people and daily life",
+      "order": 1
+    },
+    {
+      "id": "A1.U02",
+      "title": "Home and routines",
+      "order": 2
+    },
+    {
+      "id": "A1.U03",
+      "title": "Food and shopping",
+      "order": 3
+    },
+    {
+      "id": "A1.U04",
+      "title": "Work, study, and time",
+      "order": 4
+    },
+    {
+      "id": "A1.U05",
+      "title": "Places and services",
+      "order": 5
+    },
+    {
+      "id": "A1.U06",
+      "title": "Free time and invitations",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "A1.U01.L01",
+      "title": "Ask and answer personal questions",
+      "lesson_type": "role_play",
+      "scenario": "ask and answer four personal questions using appropriate be or do forms.",
+      "flashcards": [
+        {
+          "question": "Where are you from?",
+          "answer": "I'm from Rabat",
+          "phonetic": "",
+          "id": "A1.U01.L01-FC01"
+        },
+        {
+          "question": "Where do you work?",
+          "answer": "I work at a hotel",
+          "phonetic": "",
+          "id": "A1.U01.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "4/4 questions have correct auxiliaries and the partner can report two answers."
+      ],
+      "unit_id": "A1.U01",
+      "order": 1,
+      "source": "levels/a1.md",
+      "source_line": 103,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U01.L02",
+      "title": "Describe people and relationships",
+      "lesson_type": "sentence_builder",
+      "scenario": "Nadia is from Tunis. She is a cook. Her husband works at a school. They have one child. Ask who is a cook and where her husband works.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Describe people and relationships”?",
+          "answer": "write and say five accurate sentences about two people using family/job words and be, have, and present-simple verbs.",
+          "phonetic": "",
+          "id": "A1.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "five meaningful sentences; accurate subject-verb agreement in 4/5."
+      ],
+      "unit_id": "A1.U01",
+      "order": 2,
+      "source": "levels/a1.md",
+      "source_line": 113,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A1.U01.L03",
+      "title": "Give and check contact details",
+      "lesson_type": "sentence_builder",
+      "scenario": "exchange fictional contact cards; listener reads back the number for confirmation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Give and check contact details”?",
+          "answer": "understand and exchange a name, phone number, and email address, asking for repetition once when needed.",
+          "phonetic": "",
+          "id": "A1.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "transcribe all name letters and at least 9/10 digits; accurately ask for clarification."
+      ],
+      "unit_id": "A1.U01",
+      "order": 3,
+      "source": "levels/a1.md",
+      "source_line": 125,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A1.U02.L01",
+      "title": "Describe a home and locate objects",
+      "lesson_type": "sentence_builder",
+      "scenario": "partner A describes a room; partner B places four counters on a blank plan and asks one location question.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Describe a home and locate objects”?",
+          "answer": "describe a room in five sentences using there is/are and three place phrases.",
+          "phonetic": "",
+          "id": "A1.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "at least 4/5 accurate is/are choices and three understandable location phrases."
+      ],
+      "unit_id": "A1.U02",
+      "order": 4,
+      "source": "levels/a1.md",
+      "source_line": 143,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A1.U02.L02",
+      "title": "Describe routines and frequency",
+      "lesson_type": "sentence_builder",
+      "scenario": "describe a weekday routine in six sentences, placing frequency words correctly and using third-person -s in 4/5 target clauses.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Describe routines and frequency”?",
+          "answer": "describe a weekday routine in six sentences, placing frequency words correctly and using third-person -s in 4/5 target clauses.",
+          "phonetic": "",
+          "id": "A1.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "six relevant sentences, 4/5 verb forms and 4/5 adverb positions."
+      ],
+      "unit_id": "A1.U02",
+      "order": 5,
+      "source": "levels/a1.md",
+      "source_line": 157,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U02.L03",
+      "title": "A routine and a simple invitation",
+      "lesson_type": "sentence_builder",
+      "scenario": "“Mina starts work at eight. She usually takes the bus, but today she is walking because the bus is late. She has lunch at noon.”",
+      "flashcards": [
+        {
+          "question": "Why is she walking today?",
+          "answer": "eight; the bus; the bus is late",
+          "phonetic": "",
+          "id": "A1.U02.L03-FC01"
+        },
+        {
+          "question": "Why are they arriving earlier this week?",
+          "answer": "in a bookshop; nine; they are helping with a new display",
+          "phonetic": "",
+          "id": "A1.U02.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "answer 3/3 factual questions; produce a present-simple habit and a present-continuous “now/temporary” example; message includes all four required elements. If tense choice is unclear, sort five new statements into “usual” and “happening now”."
+      ],
+      "unit_id": "A1.U02",
+      "order": 6,
+      "source": "resources/integrated-skill-labs.md",
+      "source_line": 73,
+      "scenario_source": "reading",
+      "workshop_source_id": "A1.U02.L03"
+    },
+    {
+      "id": "A1.U03.L01",
+      "title": "Name foods and express preferences",
+      "lesson_type": "sentence_builder",
+      "scenario": "ask a partner Do you like ...? and record three answers; report one accurate fact.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Name foods and express preferences”?",
+          "answer": "name eight foods and state three preferences using like/don't like and a reason.",
+          "phonetic": "",
+          "id": "A1.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 food-picture matches and three understandable preference sentences."
+      ],
+      "unit_id": "A1.U03",
+      "order": 7,
+      "source": "levels/a1.md",
+      "source_line": 173,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A1.U03.L02",
+      "title": "Order politely and ask about prices",
+      "lesson_type": "role_play",
+      "scenario": "complete a café exchange with an item, quantity, price question, and confirmation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Order politely and ask about prices”?",
+          "answer": "complete a café exchange with an item, quantity, price question, and confirmation.",
+          "phonetic": "",
+          "id": "A1.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "complete four transaction moves, correctly use singular/plural price question."
+      ],
+      "unit_id": "A1.U03",
+      "order": 8,
+      "source": "levels/a1.md",
+      "source_line": 183,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U03.L03",
+      "title": "Ask for quantities and complete a shopping list",
+      "lesson_type": "sentence_builder",
+      "scenario": "For lunch, buy a loaf of bread, six eggs, some cheese, and two tomatoes. Ask what is bought and how many eggs.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Ask for quantities and complete a shopping list”?",
+          "answer": "understand a short shopping list and request at least four items using containers or quantities.",
+          "phonetic": "",
+          "id": "A1.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "list has five suitable items, two quantities, and four successful exchange turns."
+      ],
+      "unit_id": "A1.U03",
+      "order": 9,
+      "source": "levels/a1.md",
+      "source_line": 199,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A1.U04.L01",
+      "title": "Read a simple timetable",
+      "lesson_type": "sentence_builder",
+      "scenario": "retrieve five details from a weekly timetable and ask two schedule questions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Read a simple timetable”?",
+          "answer": "retrieve five details from a weekly timetable and ask two schedule questions.",
+          "phonetic": "",
+          "id": "A1.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 facts and correct auxiliary in both questions."
+      ],
+      "unit_id": "A1.U04",
+      "order": 10,
+      "source": "levels/a1.md",
+      "source_line": 213,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U04.L02",
+      "title": "Say what is happening now",
+      "lesson_type": "sentence_builder",
+      "scenario": "contrast routine and current action in six spoken/written sentences, with correct be + -ing in 4/5 clauses.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Say what is happening now”?",
+          "answer": "contrast routine and current action in six spoken/written sentences, with correct be + -ing in 4/5 clauses.",
+          "phonetic": "",
+          "id": "A1.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "classify 5/6 contexts and form 4/5 continuous clauses."
+      ],
+      "unit_id": "A1.U04",
+      "order": 11,
+      "source": "levels/a1.md",
+      "source_line": 231,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U04.L03",
+      "title": "Write a short schedule message",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 40–60-word schedule message with two activities, two times/days, and one question.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a short schedule message”?",
+          "answer": "write a 40–60-word schedule message with two activities, two times/days, and one question.",
+          "phonetic": "",
+          "id": "A1.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "40–60 words, required schedule details, readable sentence punctuation, and accurate forms in 4/5 clauses."
+      ],
+      "unit_id": "A1.U04",
+      "order": 12,
+      "source": "levels/a1.md",
+      "source_line": 241,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U05.L01",
+      "title": "Ask for and follow directions",
+      "lesson_type": "sentence_builder",
+      "scenario": "each learner gets a different start/destination card and gives directions without pointing.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Ask for and follow directions”?",
+          "answer": "ask where a place is and follow a two-step route on a simple map.",
+          "phonetic": "",
+          "id": "A1.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 routes followed accurately."
+      ],
+      "unit_id": "A1.U05",
+      "order": 13,
+      "source": "levels/a1.md",
+      "source_line": 253,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A1.U05.L02",
+      "title": "Ask for a simple service",
+      "lesson_type": "sentence_builder",
+      "scenario": "complete a service exchange with a greeting, need, one information question, and a confirmation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Ask for a simple service”?",
+          "answer": "complete a service exchange with a greeting, need, one information question, and a confirmation.",
+          "phonetic": "",
+          "id": "A1.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "all four exchange moves; learner accurately repeats the key time/place."
+      ],
+      "unit_id": "A1.U05",
+      "order": 14,
+      "source": "levels/a1.md",
+      "source_line": 273,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U05.L03",
+      "title": "Understand a public notice",
+      "lesson_type": "sentence_builder",
+      "scenario": "CITY LIBRARY: Open Monday–Saturday, 9:00 a.m.–6:00 p.m. Closed Sunday. Please return books at the desk. New members: bring an ID card.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Understand a public notice”?",
+          "answer": "identify purpose and three details in a short familiar notice.",
+          "phonetic": "",
+          "id": "A1.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "4/4 details and one accurate purpose statement."
+      ],
+      "unit_id": "A1.U05",
+      "order": 15,
+      "source": "levels/a1.md",
+      "source_line": 291,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A1.U06.L01",
+      "title": "Talk about hobbies and preferences",
+      "lesson_type": "sentence_builder",
+      "scenario": "ask and answer five questions about free-time activities and give one reason.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Talk about hobbies and preferences”?",
+          "answer": "ask and answer five questions about free-time activities and give one reason.",
+          "phonetic": "",
+          "id": "A1.U06.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 questions well formed, one reason, and two correct reported facts."
+      ],
+      "unit_id": "A1.U06",
+      "order": 16,
+      "source": "levels/a1.md",
+      "source_line": 305,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U06.L02",
+      "title": "Invite, accept, and decline politely",
+      "lesson_type": "role_play",
+      "scenario": "make an invitation, accept or decline, and agree on a day/time/place.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Invite, accept, and decline politely”?",
+          "answer": "make an invitation, accept or decline, and agree on a day/time/place.",
+          "phonetic": "",
+          "id": "A1.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "include invitation, response, alternative/confirmation; partner can repeat the agreed plan."
+      ],
+      "unit_id": "A1.U06",
+      "order": 17,
+      "source": "levels/a1.md",
+      "source_line": 315,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A1.U06.L03",
+      "title": "Write and relay an invitation",
+      "lesson_type": "essay_analysis",
+      "scenario": "Hi Lina, Would you like to see a film on Friday? It starts at six at the City Cinema. We can meet outside at 5:45. Let me know if you can come. — Noor",
+      "flashcards": [
+        {
+          "question": "What time does the learner get up?",
+          "answer": "How do they go to work",
+          "phonetic": "",
+          "id": "A1.U06.L03-FC01"
+        },
+        {
+          "question": "What do they do at lunch?",
+          "answer": "What do they do in the evening",
+          "phonetic": "",
+          "id": "A1.U06.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "all five details present, 4/5 understandable sentences, relay preserves day/time/place.",
+        "What time does the learner get up?",
+        "How do they go to work?",
+        "What do they do at lunch?",
+        "What do they do in the evening?"
+      ],
+      "unit_id": "A1.U06",
+      "order": 18,
+      "source": "levels/a1.md",
+      "source_line": 325,
+      "scenario_source": "source_task"
+    }
+  ]
+}

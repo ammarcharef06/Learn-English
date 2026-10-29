@@ -4,7 +4,7 @@ import { t as uiText } from './i18n.js';
    من نفس بيانات المنهج والمراجع، مع تكييف حسب الأخطاء السابقة.
    ============================================================ */
 import { PRONOUN_GROUPS, PRONOUN_TABLE, CONNECTORS, QUESTION_WORDS, KEY_EXAMPLES } from '../data/reference.js';
-import { ALL_UNITS, LEVELS, READINGS } from '../data/curriculum.js';
+import { ALL_UNITS, LEVELS, READINGS, activeCurriculum } from '../data/curriculum.js';
 import { shuffle, sample, uid, pick } from './utils.js';
 import { weakestFirst } from './srs.js';
 import { progress } from './store.js';
@@ -178,6 +178,7 @@ export function questionEntries() {
 }
 
 export function readingWordEntries({ levels = null } = {}) {
+  if (activeCurriculum === 'esh') return [];
   const out = [];
   for (const r of READINGS) {
     if (levels && !levels.includes(r.level)) continue;
@@ -207,8 +208,6 @@ export function keyExampleEntries() {
 
 /* ---------------- اختيار المصدر ---------------- */
 
-const levelIds = LEVELS.map((l) => l.id);
-
 export function entriesForSource(source = 'all') {
   if (source && source.startsWith('level:')) {
     const lv = source.slice(6);
@@ -219,7 +218,7 @@ export function entriesForSource(source = 'all') {
     const u = ALL_UNITS.find((x) => x.id === unitId);
     const vocab = vocabularyEntries().filter((e) => e.unitId === unitId);
     const sentences = sentenceEntries().filter((e) => e.unitId === unitId);
-    const reading = READINGS.filter((r) => r.level === (u ? u.levelId : 'a1')).flatMap((r) => (r.words || []).map((w, i) => ({
+    const reading = activeCurriculum === 'esh' ? [] : READINGS.filter((r) => r.level === (u ? u.levelId : 'a1')).flatMap((r) => (r.words || []).map((w, i) => ({
       itemId: `rw:${r.id}:${i}`, en: w.en, ar: w.ar, ex: null, kind: 'word', level: r.level, topic: r.id, topicTitle: r.titleAr, emoji: r.emoji,
     })));
     return [...vocab, ...sentences, ...reading];
@@ -236,6 +235,9 @@ export function entriesForSource(source = 'all') {
     case 'unit': return vocabularyEntries();
     case 'all':
     default:
+      if (activeCurriculum === 'esh') {
+        return [...vocabularyEntries(), ...sentenceEntries(), ...curriculumReviewEntries()];
+      }
       return [...vocabularyEntries(), ...sentenceEntries(), ...pronounEntries(), ...connectorEntries(), ...questionEntries(), ...readingWordEntries()];
   }
 }
@@ -253,6 +255,20 @@ export const SOURCES = [
   { id: 'level:a2', ar: uiText('ui.literal.2a1f3069'), en: 'Level A2' },
   { id: 'level:b1', ar: uiText('ui.literal.b717bf9b'), en: 'Level B1' },
 ];
+
+export function sourcesForCurriculum() {
+  if (activeCurriculum !== 'esh') return SOURCES;
+  return [
+    { id: 'all', ar: 'كل محتوى ESH', en: 'All ESH content' },
+    { id: 'vocab', ar: 'بطاقات ESH', en: 'ESH flashcards' },
+    { id: 'sentences', ar: 'الجمل والسيناريوهات', en: 'Sentences and scenarios' },
+    ...LEVELS.map((level) => ({
+      id: `level:${level.id}`,
+      ar: level.label,
+      en: level.labelEn || level.label,
+    })),
+  ];
+}
 
 /* ---------------- أدوات مساعدة ---------------- */
 

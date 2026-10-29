@@ -1,0 +1,455 @@
+{
+  "level": "PRE-A0",
+  "title": "PRE-A0 — Literacy and first classroom English",
+  "units": [
+    {
+      "id": "PRE-A0.U01",
+      "title": "Letter forms and names",
+      "order": 1
+    },
+    {
+      "id": "PRE-A0.U02",
+      "title": "Listening to sounds and beginning phonics",
+      "order": 2
+    },
+    {
+      "id": "PRE-A0.U03",
+      "title": "Decode and build short words",
+      "order": 3
+    },
+    {
+      "id": "PRE-A0.U04",
+      "title": "Meaningful print, copying, and spelling",
+      "order": 4
+    },
+    {
+      "id": "PRE-A0.U05",
+      "title": "First interaction and readiness",
+      "order": 5
+    }
+  ],
+  "lessons": [
+    {
+      "id": "PRE-A0.U01.L01",
+      "title": "Recognize the alphabet",
+      "lesson_type": "phonics",
+      "scenario": "A a, B b, C c, D d. Say the names; point to the matching forms. Avoid introducing all letter sounds at once.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Recognize the alphabet”?",
+          "answer": "correctly identify 20/26 uppercase letters in a mixed set and match at least 18 to their lowercase forms.",
+          "phonetic": "",
+          "id": "PRE-A0.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "record each correct response; target is 20/26 identification and 18/26 matching. The answer is the identical letter in the other case, not a letter that merely looks similar."
+      ],
+      "unit_id": "PRE-A0.U01",
+      "order": 1,
+      "source": "levels/pre-a0.md",
+      "source_line": 40,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "PRE-A0.U01.L02",
+      "title": "Match uppercase and lowercase",
+      "lesson_type": "phonics",
+      "scenario": "match 24/26 case pairs without relying on alphabet order.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Match uppercase and lowercase”?",
+          "answer": "match 24/26 case pairs without relying on alphabet order.",
+          "phonetic": "",
+          "id": "PRE-A0.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "24/26 pairs correct in two shuffled rounds. If not, practice only the missed pairs and retest with cards in a different order."
+      ],
+      "unit_id": "PRE-A0.U01",
+      "order": 2,
+      "source": "levels/pre-a0.md",
+      "source_line": 56,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U01.L03",
+      "title": "Say letter names; do not confuse names with sounds",
+      "lesson_type": "phonics",
+      "scenario": "name 20/26 shown letters and select the spoken letter name when it is said aloud.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Say letter names; do not confuse names with sounds”?",
+          "answer": "name 20/26 shown letters and select the spoken letter name when it is said aloud.",
+          "phonetic": "",
+          "id": "PRE-A0.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 mixed name-versus-sound prompts correct. Repeat using different taught letters if missed."
+      ],
+      "unit_id": "PRE-A0.U01",
+      "order": 3,
+      "source": "levels/pre-a0.md",
+      "source_line": 72,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U01.L04",
+      "title": "Write recognizable letter forms",
+      "lesson_type": "phonics",
+      "scenario": "form at least 20 lowercase and 20 uppercase letters so a reader can identify them.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write recognizable letter forms”?",
+          "answer": "form at least 20 lowercase and 20 uppercase letters so a reader can identify them.",
+          "phonetic": "",
+          "id": "PRE-A0.U01.L04-FC01"
+        }
+      ],
+      "assessment": [
+        "teacher identifies at least 20/26 uppercase and lowercase attempts without being told which letter was intended."
+      ],
+      "unit_id": "PRE-A0.U01",
+      "order": 4,
+      "source": "levels/pre-a0.md",
+      "source_line": 88,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U02.L01",
+      "title": "Vowels, consonants, and speech sounds",
+      "lesson_type": "phonics",
+      "scenario": "identify the five vowel letters and classify the other 21 letters as consonant letters; identify the first sound in 4/5 taught words.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Vowels, consonants, and speech sounds”?",
+          "answer": "identify the five vowel letters and classify the other 21 letters as consonant letters; identify the first sound in 4/5 taught words.",
+          "phonetic": "",
+          "id": "PRE-A0.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "5/5 vowel-letter identification and 4/5 initial sounds. If letter categories are secure but sound responses are weak, keep the categories and reteach listening separately."
+      ],
+      "unit_id": "PRE-A0.U02",
+      "order": 5,
+      "source": "levels/pre-a0.md",
+      "source_line": 108,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U02.L02",
+      "title": "Hear and find first, middle, and last sounds",
+      "lesson_type": "phonics",
+      "scenario": "identify the first and last sounds in 4/5 familiar words and the short vowel sound in 3/4 spoken CVC words.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Hear and find first, middle, and last sounds”?",
+          "answer": "identify the first and last sounds in 4/5 familiar words and the short vowel sound in 3/4 spoken CVC words.",
+          "phonetic": "",
+          "id": "PRE-A0.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "at least 4/5 initial/final responses and 3/4 vowel-pattern matches. If spelling is not yet known, assess oral identification with picture cards."
+      ],
+      "unit_id": "PRE-A0.U02",
+      "order": 6,
+      "source": "levels/pre-a0.md",
+      "source_line": 124,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U02.L03",
+      "title": "Contrast sounds without guessing from letter names",
+      "lesson_type": "phonics",
+      "scenario": "distinguish at least 4/5 teacher-spoken contrasts from the taught set, using picture or word cards.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Contrast sounds without guessing from letter names”?",
+          "answer": "distinguish at least 4/5 teacher-spoken contrasts from the taught set, using picture or word cards.",
+          "phonetic": "",
+          "id": "PRE-A0.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 selections across the pairs. If not met, use one contrast at a time, slow the model slightly, and retest with order changed. Do not tell the learner that their accent is wrong."
+      ],
+      "unit_id": "PRE-A0.U02",
+      "order": 7,
+      "source": "levels/pre-a0.md",
+      "source_line": 140,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U02.L04",
+      "title": "Short-vowel CVC patterns",
+      "lesson_type": "phonics",
+      "scenario": "blend and read 8/10 taught CVC words with short a, e, i, o, u.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Short-vowel CVC patterns”?",
+          "answer": "blend and read 8/10 taught CVC words with short a, e, i, o, u.",
+          "phonetic": "",
+          "id": "PRE-A0.U02.L04-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 correctly blended, including one example from each taught vowel set over the lesson sequence. If missed, sort by vowel and blend three words from the weak group before reassessment."
+      ],
+      "unit_id": "PRE-A0.U02",
+      "order": 8,
+      "source": "levels/pre-a0.md",
+      "source_line": 158,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U03.L01",
+      "title": "Blend, segment, and change one sound",
+      "lesson_type": "phonics",
+      "scenario": "read 8/10 taught CVC words and spell 4/5 from oral dictation using sound-to-letter mapping.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Blend, segment, and change one sound”?",
+          "answer": "read 8/10 taught CVC words and spell 4/5 from oral dictation using sound-to-letter mapping.",
+          "phonetic": "",
+          "id": "PRE-A0.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 reading and 4/5 spelling. Remediate only the missed position (initial, middle, final) with new examples such as pin/pan or map/mat."
+      ],
+      "unit_id": "PRE-A0.U03",
+      "order": 9,
+      "source": "levels/pre-a0.md",
+      "source_line": 180,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U03.L02",
+      "title": "Word families, rhyme, and syllables",
+      "lesson_type": "phonics",
+      "scenario": "identify a rhyming word for 4/5 spoken prompts and clap the syllables in 4/5 familiar words.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Word families, rhyme, and syllables”?",
+          "answer": "identify a rhyming word for 4/5 spoken prompts and clap the syllables in 4/5 familiar words.",
+          "phonetic": "",
+          "id": "PRE-A0.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 rhymes and 4/5 syllable counts. For a missed item, speak it naturally, tap beats, and repeat without written prompts."
+      ],
+      "unit_id": "PRE-A0.U03",
+      "order": 10,
+      "source": "levels/pre-a0.md",
+      "source_line": 194,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U03.L03",
+      "title": "Common consonant teams: `sh`, `ch`, `th`, `ck`",
+      "lesson_type": "phonics",
+      "scenario": "recognize sh, ch, and ck in taught words and decode 6/8 taught words.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Common consonant teams: `sh`, `ch`, `th`, `ck`”?",
+          "answer": "recognize sh, ch, and ck in taught words and decode 6/8 taught words.",
+          "phonetic": "",
+          "id": "PRE-A0.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "identify 4 teams correctly and read 6/8 taught words with understandable sound sequence. Remediation: contrast one team against a known CVC word (sip/ship, chip/tip) with pictures."
+      ],
+      "unit_id": "PRE-A0.U03",
+      "order": 11,
+      "source": "levels/pre-a0.md",
+      "source_line": 208,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U03.L04",
+      "title": "Silent `e` as a useful pattern",
+      "lesson_type": "phonics",
+      "scenario": "distinguish four taught short-vowel/e word pairs by listening and match each written word to its spoken form.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Silent `e` as a useful pattern”?",
+          "answer": "distinguish four taught short-vowel/e word pairs by listening and match each written word to its spoken form.",
+          "phonetic": "",
+          "id": "PRE-A0.U03.L04-FC01"
+        }
+      ],
+      "assessment": [
+        "7/8 correct. If not, return to one pair at a time and use clear picture meanings; do not teach a universal “vowel says its name” rule."
+      ],
+      "unit_id": "PRE-A0.U03",
+      "order": 12,
+      "source": "levels/pre-a0.md",
+      "source_line": 224,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U04.L01",
+      "title": "Copy letters, labels, and word spaces",
+      "lesson_type": "phonics",
+      "scenario": "copy 8/10 familiar labels legibly and identify the word boundary in 4/5 short phrases.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Copy letters, labels, and word spaces”?",
+          "answer": "copy 8/10 familiar labels legibly and identify the word boundary in 4/5 short phrases.",
+          "phonetic": "",
+          "id": "PRE-A0.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 labels recognized by a second reader; 4/5 boundaries marked. If handwriting obscures spelling, allow letter cards or oral spelling to separate knowledge from motor control."
+      ],
+      "unit_id": "PRE-A0.U04",
+      "order": 13,
+      "source": "levels/pre-a0.md",
+      "source_line": 254,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U04.L02",
+      "title": "Spell and retrieve familiar words",
+      "lesson_type": "phonics",
+      "scenario": "spell 8/10 familiar words from picture, oral cue, or real object.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Spell and retrieve familiar words”?",
+          "answer": "spell 8/10 familiar words from picture, oral cue, or real object.",
+          "phonetic": "",
+          "id": "PRE-A0.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10. For errors, sort into first sound, vowel pattern, final sound, or remembered spelling; practice that type and retest with a parallel word."
+      ],
+      "unit_id": "PRE-A0.U04",
+      "order": 14,
+      "source": "levels/pre-a0.md",
+      "source_line": 268,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U04.L03",
+      "title": "Read familiar signs and instructions",
+      "lesson_type": "phonics",
+      "scenario": "read and follow 4/5 familiar printed one-step instructions, follow 4/5 spoken instructions, and match 4/5 classroom labels to objects.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Read familiar signs and instructions”?",
+          "answer": "read and follow 4/5 familiar printed one-step instructions, follow 4/5 spoken instructions, and match 4/5 classroom labels to objects.",
+          "phonetic": "",
+          "id": "PRE-A0.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 printed instructions, 4/5 spoken instructions, 4/5 labels, and 2/2 text questions. Score reading, listening, and comprehension separately. If spoken comprehension fails, repeat with familiar words at a natural but slower pace; if printed reading fails, rehearse the phrase-to-action link, then test new printed commands."
+      ],
+      "unit_id": "PRE-A0.U04",
+      "order": 15,
+      "source": "levels/pre-a0.md",
+      "source_line": 282,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U05.L01",
+      "title": "Greetings and names",
+      "lesson_type": "phonics",
+      "scenario": "complete a two-turn greeting and state a name in an understandable phrase.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Greetings and names”?",
+          "answer": "complete a two-turn greeting and state a name in an understandable phrase.",
+          "phonetic": "",
+          "id": "PRE-A0.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "learner initiates a greeting, says a name, and responds once without copying a written script. If anxious, rehearse with the teacher, then repeat with a partner."
+      ],
+      "unit_id": "PRE-A0.U05",
+      "order": 16,
+      "source": "levels/pre-a0.md",
+      "source_line": 306,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U05.L02",
+      "title": "Sounds, words, and classroom response",
+      "lesson_type": "phonics",
+      "scenario": "match cat, map, sun, pen to pictures; mark the first and last letter; read left to right. Then follow the spoken commands below.",
+      "flashcards": [
+        {
+          "question": "Which begins with the sound /s/?",
+          "answer": "cat; sun",
+          "phonetic": "",
+          "id": "PRE-A0.U05.L02-FC01"
+        },
+        {
+          "question": "What was the final instruction?",
+          "answer": "cat; M; sit down",
+          "phonetic": "",
+          "id": "PRE-A0.U05.L02-FC02"
+        }
+      ],
+      "assessment": [
+        "Which animal was mentioned? Which letter should be written? What was the final instruction?",
+        "correctly identify 8 of 10 mixed-case letters, read 3 of 4 CVC words, and respond to 4 of 5 commands. If not, reteach letter-name/sound distinction and blend two-word sets before retrying with different items."
+      ],
+      "unit_id": "PRE-A0.U05",
+      "order": 17,
+      "source": "levels/pre-a0.md",
+      "source_line": 324,
+      "scenario_source": "source_task",
+      "workshop_source_id": "PRE-A0.U05.L02"
+    },
+    {
+      "id": "PRE-A0.U05.L03",
+      "title": "Review and learner self-check",
+      "lesson_type": "phonics",
+      "scenario": "retrieve one letter, one sound, one word, one instruction, and one greeting without a model.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Review and learner self-check”?",
+          "answer": "retrieve one letter, one sound, one word, one instruction, and one greeting without a model.",
+          "phonetic": "",
+          "id": "PRE-A0.U05.L03-FC01"
+        }
+      ],
+      "assessment": [],
+      "unit_id": "PRE-A0.U05",
+      "order": 18,
+      "source": "levels/pre-a0.md",
+      "source_line": 328,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "PRE-A0.U05.L04",
+      "title": "Integrated sound, word, and classroom check",
+      "lesson_type": "phonics",
+      "scenario": "use taught letters, decode taught words, understand instructions, and exchange names.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Integrated sound, word, and classroom check”?",
+          "answer": "use taught letters, decode taught words, understand instructions, and exchange names.",
+          "phonetic": "",
+          "id": "PRE-A0.U05.L04-FC01"
+        }
+      ],
+      "assessment": [],
+      "unit_id": "PRE-A0.U05",
+      "order": 19,
+      "source": "levels/pre-a0.md",
+      "source_line": 340,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

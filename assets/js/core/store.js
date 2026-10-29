@@ -2,11 +2,13 @@ import { t as uiText } from './i18n.js';
 /* إدارة الحالة والتخزين المحلي */
 import { todayKey, debounce } from './utils.js';
 
-const K_SETTINGS = 'lea.settings.v1';
-const K_PROGRESS = 'lea.progress.v1';
-const K_AUTH = 'lea.auth.v1';
-const K_SESSION = 'lea.session.v1';
-const K_SYNC_QUEUE = 'lea.sync.queue.v1';
+export const isEshSandbox = typeof location !== 'undefined'
+  && new URLSearchParams(location.search).get('curriculum') === 'esh';
+const K_SETTINGS = isEshSandbox ? 'lea.esh.settings.v1' : 'lea.settings.v1';
+const K_PROGRESS = isEshSandbox ? 'lea.esh.progress.v1' : 'lea.progress.v1';
+const K_AUTH = isEshSandbox ? 'lea.esh.auth.v1' : 'lea.auth.v1';
+const K_SESSION = isEshSandbox ? 'lea.esh.session.v1' : 'lea.session.v1';
+const K_SYNC_QUEUE = isEshSandbox ? 'lea.esh.sync.queue.v1' : 'lea.sync.queue.v1';
 export const KEYS = { K_SETTINGS, K_PROGRESS, K_AUTH, K_SESSION, K_SYNC_QUEUE };
 
 export const DEFAULT_SETTINGS = {

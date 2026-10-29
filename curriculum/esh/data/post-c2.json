@@ -1,0 +1,436 @@
+{
+  "level": "POST-C2",
+  "title": "Post-C2 — Advanced specialization tracks",
+  "units": [
+    {
+      "id": "POST-C2.T01",
+      "title": "Academic English and research communication",
+      "order": 1
+    },
+    {
+      "id": "POST-C2.T02",
+      "title": "Business and professional English",
+      "order": 2
+    },
+    {
+      "id": "POST-C2.T03",
+      "title": "Advanced writing and editing",
+      "order": 3
+    },
+    {
+      "id": "POST-C2.T04",
+      "title": "Public speaking and discourse leadership",
+      "order": 4
+    },
+    {
+      "id": "POST-C2.T05",
+      "title": "Translation and advanced textual analysis",
+      "order": 5
+    },
+    {
+      "id": "POST-C2.T06",
+      "title": "Discourse analysis and rhetoric",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "POST-C2.T01.L01",
+      "title": "Read a study as an argument",
+      "lesson_type": "essay_analysis",
+      "scenario": "label the sample, measure, and missing outcome in the example;",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Read a study as an argument”?",
+          "answer": "annotate a short abstract for question, sample, method, result, limitation, and claim, and identify one claim that exceeds the reported evidence.",
+          "phonetic": "",
+          "id": "POST-C2.T01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "all six abstract elements are located or explicitly marked “not reported”; the proposed overclaim is justified with a textual cue."
+      ],
+      "unit_id": "POST-C2.T01",
+      "order": 1,
+      "source": "levels/post-c2.md",
+      "source_line": 114,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T01.L02",
+      "title": "Synthesize sources and qualify a claim",
+      "lesson_type": "essay_analysis",
+      "scenario": "write 120–160 words that answers a question selected by the teacher, attributes both sources, names one shared theme and one difference, and identifies the evidence gap.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Synthesize sources and qualify a claim”?",
+          "answer": "produce a thematic synthesis of two sources, preserving their different constructs and limitations.",
+          "phonetic": "",
+          "id": "POST-C2.T01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "both sources and their measures are accurately distinguished; the synthesis does not invent causation."
+      ],
+      "unit_id": "POST-C2.T01",
+      "order": 2,
+      "source": "levels/post-c2.md",
+      "source_line": 120,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T01.L03",
+      "title": "Write and present a research brief",
+      "lesson_type": "essay_analysis",
+      "scenario": "“The pilot survey found a preference among respondents for the revised rota (Lee, 2024). Because participation was voluntary and no absence data were collected, the result should not be read as evidence of improved attendance.” The citation here is a fictional classroom placeholder, not a real source.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write and present a research brief”?",
+          "answer": "create a concise research brief with a question, method, findings, limitation, and appropriately bounded implication.",
+          "phonetic": "",
+          "id": "POST-C2.T01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "required sections are present; every external claim is attributable; limitations constrain the implication; oral answer responds to the actual question."
+      ],
+      "unit_id": "POST-C2.T01",
+      "order": 3,
+      "source": "levels/post-c2.md",
+      "source_line": 128,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T02.L01",
+      "title": "Frame a decision brief",
+      "lesson_type": "essay_analysis",
+      "scenario": "convert a one-page fictional scenario into a 150-word decision brief.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Frame a decision brief”?",
+          "answer": "distinguish decision, evidence, risk, owner, deadline, and unresolved question in a short workplace brief.",
+          "phonetic": "",
+          "id": "POST-C2.T02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "decision, evidence, risk, owner, date, and unknown are not conflated."
+      ],
+      "unit_id": "POST-C2.T02",
+      "order": 4,
+      "source": "levels/post-c2.md",
+      "source_line": 144,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T02.L02",
+      "title": "Listen, clarify, and negotiate constraints",
+      "lesson_type": "role_play",
+      "scenario": "take notes under CONDITION / LIMIT / REQUEST / UNKNOWN and compare with the key.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Listen, clarify, and negotiate constraints”?",
+          "answer": "capture each stakeholder’s condition, ask a clarifying question, and restate a proposed agreement accurately.",
+          "phonetic": "",
+          "id": "POST-C2.T02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "all four script details are retained, questions resolve an ambiguity, and the final agreement names owner/date/condition."
+      ],
+      "unit_id": "POST-C2.T02",
+      "order": 5,
+      "source": "levels/post-c2.md",
+      "source_line": 154,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T02.L03",
+      "title": "Deliver difficult news and document action",
+      "lesson_type": "role_play",
+      "scenario": "“The launch is moving from 12 to 19 May because the accessibility review is not complete. The new date is confirmed. We will send the revised test schedule by Wednesday; please contact the project lead if the change creates a delivery risk.” The reason and dates are fictional.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Deliver difficult news and document action”?",
+          "answer": "give a direct, respectful update that states the change, reason, effect, next step, and contact route.",
+          "phonetic": "",
+          "id": "POST-C2.T02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "change/reason/impact/next step are explicit, claims match the scenario, and the response acknowledges the concern."
+      ],
+      "unit_id": "POST-C2.T02",
+      "order": 6,
+      "source": "levels/post-c2.md",
+      "source_line": 164,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T03.L01",
+      "title": "Editorial and translation review",
+      "lesson_type": "essay_analysis",
+      "scenario": "partner reads the source passage aloud twice. The reviewer listens without looking at the text.",
+      "flashcards": [
+        {
+          "question": "Does the sentence present release as certain or merely possible?",
+          "answer": "the review is complete; from 1 June onward; it states that it will be available, not that it may be",
+          "phonetic": "",
+          "id": "POST-C2.T03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "compare source and revision for preserved propositions, date, commitment strength, tone, and readability. Use a short commentary to justify each substantive change. There is no single correct rewrite; score the reasoning against these criteria.",
+        "state the release date and commitment strength."
+      ],
+      "unit_id": "POST-C2.T03",
+      "order": 7,
+      "source": "levels/post-c2.md",
+      "source_line": 180,
+      "scenario_source": "listening_script",
+      "workshop_source_id": "POST-C2.T03.L01"
+    },
+    {
+      "id": "POST-C2.T03.L02",
+      "title": "Diagnose before rewriting",
+      "lesson_type": "essay_analysis",
+      "scenario": "mark a supplied 250-word draft with queries, not guesses, and sort edits into meaning / structure / style.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Diagnose before rewriting”?",
+          "answer": "annotate a draft for ambiguity, unsupported claims, repetition, hidden agency, and audience mismatch before editing it.",
+          "phonetic": "",
+          "id": "POST-C2.T03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "each proposed change has an identified problem and does not add facts."
+      ],
+      "unit_id": "POST-C2.T03",
+      "order": 8,
+      "source": "levels/post-c2.md",
+      "source_line": 184,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T03.L03",
+      "title": "Edit for flow, register, and fidelity",
+      "lesson_type": "essay_analysis",
+      "scenario": "edit a new 180–250-word notice for two audiences; provide a change log with three consequential edits and one query.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Edit for flow, register, and fidelity”?",
+          "answer": "produce two audience-specific revisions of the same short message and explain how wording affects emphasis and commitment.",
+          "phonetic": "",
+          "id": "POST-C2.T03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "meaning and commitment are stable, both registers suit their readers, and each rationale points to evidence in the source."
+      ],
+      "unit_id": "POST-C2.T03",
+      "order": 9,
+      "source": "levels/post-c2.md",
+      "source_line": 194,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T04.L01",
+      "title": "Build an argument listeners can follow",
+      "lesson_type": "essay_analysis",
+      "scenario": "prepare a 3–4-minute argument from a new evidence card.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Build an argument listeners can follow”?",
+          "answer": "outline a talk with a question, claim, evidence, qualification, counterargument, and decision request.",
+          "phonetic": "",
+          "id": "POST-C2.T04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "each claim has a source or is labeled as a proposal; the decision follows from stated evidence and limits."
+      ],
+      "unit_id": "POST-C2.T04",
+      "order": 10,
+      "source": "levels/post-c2.md",
+      "source_line": 208,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T04.L02",
+      "title": "Handle questions and chair disagreement",
+      "lesson_type": "role_play",
+      "scenario": "deliver an argument and respond to one evidence challenge and one value-based objection; chair a partner exchange and summarize both positions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Handle questions and chair disagreement”?",
+          "answer": "answer a challenge, clarify a term, and summarize two positions fairly before moving a discussion forward.",
+          "phonetic": "",
+          "id": "POST-C2.T04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "answer is relevant, uncertainty is retained, and each position is recognizable to its speaker."
+      ],
+      "unit_id": "POST-C2.T04",
+      "order": 11,
+      "source": "levels/post-c2.md",
+      "source_line": 216,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T04.L03",
+      "title": "Rehearse delivery and adapt to audience",
+      "lesson_type": "essay_analysis",
+      "scenario": "compare the specialist phrase “comparative utilization data” with “how many people use the service compared with before.” Both can be suitable; choose for audience and define the measure.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Rehearse delivery and adapt to audience”?",
+          "answer": "adapt an argument for a specialist and a public audience while preserving its evidence and decision.",
+          "phonetic": "",
+          "id": "POST-C2.T04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "both versions retain the same claim, limit, and decision; the explanation fits the audience."
+      ],
+      "unit_id": "POST-C2.T04",
+      "order": 12,
+      "source": "levels/post-c2.md",
+      "source_line": 224,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T05.L01",
+      "title": "Analyze the source before translating",
+      "lesson_type": "essay_analysis",
+      "scenario": "complete a source brief for a short notice and flag one phrase requiring author clarification.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Analyze the source before translating”?",
+          "answer": "identify proposition, actor, time, modality, register, implied relationship, and unresolved ambiguity before drafting a translation.",
+          "phonetic": "",
+          "id": "POST-C2.T05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "proposition, time, condition, and commitment are captured separately."
+      ],
+      "unit_id": "POST-C2.T05",
+      "order": 13,
+      "source": "levels/post-c2.md",
+      "source_line": 236,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T05.L02",
+      "title": "Compare translations and mediate meaning",
+      "lesson_type": "essay_analysis",
+      "scenario": "compare two learner-generated translations of a new source, note the audience, and explain one alternative.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Compare translations and mediate meaning”?",
+          "answer": "compare two translations for proposition, register, audience, and pragmatic effect; explain a preferred version and one residual loss.",
+          "phonetic": "",
+          "id": "POST-C2.T05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "comparison cites specific wording and distinguishes source facts from translator inference."
+      ],
+      "unit_id": "POST-C2.T05",
+      "order": 14,
+      "source": "levels/post-c2.md",
+      "source_line": 244,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T05.L03",
+      "title": "Revise translation and explain uncertainty",
+      "lesson_type": "essay_analysis",
+      "scenario": "translate a 100–140-word fictional public notice, add a 60-word translator’s note, and orally brief a non-specialist.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Revise translation and explain uncertainty”?",
+          "answer": "deliver a translation plus a concise translator’s note identifying ambiguity, chosen interpretation, and a question that would resolve it.",
+          "phonetic": "",
+          "id": "POST-C2.T05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "key facts and commitments are retained; at least one real ambiguity is responsibly handled; choices suit the stated readership."
+      ],
+      "unit_id": "POST-C2.T05",
+      "order": 15,
+      "source": "levels/post-c2.md",
+      "source_line": 252,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T06.L01",
+      "title": "Trace framing and agency",
+      "lesson_type": "essay_analysis",
+      "scenario": "annotate a short public statement for actors, verbs, evaluative terms, and omissions; separate observation from inference in two columns.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Trace framing and agency”?",
+          "answer": "compare two short accounts of the same event for actor, agency, evaluation, and omitted information.",
+          "phonetic": "",
+          "id": "POST-C2.T06.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "every inference cites a linguistic cue and an alternative explanation is considered."
+      ],
+      "unit_id": "POST-C2.T06",
+      "order": 16,
+      "source": "levels/post-c2.md",
+      "source_line": 268,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T06.L02",
+      "title": "Analyze stance, implicature, and audience",
+      "lesson_type": "essay_analysis",
+      "scenario": "analyze a short excerpt with its speaker/audience/context card and identify two plausible readings plus discriminating evidence.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Analyze stance, implicature, and audience”?",
+          "answer": "explain an explicit proposition and one context-dependent implication, then state what additional context would support or weaken that reading.",
+          "phonetic": "",
+          "id": "POST-C2.T06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "explicit wording and inference are separated; no emotion is asserted as fact without cues."
+      ],
+      "unit_id": "POST-C2.T06",
+      "order": 17,
+      "source": "levels/post-c2.md",
+      "source_line": 276,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "POST-C2.T06.L03",
+      "title": "Evaluate rhetorical effects and write an analysis",
+      "lesson_type": "essay_analysis",
+      "scenario": "“We counted the forms processed, not the cases resolved.” The parallel construction makes the measure distinction salient; it does not prove either number is high or low. A defensible analysis states the feature, textual cue, possible effect, and limit.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Evaluate rhetorical effects and write an analysis”?",
+          "answer": "produce a short discourse analysis linking at least three textual features to plausible audience effects, with evidence and limits.",
+          "phonetic": "",
+          "id": "POST-C2.T06.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "three observations have quoted cues, inferences are qualified, context is used, and one alternative reading is fairly represented."
+      ],
+      "unit_id": "POST-C2.T06",
+      "order": 18,
+      "source": "levels/post-c2.md",
+      "source_line": 288,
+      "scenario_source": "source_task"
+    }
+  ]
+}

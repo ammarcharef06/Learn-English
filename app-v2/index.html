@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#08080c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LEA" />
+  <meta name="description" content="محرّك تعلّم إنجليزي حتى C2 — بدون قلوب، بدون ألاعيب" />
+  <title>LEA · محرّك التعلّم</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="boot" class="boot">
+    <div class="boot__spark"></div>
+    <div class="boot__text">جارٍ تحضير محرّك التعلّم…</div>
+  </div>
+  <div id="app" aria-live="polite"></div>
+  <div id="toast-root" aria-live="assertive" aria-atomic="true"></div>
+  <div id="sheet-root"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

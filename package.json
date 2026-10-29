@@ -16,7 +16,7 @@
     "desktop:start": "electron .",
     "desktop:dist": "electron-builder",
     "check": "node tools/check.mjs",
-    "test": "node tools/check.mjs && node tools/validate-foundation-curriculum.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs",
+    "test": "node tools/check.mjs && node tools/validate-foundation-curriculum.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs && node tools/test-esh-adapter.mjs && node tools/test-esh-personalization.mjs",
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android"
   },
@@ -40,6 +40,7 @@
     "asar": true,
     "files": [
       "assets/**/*",
+      "curriculum/**/*",
       "desktop/**/*",
       "index.html",
       "zero.html",

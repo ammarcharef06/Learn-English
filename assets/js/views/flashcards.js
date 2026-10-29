@@ -15,10 +15,10 @@ import { gradeItem, stats as srsStats, buildSession, smartReviewPlan, dueEntries
 import { recordAnswer } from '../core/gamify.js';
 import { renderSidebarStats } from './shell.js';
 import { speak, stopSpeaking } from '../core/speech.js';
-import { ALL_UNITS } from '../data/curriculum.js';
+import { ALL_UNITS, LEVELS, activeCurriculum } from '../data/curriculum.js';
 import { settings, saveSettings } from '../core/store.js';
 
-const DECKS = [
+const DEFAULT_DECKS = [
   { id: 'all', labelKey: 'fc.deck.all', icon: '🌍' },
   { id: 'due', labelKey: 'fc.deck.due', icon: '⏰' },
   { id: 'notebook', labelKey: 'fc.deck.notebook', icon: '📒' },
@@ -34,7 +34,21 @@ const DECKS = [
   { id: 'reading', labelKey: 'fc.deck.reading', icon: '📖' },
 ];
 
+function decksForCurriculum() {
+  return activeCurriculum === 'esh'
+    ? [
+    { id: 'all', labelKey: 'fc.deck.all', icon: '🌍' },
+    { id: 'due', labelKey: 'fc.deck.due', icon: '⏰' },
+    { id: 'notebook', labelKey: 'fc.deck.notebook', icon: '📒' },
+    ...LEVELS.map((level) => ({ id: level.id, label: level.label, labelKey: '', icon: level.icon })),
+    ]
+    : DEFAULT_DECKS;
+}
+
 function deckEntries(deck) {
+  if (activeCurriculum === 'esh' && LEVELS.some((level) => level.id === deck)) {
+    return [...vocabularyEntries({ levels: [deck] }), ...sentenceEntries({ levels: [deck] }), ...curriculumReviewEntries({ levels: [deck] })];
+  }
   switch (deck) {
     case 'notebook': return notebookEntries();
     case 'a1': case 'a2': case 'b1': case 'b2': case 'c1': case 'c2':
@@ -49,6 +63,14 @@ function deckEntries(deck) {
   }
 }
 function allEntries() {
+  if (activeCurriculum === 'esh') {
+    return [
+      ...vocabularyEntries(),
+      ...sentenceEntries(),
+      ...curriculumReviewEntries(),
+      ...notebookEntries(),
+    ];
+  }
   return [
     ...vocabularyEntries(),
     ...sentenceEntries(),
@@ -130,6 +152,7 @@ function renderDepthDetails(entry) {
 }
 
 export function renderFlashcards(host) {
+  const decks = decksForCurriculum();
   const reviewSize = [10, 15, 20, 30, 50].includes(Number(settings.reviewSize)) ? Number(settings.reviewSize) : 15;
   const state = { deck: 'all', size: reviewSize, session: [], mode: 'smart', index: 0, flipped: false, sheetOpen: false, transitioning: false, advanceTimer: null, result: { again: 0, hard: 0, good: 0, easy: 0 }, startAt: Date.now() };
 
@@ -147,7 +170,8 @@ export function renderFlashcards(host) {
     const smartPlan = smartReviewPlan(entries, state.size);
     const suggestedSession = state.deck === 'all' ? smartPlan.entries : dueSession;
     const startMode = state.deck === 'all' ? 'smart' : 'deck';
-    const deckLabel = t(DECKS.find((deck) => deck.id === state.deck)?.labelKey || 'fc.deck.all');
+    const selectedDeck = decks.find((deck) => deck.id === state.deck);
+    const deckLabel = selectedDeck?.label || t(selectedDeck?.labelKey || 'fc.deck.all');
     host.innerHTML = `
       <section class="fc-entry" aria-labelledby="fcEntryTitle">
         <button class="fc-entry__close" type="button" id="fcEntryClose" aria-label="${esc(t('common.close'))}">×</button>
@@ -169,7 +193,7 @@ export function renderFlashcards(host) {
           <div class="fc-entry__options-content">
             <label for="fcDeck">${esc(t('fc.deck'))}</label>
             <select class="select" id="fcDeck">
-              ${DECKS.map((deck) => `<option value="${deck.id}" ${deck.id === state.deck ? 'selected' : ''}>${esc(t(deck.labelKey))}</option>`).join('')}
+              ${decks.map((deck) => `<option value="${deck.id}" ${deck.id === state.deck ? 'selected' : ''}>${esc(deck.label || t(deck.labelKey))}</option>`).join('')}
             </select>
             <label for="fcSize">${esc(t('drills.count'))}</label>
             <select class="select" id="fcSize">

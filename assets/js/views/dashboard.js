@@ -1,8 +1,10 @@
 /* لوحة بداية هادئة: التقدم والسلسلة وخطوة واضحة لبدء المراجعة. */
 import { t, isRTL } from '../core/i18n.js';
-import { goalForToday, progress } from '../core/store.js';
+import { goalForToday, progress, isEshSandbox } from '../core/store.js';
 import { esc, pct } from '../core/utils.js';
 import { overallStats, streakInfo } from '../core/gamify.js';
+import { ALL_UNITS } from '../data/curriculum.js';
+import { getEshProfile, getEshRecommendations } from '../../../curriculum/esh/personalization.js';
 
 function activityHeatmap() {
   const now = new Date();
@@ -30,9 +32,28 @@ export function renderDashboard(host) {
   const circumference = 2 * Math.PI * 54;
   const offset = circumference * (1 - todayPercent / 100);
   const todayLabel = new Intl.DateTimeFormat(isRTL() ? 'ar' : 'en', { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date());
+  const profile = isEshSandbox ? getEshProfile() : null;
+  const recommendations = profile ? getEshRecommendations(ALL_UNITS, profile, progress) : [];
+  const personalizedPlan = profile ? `
+    <section class="esh-personal-plan" aria-labelledby="eshPlanTitle">
+      <header class="esh-personal-plan__head">
+        <div><p class="esh-personal-plan__eyebrow">خُطّتك المصمّمة لك</p><h2 id="eshPlanTitle">دروس تناسب هدفك ووقتك</h2></div>
+        <a class="btn btn--sm" href="#/onboarding">تعديل التفضيلات</a>
+      </header>
+      <p class="esh-personal-plan__summary">${esc(motivationLabel(profile.motivation))} · ${profile.minutesPerSession} دقائق للجلسة · ${esc(profileLevelLabel(profile.levelId))} · ${esc(bridgeLanguageLabel(profile.bridgeLanguage))}</p>
+      ${recommendations.length ? `<div class="esh-personal-plan__lessons">
+        ${recommendations.map(({ unit, lesson, index, estimatedMinutes }) => `
+          <a class="esh-personal-lesson" href="#/lesson/${encodeURIComponent(unit.id)}/${index}">
+            <span class="esh-personal-lesson__icon" aria-hidden="true">${unit.icon || '✦'}</span>
+            <span class="esh-personal-lesson__body"><b>${esc(lesson.title)}</b><small>${esc(unit.levelLabel)} · ${estimatedMinutes} د</small></span>
+            <span class="esh-personal-lesson__arrow" aria-hidden="true">↗</span>
+          </a>`).join('')}
+      </div>` : '<p class="muted">لا توجد دروس مطابقة حالياً. افتح خريطة المنهج لاستكشاف جميع الدروس.</p>'}
+    </section>` : '';
 
   host.innerHTML = `
     <section class="dashboard-v2" aria-labelledby="dashboardTitle">
+      ${personalizedPlan}
       <header class="dashboard-v2__head">
         <div>
           <p class="dashboard-v2__date">${esc(todayLabel)}</p>
@@ -83,4 +104,20 @@ export function renderDashboard(host) {
       </section>
     </section>
   `;
+}
+
+const MOTIVATION_LABELS = {
+  travel: 'السفر والتنقّل',
+  work: 'العمل والتطوّر المهني',
+  study: 'الدراسة والاختبارات',
+  daily: 'الحياة اليومية',
+  confidence: 'التحدّث بثقة',
+};
+
+function motivationLabel(value) { return MOTIVATION_LABELS[value] || 'هدفك الشخصي'; }
+function bridgeLanguageLabel(value) {
+  return ({ ar: 'بدعم العربية', fr: 'بجسر من الفرنسية', en: 'بشرح إنجليزي', none: 'بالتعلّم من السياق' })[value] || 'بمسار متوازن';
+}
+function profileLevelLabel(levelId) {
+  return ALL_UNITS.find((unit) => unit.levelId === levelId)?.levelLabel || levelId.toUpperCase();
 }

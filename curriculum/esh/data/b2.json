@@ -1,0 +1,534 @@
+{
+  "level": "B2",
+  "title": "B2 — Upper intermediate",
+  "units": [
+    {
+      "id": "B2.U01",
+      "title": "Debate and argumentative structure",
+      "order": 1
+    },
+    {
+      "id": "B2.U02",
+      "title": "Media and persuasion",
+      "order": 2
+    },
+    {
+      "id": "B2.U03",
+      "title": "Education and society",
+      "order": 3
+    },
+    {
+      "id": "B2.U04",
+      "title": "Work, leadership, and environment",
+      "order": 4
+    },
+    {
+      "id": "B2.U05",
+      "title": "Health, science, and technology",
+      "order": 5
+    },
+    {
+      "id": "B2.U06",
+      "title": "Culture, identity, and global issues",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "B2.U01.L01",
+      "title": "Identify a claim and weigh the evidence",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A city tested a slower school-start schedule for one term. Attendance improved and students reported lower stress. The pilot had 120 students and no comparison group.” Which word shows measurement?",
+      "flashcards": [
+        {
+          "question": "The pilot had 120 students and no comparison group.” Which word shows measurement?",
+          "answer": "improved and 120 students",
+          "phonetic": "",
+          "id": "B2.U01.L01-FC01"
+        },
+        {
+          "question": "What is the key limitation?",
+          "answer": "no comparison group",
+          "phonetic": "",
+          "id": "B2.U01.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "claim, evidence, and one limit are all named."
+      ],
+      "unit_id": "B2.U01",
+      "order": 1,
+      "source": "levels/b2.md",
+      "source_line": 50,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U01.L02",
+      "title": "Build a structured argument with cautious language",
+      "lesson_type": "essay_analysis",
+      "scenario": "“The new policy may improve student well-being, although the pilot was limited to one school. The survey showed that absenteeism fell and students reported better focus. However, the sample was small, so the results should be treated cautiously. Overall, the policy deserves a longer trial before a wider rollout.”",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Build a structured argument with cautious language”?",
+          "answer": "write a short argument paragraph that includes a claim, evidence, a limitation, and a response to a possible objection.",
+          "phonetic": "",
+          "id": "B2.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "thesis, evidence, one limitation, one counterargument, and a conclusion."
+      ],
+      "unit_id": "B2.U01",
+      "order": 2,
+      "source": "levels/b2.md",
+      "source_line": 64,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U01.L03",
+      "title": "Respond to a counterargument and refine a position",
+      "lesson_type": "essay_analysis",
+      "scenario": "debate whether a school should introduce a longer lunch break or a four-day week. Each learner states a claim plus a counterargument and response.",
+      "flashcards": [
+        {
+          "question": "Which conclusion is justified?",
+          "answer": "slightly higher attendance and student reports; one department, six weeks, 42 volunteers; the pilot is promising but insufficient to establish institution-wide effectiveness",
+          "phonetic": "",
+          "id": "B2.U01.L03-FC01"
+        },
+        {
+          "question": "Which additional groups or data are proposed?",
+          "answer": "reduced travel/focus; access to campus services; other courses and non-volunteers",
+          "phonetic": "",
+          "id": "B2.U01.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "counterargument and response are clearly marked, and the final stance remains consistent.",
+        "score 0–2 each for evidence use, qualification, organization, and response to counterargument. Success for this workshop: 6/8 with no invented evidence. This local criterion is not a CEFR score."
+      ],
+      "unit_id": "B2.U01",
+      "order": 3,
+      "source": "levels/b2.md",
+      "source_line": 78,
+      "scenario_source": "role-play",
+      "workshop_source_id": "B2.W01.L02"
+    },
+    {
+      "id": "B2.U01.L04",
+      "title": "Weigh evidence and qualify an argument",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A college trialled a four-day teaching week in one department. Attendance rose slightly, and students reported more time for independent study. The trial lasted six weeks and included 42 volunteers. These results are promising, but they do not establish that the schedule would work across the whole college.”",
+      "flashcards": [
+        {
+          "question": "Which conclusion is justified?",
+          "answer": "slightly higher attendance and student reports; one department, six weeks, 42 volunteers; the pilot is promising but insufficient to establish institution-wide effectiveness",
+          "phonetic": "",
+          "id": "B2.U01.L04-FC01"
+        },
+        {
+          "question": "Which additional groups or data are proposed?",
+          "answer": "reduced travel/focus; access to campus services; other courses and non-volunteers",
+          "phonetic": "",
+          "id": "B2.U01.L04-FC02"
+        }
+      ],
+      "assessment": [
+        "score 0–2 each for evidence use, qualification, organization, and response to counterargument. Success for this workshop: 6/8 with no invented evidence. This local criterion is not a CEFR score."
+      ],
+      "unit_id": "B2.U01",
+      "order": 4,
+      "source": "levels/b2.md",
+      "source_line": 92,
+      "scenario_source": "reading",
+      "workshop_source_id": "B2.W01.L02"
+    },
+    {
+      "id": "B2.U02.L01",
+      "title": "Analyze a media claim",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A local campaign claims that a new shopping district will create jobs and improve the city center. The article uses interviews with business owners and optimistic language, but no independent figures are provided.” What is the claim?",
+      "flashcards": [
+        {
+          "question": "The article uses interviews with business owners and optimistic language, but no independent figures are provided.” What is the claim?",
+          "answer": "new shopping district will create jobs and improve the city center",
+          "phonetic": "",
+          "id": "B2.U02.L01-FC01"
+        },
+        {
+          "question": "What is missing?",
+          "answer": "independent figures or data",
+          "phonetic": "",
+          "id": "B2.U02.L01-FC02"
+        },
+        {
+          "question": "How does the tone affect the argument?",
+          "answer": "optimistic language, with limited evidence",
+          "phonetic": "",
+          "id": "B2.U02.L01-FC03"
+        }
+      ],
+      "assessment": [
+        "claim, evidence, and one tone or bias note."
+      ],
+      "unit_id": "B2.U02",
+      "order": 5,
+      "source": "levels/b2.md",
+      "source_line": 98,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U02.L02",
+      "title": "Evaluate bias and audience appeal",
+      "lesson_type": "essay_analysis",
+      "scenario": "“The campaign video presents the new policy as a safe and necessary step for families. It uses images of children and quiet streets, but it does not mention the cost or the disruption during the building phase.” What does the video emphasize?",
+      "flashcards": [
+        {
+          "question": "It uses images of children and quiet streets, but it does not mention the cost or the disruption during the building phase.” What does the video emphasize?",
+          "answer": "safety and family concerns",
+          "phonetic": "",
+          "id": "B2.U02.L02-FC01"
+        },
+        {
+          "question": "What is missing?",
+          "answer": "cost and disruption",
+          "phonetic": "",
+          "id": "B2.U02.L02-FC02"
+        }
+      ],
+      "assessment": [
+        "one claim, one method of persuasion, and one missing fact."
+      ],
+      "unit_id": "B2.U02",
+      "order": 6,
+      "source": "levels/b2.md",
+      "source_line": 110,
+      "scenario_source": "listening_script"
+    },
+    {
+      "id": "B2.U02.L03",
+      "title": "Respond to a claim in a formal discussion",
+      "lesson_type": "essay_analysis",
+      "scenario": "answer a media or policy claim politely but clearly, with a reason and a counterexample.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Respond to a claim in a formal discussion”?",
+          "answer": "answer a media or policy claim politely but clearly, with a reason and a counterexample.",
+          "phonetic": "",
+          "id": "B2.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "claim + evidence + response to counterargument."
+      ],
+      "unit_id": "B2.U02",
+      "order": 7,
+      "source": "levels/b2.md",
+      "source_line": 122,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "B2.U03.L01",
+      "title": "Discuss social and educational inequality",
+      "lesson_type": "role_play",
+      "scenario": "“School transport is often unreliable in rural areas, which limits attendance and lowers opportunities for students who need extra support. A small grant for transport could increase access, but it would require local funding and oversight.” What is the problem?",
+      "flashcards": [
+        {
+          "question": "A small grant for transport could increase access, but it would require local funding and oversight.” What is the problem?",
+          "answer": "unreliable transport",
+          "phonetic": "",
+          "id": "B2.U03.L01-FC01"
+        },
+        {
+          "question": "What is the proposed solution?",
+          "answer": "a small grant for transport",
+          "phonetic": "",
+          "id": "B2.U03.L01-FC02"
+        },
+        {
+          "question": "What is the trade-off?",
+          "answer": "local funding and oversight",
+          "phonetic": "",
+          "id": "B2.U03.L01-FC03"
+        }
+      ],
+      "assessment": [
+        "problem, cause, and response all present."
+      ],
+      "unit_id": "B2.U03",
+      "order": 8,
+      "source": "levels/b2.md",
+      "source_line": 134,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U03.L02",
+      "title": "Write a balanced policy paragraph",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A more flexible school timetable could improve wellbeing, yet it could also create timetable pressure for teachers and families.” Use comparison and nuance rather than a single extreme statement.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a balanced policy paragraph”?",
+          "answer": "write 200–250 words arguing for or against a policy change in education, transport, or public services.",
+          "phonetic": "",
+          "id": "B2.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "all four parts appear and the position is justified with examples."
+      ],
+      "unit_id": "B2.U03",
+      "order": 9,
+      "source": "levels/b2.md",
+      "source_line": 146,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U03.L03",
+      "title": "Present and mediate a policy recommendation",
+      "lesson_type": "role_play",
+      "scenario": "propose one reform for a public issue. Each group prepares a 1-minute summary and then relays it to another group.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Present and mediate a policy recommendation”?",
+          "answer": "speak for 1–2 minutes on a social issue and then relay the decision in neutral language.",
+          "phonetic": "",
+          "id": "B2.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "clarity, evidence, and concession."
+      ],
+      "unit_id": "B2.U03",
+      "order": 10,
+      "source": "levels/b2.md",
+      "source_line": 158,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U04.L01",
+      "title": "Explain a business or leadership issue",
+      "lesson_type": "role_play",
+      "scenario": "“A company reduced support staff to save costs, but the result was slower customer response and higher employee stress. Managers argued that the policy was temporary. Staff questioned whether it was sustainable.” Which term indicates a concern about long-term viability?",
+      "flashcards": [
+        {
+          "question": "Staff questioned whether it was sustainable.” Which term indicates a concern about long-term viability?",
+          "answer": "sustainable",
+          "phonetic": "",
+          "id": "B2.U04.L01-FC01"
+        },
+        {
+          "question": "What is the downside of the cost-saving policy?",
+          "answer": "slower customer response and higher stress",
+          "phonetic": "",
+          "id": "B2.U04.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "cause, effect, and one proposed solution."
+      ],
+      "unit_id": "B2.U04",
+      "order": 11,
+      "source": "levels/b2.md",
+      "source_line": 168,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U04.L02",
+      "title": "Write a brief recommendation for a policy or strategy",
+      "lesson_type": "essay_analysis",
+      "scenario": "complete A limited pilot is useful because ____ .",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a brief recommendation for a policy or strategy”?",
+          "answer": "produce a concise recommendation with safeguards, risk, and evaluation.",
+          "phonetic": "",
+          "id": "B2.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "clear recommendation, at least two risks or safeguards, and a final decision."
+      ],
+      "unit_id": "B2.U04",
+      "order": 12,
+      "source": "levels/b2.md",
+      "source_line": 180,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U04.L03",
+      "title": "Deliver a short presentation and answer questions",
+      "lesson_type": "role_play",
+      "scenario": "present a workplace or environmental recommendation to a small group.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Deliver a short presentation and answer questions”?",
+          "answer": "present a structured viewpoint in 1–2 minutes and answer brief follow-up questions.",
+          "phonetic": "",
+          "id": "B2.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "clear structure, audience awareness, and response to at least one follow-up question."
+      ],
+      "unit_id": "B2.U04",
+      "order": 13,
+      "source": "levels/b2.md",
+      "source_line": 188,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U05.L01",
+      "title": "Discuss evidence in health and science communication",
+      "lesson_type": "essay_analysis",
+      "scenario": "“A small study reported that a daily breathing exercise reduced stress in a sample of 30 adults. The report noted that results may be linked to motivation and self-selection, and it did not compare the exercise with other treatments.” What can be concluded?",
+      "flashcards": [
+        {
+          "question": "The report noted that results may be linked to motivation and self-selection, and it did not compare the exercise with other treatments.” What can be concluded?",
+          "answer": "the results are promising but limited",
+          "phonetic": "",
+          "id": "B2.U05.L01-FC01"
+        },
+        {
+          "question": "Why cautious?",
+          "answer": "small sample and no comparison group",
+          "phonetic": "",
+          "id": "B2.U05.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "explicit caution and one valid limit."
+      ],
+      "unit_id": "B2.U05",
+      "order": 14,
+      "source": "levels/b2.md",
+      "source_line": 198,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U05.L02",
+      "title": "Present a recommendation with conditions",
+      "lesson_type": "role_play",
+      "scenario": "“If the trial continues to show lower stress and no adverse side effects, ___ .”",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Present a recommendation with conditions”?",
+          "answer": "formulate a recommendation under conditions, including a reason and a safeguard.",
+          "phonetic": "",
+          "id": "B2.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "recommendation, condition, risk/safeguard, and mention of evidence."
+      ],
+      "unit_id": "B2.U05",
+      "order": 15,
+      "source": "levels/b2.md",
+      "source_line": 210,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "B2.U05.L03",
+      "title": "Explain uncertainty and respond to a challenge",
+      "lesson_type": "role_play",
+      "scenario": "answer a challenge to a recommendation by acknowledging uncertainty and explaining the next evidence needed.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Explain uncertainty and respond to a challenge”?",
+          "answer": "answer a challenge to a recommendation by acknowledging uncertainty and explaining the next evidence needed.",
+          "phonetic": "",
+          "id": "B2.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "evidence, challenge response, and next evidence needed."
+      ],
+      "unit_id": "B2.U05",
+      "order": 16,
+      "source": "levels/b2.md",
+      "source_line": 218,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "B2.U06.L01",
+      "title": "Express a nuanced opinion on identity or culture",
+      "lesson_type": "role_play",
+      "scenario": "“Cultural exchange programmes can broaden understanding and improve young people’s confidence in communication, although some students still find local customs difficult to interpret. The main challenge is not opposition, but misunderstanding.” What is the central tension?",
+      "flashcards": [
+        {
+          "question": "The main challenge is not opposition, but misunderstanding.” What is the central tension?",
+          "answer": "benefits of exchange versus difficulty of interpretation",
+          "phonetic": "",
+          "id": "B2.U06.L01-FC01"
+        },
+        {
+          "question": "What is the challenge?",
+          "answer": "misunderstanding rather than open rejection",
+          "phonetic": "",
+          "id": "B2.U06.L01-FC02"
+        }
+      ],
+      "assessment": [
+        "balanced view, at least one reason, and one respectful concession."
+      ],
+      "unit_id": "B2.U06",
+      "order": 17,
+      "source": "levels/b2.md",
+      "source_line": 228,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "B2.U06.L02",
+      "title": "Write a formal opinion essay",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 250–300-word essay on a global or cultural issue, using thesis, supporting points, and a counterargument.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a formal opinion essay”?",
+          "answer": "write a 250–300-word essay on a global or cultural issue, using thesis, supporting points, and a counterargument.",
+          "phonetic": "",
+          "id": "B2.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "introduction, evidence, at least one counterargument, and conclusion."
+      ],
+      "unit_id": "B2.U06",
+      "order": 18,
+      "source": "levels/b2.md",
+      "source_line": 240,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "B2.U06.L03",
+      "title": "Debate and clarify a position",
+      "lesson_type": "role_play",
+      "scenario": "take part in a formal group discussion, respond to disagreement, and summarize the final decision.",
+      "flashcards": [
+        {
+          "question": "What does the final sentence suggest about the best model?",
+          "answer": "digital learning is useful but not sufficient; students need feedback and interaction; blended learning is likely best",
+          "phonetic": "",
+          "id": "B2.U06.L03-FC01"
+        },
+        {
+          "question": "What is the main claim?",
+          "answer": "Why does the writer say face-to-face teaching still matters",
+          "phonetic": "",
+          "id": "B2.U06.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "clear claim, respectful challenge response, and summary of final position.",
+        "What is the main claim?",
+        "Why does the writer say face-to-face teaching still matters?",
+        "What does the final sentence suggest about the best model?"
+      ],
+      "unit_id": "B2.U06",
+      "order": 19,
+      "source": "levels/b2.md",
+      "source_line": 248,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

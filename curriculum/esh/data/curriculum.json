@@ -1,0 +1,4295 @@
+{
+  "levels": [
+    {
+      "level": "PRE-A0",
+      "title": "PRE-A0 — Literacy and first classroom English",
+      "units": [
+        {
+          "id": "PRE-A0.U01",
+          "title": "Letter forms and names",
+          "order": 1
+        },
+        {
+          "id": "PRE-A0.U02",
+          "title": "Listening to sounds and beginning phonics",
+          "order": 2
+        },
+        {
+          "id": "PRE-A0.U03",
+          "title": "Decode and build short words",
+          "order": 3
+        },
+        {
+          "id": "PRE-A0.U04",
+          "title": "Meaningful print, copying, and spelling",
+          "order": 4
+        },
+        {
+          "id": "PRE-A0.U05",
+          "title": "First interaction and readiness",
+          "order": 5
+        }
+      ],
+      "lessons": [
+        {
+          "id": "PRE-A0.U01.L01",
+          "title": "Recognize the alphabet",
+          "lesson_type": "phonics",
+          "scenario": "A a, B b, C c, D d. Say the names; point to the matching forms. Avoid introducing all letter sounds at once.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Recognize the alphabet”?",
+              "answer": "correctly identify 20/26 uppercase letters in a mixed set and match at least 18 to their lowercase forms.",
+              "phonetic": "",
+              "id": "PRE-A0.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "record each correct response; target is 20/26 identification and 18/26 matching. The answer is the identical letter in the other case, not a letter that merely looks similar."
+          ],
+          "unit_id": "PRE-A0.U01",
+          "order": 1,
+          "source": "levels/pre-a0.md",
+          "source_line": 40,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "PRE-A0.U01.L02",
+          "title": "Match uppercase and lowercase",
+          "lesson_type": "phonics",
+          "scenario": "match 24/26 case pairs without relying on alphabet order.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Match uppercase and lowercase”?",
+              "answer": "match 24/26 case pairs without relying on alphabet order.",
+              "phonetic": "",
+              "id": "PRE-A0.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "24/26 pairs correct in two shuffled rounds. If not, practice only the missed pairs and retest with cards in a different order."
+          ],
+          "unit_id": "PRE-A0.U01",
+          "order": 2,
+          "source": "levels/pre-a0.md",
+          "source_line": 56,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U01.L03",
+          "title": "Say letter names; do not confuse names with sounds",
+          "lesson_type": "phonics",
+          "scenario": "name 20/26 shown letters and select the spoken letter name when it is said aloud.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Say letter names; do not confuse names with sounds”?",
+              "answer": "name 20/26 shown letters and select the spoken letter name when it is said aloud.",
+              "phonetic": "",
+              "id": "PRE-A0.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 mixed name-versus-sound prompts correct. Repeat using different taught letters if missed."
+          ],
+          "unit_id": "PRE-A0.U01",
+          "order": 3,
+          "source": "levels/pre-a0.md",
+          "source_line": 72,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U01.L04",
+          "title": "Write recognizable letter forms",
+          "lesson_type": "phonics",
+          "scenario": "form at least 20 lowercase and 20 uppercase letters so a reader can identify them.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write recognizable letter forms”?",
+              "answer": "form at least 20 lowercase and 20 uppercase letters so a reader can identify them.",
+              "phonetic": "",
+              "id": "PRE-A0.U01.L04-FC01"
+            }
+          ],
+          "assessment": [
+            "teacher identifies at least 20/26 uppercase and lowercase attempts without being told which letter was intended."
+          ],
+          "unit_id": "PRE-A0.U01",
+          "order": 4,
+          "source": "levels/pre-a0.md",
+          "source_line": 88,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U02.L01",
+          "title": "Vowels, consonants, and speech sounds",
+          "lesson_type": "phonics",
+          "scenario": "identify the five vowel letters and classify the other 21 letters as consonant letters; identify the first sound in 4/5 taught words.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Vowels, consonants, and speech sounds”?",
+              "answer": "identify the five vowel letters and classify the other 21 letters as consonant letters; identify the first sound in 4/5 taught words.",
+              "phonetic": "",
+              "id": "PRE-A0.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "5/5 vowel-letter identification and 4/5 initial sounds. If letter categories are secure but sound responses are weak, keep the categories and reteach listening separately."
+          ],
+          "unit_id": "PRE-A0.U02",
+          "order": 5,
+          "source": "levels/pre-a0.md",
+          "source_line": 108,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U02.L02",
+          "title": "Hear and find first, middle, and last sounds",
+          "lesson_type": "phonics",
+          "scenario": "identify the first and last sounds in 4/5 familiar words and the short vowel sound in 3/4 spoken CVC words.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Hear and find first, middle, and last sounds”?",
+              "answer": "identify the first and last sounds in 4/5 familiar words and the short vowel sound in 3/4 spoken CVC words.",
+              "phonetic": "",
+              "id": "PRE-A0.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "at least 4/5 initial/final responses and 3/4 vowel-pattern matches. If spelling is not yet known, assess oral identification with picture cards."
+          ],
+          "unit_id": "PRE-A0.U02",
+          "order": 6,
+          "source": "levels/pre-a0.md",
+          "source_line": 124,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U02.L03",
+          "title": "Contrast sounds without guessing from letter names",
+          "lesson_type": "phonics",
+          "scenario": "distinguish at least 4/5 teacher-spoken contrasts from the taught set, using picture or word cards.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Contrast sounds without guessing from letter names”?",
+              "answer": "distinguish at least 4/5 teacher-spoken contrasts from the taught set, using picture or word cards.",
+              "phonetic": "",
+              "id": "PRE-A0.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 selections across the pairs. If not met, use one contrast at a time, slow the model slightly, and retest with order changed. Do not tell the learner that their accent is wrong."
+          ],
+          "unit_id": "PRE-A0.U02",
+          "order": 7,
+          "source": "levels/pre-a0.md",
+          "source_line": 140,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U02.L04",
+          "title": "Short-vowel CVC patterns",
+          "lesson_type": "phonics",
+          "scenario": "blend and read 8/10 taught CVC words with short a, e, i, o, u.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Short-vowel CVC patterns”?",
+              "answer": "blend and read 8/10 taught CVC words with short a, e, i, o, u.",
+              "phonetic": "",
+              "id": "PRE-A0.U02.L04-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 correctly blended, including one example from each taught vowel set over the lesson sequence. If missed, sort by vowel and blend three words from the weak group before reassessment."
+          ],
+          "unit_id": "PRE-A0.U02",
+          "order": 8,
+          "source": "levels/pre-a0.md",
+          "source_line": 158,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U03.L01",
+          "title": "Blend, segment, and change one sound",
+          "lesson_type": "phonics",
+          "scenario": "read 8/10 taught CVC words and spell 4/5 from oral dictation using sound-to-letter mapping.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Blend, segment, and change one sound”?",
+              "answer": "read 8/10 taught CVC words and spell 4/5 from oral dictation using sound-to-letter mapping.",
+              "phonetic": "",
+              "id": "PRE-A0.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 reading and 4/5 spelling. Remediate only the missed position (initial, middle, final) with new examples such as pin/pan or map/mat."
+          ],
+          "unit_id": "PRE-A0.U03",
+          "order": 9,
+          "source": "levels/pre-a0.md",
+          "source_line": 180,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U03.L02",
+          "title": "Word families, rhyme, and syllables",
+          "lesson_type": "phonics",
+          "scenario": "identify a rhyming word for 4/5 spoken prompts and clap the syllables in 4/5 familiar words.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Word families, rhyme, and syllables”?",
+              "answer": "identify a rhyming word for 4/5 spoken prompts and clap the syllables in 4/5 familiar words.",
+              "phonetic": "",
+              "id": "PRE-A0.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 rhymes and 4/5 syllable counts. For a missed item, speak it naturally, tap beats, and repeat without written prompts."
+          ],
+          "unit_id": "PRE-A0.U03",
+          "order": 10,
+          "source": "levels/pre-a0.md",
+          "source_line": 194,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U03.L03",
+          "title": "Common consonant teams: `sh`, `ch`, `th`, `ck`",
+          "lesson_type": "phonics",
+          "scenario": "recognize sh, ch, and ck in taught words and decode 6/8 taught words.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Common consonant teams: `sh`, `ch`, `th`, `ck`”?",
+              "answer": "recognize sh, ch, and ck in taught words and decode 6/8 taught words.",
+              "phonetic": "",
+              "id": "PRE-A0.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "identify 4 teams correctly and read 6/8 taught words with understandable sound sequence. Remediation: contrast one team against a known CVC word (sip/ship, chip/tip) with pictures."
+          ],
+          "unit_id": "PRE-A0.U03",
+          "order": 11,
+          "source": "levels/pre-a0.md",
+          "source_line": 208,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U03.L04",
+          "title": "Silent `e` as a useful pattern",
+          "lesson_type": "phonics",
+          "scenario": "distinguish four taught short-vowel/e word pairs by listening and match each written word to its spoken form.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Silent `e` as a useful pattern”?",
+              "answer": "distinguish four taught short-vowel/e word pairs by listening and match each written word to its spoken form.",
+              "phonetic": "",
+              "id": "PRE-A0.U03.L04-FC01"
+            }
+          ],
+          "assessment": [
+            "7/8 correct. If not, return to one pair at a time and use clear picture meanings; do not teach a universal “vowel says its name” rule."
+          ],
+          "unit_id": "PRE-A0.U03",
+          "order": 12,
+          "source": "levels/pre-a0.md",
+          "source_line": 224,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U04.L01",
+          "title": "Copy letters, labels, and word spaces",
+          "lesson_type": "phonics",
+          "scenario": "copy 8/10 familiar labels legibly and identify the word boundary in 4/5 short phrases.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Copy letters, labels, and word spaces”?",
+              "answer": "copy 8/10 familiar labels legibly and identify the word boundary in 4/5 short phrases.",
+              "phonetic": "",
+              "id": "PRE-A0.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 labels recognized by a second reader; 4/5 boundaries marked. If handwriting obscures spelling, allow letter cards or oral spelling to separate knowledge from motor control."
+          ],
+          "unit_id": "PRE-A0.U04",
+          "order": 13,
+          "source": "levels/pre-a0.md",
+          "source_line": 254,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U04.L02",
+          "title": "Spell and retrieve familiar words",
+          "lesson_type": "phonics",
+          "scenario": "spell 8/10 familiar words from picture, oral cue, or real object.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Spell and retrieve familiar words”?",
+              "answer": "spell 8/10 familiar words from picture, oral cue, or real object.",
+              "phonetic": "",
+              "id": "PRE-A0.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10. For errors, sort into first sound, vowel pattern, final sound, or remembered spelling; practice that type and retest with a parallel word."
+          ],
+          "unit_id": "PRE-A0.U04",
+          "order": 14,
+          "source": "levels/pre-a0.md",
+          "source_line": 268,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U04.L03",
+          "title": "Read familiar signs and instructions",
+          "lesson_type": "phonics",
+          "scenario": "read and follow 4/5 familiar printed one-step instructions, follow 4/5 spoken instructions, and match 4/5 classroom labels to objects.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Read familiar signs and instructions”?",
+              "answer": "read and follow 4/5 familiar printed one-step instructions, follow 4/5 spoken instructions, and match 4/5 classroom labels to objects.",
+              "phonetic": "",
+              "id": "PRE-A0.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 printed instructions, 4/5 spoken instructions, 4/5 labels, and 2/2 text questions. Score reading, listening, and comprehension separately. If spoken comprehension fails, repeat with familiar words at a natural but slower pace; if printed reading fails, rehearse the phrase-to-action link, then test new printed commands."
+          ],
+          "unit_id": "PRE-A0.U04",
+          "order": 15,
+          "source": "levels/pre-a0.md",
+          "source_line": 282,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U05.L01",
+          "title": "Greetings and names",
+          "lesson_type": "phonics",
+          "scenario": "complete a two-turn greeting and state a name in an understandable phrase.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Greetings and names”?",
+              "answer": "complete a two-turn greeting and state a name in an understandable phrase.",
+              "phonetic": "",
+              "id": "PRE-A0.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "learner initiates a greeting, says a name, and responds once without copying a written script. If anxious, rehearse with the teacher, then repeat with a partner."
+          ],
+          "unit_id": "PRE-A0.U05",
+          "order": 16,
+          "source": "levels/pre-a0.md",
+          "source_line": 306,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U05.L02",
+          "title": "Sounds, words, and classroom response",
+          "lesson_type": "phonics",
+          "scenario": "match cat, map, sun, pen to pictures; mark the first and last letter; read left to right. Then follow the spoken commands below.",
+          "flashcards": [
+            {
+              "question": "Which begins with the sound /s/?",
+              "answer": "cat; sun",
+              "phonetic": "",
+              "id": "PRE-A0.U05.L02-FC01"
+            },
+            {
+              "question": "What was the final instruction?",
+              "answer": "cat; M; sit down",
+              "phonetic": "",
+              "id": "PRE-A0.U05.L02-FC02"
+            }
+          ],
+          "assessment": [
+            "Which animal was mentioned? Which letter should be written? What was the final instruction?",
+            "correctly identify 8 of 10 mixed-case letters, read 3 of 4 CVC words, and respond to 4 of 5 commands. If not, reteach letter-name/sound distinction and blend two-word sets before retrying with different items."
+          ],
+          "unit_id": "PRE-A0.U05",
+          "order": 17,
+          "source": "levels/pre-a0.md",
+          "source_line": 324,
+          "scenario_source": "source_task",
+          "workshop_source_id": "PRE-A0.U05.L02"
+        },
+        {
+          "id": "PRE-A0.U05.L03",
+          "title": "Review and learner self-check",
+          "lesson_type": "phonics",
+          "scenario": "retrieve one letter, one sound, one word, one instruction, and one greeting without a model.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Review and learner self-check”?",
+              "answer": "retrieve one letter, one sound, one word, one instruction, and one greeting without a model.",
+              "phonetic": "",
+              "id": "PRE-A0.U05.L03-FC01"
+            }
+          ],
+          "assessment": [],
+          "unit_id": "PRE-A0.U05",
+          "order": 18,
+          "source": "levels/pre-a0.md",
+          "source_line": 328,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "PRE-A0.U05.L04",
+          "title": "Integrated sound, word, and classroom check",
+          "lesson_type": "phonics",
+          "scenario": "use taught letters, decode taught words, understand instructions, and exchange names.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Integrated sound, word, and classroom check”?",
+              "answer": "use taught letters, decode taught words, understand instructions, and exchange names.",
+              "phonetic": "",
+              "id": "PRE-A0.U05.L04-FC01"
+            }
+          ],
+          "assessment": [],
+          "unit_id": "PRE-A0.U05",
+          "order": 19,
+          "source": "levels/pre-a0.md",
+          "source_line": 340,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "A0",
+      "title": "A0 / Pre-A1 — First usable English",
+      "units": [
+        {
+          "id": "A0.U01",
+          "title": "People, names, numbers, and dates",
+          "order": 1
+        },
+        {
+          "id": "A0.U02",
+          "title": "Family, objects, articles, and ownership",
+          "order": 2
+        },
+        {
+          "id": "A0.U03",
+          "title": "Clock time, daily routines, and present simple",
+          "order": 3
+        },
+        {
+          "id": "A0.U04",
+          "title": "Familiar places, locations, and requests",
+          "order": 4
+        },
+        {
+          "id": "A0.U05",
+          "title": "Build, read, write, and retrieve",
+          "order": 5
+        }
+      ],
+      "lessons": [
+        {
+          "id": "A0.U01.L01",
+          "title": "Subject pronouns and `be`",
+          "lesson_type": "sentence_builder",
+          "scenario": "complete 8/10 sentence prompts with the correct subject pronoun and present be.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Subject pronouns and `be`”?",
+              "answer": "complete 8/10 sentence prompts with the correct subject pronoun and present be.",
+              "phonetic": "",
+              "id": "A0.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 correct in a new mixed set; include at least two different be forms."
+          ],
+          "unit_id": "A0.U01",
+          "order": 1,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 39,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U01.L02",
+          "title": "Affirmative, negative, and `be` questions",
+          "lesson_type": "sentence_builder",
+          "scenario": "turn 4/5 statements into accurate negatives and 4/5 into appropriate be questions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Affirmative, negative, and `be` questions”?",
+              "answer": "turn 4/5 statements into accurate negatives and 4/5 into appropriate be questions.",
+              "phonetic": "",
+              "id": "A0.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 transformations with correct order and be."
+          ],
+          "unit_id": "A0.U01",
+          "order": 2,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 65,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U01.L03",
+          "title": "Numbers, age, and spelling personal details",
+          "lesson_type": "sentence_builder",
+          "scenario": "identify, say, and write 18/20 numbers from 1–20 and the taught tens; state age using a complete phrase.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Numbers, age, and spelling personal details”?",
+              "answer": "identify, say, and write 18/20 numbers from 1–20 and the taught tens; state age using a complete phrase.",
+              "phonetic": "",
+              "id": "A0.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "18/20 number recognition/writing including at least three teen/tens contrasts."
+          ],
+          "unit_id": "A0.U01",
+          "order": 3,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 98,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U01.L04",
+          "title": "A simple personal introduction",
+          "lesson_type": "sentence_builder",
+          "scenario": "“My name is Lina. I am nineteen and I live in Rabat. I have one brother. My brother is a student.”",
+          "flashcards": [
+            {
+              "question": "What is her brother?",
+              "answer": "Rabat; one; a student",
+              "phonetic": "",
+              "id": "A0.U01.L04-FC01"
+            },
+            {
+              "question": "How many sisters does he have?",
+              "answer": "twenty; Tunis; two",
+              "phonetic": "",
+              "id": "A0.U01.L04-FC02"
+            }
+          ],
+          "assessment": [
+            "at least 4/5 profile details conveyed correctly; 4 sentences use be/have accurately; question uses appropriate word order. Correct errors by sorting examples into be questions and do questions."
+          ],
+          "unit_id": "A0.U01",
+          "order": 4,
+          "source": "resources/integrated-skill-labs.md",
+          "source_line": 31,
+          "scenario_source": "reading",
+          "workshop_source_id": "A0.U01.L04"
+        },
+        {
+          "id": "A0.U01.L05",
+          "title": "Days, months, dates, and birthdays",
+          "lesson_type": "sentence_builder",
+          "scenario": "sequence days and months, understand 4/5 read dates, and say or write a personal date using an appropriate preposition.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Days, months, dates, and birthdays”?",
+              "answer": "sequence days and months, understand 4/5 read dates, and say or write a personal date using an appropriate preposition.",
+              "phonetic": "",
+              "id": "A0.U01.L05-FC01"
+            }
+          ],
+          "assessment": [
+            "correctly sequence 6/7 days and 10/12 months (two rounds); 4/5 date/preposition items."
+          ],
+          "unit_id": "A0.U01",
+          "order": 5,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 127,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U02.L01",
+          "title": "Family and basic plural nouns",
+          "lesson_type": "sentence_builder",
+          "scenario": "identify 10 family words and form the plural of 8/10 taught regular nouns.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Family and basic plural nouns”?",
+              "answer": "identify 10 family words and form the plural of 8/10 taught regular nouns.",
+              "phonetic": "",
+              "id": "A0.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 plural forms and 8/10 picture-word matches."
+          ],
+          "unit_id": "A0.U02",
+          "order": 6,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 156,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U02.L02",
+          "title": "`a/an`, `the`, and familiar objects",
+          "lesson_type": "sentence_builder",
+          "scenario": "I have an apple. The apple is red.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “`a/an`, `the`, and familiar objects”?",
+              "answer": "choose a suitable article in 8/10 familiar noun phrases and identify when the object is already known.",
+              "phonetic": "",
+              "id": "A0.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 choices, judged by beginning sound and reference."
+          ],
+          "unit_id": "A0.U02",
+          "order": 7,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 173,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A0.U02.L03",
+          "title": "Basic adjectives and describing objects",
+          "lesson_type": "sentence_builder",
+          "scenario": "produce five noun phrases with a correct simple adjective-before-noun order and matching be sentence.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Basic adjectives and describing objects”?",
+              "answer": "produce five noun phrases with a correct simple adjective-before-noun order and matching be sentence.",
+              "phonetic": "",
+              "id": "A0.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "five phrases have adjective+noun order and no plural adjective ending."
+          ],
+          "unit_id": "A0.U02",
+          "order": 8,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 198,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U02.L04",
+          "title": "Possessive adjectives, `have/has`, and `’s`",
+          "lesson_type": "sentence_builder",
+          "scenario": "use four possessive adjectives and have/has in 8/10 descriptions; identify ownership with a name + 's.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Possessive adjectives, `have/has`, and `’s`”?",
+              "answer": "use four possessive adjectives and have/has in 8/10 descriptions; identify ownership with a name + 's.",
+              "phonetic": "",
+              "id": "A0.U02.L04-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 correct possessive/verb pairings and explain whose object is meant."
+          ],
+          "unit_id": "A0.U02",
+          "order": 9,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 217,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U02.L05",
+          "title": "Read and describe a family/home profile",
+          "lesson_type": "sentence_builder",
+          "scenario": "This is Hana's family. Her parents are at home. Hana has one brother and two sisters. Their home is small. It has a blue door and a big kitchen.",
+          "flashcards": [
+            {
+              "question": "What color is the door?",
+              "answer": "Hana's; two; at home; blue",
+              "phonetic": "",
+              "id": "A0.U02.L05-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 factual details; writing contains at least four understandable sentences, at least one possessive and one be/have form. If not, revisit the specific earlier lesson."
+          ],
+          "unit_id": "A0.U02",
+          "order": 10,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 242,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A0.U03.L01",
+          "title": "Clock time and time prepositions",
+          "lesson_type": "sentence_builder",
+          "scenario": "identify 8/10 full-hour/half-hour clock times and choose at/on/in in 8/10 taught time phrases.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Clock time and time prepositions”?",
+              "answer": "identify 8/10 full-hour/half-hour clock times and choose at/on/in in 8/10 taught time phrases.",
+              "phonetic": "",
+              "id": "A0.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 clock matches and 4/5 prepositions."
+          ],
+          "unit_id": "A0.U03",
+          "order": 11,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 279,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U03.L02",
+          "title": "Everyday verbs and present-simple statements",
+          "lesson_type": "role_play",
+          "scenario": "produce 6/7 short present-simple routine sentences with a subject and correct base/third-person verb form.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Everyday verbs and present-simple statements”?",
+              "answer": "produce 6/7 short present-simple routine sentences with a subject and correct base/third-person verb form.",
+              "phonetic": "",
+              "id": "A0.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "6/7 verbs appropriate for subject."
+          ],
+          "unit_id": "A0.U03",
+          "order": 12,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 298,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U03.L03",
+          "title": "Frequency words and negative routines",
+          "lesson_type": "sentence_builder",
+          "scenario": "place always, usually, sometimes, and never appropriately in 4/5 sentences and form 4/5 present-simple negatives.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Frequency words and negative routines”?",
+              "answer": "place always, usually, sometimes, and never appropriately in 4/5 sentences and form 4/5 present-simple negatives.",
+              "phonetic": "",
+              "id": "A0.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 adverb placements and 4/5 negatives."
+          ],
+          "unit_id": "A0.U03",
+          "order": 13,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 327,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U03.L04",
+          "title": "`Do/does` questions and short answers",
+          "lesson_type": "sentence_builder",
+          "scenario": "ask 4/5 present-simple questions with correct order and give a matching short answer.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “`Do/does` questions and short answers”?",
+              "answer": "ask 4/5 present-simple questions with correct order and give a matching short answer.",
+              "phonetic": "",
+              "id": "A0.U03.L04-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 question forms plus 4 matched short answers."
+          ],
+          "unit_id": "A0.U03",
+          "order": 14,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 350,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U03.L05",
+          "title": "Read a simple timetable and report a routine",
+          "lesson_type": "essay_analysis",
+          "scenario": "retrieve 4/5 timetable facts and give a short oral routine with three time phrases.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Read a simple timetable and report a routine”?",
+              "answer": "retrieve 4/5 timetable facts and give a short oral routine with three time phrases.",
+              "phonetic": "",
+              "id": "A0.U03.L05-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 facts and 4/5 sentences with correct subject/verb/time phrase."
+          ],
+          "unit_id": "A0.U03",
+          "order": 15,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 383,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U04.L01",
+          "title": "Prepositions of place",
+          "lesson_type": "sentence_builder",
+          "scenario": "describe 5/6 object locations using a taught preposition.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Prepositions of place”?",
+              "answer": "describe 5/6 object locations using a taught preposition.",
+              "phonetic": "",
+              "id": "A0.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "5/6 accurate descriptions and partner can reproduce 4/5 arrangements."
+          ],
+          "unit_id": "A0.U04",
+          "order": 16,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 414,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U04.L02",
+          "title": "`there is/there are` and local places",
+          "lesson_type": "sentence_builder",
+          "scenario": "describe a simple picture/map with 5/6 correct singular/plural there is/are statements and answer 3 location questions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “`there is/there are` and local places”?",
+              "answer": "describe a simple picture/map with 5/6 correct singular/plural there is/are statements and answer 3 location questions.",
+              "phonetic": "",
+              "id": "A0.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "5/6 agreement and three understandable questions."
+          ],
+          "unit_id": "A0.U04",
+          "order": 17,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 431,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U04.L03",
+          "title": "`can/can't` for ability and polite requests",
+          "lesson_type": "role_play",
+          "scenario": "express 3 abilities/inabilities and make 3 understandable requests using can.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “`can/can't` for ability and polite requests”?",
+              "answer": "express 3 abilities/inabilities and make 3 understandable requests using can.",
+              "phonetic": "",
+              "id": "A0.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "5/6 correct base-verb forms and requests include an understandable request plus polite marker where suitable."
+          ],
+          "unit_id": "A0.U04",
+          "order": 18,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 460,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U04.L04",
+          "title": "Ask for help and give simple directions",
+          "lesson_type": "sentence_builder",
+          "scenario": "complete a map-based exchange by asking where one place is and giving two-step directions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Ask for help and give simple directions”?",
+              "answer": "complete a map-based exchange by asking where one place is and giving two-step directions.",
+              "phonetic": "",
+              "id": "A0.U04.L04-FC01"
+            }
+          ],
+          "assessment": [],
+          "unit_id": "A0.U04",
+          "order": 19,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 485,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U05.L01",
+          "title": "Word order, capitals, full stops, and `and/but`",
+          "lesson_type": "sentence_builder",
+          "scenario": "arrange 5/6 word sets into simple statements and punctuate 4/5 sentences appropriately.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Word order, capitals, full stops, and `and/but`”?",
+              "answer": "arrange 5/6 word sets into simple statements and punctuate 4/5 sentences appropriately.",
+              "phonetic": "",
+              "id": "A0.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "5/6 word orders and 4/5 capitalization/end marks."
+          ],
+          "unit_id": "A0.U05",
+          "order": 20,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 526,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U05.L02",
+          "title": "Integrated personal-profile workshop",
+          "lesson_type": "sentence_builder",
+          "scenario": "",
+          "flashcards": [],
+          "assessment": [],
+          "unit_id": "A0.U05",
+          "order": 21,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 551,
+          "scenario_source": "not_provided"
+        },
+        {
+          "id": "A0.U05.L03",
+          "title": "Read a message and find the useful details",
+          "lesson_type": "sentence_builder",
+          "scenario": "retrieve 4/5 literal details from a short familiar message and identify its practical purpose.",
+          "flashcards": [
+            {
+              "question": "What color is the book?",
+              "answer": "Lina; at the library; four o'clock; Lina's book; blue",
+              "phonetic": "",
+              "id": "A0.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 facts and practical purpose."
+          ],
+          "unit_id": "A0.U05",
+          "order": 22,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 557,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A0.U05.L04",
+          "title": "Write a short connected profile",
+          "lesson_type": "essay_analysis",
+          "scenario": "My name is Huda. I am 20. I live in a small city. I have one brother. Our home is near a park. I study in the morning. I go to the library at four.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a short connected profile”?",
+              "answer": "write 6–8 connected sentences about self, family, home, or routine, including at least one be, one have/has, and two routine/location details.",
+              "phonetic": "",
+              "id": "A0.U05.L04-FC01"
+            }
+          ],
+          "assessment": [],
+          "unit_id": "A0.U05",
+          "order": 23,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 574,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A0.U05.L05",
+          "title": "Retrieval, diagnostic repair, and transition practice",
+          "lesson_type": "sentence_builder",
+          "scenario": "retrieve at least one target from each unit and identify one personal review need.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Retrieval, diagnostic repair, and transition practice”?",
+              "answer": "retrieve at least one target from each unit and identify one personal review need.",
+              "phonetic": "",
+              "id": "A0.U05.L05-FC01"
+            }
+          ],
+          "assessment": [
+            "complete resources/foundation-assessment.md diagnostic repair check, then final transition gate on a later day. Link results to the specific outcome/lesson; do not average a missed listening skill away with strong writing."
+          ],
+          "unit_id": "A0.U05",
+          "order": 24,
+          "source": "levels/a0-pre-a1.md",
+          "source_line": 607,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "A1",
+      "title": "A1 — Beginner",
+      "units": [
+        {
+          "id": "A1.U01",
+          "title": "Meeting people and daily life",
+          "order": 1
+        },
+        {
+          "id": "A1.U02",
+          "title": "Home and routines",
+          "order": 2
+        },
+        {
+          "id": "A1.U03",
+          "title": "Food and shopping",
+          "order": 3
+        },
+        {
+          "id": "A1.U04",
+          "title": "Work, study, and time",
+          "order": 4
+        },
+        {
+          "id": "A1.U05",
+          "title": "Places and services",
+          "order": 5
+        },
+        {
+          "id": "A1.U06",
+          "title": "Free time and invitations",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "A1.U01.L01",
+          "title": "Ask and answer personal questions",
+          "lesson_type": "role_play",
+          "scenario": "ask and answer four personal questions using appropriate be or do forms.",
+          "flashcards": [
+            {
+              "question": "Where are you from?",
+              "answer": "I'm from Rabat",
+              "phonetic": "",
+              "id": "A1.U01.L01-FC01"
+            },
+            {
+              "question": "Where do you work?",
+              "answer": "I work at a hotel",
+              "phonetic": "",
+              "id": "A1.U01.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "4/4 questions have correct auxiliaries and the partner can report two answers."
+          ],
+          "unit_id": "A1.U01",
+          "order": 1,
+          "source": "levels/a1.md",
+          "source_line": 103,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U01.L02",
+          "title": "Describe people and relationships",
+          "lesson_type": "sentence_builder",
+          "scenario": "Nadia is from Tunis. She is a cook. Her husband works at a school. They have one child. Ask who is a cook and where her husband works.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Describe people and relationships”?",
+              "answer": "write and say five accurate sentences about two people using family/job words and be, have, and present-simple verbs.",
+              "phonetic": "",
+              "id": "A1.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "five meaningful sentences; accurate subject-verb agreement in 4/5."
+          ],
+          "unit_id": "A1.U01",
+          "order": 2,
+          "source": "levels/a1.md",
+          "source_line": 113,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A1.U01.L03",
+          "title": "Give and check contact details",
+          "lesson_type": "sentence_builder",
+          "scenario": "exchange fictional contact cards; listener reads back the number for confirmation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Give and check contact details”?",
+              "answer": "understand and exchange a name, phone number, and email address, asking for repetition once when needed.",
+              "phonetic": "",
+              "id": "A1.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "transcribe all name letters and at least 9/10 digits; accurately ask for clarification."
+          ],
+          "unit_id": "A1.U01",
+          "order": 3,
+          "source": "levels/a1.md",
+          "source_line": 125,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A1.U02.L01",
+          "title": "Describe a home and locate objects",
+          "lesson_type": "sentence_builder",
+          "scenario": "partner A describes a room; partner B places four counters on a blank plan and asks one location question.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Describe a home and locate objects”?",
+              "answer": "describe a room in five sentences using there is/are and three place phrases.",
+              "phonetic": "",
+              "id": "A1.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "at least 4/5 accurate is/are choices and three understandable location phrases."
+          ],
+          "unit_id": "A1.U02",
+          "order": 4,
+          "source": "levels/a1.md",
+          "source_line": 143,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A1.U02.L02",
+          "title": "Describe routines and frequency",
+          "lesson_type": "sentence_builder",
+          "scenario": "describe a weekday routine in six sentences, placing frequency words correctly and using third-person -s in 4/5 target clauses.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Describe routines and frequency”?",
+              "answer": "describe a weekday routine in six sentences, placing frequency words correctly and using third-person -s in 4/5 target clauses.",
+              "phonetic": "",
+              "id": "A1.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "six relevant sentences, 4/5 verb forms and 4/5 adverb positions."
+          ],
+          "unit_id": "A1.U02",
+          "order": 5,
+          "source": "levels/a1.md",
+          "source_line": 157,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U02.L03",
+          "title": "A routine and a simple invitation",
+          "lesson_type": "sentence_builder",
+          "scenario": "“Mina starts work at eight. She usually takes the bus, but today she is walking because the bus is late. She has lunch at noon.”",
+          "flashcards": [
+            {
+              "question": "Why is she walking today?",
+              "answer": "eight; the bus; the bus is late",
+              "phonetic": "",
+              "id": "A1.U02.L03-FC01"
+            },
+            {
+              "question": "Why are they arriving earlier this week?",
+              "answer": "in a bookshop; nine; they are helping with a new display",
+              "phonetic": "",
+              "id": "A1.U02.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "answer 3/3 factual questions; produce a present-simple habit and a present-continuous “now/temporary” example; message includes all four required elements. If tense choice is unclear, sort five new statements into “usual” and “happening now”."
+          ],
+          "unit_id": "A1.U02",
+          "order": 6,
+          "source": "resources/integrated-skill-labs.md",
+          "source_line": 73,
+          "scenario_source": "reading",
+          "workshop_source_id": "A1.U02.L03"
+        },
+        {
+          "id": "A1.U03.L01",
+          "title": "Name foods and express preferences",
+          "lesson_type": "sentence_builder",
+          "scenario": "ask a partner Do you like ...? and record three answers; report one accurate fact.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Name foods and express preferences”?",
+              "answer": "name eight foods and state three preferences using like/don't like and a reason.",
+              "phonetic": "",
+              "id": "A1.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "8/10 food-picture matches and three understandable preference sentences."
+          ],
+          "unit_id": "A1.U03",
+          "order": 7,
+          "source": "levels/a1.md",
+          "source_line": 173,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A1.U03.L02",
+          "title": "Order politely and ask about prices",
+          "lesson_type": "role_play",
+          "scenario": "complete a café exchange with an item, quantity, price question, and confirmation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Order politely and ask about prices”?",
+              "answer": "complete a café exchange with an item, quantity, price question, and confirmation.",
+              "phonetic": "",
+              "id": "A1.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "complete four transaction moves, correctly use singular/plural price question."
+          ],
+          "unit_id": "A1.U03",
+          "order": 8,
+          "source": "levels/a1.md",
+          "source_line": 183,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U03.L03",
+          "title": "Ask for quantities and complete a shopping list",
+          "lesson_type": "sentence_builder",
+          "scenario": "For lunch, buy a loaf of bread, six eggs, some cheese, and two tomatoes. Ask what is bought and how many eggs.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Ask for quantities and complete a shopping list”?",
+              "answer": "understand a short shopping list and request at least four items using containers or quantities.",
+              "phonetic": "",
+              "id": "A1.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "list has five suitable items, two quantities, and four successful exchange turns."
+          ],
+          "unit_id": "A1.U03",
+          "order": 9,
+          "source": "levels/a1.md",
+          "source_line": 199,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A1.U04.L01",
+          "title": "Read a simple timetable",
+          "lesson_type": "sentence_builder",
+          "scenario": "retrieve five details from a weekly timetable and ask two schedule questions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Read a simple timetable”?",
+              "answer": "retrieve five details from a weekly timetable and ask two schedule questions.",
+              "phonetic": "",
+              "id": "A1.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 facts and correct auxiliary in both questions."
+          ],
+          "unit_id": "A1.U04",
+          "order": 10,
+          "source": "levels/a1.md",
+          "source_line": 213,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U04.L02",
+          "title": "Say what is happening now",
+          "lesson_type": "sentence_builder",
+          "scenario": "contrast routine and current action in six spoken/written sentences, with correct be + -ing in 4/5 clauses.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Say what is happening now”?",
+              "answer": "contrast routine and current action in six spoken/written sentences, with correct be + -ing in 4/5 clauses.",
+              "phonetic": "",
+              "id": "A1.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "classify 5/6 contexts and form 4/5 continuous clauses."
+          ],
+          "unit_id": "A1.U04",
+          "order": 11,
+          "source": "levels/a1.md",
+          "source_line": 231,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U04.L03",
+          "title": "Write a short schedule message",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 40–60-word schedule message with two activities, two times/days, and one question.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a short schedule message”?",
+              "answer": "write a 40–60-word schedule message with two activities, two times/days, and one question.",
+              "phonetic": "",
+              "id": "A1.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "40–60 words, required schedule details, readable sentence punctuation, and accurate forms in 4/5 clauses."
+          ],
+          "unit_id": "A1.U04",
+          "order": 12,
+          "source": "levels/a1.md",
+          "source_line": 241,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U05.L01",
+          "title": "Ask for and follow directions",
+          "lesson_type": "sentence_builder",
+          "scenario": "each learner gets a different start/destination card and gives directions without pointing.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Ask for and follow directions”?",
+              "answer": "ask where a place is and follow a two-step route on a simple map.",
+              "phonetic": "",
+              "id": "A1.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 routes followed accurately."
+          ],
+          "unit_id": "A1.U05",
+          "order": 13,
+          "source": "levels/a1.md",
+          "source_line": 253,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A1.U05.L02",
+          "title": "Ask for a simple service",
+          "lesson_type": "sentence_builder",
+          "scenario": "complete a service exchange with a greeting, need, one information question, and a confirmation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Ask for a simple service”?",
+              "answer": "complete a service exchange with a greeting, need, one information question, and a confirmation.",
+              "phonetic": "",
+              "id": "A1.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "all four exchange moves; learner accurately repeats the key time/place."
+          ],
+          "unit_id": "A1.U05",
+          "order": 14,
+          "source": "levels/a1.md",
+          "source_line": 273,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U05.L03",
+          "title": "Understand a public notice",
+          "lesson_type": "sentence_builder",
+          "scenario": "CITY LIBRARY: Open Monday–Saturday, 9:00 a.m.–6:00 p.m. Closed Sunday. Please return books at the desk. New members: bring an ID card.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Understand a public notice”?",
+              "answer": "identify purpose and three details in a short familiar notice.",
+              "phonetic": "",
+              "id": "A1.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "4/4 details and one accurate purpose statement."
+          ],
+          "unit_id": "A1.U05",
+          "order": 15,
+          "source": "levels/a1.md",
+          "source_line": 291,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A1.U06.L01",
+          "title": "Talk about hobbies and preferences",
+          "lesson_type": "sentence_builder",
+          "scenario": "ask and answer five questions about free-time activities and give one reason.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Talk about hobbies and preferences”?",
+              "answer": "ask and answer five questions about free-time activities and give one reason.",
+              "phonetic": "",
+              "id": "A1.U06.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 questions well formed, one reason, and two correct reported facts."
+          ],
+          "unit_id": "A1.U06",
+          "order": 16,
+          "source": "levels/a1.md",
+          "source_line": 305,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U06.L02",
+          "title": "Invite, accept, and decline politely",
+          "lesson_type": "role_play",
+          "scenario": "make an invitation, accept or decline, and agree on a day/time/place.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Invite, accept, and decline politely”?",
+              "answer": "make an invitation, accept or decline, and agree on a day/time/place.",
+              "phonetic": "",
+              "id": "A1.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "include invitation, response, alternative/confirmation; partner can repeat the agreed plan."
+          ],
+          "unit_id": "A1.U06",
+          "order": 17,
+          "source": "levels/a1.md",
+          "source_line": 315,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A1.U06.L03",
+          "title": "Write and relay an invitation",
+          "lesson_type": "essay_analysis",
+          "scenario": "Hi Lina, Would you like to see a film on Friday? It starts at six at the City Cinema. We can meet outside at 5:45. Let me know if you can come. — Noor",
+          "flashcards": [
+            {
+              "question": "What time does the learner get up?",
+              "answer": "How do they go to work",
+              "phonetic": "",
+              "id": "A1.U06.L03-FC01"
+            },
+            {
+              "question": "What do they do at lunch?",
+              "answer": "What do they do in the evening",
+              "phonetic": "",
+              "id": "A1.U06.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "all five details present, 4/5 understandable sentences, relay preserves day/time/place.",
+            "What time does the learner get up?",
+            "How do they go to work?",
+            "What do they do at lunch?",
+            "What do they do in the evening?"
+          ],
+          "unit_id": "A1.U06",
+          "order": 18,
+          "source": "levels/a1.md",
+          "source_line": 325,
+          "scenario_source": "source_task"
+        }
+      ]
+    },
+    {
+      "level": "A2",
+      "title": "A2 — Pre-intermediate",
+      "units": [
+        {
+          "id": "A2.U01",
+          "title": "Past experiences",
+          "order": 1
+        },
+        {
+          "id": "A2.U02",
+          "title": "Travel and services",
+          "order": 2
+        },
+        {
+          "id": "A2.U03",
+          "title": "Health and body",
+          "order": 3
+        },
+        {
+          "id": "A2.U04",
+          "title": "Work and daily obligations",
+          "order": 4
+        },
+        {
+          "id": "A2.U05",
+          "title": "Future plans and predictions",
+          "order": 5
+        },
+        {
+          "id": "A2.U06",
+          "title": "Preferences and comparisons",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "A2.U01.L01",
+          "title": "Build a past-time account",
+          "lesson_type": "sentence_builder",
+          "scenario": "tell a real or imagined account using these or six learner-created events.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Build a past-time account”?",
+              "answer": "tell a six-event weekend account using at least four accurate past forms and three sequence markers.",
+              "phonetic": "",
+              "id": "A2.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "at least four accurate past forms and three sequence markers in logical order."
+          ],
+          "unit_id": "A2.U01",
+          "order": 1,
+          "source": "levels/a2.md",
+          "source_line": 104,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A2.U01.L02",
+          "title": "Add a reaction and a reason",
+          "lesson_type": "role_play",
+          "scenario": "On Sunday, I took my niece to the science museum. We saw a robot show and made a paper bridge. The museum was busy, but the staff were helpful. I enjoyed the visit because my niece asked many questions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Add a reaction and a reason”?",
+              "answer": "write a 70–90-word account with an event, reaction, reason, and contrast.",
+              "phonetic": "",
+              "id": "A2.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "70–90 words, 3 accurate past verbs, one reason and one contrast, clear event order."
+          ],
+          "unit_id": "A2.U01",
+          "order": 2,
+          "source": "levels/a2.md",
+          "source_line": 114,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A2.U01.L03",
+          "title": "A past visit and a future arrangement",
+          "lesson_type": "role_play",
+          "scenario": "“On Saturday, Huda visited the old market with her cousin. They bought fruit and had lunch at a small café. Huda liked the market because it was lively, although it was crowded. She is going to return next month.”",
+          "flashcards": [
+            {
+              "question": "Why did she like the market?",
+              "answer": "her cousin; fruit; it was lively",
+              "phonetic": "",
+              "id": "A2.U01.L03-FC01"
+            },
+            {
+              "question": "Why are they leaving home later today?",
+              "answer": "10:30; yesterday; because the station is quieter in the morning",
+              "phonetic": "",
+              "id": "A2.U01.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "correctly answer all 3 content questions; use two past forms and a clearly marked intention; writing contains the three required features. Review irregular past forms in a fresh sentence if missed."
+          ],
+          "unit_id": "A2.U01",
+          "order": 3,
+          "source": "resources/integrated-skill-labs.md",
+          "source_line": 101,
+          "scenario_source": "reading",
+          "workshop_source_id": "A2.U01.L03"
+        },
+        {
+          "id": "A2.U02.L01",
+          "title": "Plan a journey from a timetable",
+          "lesson_type": "role_play",
+          "scenario": "use a second timetable card to plan a trip; ask a partner two questions and repeat the answer to confirm.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Plan a journey from a timetable”?",
+              "answer": "retrieve four journey details and ask two accurate timetable questions.",
+              "phonetic": "",
+              "id": "A2.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 details, both questions understandable, no confusion of departure and arrival."
+          ],
+          "unit_id": "A2.U02",
+          "order": 4,
+          "source": "levels/a2.md",
+          "source_line": 134,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A2.U02.L02",
+          "title": "Explain a travel problem and request help",
+          "lesson_type": "role_play",
+          "scenario": "Platform 2 is closed. For trains to Hilltown, use platform 4. Ask staff if you need assistance. Which platform? 4. What is closed? Platform 2.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Explain a travel problem and request help”?",
+              "answer": "explain a travel problem and complete a four-turn help exchange, including one clarification.",
+              "phonetic": "",
+              "id": "A2.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "problem, request, relevant question, accurate confirmation all present."
+          ],
+          "unit_id": "A2.U02",
+          "order": 5,
+          "source": "levels/a2.md",
+          "source_line": 146,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A2.U02.L03",
+          "title": "Compare accommodation and confirm a booking",
+          "lesson_type": "role_play",
+          "scenario": "compare two lodging options and confirm three booking details in a role-play.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Compare accommodation and confirm a booking”?",
+              "answer": "compare two lodging options and confirm three booking details in a role-play.",
+              "phonetic": "",
+              "id": "A2.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "comparison accurate, all three details repeated, no invented amenities."
+          ],
+          "unit_id": "A2.U02",
+          "order": 6,
+          "source": "levels/a2.md",
+          "source_line": 158,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U03.L01",
+          "title": "Describe symptoms and ask for help",
+          "lesson_type": "role_play",
+          "scenario": "use a fictional symptom card to explain problem and duration; partner asks one follow-up.",
+          "flashcards": [
+            {
+              "question": "I feel tired, but I don't have a fever.” Ask symptom, start, fever?",
+              "answer": "sore throat; yesterday; no",
+              "phonetic": "",
+              "id": "A2.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "symptom, time, and effect conveyed; partner accurately repeats them."
+          ],
+          "unit_id": "A2.U03",
+          "order": 7,
+          "source": "levels/a2.md",
+          "source_line": 172,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A2.U03.L02",
+          "title": "Give simple advice and understand instructions",
+          "lesson_type": "role_play",
+          "scenario": "give two relevant suggestions and follow three short care instructions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Give simple advice and understand instructions”?",
+              "answer": "give two relevant suggestions and follow three short care instructions.",
+              "phonetic": "",
+              "id": "A2.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "3/3 instructions understood and advice form is grammatical/relevant."
+          ],
+          "unit_id": "A2.U03",
+          "order": 8,
+          "source": "levels/a2.md",
+          "source_line": 186,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U03.L03",
+          "title": "Make an appointment and summarize instructions",
+          "lesson_type": "role_play",
+          "scenario": "Clinic: appointments Tuesday–Friday. Bring your appointment card. If you cannot attend, call before 9 a.m. Ask available days, what to bring, and when to call if unable to attend.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Make an appointment and summarize instructions”?",
+              "answer": "arrange an appointment by phone and accurately relay three appointment details.",
+              "phonetic": "",
+              "id": "A2.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "all three details accurate and at least one clarification/confirmation phrase."
+          ],
+          "unit_id": "A2.U03",
+          "order": 9,
+          "source": "levels/a2.md",
+          "source_line": 198,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A2.U04.L01",
+          "title": "Describe duties and schedules",
+          "lesson_type": "role_play",
+          "scenario": "describe four work/study duties and compare a weekly schedule using have to accurately.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Describe duties and schedules”?",
+              "answer": "describe four work/study duties and compare a weekly schedule using have to accurately.",
+              "phonetic": "",
+              "id": "A2.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 modal/subject forms; correctly distinguish optional from forbidden."
+          ],
+          "unit_id": "A2.U04",
+          "order": 10,
+          "source": "levels/a2.md",
+          "source_line": 214,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U04.L02",
+          "title": "Give advice and make a request at work",
+          "lesson_type": "role_play",
+          "scenario": "The shared printer is out of paper. The report is due at 3 p.m. Ask the office assistant for more paper or use the printer on floor two. What is wrong? printer has no paper. When is report due? 3 p.m. What alternatives are stated? ask assistant/use floor two.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Give advice and make a request at work”?",
+              "answer": "respond to a workplace problem with relevant advice and make one polite request.",
+              "phonetic": "",
+              "id": "A2.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "relevant suggestion, understandable request, no unsupported “must.”"
+          ],
+          "unit_id": "A2.U04",
+          "order": 11,
+          "source": "levels/a2.md",
+          "source_line": 224,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A2.U04.L03",
+          "title": "Write a practical work message",
+          "lesson_type": "essay_analysis",
+          "scenario": "write an 80–100-word work/study message with a problem, relevant detail, request, and next step.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a practical work message”?",
+              "answer": "write an 80–100-word work/study message with a problem, relevant detail, request, and next step.",
+              "phonetic": "",
+              "id": "A2.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "four content elements, appropriate tone, readable sequence."
+          ],
+          "unit_id": "A2.U04",
+          "order": 12,
+          "source": "levels/a2.md",
+          "source_line": 236,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U05.L01",
+          "title": "Explain intentions and arrangements",
+          "lesson_type": "role_play",
+          "scenario": "explain a plan, reason, and one arrangement; partner asks when/where.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Explain intentions and arrangements”?",
+              "answer": "describe three plans and distinguish an intention from a fixed arrangement.",
+              "phonetic": "",
+              "id": "A2.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "3/4 choices fit context, arrangement details included."
+          ],
+          "unit_id": "A2.U05",
+          "order": 13,
+          "source": "levels/a2.md",
+          "source_line": 262,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "A2.U05.L02",
+          "title": "Make predictions and spontaneous offers",
+          "lesson_type": "role_play",
+          "scenario": "respond to four situations using a context-appropriate prediction, offer, or intention.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Make predictions and spontaneous offers”?",
+              "answer": "respond to four situations using a context-appropriate prediction, offer, or intention.",
+              "phonetic": "",
+              "id": "A2.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "3/4 forms fit the supplied context and function is explained."
+          ],
+          "unit_id": "A2.U05",
+          "order": 14,
+          "source": "levels/a2.md",
+          "source_line": 272,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U05.L03",
+          "title": "Negotiate a plan and send a confirmation",
+          "lesson_type": "role_play",
+          "scenario": "negotiate a plan, resolve one conflict, and write a 70–90-word confirmation with complete details.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Negotiate a plan and send a confirmation”?",
+              "answer": "negotiate a plan, resolve one conflict, and write a 70–90-word confirmation with complete details.",
+              "phonetic": "",
+              "id": "A2.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "no constraint violated, final details repeated accurately, message includes all five elements."
+          ],
+          "unit_id": "A2.U05",
+          "order": 15,
+          "source": "levels/a2.md",
+          "source_line": 282,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U06.L01",
+          "title": "Compare choices using evidence",
+          "lesson_type": "essay_analysis",
+          "scenario": "compare two options in four accurate sentences and justify a preference with two details.",
+          "flashcards": [
+            {
+              "question": "given three prices (£6, £8, £10), which is the cheapest?",
+              "answer": "the £6 option",
+              "phonetic": "",
+              "id": "A2.U06.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "4/5 comparison forms/facts accurate and reasons support stated preference."
+          ],
+          "unit_id": "A2.U06",
+          "order": 16,
+          "source": "levels/a2.md",
+          "source_line": 296,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "A2.U06.L02",
+          "title": "Compare experiences and express preferences",
+          "lesson_type": "role_play",
+          "scenario": "Maya prefers the train: it is faster and she can read. Rafi prefers the bus because it is cheaper and stops near his home. Neither travels every day. Ask who values price, who values speed, and whether either goes daily.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Compare experiences and express preferences”?",
+              "answer": "give an opinion with two supporting comparisons and respond to a different preference.",
+              "phonetic": "",
+              "id": "A2.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "two accurate comparisons and one respectful follow-up."
+          ],
+          "unit_id": "A2.U06",
+          "order": 17,
+          "source": "levels/a2.md",
+          "source_line": 308,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "A2.U06.L03",
+          "title": "Write a short recommendation",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 90–110-word recommendation comparing two familiar choices and acknowledging one trade-off.",
+          "flashcards": [
+            {
+              "question": "Where did the learner go?",
+              "answer": "What did they do",
+              "phonetic": "",
+              "id": "A2.U06.L03-FC01"
+            },
+            {
+              "question": "What was the weather like?",
+              "answer": "What is planned for next month",
+              "phonetic": "",
+              "id": "A2.U06.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "90–110 words, two supported comparisons, one trade-off, audience-based conclusion.",
+            "Where did the learner go?",
+            "What did they do?",
+            "What was the weather like?",
+            "What is planned for next month?"
+          ],
+          "unit_id": "A2.U06",
+          "order": 18,
+          "source": "levels/a2.md",
+          "source_line": 320,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "B1",
+      "title": "B1 — Intermediate",
+      "units": [
+        {
+          "id": "B1.U01",
+          "title": "Experiences and narratives",
+          "order": 1
+        },
+        {
+          "id": "B1.U02",
+          "title": "Opinions and reasons",
+          "order": 2
+        },
+        {
+          "id": "B1.U03",
+          "title": "Problem solving and advice",
+          "order": 3
+        },
+        {
+          "id": "B1.U04",
+          "title": "Work and study contexts",
+          "order": 4
+        },
+        {
+          "id": "B1.U05",
+          "title": "Society and public issues",
+          "order": 5
+        },
+        {
+          "id": "B1.U06",
+          "title": "Media and technology",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "B1.U01.L01",
+          "title": "Tell a personal story with time order",
+          "lesson_type": "role_play",
+          "scenario": "complete: When we ___ (arrive), the museum ___ (already close).",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Tell a personal story with time order”?",
+              "answer": "narrate a short personal event in sequence using at least four past forms and three sequence markers.",
+              "phonetic": "",
+              "id": "B1.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "at least four correct past forms and a clear chronological order."
+          ],
+          "unit_id": "B1.U01",
+          "order": 1,
+          "source": "levels/b1.md",
+          "source_line": 53,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B1.U01.L02",
+          "title": "Describe change and experience",
+          "lesson_type": "role_play",
+          "scenario": "“Before I moved to this city, I lived with my parents. I had never worked full-time, and I was nervous at first. Now I feel more confident.” Which idea is the strongest result?",
+          "flashcards": [
+            {
+              "question": "Now I feel more confident.” Which idea is the strongest result?",
+              "answer": "the speaker feels more confident now",
+              "phonetic": "",
+              "id": "B1.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "one past habit, one contrast, one present result."
+          ],
+          "unit_id": "B1.U01",
+          "order": 2,
+          "source": "levels/b1.md",
+          "source_line": 63,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U01.L03",
+          "title": "Summarize a personal experience",
+          "lesson_type": "role_play",
+          "scenario": "“I was nervous before the interview. I had prepared my answers, but I still felt unsure. After the first question, I relaxed and spoke more naturally. In the end, I got the job.”",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Summarize a personal experience”?",
+              "answer": "give a short spoken summary of an experience with reason, result, and reflection.",
+              "phonetic": "",
+              "id": "B1.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "reason, steps, outcome, and reflection are all present."
+          ],
+          "unit_id": "B1.U01",
+          "order": 3,
+          "source": "levels/b1.md",
+          "source_line": 75,
+          "scenario_source": "listening_script"
+        },
+        {
+          "id": "B1.U02.L01",
+          "title": "Express an opinion clearly",
+          "lesson_type": "role_play",
+          "scenario": "“Online learning is flexible, but it can feel isolating. I prefer a mixed model because it combines independence with teacher support.” Which word introduces contrast?",
+          "flashcards": [
+            {
+              "question": "I prefer a mixed model because it combines independence with teacher support.” Which word introduces contrast?",
+              "answer": "but",
+              "phonetic": "",
+              "id": "B1.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "3 clear reasons and one contrast or example."
+          ],
+          "unit_id": "B1.U02",
+          "order": 4,
+          "source": "levels/b1.md",
+          "source_line": 91,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U02.L02",
+          "title": "Build a paragraph with reasons and examples",
+          "lesson_type": "essay_analysis",
+          "scenario": "“I believe students should have more project-based learning. It helps them apply theory to real problems. For example, a class can design a school campaign or a small business plan. This method also improves cooperation. Therefore, it prepares students better for work.”",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Build a paragraph with reasons and examples”?",
+              "answer": "write a 120–150-word opinion paragraph with a clear point, reasons, and a conclusion.",
+              "phonetic": "",
+              "id": "B1.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "clear topic sentence, at least two reasons, one example, and a closing sentence."
+          ],
+          "unit_id": "B1.U02",
+          "order": 5,
+          "source": "levels/b1.md",
+          "source_line": 103,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B1.U02.L03",
+          "title": "Respond to a counterargument",
+          "lesson_type": "essay_analysis",
+          "scenario": "discuss whether school uniforms are a good idea. Partner A argues in favour. Partner B opposes. Switch roles after 90 seconds.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Respond to a counterargument”?",
+              "answer": "acknowledge an opposing view and still defend a position with evidence or experience.",
+              "phonetic": "",
+              "id": "B1.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "one concession, one counterargument, and one justification."
+          ],
+          "unit_id": "B1.U02",
+          "order": 6,
+          "source": "levels/b1.md",
+          "source_line": 115,
+          "scenario_source": "role-play"
+        },
+        {
+          "id": "B1.U03.L01",
+          "title": "Define the problem and the cause",
+          "lesson_type": "role_play",
+          "scenario": "each learner chooses a local issue and explains its cause and one effect.",
+          "flashcards": [
+            {
+              "question": "The main reason is limited staffing.” Which is the main cause?",
+              "answer": "limited staffing",
+              "phonetic": "",
+              "id": "B1.U03.L01-FC01"
+            },
+            {
+              "question": "What is the direct effect?",
+              "answer": "students cannot finish group work after six",
+              "phonetic": "",
+              "id": "B1.U03.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "clear problem statement, cause, and effect; no invented evidence."
+          ],
+          "unit_id": "B1.U03",
+          "order": 7,
+          "source": "levels/b1.md",
+          "source_line": 125,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B1.U03.L02",
+          "title": "Recommend a solution and weigh a trade-off",
+          "lesson_type": "role_play",
+          "scenario": "“The city should test a later bus service for three months and publish the results.” Which part is the recommendation?",
+          "flashcards": [
+            {
+              "question": "Reading:** “The city should test a later bus service for three months and publish the results.” Which part is the recommendation?",
+              "answer": "test a later bus service and publish results",
+              "phonetic": "",
+              "id": "B1.U03.L02-FC01"
+            },
+            {
+              "question": "What is the trade-off?",
+              "answer": "cost / service resources / reduced parking etc",
+              "phonetic": "",
+              "id": "B1.U03.L02-FC02"
+            }
+          ],
+          "assessment": [
+            "problem, proposal, reason, trade-off, and conclusion."
+          ],
+          "unit_id": "B1.U03",
+          "order": 8,
+          "source": "levels/b1.md",
+          "source_line": 137,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U03.L03",
+          "title": "Discuss alternatives and choose one",
+          "lesson_type": "role_play",
+          "scenario": "“Residents say the buses are unreliable at peak times. A dedicated lane could reduce delays, but it would require removing some parking spaces. The city should test the lane for three months and publish the results before deciding whether to expand it.”",
+          "flashcards": [
+            {
+              "question": "What action does the writer recommend?",
+              "answer": "unreliable peak-time buses; loss of some parking; a three-month test with published results",
+              "phonetic": "",
+              "id": "B1.U03.L03-FC01"
+            },
+            {
+              "question": "What evidence is needed?",
+              "answer": "evening students; a later bus; evidence of sufficient use",
+              "phonetic": "",
+              "id": "B1.U03.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "all members speak, at least one reason and one drawback are named, and the final decision is supported by the group.",
+            "4-point checklist, one point each for clear problem, relevant reason, feasible action, and limitation/result. At least 3/4 plus understandable linking is the local mastery threshold; it is not a CEFR certification."
+          ],
+          "unit_id": "B1.U03",
+          "order": 9,
+          "source": "levels/b1.md",
+          "source_line": 149,
+          "scenario_source": "reading",
+          "workshop_source_id": "B1.W03.L02"
+        },
+        {
+          "id": "B1.U03.L04",
+          "title": "Explain a problem and recommend a solution",
+          "lesson_type": "role_play",
+          "scenario": "“Residents say the buses are unreliable at peak times. A dedicated lane could reduce delays, but it would require removing some parking spaces. The city should test the lane for three months and publish the results before deciding whether to expand it.”",
+          "flashcards": [
+            {
+              "question": "What action does the writer recommend?",
+              "answer": "unreliable peak-time buses; loss of some parking; a three-month test with published results",
+              "phonetic": "",
+              "id": "B1.U03.L04-FC01"
+            },
+            {
+              "question": "What evidence is needed?",
+              "answer": "evening students; a later bus; evidence of sufficient use",
+              "phonetic": "",
+              "id": "B1.U03.L04-FC02"
+            }
+          ],
+          "assessment": [
+            "4-point checklist, one point each for clear problem, relevant reason, feasible action, and limitation/result. At least 3/4 plus understandable linking is the local mastery threshold; it is not a CEFR certification."
+          ],
+          "unit_id": "B1.U03",
+          "order": 10,
+          "source": "levels/b1.md",
+          "source_line": 157,
+          "scenario_source": "reading",
+          "workshop_source_id": "B1.W03.L02"
+        },
+        {
+          "id": "B1.U04.L01",
+          "title": "Describe responsibilities and routine work",
+          "lesson_type": "role_play",
+          "scenario": "choose the correct form: At the moment, I (manage / am managing) a small team.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Describe responsibilities and routine work”?",
+              "answer": "describe work or study responsibilities using present simple and adverbs of frequency.",
+              "phonetic": "",
+              "id": "B1.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "at least three correct verbs and clear time language."
+          ],
+          "unit_id": "B1.U04",
+          "order": 11,
+          "source": "levels/b1.md",
+          "source_line": 163,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B1.U04.L02",
+          "title": "Write a short report or summary",
+          "lesson_type": "essay_analysis",
+          "scenario": "“The project started late because training was delayed. By week three, the team had completed most of the research, but one department still needed support. The final report recommended clearer deadlines and regular check-ins.” What caused the delay?",
+          "flashcards": [
+            {
+              "question": "The final report recommended clearer deadlines and regular check-ins.” What caused the delay?",
+              "answer": "training was delayed",
+              "phonetic": "",
+              "id": "B1.U04.L02-FC01"
+            },
+            {
+              "question": "What remedy was recommended?",
+              "answer": "clearer deadlines and regular check-ins",
+              "phonetic": "",
+              "id": "B1.U04.L02-FC02"
+            }
+          ],
+          "assessment": [
+            "time order, one cause, one result, and one recommendation."
+          ],
+          "unit_id": "B1.U04",
+          "order": 12,
+          "source": "levels/b1.md",
+          "source_line": 173,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U04.L03",
+          "title": "Explain a difficult situation and a plan",
+          "lesson_type": "role_play",
+          "scenario": "manager and employee discuss a delay. Candidate language: We need an updated plan., If we reduce the scope, we can finish on time., By Friday, we should have a revised schedule.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Explain a difficult situation and a plan”?",
+              "answer": "explain a problem, suggest a plan, and give a realistic timeline.",
+              "phonetic": "",
+              "id": "B1.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "plan, timeline, and reason are all clear."
+          ],
+          "unit_id": "B1.U04",
+          "order": 13,
+          "source": "levels/b1.md",
+          "source_line": 191,
+          "scenario_source": "role-play"
+        },
+        {
+          "id": "B1.U05.L01",
+          "title": "Discuss benefits and drawbacks",
+          "lesson_type": "role_play",
+          "scenario": "“Many cities encourage cycling. A bike lane reduces congestion and improves health, but it may reduce parking space. The main challenge is that drivers need time to adapt.” What are the benefits?",
+          "flashcards": [
+            {
+              "question": "The main challenge is that drivers need time to adapt.” What are the benefits?",
+              "answer": "reduces congestion and improves health",
+              "phonetic": "",
+              "id": "B1.U05.L01-FC01"
+            },
+            {
+              "question": "What is the disadvantage?",
+              "answer": "less parking space",
+              "phonetic": "",
+              "id": "B1.U05.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "benefit, drawback, and a conclusion."
+          ],
+          "unit_id": "B1.U05",
+          "order": 14,
+          "source": "levels/b1.md",
+          "source_line": 201,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U05.L02",
+          "title": "Write a balanced paragraph",
+          "lesson_type": "essay_analysis",
+          "scenario": "“Public transport is often cheaper and more sustainable, but many commuters still prefer cars. The main advantage is lower pollution and lower cost. However, cars are often seen as more comfortable and convenient. In my view, better bus services and cleaner stations would reduce the gap.”",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a balanced paragraph”?",
+              "answer": "write a 150–180-word paragraph that presents a problem, two sides, and a recommendation.",
+              "phonetic": "",
+              "id": "B1.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "clear statement, two side points, conclusion, and at least four connectors."
+          ],
+          "unit_id": "B1.U05",
+          "order": 15,
+          "source": "levels/b1.md",
+          "source_line": 213,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B1.U05.L03",
+          "title": "Speak and mediate on a public issue",
+          "lesson_type": "role_play",
+          "scenario": "summarize a discussion and relay a position neutrally to another person.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Speak and mediate on a public issue”?",
+              "answer": "summarize a discussion and relay a position neutrally to another person.",
+              "phonetic": "",
+              "id": "B1.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "the spokesperson restates the recommendation, the reason, and one objection."
+          ],
+          "unit_id": "B1.U05",
+          "order": 16,
+          "source": "levels/b1.md",
+          "source_line": 225,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "B1.U06.L01",
+          "title": "Evaluate information and source quality",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A news site reports that smartphone use among teenagers has increased, but it does not mention how the survey was conducted. A second article includes charts and a clear method, but it covers only one region.” Which is more reliable?",
+          "flashcards": [
+            {
+              "question": "A second article includes charts and a clear method, but it covers only one region.” Which is more reliable?",
+              "answer": "the second article because it gives method and scope",
+              "phonetic": "",
+              "id": "B1.U06.L01-FC01"
+            },
+            {
+              "question": "What is the limitation?",
+              "answer": "only one region",
+              "phonetic": "",
+              "id": "B1.U06.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "at least one claim and one reliability point."
+          ],
+          "unit_id": "B1.U06",
+          "order": 17,
+          "source": "levels/b1.md",
+          "source_line": 235,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B1.U06.L02",
+          "title": "Compare digital and face-to-face learning",
+          "lesson_type": "role_play",
+          "scenario": "discuss and justify a preference between two learning modes.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Compare digital and face-to-face learning”?",
+              "answer": "discuss and justify a preference between two learning modes.",
+              "phonetic": "",
+              "id": "B1.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "contrast, at least two reasons, conclusion."
+          ],
+          "unit_id": "B1.U06",
+          "order": 18,
+          "source": "levels/b1.md",
+          "source_line": 249,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "B1.U06.L03",
+          "title": "Write and relay a recommendation about media or technology",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a short recommendation about digital habits or online study and relay it clearly to another person.",
+          "flashcards": [
+            {
+              "question": "What is the writer’s opinion?",
+              "answer": "delays and congestion; comfort; invest more in buses and trains; governments should reduce pollution and save time",
+              "phonetic": "",
+              "id": "B1.U06.L03-FC01"
+            },
+            {
+              "question": "What is the problem described?",
+              "answer": "Why do people still prefer cars",
+              "phonetic": "",
+              "id": "B1.U06.L03-FC02"
+            },
+            {
+              "question": "What is the proposed solution?",
+              "answer": "What is the writer’s opinion",
+              "phonetic": "",
+              "id": "B1.U06.L03-FC03"
+            }
+          ],
+          "assessment": [
+            "issue, action, reason, and conclusion.",
+            "What is the problem described?",
+            "Why do people still prefer cars?",
+            "What is the proposed solution?",
+            "What is the writer’s opinion?"
+          ],
+          "unit_id": "B1.U06",
+          "order": 19,
+          "source": "levels/b1.md",
+          "source_line": 257,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "B2",
+      "title": "B2 — Upper intermediate",
+      "units": [
+        {
+          "id": "B2.U01",
+          "title": "Debate and argumentative structure",
+          "order": 1
+        },
+        {
+          "id": "B2.U02",
+          "title": "Media and persuasion",
+          "order": 2
+        },
+        {
+          "id": "B2.U03",
+          "title": "Education and society",
+          "order": 3
+        },
+        {
+          "id": "B2.U04",
+          "title": "Work, leadership, and environment",
+          "order": 4
+        },
+        {
+          "id": "B2.U05",
+          "title": "Health, science, and technology",
+          "order": 5
+        },
+        {
+          "id": "B2.U06",
+          "title": "Culture, identity, and global issues",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "B2.U01.L01",
+          "title": "Identify a claim and weigh the evidence",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A city tested a slower school-start schedule for one term. Attendance improved and students reported lower stress. The pilot had 120 students and no comparison group.” Which word shows measurement?",
+          "flashcards": [
+            {
+              "question": "The pilot had 120 students and no comparison group.” Which word shows measurement?",
+              "answer": "improved and 120 students",
+              "phonetic": "",
+              "id": "B2.U01.L01-FC01"
+            },
+            {
+              "question": "What is the key limitation?",
+              "answer": "no comparison group",
+              "phonetic": "",
+              "id": "B2.U01.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "claim, evidence, and one limit are all named."
+          ],
+          "unit_id": "B2.U01",
+          "order": 1,
+          "source": "levels/b2.md",
+          "source_line": 50,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U01.L02",
+          "title": "Build a structured argument with cautious language",
+          "lesson_type": "essay_analysis",
+          "scenario": "“The new policy may improve student well-being, although the pilot was limited to one school. The survey showed that absenteeism fell and students reported better focus. However, the sample was small, so the results should be treated cautiously. Overall, the policy deserves a longer trial before a wider rollout.”",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Build a structured argument with cautious language”?",
+              "answer": "write a short argument paragraph that includes a claim, evidence, a limitation, and a response to a possible objection.",
+              "phonetic": "",
+              "id": "B2.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "thesis, evidence, one limitation, one counterargument, and a conclusion."
+          ],
+          "unit_id": "B2.U01",
+          "order": 2,
+          "source": "levels/b2.md",
+          "source_line": 64,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U01.L03",
+          "title": "Respond to a counterargument and refine a position",
+          "lesson_type": "essay_analysis",
+          "scenario": "debate whether a school should introduce a longer lunch break or a four-day week. Each learner states a claim plus a counterargument and response.",
+          "flashcards": [
+            {
+              "question": "Which conclusion is justified?",
+              "answer": "slightly higher attendance and student reports; one department, six weeks, 42 volunteers; the pilot is promising but insufficient to establish institution-wide effectiveness",
+              "phonetic": "",
+              "id": "B2.U01.L03-FC01"
+            },
+            {
+              "question": "Which additional groups or data are proposed?",
+              "answer": "reduced travel/focus; access to campus services; other courses and non-volunteers",
+              "phonetic": "",
+              "id": "B2.U01.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "counterargument and response are clearly marked, and the final stance remains consistent.",
+            "score 0–2 each for evidence use, qualification, organization, and response to counterargument. Success for this workshop: 6/8 with no invented evidence. This local criterion is not a CEFR score."
+          ],
+          "unit_id": "B2.U01",
+          "order": 3,
+          "source": "levels/b2.md",
+          "source_line": 78,
+          "scenario_source": "role-play",
+          "workshop_source_id": "B2.W01.L02"
+        },
+        {
+          "id": "B2.U01.L04",
+          "title": "Weigh evidence and qualify an argument",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A college trialled a four-day teaching week in one department. Attendance rose slightly, and students reported more time for independent study. The trial lasted six weeks and included 42 volunteers. These results are promising, but they do not establish that the schedule would work across the whole college.”",
+          "flashcards": [
+            {
+              "question": "Which conclusion is justified?",
+              "answer": "slightly higher attendance and student reports; one department, six weeks, 42 volunteers; the pilot is promising but insufficient to establish institution-wide effectiveness",
+              "phonetic": "",
+              "id": "B2.U01.L04-FC01"
+            },
+            {
+              "question": "Which additional groups or data are proposed?",
+              "answer": "reduced travel/focus; access to campus services; other courses and non-volunteers",
+              "phonetic": "",
+              "id": "B2.U01.L04-FC02"
+            }
+          ],
+          "assessment": [
+            "score 0–2 each for evidence use, qualification, organization, and response to counterargument. Success for this workshop: 6/8 with no invented evidence. This local criterion is not a CEFR score."
+          ],
+          "unit_id": "B2.U01",
+          "order": 4,
+          "source": "levels/b2.md",
+          "source_line": 92,
+          "scenario_source": "reading",
+          "workshop_source_id": "B2.W01.L02"
+        },
+        {
+          "id": "B2.U02.L01",
+          "title": "Analyze a media claim",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A local campaign claims that a new shopping district will create jobs and improve the city center. The article uses interviews with business owners and optimistic language, but no independent figures are provided.” What is the claim?",
+          "flashcards": [
+            {
+              "question": "The article uses interviews with business owners and optimistic language, but no independent figures are provided.” What is the claim?",
+              "answer": "new shopping district will create jobs and improve the city center",
+              "phonetic": "",
+              "id": "B2.U02.L01-FC01"
+            },
+            {
+              "question": "What is missing?",
+              "answer": "independent figures or data",
+              "phonetic": "",
+              "id": "B2.U02.L01-FC02"
+            },
+            {
+              "question": "How does the tone affect the argument?",
+              "answer": "optimistic language, with limited evidence",
+              "phonetic": "",
+              "id": "B2.U02.L01-FC03"
+            }
+          ],
+          "assessment": [
+            "claim, evidence, and one tone or bias note."
+          ],
+          "unit_id": "B2.U02",
+          "order": 5,
+          "source": "levels/b2.md",
+          "source_line": 98,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U02.L02",
+          "title": "Evaluate bias and audience appeal",
+          "lesson_type": "essay_analysis",
+          "scenario": "“The campaign video presents the new policy as a safe and necessary step for families. It uses images of children and quiet streets, but it does not mention the cost or the disruption during the building phase.” What does the video emphasize?",
+          "flashcards": [
+            {
+              "question": "It uses images of children and quiet streets, but it does not mention the cost or the disruption during the building phase.” What does the video emphasize?",
+              "answer": "safety and family concerns",
+              "phonetic": "",
+              "id": "B2.U02.L02-FC01"
+            },
+            {
+              "question": "What is missing?",
+              "answer": "cost and disruption",
+              "phonetic": "",
+              "id": "B2.U02.L02-FC02"
+            }
+          ],
+          "assessment": [
+            "one claim, one method of persuasion, and one missing fact."
+          ],
+          "unit_id": "B2.U02",
+          "order": 6,
+          "source": "levels/b2.md",
+          "source_line": 110,
+          "scenario_source": "listening_script"
+        },
+        {
+          "id": "B2.U02.L03",
+          "title": "Respond to a claim in a formal discussion",
+          "lesson_type": "essay_analysis",
+          "scenario": "answer a media or policy claim politely but clearly, with a reason and a counterexample.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Respond to a claim in a formal discussion”?",
+              "answer": "answer a media or policy claim politely but clearly, with a reason and a counterexample.",
+              "phonetic": "",
+              "id": "B2.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "claim + evidence + response to counterargument."
+          ],
+          "unit_id": "B2.U02",
+          "order": 7,
+          "source": "levels/b2.md",
+          "source_line": 122,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "B2.U03.L01",
+          "title": "Discuss social and educational inequality",
+          "lesson_type": "role_play",
+          "scenario": "“School transport is often unreliable in rural areas, which limits attendance and lowers opportunities for students who need extra support. A small grant for transport could increase access, but it would require local funding and oversight.” What is the problem?",
+          "flashcards": [
+            {
+              "question": "A small grant for transport could increase access, but it would require local funding and oversight.” What is the problem?",
+              "answer": "unreliable transport",
+              "phonetic": "",
+              "id": "B2.U03.L01-FC01"
+            },
+            {
+              "question": "What is the proposed solution?",
+              "answer": "a small grant for transport",
+              "phonetic": "",
+              "id": "B2.U03.L01-FC02"
+            },
+            {
+              "question": "What is the trade-off?",
+              "answer": "local funding and oversight",
+              "phonetic": "",
+              "id": "B2.U03.L01-FC03"
+            }
+          ],
+          "assessment": [
+            "problem, cause, and response all present."
+          ],
+          "unit_id": "B2.U03",
+          "order": 8,
+          "source": "levels/b2.md",
+          "source_line": 134,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U03.L02",
+          "title": "Write a balanced policy paragraph",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A more flexible school timetable could improve wellbeing, yet it could also create timetable pressure for teachers and families.” Use comparison and nuance rather than a single extreme statement.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a balanced policy paragraph”?",
+              "answer": "write 200–250 words arguing for or against a policy change in education, transport, or public services.",
+              "phonetic": "",
+              "id": "B2.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "all four parts appear and the position is justified with examples."
+          ],
+          "unit_id": "B2.U03",
+          "order": 9,
+          "source": "levels/b2.md",
+          "source_line": 146,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U03.L03",
+          "title": "Present and mediate a policy recommendation",
+          "lesson_type": "role_play",
+          "scenario": "propose one reform for a public issue. Each group prepares a 1-minute summary and then relays it to another group.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Present and mediate a policy recommendation”?",
+              "answer": "speak for 1–2 minutes on a social issue and then relay the decision in neutral language.",
+              "phonetic": "",
+              "id": "B2.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "clarity, evidence, and concession."
+          ],
+          "unit_id": "B2.U03",
+          "order": 10,
+          "source": "levels/b2.md",
+          "source_line": 158,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U04.L01",
+          "title": "Explain a business or leadership issue",
+          "lesson_type": "role_play",
+          "scenario": "“A company reduced support staff to save costs, but the result was slower customer response and higher employee stress. Managers argued that the policy was temporary. Staff questioned whether it was sustainable.” Which term indicates a concern about long-term viability?",
+          "flashcards": [
+            {
+              "question": "Staff questioned whether it was sustainable.” Which term indicates a concern about long-term viability?",
+              "answer": "sustainable",
+              "phonetic": "",
+              "id": "B2.U04.L01-FC01"
+            },
+            {
+              "question": "What is the downside of the cost-saving policy?",
+              "answer": "slower customer response and higher stress",
+              "phonetic": "",
+              "id": "B2.U04.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "cause, effect, and one proposed solution."
+          ],
+          "unit_id": "B2.U04",
+          "order": 11,
+          "source": "levels/b2.md",
+          "source_line": 168,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U04.L02",
+          "title": "Write a brief recommendation for a policy or strategy",
+          "lesson_type": "essay_analysis",
+          "scenario": "complete A limited pilot is useful because ____ .",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a brief recommendation for a policy or strategy”?",
+              "answer": "produce a concise recommendation with safeguards, risk, and evaluation.",
+              "phonetic": "",
+              "id": "B2.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "clear recommendation, at least two risks or safeguards, and a final decision."
+          ],
+          "unit_id": "B2.U04",
+          "order": 12,
+          "source": "levels/b2.md",
+          "source_line": 180,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U04.L03",
+          "title": "Deliver a short presentation and answer questions",
+          "lesson_type": "role_play",
+          "scenario": "present a workplace or environmental recommendation to a small group.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Deliver a short presentation and answer questions”?",
+              "answer": "present a structured viewpoint in 1–2 minutes and answer brief follow-up questions.",
+              "phonetic": "",
+              "id": "B2.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "clear structure, audience awareness, and response to at least one follow-up question."
+          ],
+          "unit_id": "B2.U04",
+          "order": 13,
+          "source": "levels/b2.md",
+          "source_line": 188,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U05.L01",
+          "title": "Discuss evidence in health and science communication",
+          "lesson_type": "essay_analysis",
+          "scenario": "“A small study reported that a daily breathing exercise reduced stress in a sample of 30 adults. The report noted that results may be linked to motivation and self-selection, and it did not compare the exercise with other treatments.” What can be concluded?",
+          "flashcards": [
+            {
+              "question": "The report noted that results may be linked to motivation and self-selection, and it did not compare the exercise with other treatments.” What can be concluded?",
+              "answer": "the results are promising but limited",
+              "phonetic": "",
+              "id": "B2.U05.L01-FC01"
+            },
+            {
+              "question": "Why cautious?",
+              "answer": "small sample and no comparison group",
+              "phonetic": "",
+              "id": "B2.U05.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "explicit caution and one valid limit."
+          ],
+          "unit_id": "B2.U05",
+          "order": 14,
+          "source": "levels/b2.md",
+          "source_line": 198,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U05.L02",
+          "title": "Present a recommendation with conditions",
+          "lesson_type": "role_play",
+          "scenario": "“If the trial continues to show lower stress and no adverse side effects, ___ .”",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Present a recommendation with conditions”?",
+              "answer": "formulate a recommendation under conditions, including a reason and a safeguard.",
+              "phonetic": "",
+              "id": "B2.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "recommendation, condition, risk/safeguard, and mention of evidence."
+          ],
+          "unit_id": "B2.U05",
+          "order": 15,
+          "source": "levels/b2.md",
+          "source_line": 210,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "B2.U05.L03",
+          "title": "Explain uncertainty and respond to a challenge",
+          "lesson_type": "role_play",
+          "scenario": "answer a challenge to a recommendation by acknowledging uncertainty and explaining the next evidence needed.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Explain uncertainty and respond to a challenge”?",
+              "answer": "answer a challenge to a recommendation by acknowledging uncertainty and explaining the next evidence needed.",
+              "phonetic": "",
+              "id": "B2.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "evidence, challenge response, and next evidence needed."
+          ],
+          "unit_id": "B2.U05",
+          "order": 16,
+          "source": "levels/b2.md",
+          "source_line": 218,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "B2.U06.L01",
+          "title": "Express a nuanced opinion on identity or culture",
+          "lesson_type": "role_play",
+          "scenario": "“Cultural exchange programmes can broaden understanding and improve young people’s confidence in communication, although some students still find local customs difficult to interpret. The main challenge is not opposition, but misunderstanding.” What is the central tension?",
+          "flashcards": [
+            {
+              "question": "The main challenge is not opposition, but misunderstanding.” What is the central tension?",
+              "answer": "benefits of exchange versus difficulty of interpretation",
+              "phonetic": "",
+              "id": "B2.U06.L01-FC01"
+            },
+            {
+              "question": "What is the challenge?",
+              "answer": "misunderstanding rather than open rejection",
+              "phonetic": "",
+              "id": "B2.U06.L01-FC02"
+            }
+          ],
+          "assessment": [
+            "balanced view, at least one reason, and one respectful concession."
+          ],
+          "unit_id": "B2.U06",
+          "order": 17,
+          "source": "levels/b2.md",
+          "source_line": 228,
+          "scenario_source": "reading"
+        },
+        {
+          "id": "B2.U06.L02",
+          "title": "Write a formal opinion essay",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 250–300-word essay on a global or cultural issue, using thesis, supporting points, and a counterargument.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write a formal opinion essay”?",
+              "answer": "write a 250–300-word essay on a global or cultural issue, using thesis, supporting points, and a counterargument.",
+              "phonetic": "",
+              "id": "B2.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "introduction, evidence, at least one counterargument, and conclusion."
+          ],
+          "unit_id": "B2.U06",
+          "order": 18,
+          "source": "levels/b2.md",
+          "source_line": 240,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "B2.U06.L03",
+          "title": "Debate and clarify a position",
+          "lesson_type": "role_play",
+          "scenario": "take part in a formal group discussion, respond to disagreement, and summarize the final decision.",
+          "flashcards": [
+            {
+              "question": "What does the final sentence suggest about the best model?",
+              "answer": "digital learning is useful but not sufficient; students need feedback and interaction; blended learning is likely best",
+              "phonetic": "",
+              "id": "B2.U06.L03-FC01"
+            },
+            {
+              "question": "What is the main claim?",
+              "answer": "Why does the writer say face-to-face teaching still matters",
+              "phonetic": "",
+              "id": "B2.U06.L03-FC02"
+            }
+          ],
+          "assessment": [
+            "clear claim, respectful challenge response, and summary of final position.",
+            "What is the main claim?",
+            "Why does the writer say face-to-face teaching still matters?",
+            "What does the final sentence suggest about the best model?"
+          ],
+          "unit_id": "B2.U06",
+          "order": 19,
+          "source": "levels/b2.md",
+          "source_line": 248,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "C1",
+      "title": "C1 — Advanced",
+      "units": [
+        {
+          "id": "C1.U01",
+          "title": "Reading and analytic comprehension",
+          "order": 1
+        },
+        {
+          "id": "C1.U02",
+          "title": "Academic and professional writing",
+          "order": 2
+        },
+        {
+          "id": "C1.U03",
+          "title": "Oral argumentation and presentations",
+          "order": 3
+        },
+        {
+          "id": "C1.U04",
+          "title": "Implicit meaning and nuance",
+          "order": 4
+        },
+        {
+          "id": "C1.U05",
+          "title": "Research and synthesis",
+          "order": 5
+        },
+        {
+          "id": "C1.U06",
+          "title": "Negotiation and complex interaction",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "C1.U01.L01",
+          "title": "Map an argument",
+          "lesson_type": "essay_analysis",
+          "scenario": "label a passage's claim, evidence, qualification, and conclusion, each with a text cue.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Map an argument”?",
+              "answer": "label a passage's claim, evidence, qualification, and conclusion, each with a text cue.",
+              "phonetic": "",
+              "id": "C1.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "all four functions are located and the qualification is not mistaken for a refutation."
+          ],
+          "unit_id": "C1.U01",
+          "order": 1,
+          "source": "levels/c1.md",
+          "source_line": 133,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U01.L02",
+          "title": "Follow cohesion and scope",
+          "lesson_type": "essay_analysis",
+          "scenario": "trace two reference or connective links and identify the scope of a claim.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Follow cohesion and scope”?",
+              "answer": "trace two reference or connective links and identify the scope of a claim.",
+              "phonetic": "",
+              "id": "C1.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "both links are accurate and no broader population or causal claim is invented."
+          ],
+          "unit_id": "C1.U01",
+          "order": 2,
+          "source": "levels/c1.md",
+          "source_line": 137,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U01.L03",
+          "title": "Write an analytical summary",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 70–90-word summary retaining evidence, limitation, and implication.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write an analytical summary”?",
+              "answer": "write a 70–90-word summary retaining evidence, limitation, and implication.",
+              "phonetic": "",
+              "id": "C1.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "includes all three required relations and makes no unsupported causal claim.",
+            "C1-T-U01 transfer."
+          ],
+          "unit_id": "C1.U01",
+          "order": 3,
+          "source": "levels/c1.md",
+          "source_line": 141,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U02.L01",
+          "title": "Plan for a decision reader",
+          "lesson_type": "essay_analysis",
+          "scenario": "organize a report note around a decision question, evidence, limitation, recommendation, and next check.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Plan for a decision reader”?",
+              "answer": "organize a report note around a decision question, evidence, limitation, recommendation, and next check.",
+              "phonetic": "",
+              "id": "C1.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "all five functions appear in a logical order and the recommendation remains limited."
+          ],
+          "unit_id": "C1.U02",
+          "order": 4,
+          "source": "levels/c1.md",
+          "source_line": 145,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U02.L02",
+          "title": "Edit agency and register",
+          "lesson_type": "sentence_builder",
+          "scenario": "revise nominalized or passive wording when it hides a relevant actor, without making the tone less professional.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Edit agency and register”?",
+              "answer": "revise nominalized or passive wording when it hides a relevant actor, without making the tone less professional.",
+              "phonetic": "",
+              "id": "C1.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "actor and meaning are preserved; tone is direct, not inflated.",
+            "C1-T-U02 language item."
+          ],
+          "unit_id": "C1.U02",
+          "order": 5,
+          "source": "levels/c1.md",
+          "source_line": 149,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U02.L03",
+          "title": "Draft an evidence-based note",
+          "lesson_type": "essay_analysis",
+          "scenario": "produce a 70–100-word manager note including evidence, limitation, and action.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Draft an evidence-based note”?",
+              "answer": "produce a 70–100-word manager note including evidence, limitation, and action.",
+              "phonetic": "",
+              "id": "C1.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "all three elements are present and the guide is not credited with an effect that may also come from demonstrations.",
+            "C1-T-U02 transfer."
+          ],
+          "unit_id": "C1.U02",
+          "order": 6,
+          "source": "levels/c1.md",
+          "source_line": 153,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U03.L01",
+          "title": "Build a spoken argument map",
+          "lesson_type": "essay_analysis",
+          "scenario": "plan a short talk with claim, evidence, limitation, and decision rule.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Build a spoken argument map”?",
+              "answer": "plan a short talk with claim, evidence, limitation, and decision rule.",
+              "phonetic": "",
+              "id": "C1.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "no evidence point is used to prove an unmeasured outcome."
+          ],
+          "unit_id": "C1.U03",
+          "order": 7,
+          "source": "levels/c1.md",
+          "source_line": 157,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U03.L02",
+          "title": "Make relations audible",
+          "lesson_type": "essay_analysis",
+          "scenario": "use signposting and pausing to make two reasoning relations clear in a spoken explanation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Make relations audible”?",
+              "answer": "use signposting and pausing to make two reasoning relations clear in a spoken explanation.",
+              "phonetic": "",
+              "id": "C1.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "listener identifies the intended relation without seeing the notes."
+          ],
+          "unit_id": "C1.U03",
+          "order": 8,
+          "source": "levels/c1.md",
+          "source_line": 161,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U03.L03",
+          "title": "Respond and repair",
+          "lesson_type": "role_play",
+          "scenario": "answer a challenge question relevantly and clarify one ambiguous term.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Respond and repair”?",
+              "answer": "answer a challenge question relevantly and clarify one ambiguous term.",
+              "phonetic": "",
+              "id": "C1.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "direct response, accurate qualification, and successful clarification/repair.",
+            "C1-T-U03 transfer."
+          ],
+          "unit_id": "C1.U03",
+          "order": 9,
+          "source": "levels/c1.md",
+          "source_line": 165,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U04.L01",
+          "title": "Infer stance from cues",
+          "lesson_type": "essay_analysis",
+          "scenario": "support a stance inference with two wording/context cues and label it as inference.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Infer stance from cues”?",
+              "answer": "support a stance inference with two wording/context cues and label it as inference.",
+              "phonetic": "",
+              "id": "C1.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "two cues cited; no inferred emotion is stated as fact."
+          ],
+          "unit_id": "C1.U04",
+          "order": 10,
+          "source": "levels/c1.md",
+          "source_line": 169,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U04.L02",
+          "title": "Interpret irony cautiously",
+          "lesson_type": "essay_analysis",
+          "scenario": "compare a literal and a plausible ironic reading and state what remains uncertain.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Interpret irony cautiously”?",
+              "answer": "compare a literal and a plausible ironic reading and state what remains uncertain.",
+              "phonetic": "",
+              "id": "C1.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "the challenge is recognized while hostility/sarcasm is not assumed."
+          ],
+          "unit_id": "C1.U04",
+          "order": 11,
+          "source": "levels/c1.md",
+          "source_line": 173,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U04.L03",
+          "title": "Paraphrase implication",
+          "lesson_type": "essay_analysis",
+          "scenario": "produce a neutral paraphrase and a clearly labeled inference from the same input.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Paraphrase implication”?",
+              "answer": "produce a neutral paraphrase and a clearly labeled inference from the same input.",
+              "phonetic": "",
+              "id": "C1.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "explicit content and inference remain distinct and cue-supported.",
+            "C1-T-U04 transfer."
+          ],
+          "unit_id": "C1.U04",
+          "order": 12,
+          "source": "levels/c1.md",
+          "source_line": 177,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U05.L01",
+          "title": "Compare methods and constructs",
+          "lesson_type": "essay_analysis",
+          "scenario": "state what two sources measure and whether they support a common outcome claim.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Compare methods and constructs”?",
+              "answer": "state what two sources measure and whether they support a common outcome claim.",
+              "phonetic": "",
+              "id": "C1.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "no learning-effect claim is inferred from preference or tutor views alone."
+          ],
+          "unit_id": "C1.U05",
+          "order": 13,
+          "source": "levels/c1.md",
+          "source_line": 181,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U05.L02",
+          "title": "Synthesize sources and communicate uncertainty",
+          "lesson_type": "essay_analysis",
+          "scenario": "read aloud: “Both reports suggest that schedule flexibility affects people differently. One emphasizes commute experience; the other highlights coordination. A policy may therefore need a shared collaboration window, but the evidence does not establish a single best arrangement.”",
+          "flashcards": [
+            {
+              "question": "Can either source prove that flexible schedules improve productivity?",
+              "answer": "self-reported commute stress; difficulty collaborating without shared hours; no, neither measures productivity causally",
+              "phonetic": "",
+              "id": "C1.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "0–2 each for accurate attribution, synthesis, qualification, and audience clarity. Success: 6/8 and no misrepresentation. Teacher checks paraphrase and language use.",
+            "name one focus of each report and the policy implication."
+          ],
+          "unit_id": "C1.U05",
+          "order": 14,
+          "source": "levels/c1.md",
+          "source_line": 185,
+          "scenario_source": "listening_script",
+          "workshop_source_id": "C1.U05.L02"
+        },
+        {
+          "id": "C1.U05.L03",
+          "title": "Synthesize and qualify",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 70–100-word synthesis that attributes both sources, identifies one shared theme and one difference, and proposes no unsupported conclusion.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Synthesize and qualify”?",
+              "answer": "write a 70–100-word synthesis that attributes both sources, identifies one shared theme and one difference, and proposes no unsupported conclusion.",
+              "phonetic": "",
+              "id": "C1.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "attribution and distinction are accurate; no causal outcome is invented.",
+            "C1-T-U05 transfer."
+          ],
+          "unit_id": "C1.U05",
+          "order": 15,
+          "source": "levels/c1.md",
+          "source_line": 189,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U06.L01",
+          "title": "Listen for interests",
+          "lesson_type": "essay_analysis",
+          "scenario": "distinguish a stakeholder's stated position from the interest or constraint it may represent.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Listen for interests”?",
+              "answer": "distinguish a stakeholder's stated position from the interest or constraint it may represent.",
+              "phonetic": "",
+              "id": "C1.U06.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "label proposals as proposals and do not assign motives as facts."
+          ],
+          "unit_id": "C1.U06",
+          "order": 16,
+          "source": "levels/c1.md",
+          "source_line": 193,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U06.L02",
+          "title": "Negotiate conditional options",
+          "lesson_type": "role_play",
+          "scenario": "formulate an option with a clear condition and confirm whether it is accepted.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Negotiate conditional options”?",
+              "answer": "formulate an option with a clear condition and confirm whether it is accepted.",
+              "phonetic": "",
+              "id": "C1.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "every condition is retained and no discussion is reported as consensus."
+          ],
+          "unit_id": "C1.U06",
+          "order": 17,
+          "source": "levels/c1.md",
+          "source_line": 197,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C1.U06.L03",
+          "title": "Mediate the decision",
+          "lesson_type": "role_play",
+          "scenario": "relay the decision and one unresolved issue to a new audience without altering either.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Mediate the decision”?",
+              "answer": "relay the decision and one unresolved issue to a new audience without altering either.",
+              "phonetic": "",
+              "id": "C1.U06.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "condition, common ground, and unresolved matter are all accurately represented.",
+            "C1-T-U06 transfer."
+          ],
+          "unit_id": "C1.U06",
+          "order": 18,
+          "source": "levels/c1.md",
+          "source_line": 201,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "C2",
+      "title": "C2 — Proficiency",
+      "units": [
+        {
+          "id": "C2.U01",
+          "title": "Precision and nuance",
+          "order": 1
+        },
+        {
+          "id": "C2.U02",
+          "title": "Advanced reading and interpretation",
+          "order": 2
+        },
+        {
+          "id": "C2.U03",
+          "title": "Public speaking and influence",
+          "order": 3
+        },
+        {
+          "id": "C2.U04",
+          "title": "Professional communication",
+          "order": 4
+        },
+        {
+          "id": "C2.U05",
+          "title": "High-level written sophistication",
+          "order": 5
+        },
+        {
+          "id": "C2.U06",
+          "title": "Advanced interaction and mediation",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "C2.U01.L01",
+          "title": "Choose precise words in context",
+          "lesson_type": "essay_analysis",
+          "scenario": "distinguish the contextual force of four near-synonyms and justify a choice with the source's communicative purpose.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Choose precise words in context”?",
+              "answer": "distinguish the contextual force of four near-synonyms and justify a choice with the source's communicative purpose.",
+              "phonetic": "",
+              "id": "C2.U01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "wording preserves observation and causal limit."
+          ],
+          "unit_id": "C2.U01",
+          "order": 1,
+          "source": "levels/c2.md",
+          "source_line": 114,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U01.L02",
+          "title": "Edit commitment and focus",
+          "lesson_type": "essay_analysis",
+          "scenario": "revise a short passage without changing date, quantity, condition, scope, or modality.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Edit commitment and focus”?",
+              "answer": "revise a short passage without changing date, quantity, condition, scope, or modality.",
+              "phonetic": "",
+              "id": "C2.U01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "all factual commitments remain stable.",
+            "C2-T-U01 language item."
+          ],
+          "unit_id": "C2.U01",
+          "order": 2,
+          "source": "levels/c2.md",
+          "source_line": 118,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U01.L03",
+          "title": "Adapt two audience versions",
+          "lesson_type": "essay_analysis",
+          "scenario": "produce two audience-specific versions and explain one deliberate change that does not alter the evidence.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Adapt two audience versions”?",
+              "answer": "produce two audience-specific versions and explain one deliberate change that does not alter the evidence.",
+              "phonetic": "",
+              "id": "C2.U01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "both versions preserve the provisional decision and the missing causal evidence.",
+            "C2-T-U01 transfer."
+          ],
+          "unit_id": "C2.U01",
+          "order": 3,
+          "source": "levels/c2.md",
+          "source_line": 122,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U02.L01",
+          "title": "Reconstruct premises",
+          "lesson_type": "essay_analysis",
+          "scenario": "distinguish explicit proposition, presupposition, entailment, and defeasible implication in a dense short argument.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Reconstruct premises”?",
+              "answer": "distinguish explicit proposition, presupposition, entailment, and defeasible implication in a dense short argument.",
+              "phonetic": "",
+              "id": "C2.U02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "categories are correctly assigned and supported by wording."
+          ],
+          "unit_id": "C2.U02",
+          "order": 4,
+          "source": "levels/c2.md",
+          "source_line": 126,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U02.L02",
+          "title": "Rank competing readings",
+          "lesson_type": "essay_analysis",
+          "scenario": "rank three interpretations by textual support and explain why one plausible claim is unsupported.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Rank competing readings”?",
+              "answer": "rank three interpretations by textual support and explain why one plausible claim is unsupported.",
+              "phonetic": "",
+              "id": "C2.U02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "strongest reading is supported; contradiction and absence of evidence are distinguished."
+          ],
+          "unit_id": "C2.U02",
+          "order": 5,
+          "source": "levels/c2.md",
+          "source_line": 130,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U02.L03",
+          "title": "Write interpretive commentary",
+          "lesson_type": "essay_analysis",
+          "scenario": "write a 120–160-word commentary separating explicit content, inference, and unknown, with an alternative interpretation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write interpretive commentary”?",
+              "answer": "write a 120–160-word commentary separating explicit content, inference, and unknown, with an alternative interpretation.",
+              "phonetic": "",
+              "id": "C2.U02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "every interpretive claim cites a cue and at least one plausible alternative is acknowledged.",
+            "C2-T-U02 transfer."
+          ],
+          "unit_id": "C2.U02",
+          "order": 6,
+          "source": "levels/c2.md",
+          "source_line": 134,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U03.L01",
+          "title": "Shape an address for an audience",
+          "lesson_type": "essay_analysis",
+          "scenario": "organize an address with a claim, progression, and close suited to a stated audience.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Shape an address for an audience”?",
+              "answer": "organize an address with a claim, progression, and close suited to a stated audience.",
+              "phonetic": "",
+              "id": "C2.U03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "audience can restate the recommendation without mistaking it for cancellation."
+          ],
+          "unit_id": "C2.U03",
+          "order": 7,
+          "source": "levels/c2.md",
+          "source_line": 138,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U03.L02",
+          "title": "Control parallelism and emphasis",
+          "lesson_type": "essay_analysis",
+          "scenario": "use one parallel contrast to sharpen a distinction without exaggerating evidence.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Control parallelism and emphasis”?",
+              "answer": "use one parallel contrast to sharpen a distinction without exaggerating evidence.",
+              "phonetic": "",
+              "id": "C2.U03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "wording is parallel and the listener identifies output versus outcome."
+          ],
+          "unit_id": "C2.U03",
+          "order": 8,
+          "source": "levels/c2.md",
+          "source_line": 142,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U03.L03",
+          "title": "Answer adversarial questions",
+          "lesson_type": "role_play",
+          "scenario": "answer two challenging questions by acknowledging their premise, addressing evidence or values, and preserving qualifications.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Answer adversarial questions”?",
+              "answer": "answer two challenging questions by acknowledging their premise, addressing evidence or values, and preserving qualifications.",
+              "phonetic": "",
+              "id": "C2.U03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "direct response, evidence boundary, and one useful clarification/repair are observable.",
+            "C2-T-U03 transfer."
+          ],
+          "unit_id": "C2.U03",
+          "order": 9,
+          "source": "levels/c2.md",
+          "source_line": 146,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U04.L01",
+          "title": "Map authority, interests, and unknowns",
+          "lesson_type": "essay_analysis",
+          "scenario": "record each stakeholder's position, condition, authority, and unknown before negotiation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Map authority, interests, and unknowns”?",
+              "answer": "record each stakeholder's position, condition, authority, and unknown before negotiation.",
+              "phonetic": "",
+              "id": "C2.U04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "preferences are not presented as commitments, and scope is accurate."
+          ],
+          "unit_id": "C2.U04",
+          "order": 10,
+          "source": "levels/c2.md",
+          "source_line": 150,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U04.L02",
+          "title": "Make a high-stakes recommendation with precision",
+          "lesson_type": "essay_analysis",
+          "scenario": "“Operations supports a pilot if weekend data are collected. Finance prefers a cap on overtime. The service lead says any cap must not leave the busiest shift uncovered. No team has yet estimated the effect on customer satisfaction.”",
+          "flashcards": [
+            {
+              "question": "What does the proposed pilot test?",
+              "answer": "longer response times in two peak periods; weekend performance and broader causes; whether temporary staffing improves service within an acceptable cost",
+              "phonetic": "",
+              "id": "C2.U04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "0–2 each for factual fidelity, explicit uncertainty, workable safeguards, and concise register. Success: 6/8 with no invented facts; specialist review is required for actual operational decisions.",
+            "state one condition from each function and one missing measure."
+          ],
+          "unit_id": "C2.U04",
+          "order": 11,
+          "source": "levels/c2.md",
+          "source_line": 154,
+          "scenario_source": "listening_script",
+          "workshop_source_id": "C2.U04.L02"
+        },
+        {
+          "id": "C2.U04.L03",
+          "title": "Write and verify a decision record",
+          "lesson_type": "essay_analysis",
+          "scenario": "produce a concise record that names decision, actor, condition, owner, measure, review date, and unresolved issue.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write and verify a decision record”?",
+              "answer": "produce a concise record that names decision, actor, condition, owner, measure, review date, and unresolved issue.",
+              "phonetic": "",
+              "id": "C2.U04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "a reader can identify exactly what was authorized and what was not.",
+            "C2-T-U04 transfer."
+          ],
+          "unit_id": "C2.U04",
+          "order": 12,
+          "source": "levels/c2.md",
+          "source_line": 158,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U05.L01",
+          "title": "Audit the claim chain",
+          "lesson_type": "essay_analysis",
+          "scenario": "trace a report's evidence, alternative explanation, limit, and recommendation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Audit the claim chain”?",
+              "answer": "trace a report's evidence, alternative explanation, limit, and recommendation.",
+              "phonetic": "",
+              "id": "C2.U05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "staffing is not named as the sole cause."
+          ],
+          "unit_id": "C2.U05",
+          "order": 13,
+          "source": "levels/c2.md",
+          "source_line": 162,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U05.L02",
+          "title": "Revise information focus and rhythm",
+          "lesson_type": "essay_analysis",
+          "scenario": "revise sentence order and rhythm to foreground the decision boundary without changing claim strength.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Revise information focus and rhythm”?",
+              "answer": "revise sentence order and rhythm to foreground the decision boundary without changing claim strength.",
+              "phonetic": "",
+              "id": "C2.U05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "focus improves while scope and qualification remain unchanged."
+          ],
+          "unit_id": "C2.U05",
+          "order": 14,
+          "source": "levels/c2.md",
+          "source_line": 166,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U05.L03",
+          "title": "Edit for fidelity and concision",
+          "lesson_type": "essay_analysis",
+          "scenario": "produce a 180–230-word evidence-based note and a revision note explaining an improvement that preserves meaning.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Edit for fidelity and concision”?",
+              "answer": "produce a 180–230-word evidence-based note and a revision note explaining an improvement that preserves meaning.",
+              "phonetic": "",
+              "id": "C2.U05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "no invented evidence, exact causal limit, and a defensible audience choice.",
+            "C2-T-U05 transfer."
+          ],
+          "unit_id": "C2.U05",
+          "order": 15,
+          "source": "levels/c2.md",
+          "source_line": 170,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U06.L01",
+          "title": "Track exact commitments",
+          "lesson_type": "essay_analysis",
+          "scenario": "distinguish a stated commitment, conditional plan, opinion, and inference in conflicting accounts.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Track exact commitments”?",
+              "answer": "distinguish a stated commitment, conditional plan, opinion, and inference in conflicting accounts.",
+              "phonetic": "",
+              "id": "C2.U06.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "no one is reported as saying analysis is complete."
+          ],
+          "unit_id": "C2.U06",
+          "order": 16,
+          "source": "levels/c2.md",
+          "source_line": 174,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U06.L02",
+          "title": "Test and repair understanding",
+          "lesson_type": "role_play",
+          "scenario": "ask a clarification question that tests scope or deadline and reformulate a partner's position for confirmation.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Test and repair understanding”?",
+              "answer": "ask a clarification question that tests scope or deadline and reformulate a partner's position for confirmation.",
+              "phonetic": "",
+              "id": "C2.U06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "ambiguity is surfaced and correction incorporated."
+          ],
+          "unit_id": "C2.U06",
+          "order": 17,
+          "source": "levels/c2.md",
+          "source_line": 178,
+          "scenario_source": "source_outcome"
+        },
+        {
+          "id": "C2.U06.L03",
+          "title": "Mediate for two audiences",
+          "lesson_type": "role_play",
+          "scenario": "create specialist and public summaries that preserve the same condition and uncertainty.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Mediate for two audiences”?",
+              "answer": "create specialist and public summaries that preserve the same condition and uncertainty.",
+              "phonetic": "",
+              "id": "C2.U06.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "both accounts preserve the completeness condition and do not call Friday unconditional.",
+            "C2-T-U06 transfer."
+          ],
+          "unit_id": "C2.U06",
+          "order": 18,
+          "source": "levels/c2.md",
+          "source_line": 182,
+          "scenario_source": "source_outcome"
+        }
+      ]
+    },
+    {
+      "level": "POST-C2",
+      "title": "Post-C2 — Advanced specialization tracks",
+      "units": [
+        {
+          "id": "POST-C2.T01",
+          "title": "Academic English and research communication",
+          "order": 1
+        },
+        {
+          "id": "POST-C2.T02",
+          "title": "Business and professional English",
+          "order": 2
+        },
+        {
+          "id": "POST-C2.T03",
+          "title": "Advanced writing and editing",
+          "order": 3
+        },
+        {
+          "id": "POST-C2.T04",
+          "title": "Public speaking and discourse leadership",
+          "order": 4
+        },
+        {
+          "id": "POST-C2.T05",
+          "title": "Translation and advanced textual analysis",
+          "order": 5
+        },
+        {
+          "id": "POST-C2.T06",
+          "title": "Discourse analysis and rhetoric",
+          "order": 6
+        }
+      ],
+      "lessons": [
+        {
+          "id": "POST-C2.T01.L01",
+          "title": "Read a study as an argument",
+          "lesson_type": "essay_analysis",
+          "scenario": "label the sample, measure, and missing outcome in the example;",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Read a study as an argument”?",
+              "answer": "annotate a short abstract for question, sample, method, result, limitation, and claim, and identify one claim that exceeds the reported evidence.",
+              "phonetic": "",
+              "id": "POST-C2.T01.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "all six abstract elements are located or explicitly marked “not reported”; the proposed overclaim is justified with a textual cue."
+          ],
+          "unit_id": "POST-C2.T01",
+          "order": 1,
+          "source": "levels/post-c2.md",
+          "source_line": 114,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T01.L02",
+          "title": "Synthesize sources and qualify a claim",
+          "lesson_type": "essay_analysis",
+          "scenario": "write 120–160 words that answers a question selected by the teacher, attributes both sources, names one shared theme and one difference, and identifies the evidence gap.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Synthesize sources and qualify a claim”?",
+              "answer": "produce a thematic synthesis of two sources, preserving their different constructs and limitations.",
+              "phonetic": "",
+              "id": "POST-C2.T01.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "both sources and their measures are accurately distinguished; the synthesis does not invent causation."
+          ],
+          "unit_id": "POST-C2.T01",
+          "order": 2,
+          "source": "levels/post-c2.md",
+          "source_line": 120,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T01.L03",
+          "title": "Write and present a research brief",
+          "lesson_type": "essay_analysis",
+          "scenario": "“The pilot survey found a preference among respondents for the revised rota (Lee, 2024). Because participation was voluntary and no absence data were collected, the result should not be read as evidence of improved attendance.” The citation here is a fictional classroom placeholder, not a real source.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Write and present a research brief”?",
+              "answer": "create a concise research brief with a question, method, findings, limitation, and appropriately bounded implication.",
+              "phonetic": "",
+              "id": "POST-C2.T01.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "required sections are present; every external claim is attributable; limitations constrain the implication; oral answer responds to the actual question."
+          ],
+          "unit_id": "POST-C2.T01",
+          "order": 3,
+          "source": "levels/post-c2.md",
+          "source_line": 128,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T02.L01",
+          "title": "Frame a decision brief",
+          "lesson_type": "essay_analysis",
+          "scenario": "convert a one-page fictional scenario into a 150-word decision brief.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Frame a decision brief”?",
+              "answer": "distinguish decision, evidence, risk, owner, deadline, and unresolved question in a short workplace brief.",
+              "phonetic": "",
+              "id": "POST-C2.T02.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "decision, evidence, risk, owner, date, and unknown are not conflated."
+          ],
+          "unit_id": "POST-C2.T02",
+          "order": 4,
+          "source": "levels/post-c2.md",
+          "source_line": 144,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T02.L02",
+          "title": "Listen, clarify, and negotiate constraints",
+          "lesson_type": "role_play",
+          "scenario": "take notes under CONDITION / LIMIT / REQUEST / UNKNOWN and compare with the key.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Listen, clarify, and negotiate constraints”?",
+              "answer": "capture each stakeholder’s condition, ask a clarifying question, and restate a proposed agreement accurately.",
+              "phonetic": "",
+              "id": "POST-C2.T02.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "all four script details are retained, questions resolve an ambiguity, and the final agreement names owner/date/condition."
+          ],
+          "unit_id": "POST-C2.T02",
+          "order": 5,
+          "source": "levels/post-c2.md",
+          "source_line": 154,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T02.L03",
+          "title": "Deliver difficult news and document action",
+          "lesson_type": "role_play",
+          "scenario": "“The launch is moving from 12 to 19 May because the accessibility review is not complete. The new date is confirmed. We will send the revised test schedule by Wednesday; please contact the project lead if the change creates a delivery risk.” The reason and dates are fictional.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Deliver difficult news and document action”?",
+              "answer": "give a direct, respectful update that states the change, reason, effect, next step, and contact route.",
+              "phonetic": "",
+              "id": "POST-C2.T02.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "change/reason/impact/next step are explicit, claims match the scenario, and the response acknowledges the concern."
+          ],
+          "unit_id": "POST-C2.T02",
+          "order": 6,
+          "source": "levels/post-c2.md",
+          "source_line": 164,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T03.L01",
+          "title": "Editorial and translation review",
+          "lesson_type": "essay_analysis",
+          "scenario": "partner reads the source passage aloud twice. The reviewer listens without looking at the text.",
+          "flashcards": [
+            {
+              "question": "Does the sentence present release as certain or merely possible?",
+              "answer": "the review is complete; from 1 June onward; it states that it will be available, not that it may be",
+              "phonetic": "",
+              "id": "POST-C2.T03.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "compare source and revision for preserved propositions, date, commitment strength, tone, and readability. Use a short commentary to justify each substantive change. There is no single correct rewrite; score the reasoning against these criteria.",
+            "state the release date and commitment strength."
+          ],
+          "unit_id": "POST-C2.T03",
+          "order": 7,
+          "source": "levels/post-c2.md",
+          "source_line": 180,
+          "scenario_source": "listening_script",
+          "workshop_source_id": "POST-C2.T03.L01"
+        },
+        {
+          "id": "POST-C2.T03.L02",
+          "title": "Diagnose before rewriting",
+          "lesson_type": "essay_analysis",
+          "scenario": "mark a supplied 250-word draft with queries, not guesses, and sort edits into meaning / structure / style.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Diagnose before rewriting”?",
+              "answer": "annotate a draft for ambiguity, unsupported claims, repetition, hidden agency, and audience mismatch before editing it.",
+              "phonetic": "",
+              "id": "POST-C2.T03.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "each proposed change has an identified problem and does not add facts."
+          ],
+          "unit_id": "POST-C2.T03",
+          "order": 8,
+          "source": "levels/post-c2.md",
+          "source_line": 184,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T03.L03",
+          "title": "Edit for flow, register, and fidelity",
+          "lesson_type": "essay_analysis",
+          "scenario": "edit a new 180–250-word notice for two audiences; provide a change log with three consequential edits and one query.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Edit for flow, register, and fidelity”?",
+              "answer": "produce two audience-specific revisions of the same short message and explain how wording affects emphasis and commitment.",
+              "phonetic": "",
+              "id": "POST-C2.T03.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "meaning and commitment are stable, both registers suit their readers, and each rationale points to evidence in the source."
+          ],
+          "unit_id": "POST-C2.T03",
+          "order": 9,
+          "source": "levels/post-c2.md",
+          "source_line": 194,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T04.L01",
+          "title": "Build an argument listeners can follow",
+          "lesson_type": "essay_analysis",
+          "scenario": "prepare a 3–4-minute argument from a new evidence card.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Build an argument listeners can follow”?",
+              "answer": "outline a talk with a question, claim, evidence, qualification, counterargument, and decision request.",
+              "phonetic": "",
+              "id": "POST-C2.T04.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "each claim has a source or is labeled as a proposal; the decision follows from stated evidence and limits."
+          ],
+          "unit_id": "POST-C2.T04",
+          "order": 10,
+          "source": "levels/post-c2.md",
+          "source_line": 208,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T04.L02",
+          "title": "Handle questions and chair disagreement",
+          "lesson_type": "role_play",
+          "scenario": "deliver an argument and respond to one evidence challenge and one value-based objection; chair a partner exchange and summarize both positions.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Handle questions and chair disagreement”?",
+              "answer": "answer a challenge, clarify a term, and summarize two positions fairly before moving a discussion forward.",
+              "phonetic": "",
+              "id": "POST-C2.T04.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "answer is relevant, uncertainty is retained, and each position is recognizable to its speaker."
+          ],
+          "unit_id": "POST-C2.T04",
+          "order": 11,
+          "source": "levels/post-c2.md",
+          "source_line": 216,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T04.L03",
+          "title": "Rehearse delivery and adapt to audience",
+          "lesson_type": "essay_analysis",
+          "scenario": "compare the specialist phrase “comparative utilization data” with “how many people use the service compared with before.” Both can be suitable; choose for audience and define the measure.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Rehearse delivery and adapt to audience”?",
+              "answer": "adapt an argument for a specialist and a public audience while preserving its evidence and decision.",
+              "phonetic": "",
+              "id": "POST-C2.T04.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "both versions retain the same claim, limit, and decision; the explanation fits the audience."
+          ],
+          "unit_id": "POST-C2.T04",
+          "order": 12,
+          "source": "levels/post-c2.md",
+          "source_line": 224,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T05.L01",
+          "title": "Analyze the source before translating",
+          "lesson_type": "essay_analysis",
+          "scenario": "complete a source brief for a short notice and flag one phrase requiring author clarification.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Analyze the source before translating”?",
+              "answer": "identify proposition, actor, time, modality, register, implied relationship, and unresolved ambiguity before drafting a translation.",
+              "phonetic": "",
+              "id": "POST-C2.T05.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "proposition, time, condition, and commitment are captured separately."
+          ],
+          "unit_id": "POST-C2.T05",
+          "order": 13,
+          "source": "levels/post-c2.md",
+          "source_line": 236,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T05.L02",
+          "title": "Compare translations and mediate meaning",
+          "lesson_type": "essay_analysis",
+          "scenario": "compare two learner-generated translations of a new source, note the audience, and explain one alternative.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Compare translations and mediate meaning”?",
+              "answer": "compare two translations for proposition, register, audience, and pragmatic effect; explain a preferred version and one residual loss.",
+              "phonetic": "",
+              "id": "POST-C2.T05.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "comparison cites specific wording and distinguishes source facts from translator inference."
+          ],
+          "unit_id": "POST-C2.T05",
+          "order": 14,
+          "source": "levels/post-c2.md",
+          "source_line": 244,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T05.L03",
+          "title": "Revise translation and explain uncertainty",
+          "lesson_type": "essay_analysis",
+          "scenario": "translate a 100–140-word fictional public notice, add a 60-word translator’s note, and orally brief a non-specialist.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Revise translation and explain uncertainty”?",
+              "answer": "deliver a translation plus a concise translator’s note identifying ambiguity, chosen interpretation, and a question that would resolve it.",
+              "phonetic": "",
+              "id": "POST-C2.T05.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "key facts and commitments are retained; at least one real ambiguity is responsibly handled; choices suit the stated readership."
+          ],
+          "unit_id": "POST-C2.T05",
+          "order": 15,
+          "source": "levels/post-c2.md",
+          "source_line": 252,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T06.L01",
+          "title": "Trace framing and agency",
+          "lesson_type": "essay_analysis",
+          "scenario": "annotate a short public statement for actors, verbs, evaluative terms, and omissions; separate observation from inference in two columns.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Trace framing and agency”?",
+              "answer": "compare two short accounts of the same event for actor, agency, evaluation, and omitted information.",
+              "phonetic": "",
+              "id": "POST-C2.T06.L01-FC01"
+            }
+          ],
+          "assessment": [
+            "every inference cites a linguistic cue and an alternative explanation is considered."
+          ],
+          "unit_id": "POST-C2.T06",
+          "order": 16,
+          "source": "levels/post-c2.md",
+          "source_line": 268,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T06.L02",
+          "title": "Analyze stance, implicature, and audience",
+          "lesson_type": "essay_analysis",
+          "scenario": "analyze a short excerpt with its speaker/audience/context card and identify two plausible readings plus discriminating evidence.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Analyze stance, implicature, and audience”?",
+              "answer": "explain an explicit proposition and one context-dependent implication, then state what additional context would support or weaken that reading.",
+              "phonetic": "",
+              "id": "POST-C2.T06.L02-FC01"
+            }
+          ],
+          "assessment": [
+            "explicit wording and inference are separated; no emotion is asserted as fact without cues."
+          ],
+          "unit_id": "POST-C2.T06",
+          "order": 17,
+          "source": "levels/post-c2.md",
+          "source_line": 276,
+          "scenario_source": "source_task"
+        },
+        {
+          "id": "POST-C2.T06.L03",
+          "title": "Evaluate rhetorical effects and write an analysis",
+          "lesson_type": "essay_analysis",
+          "scenario": "“We counted the forms processed, not the cases resolved.” The parallel construction makes the measure distinction salient; it does not prove either number is high or low. A defensible analysis states the feature, textual cue, possible effect, and limit.",
+          "flashcards": [
+            {
+              "question": "What is the goal of “Evaluate rhetorical effects and write an analysis”?",
+              "answer": "produce a short discourse analysis linking at least three textual features to plausible audience effects, with evidence and limits.",
+              "phonetic": "",
+              "id": "POST-C2.T06.L03-FC01"
+            }
+          ],
+          "assessment": [
+            "three observations have quoted cues, inferences are qualified, context is used, and one alternative reading is fairly represented."
+          ],
+          "unit_id": "POST-C2.T06",
+          "order": 18,
+          "source": "levels/post-c2.md",
+          "source_line": 288,
+          "scenario_source": "source_task"
+        }
+      ]
+    }
+  ]
+}

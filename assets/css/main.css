@@ -119,6 +119,60 @@ body {
   transition: background var(--medium) var(--ease), color var(--medium) var(--ease);
 }
 html[data-ui-lang="en"] body { font-family: var(--font-en), var(--font-ar), sans-serif; }
+html[data-curriculum="esh"] body { font-family: "Cairo", "Tajawal", var(--font-ar), sans-serif; }
+html[data-curriculum="esh"] .esh-onboarding,
+html[data-curriculum="esh"] .esh-personal-plan { direction: rtl; }
+html[data-curriculum="esh"] .esh-onboarding {
+  max-inline-size: 760px;
+  margin: clamp(12px, 4vw, 42px) auto;
+  padding: clamp(20px, 4vw, 42px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, var(--surface-raised), var(--surface));
+  box-shadow: var(--shadow);
+}
+.esh-onboarding__brand, .esh-onboarding__step, .esh-onboarding__privacy { color: var(--text-muted); }
+.esh-onboarding__brand { display: flex; align-items: center; gap: 9px; color: var(--accent); font-weight: 700; }
+.esh-onboarding__brand span { font-size: 1.4rem; }
+.esh-onboarding__progress { block-size: 7px; margin-block: 26px 14px; overflow: hidden; border-radius: 99px; background: var(--surface-hover); }
+.esh-onboarding__progress span { display: block; block-size: 100%; border-radius: inherit; background: var(--accent); transition: width 180ms ease; }
+.esh-onboarding__step { margin-block-end: 8px; font-size: .88rem; }
+.esh-onboarding h1 { margin-block-end: 10px; font-size: clamp(1.45rem, 3vw, 2rem); }
+.esh-onboarding__intro { margin-block-end: 24px; color: var(--text-soft); }
+.esh-onboarding__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.esh-onboarding__choice { display: grid; gap: 5px; min-block-size: 84px; padding: 15px 16px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface-raised); color: var(--text); text-align: start; transition: border-color 140ms ease, background 140ms ease, transform 140ms ease; }
+.esh-onboarding__choice:hover { transform: translateY(-2px); border-color: var(--accent); }
+.esh-onboarding__choice.is-selected { border-color: var(--accent); background: var(--accent-soft); }
+.esh-onboarding__choice-title { font-weight: 700; }
+.esh-onboarding__choice-description { color: var(--text-muted); font-size: .86rem; }
+.esh-onboarding__choices--compact { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.esh-onboarding__choices--compact .esh-onboarding__choice { min-block-size: 48px; place-content: center; text-align: center; }
+.esh-onboarding__quiz { display: grid; gap: 16px; }
+.esh-onboarding__question { min-inline-size: 0; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); }
+.esh-onboarding__question legend { display: flex; align-items: center; gap: 10px; padding-inline: 5px; }
+.esh-onboarding__question legend > span { display: grid; inline-size: 28px; block-size: 28px; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+.esh-onboarding__footer { display: flex; justify-content: space-between; gap: 12px; margin-block-start: 24px; }
+.esh-onboarding__footer .btn:disabled { cursor: not-allowed; opacity: .48; }
+.esh-onboarding__privacy { margin-block-start: 18px; text-align: center; font-size: .82rem; }
+.esh-personal-plan { margin-block-end: 20px; padding: clamp(18px, 3vw, 28px); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.esh-personal-plan__head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.esh-personal-plan__eyebrow { margin: 0 0 4px; color: var(--accent); font-size: .85rem; font-weight: 700; }
+.esh-personal-plan__head h2 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+.esh-personal-plan__summary { margin-block: 12px 18px; color: var(--text-muted); }
+.esh-personal-plan__lessons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.esh-personal-lesson { display: flex; align-items: center; gap: 12px; min-inline-size: 0; padding: 13px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-raised); }
+.esh-personal-lesson:hover { border-color: var(--accent); }
+.esh-personal-lesson__icon { display: grid; flex: 0 0 38px; inline-size: 38px; block-size: 38px; place-items: center; border-radius: 12px; background: var(--accent-soft); }
+.esh-personal-lesson__body { display: grid; min-inline-size: 0; gap: 3px; }
+.esh-personal-lesson__body b { overflow: hidden; text-overflow: ellipsis; }
+.esh-personal-lesson__body small { color: var(--text-muted); }
+.esh-personal-lesson__arrow { margin-inline-start: auto; color: var(--accent); }
+html[data-curriculum="esh"] #btnLang { display: none; }
+@media (max-width: 640px) {
+  .esh-onboarding__choices, .esh-personal-plan__lessons { grid-template-columns: 1fr; }
+  .esh-personal-plan__head { align-items: flex-start; }
+  .esh-onboarding__footer .btn { flex: 1; }
+}
 img, svg, video { display: block; max-inline-size: 100%; }
 button, input, select, textarea { color: inherit; font: inherit; }
 button { cursor: pointer; }

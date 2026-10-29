@@ -1,0 +1,443 @@
+{
+  "level": "C2",
+  "title": "C2 — Proficiency",
+  "units": [
+    {
+      "id": "C2.U01",
+      "title": "Precision and nuance",
+      "order": 1
+    },
+    {
+      "id": "C2.U02",
+      "title": "Advanced reading and interpretation",
+      "order": 2
+    },
+    {
+      "id": "C2.U03",
+      "title": "Public speaking and influence",
+      "order": 3
+    },
+    {
+      "id": "C2.U04",
+      "title": "Professional communication",
+      "order": 4
+    },
+    {
+      "id": "C2.U05",
+      "title": "High-level written sophistication",
+      "order": 5
+    },
+    {
+      "id": "C2.U06",
+      "title": "Advanced interaction and mediation",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "C2.U01.L01",
+      "title": "Choose precise words in context",
+      "lesson_type": "essay_analysis",
+      "scenario": "distinguish the contextual force of four near-synonyms and justify a choice with the source's communicative purpose.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Choose precise words in context”?",
+          "answer": "distinguish the contextual force of four near-synonyms and justify a choice with the source's communicative purpose.",
+          "phonetic": "",
+          "id": "C2.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "wording preserves observation and causal limit."
+      ],
+      "unit_id": "C2.U01",
+      "order": 1,
+      "source": "levels/c2.md",
+      "source_line": 114,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U01.L02",
+      "title": "Edit commitment and focus",
+      "lesson_type": "essay_analysis",
+      "scenario": "revise a short passage without changing date, quantity, condition, scope, or modality.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Edit commitment and focus”?",
+          "answer": "revise a short passage without changing date, quantity, condition, scope, or modality.",
+          "phonetic": "",
+          "id": "C2.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "all factual commitments remain stable.",
+        "C2-T-U01 language item."
+      ],
+      "unit_id": "C2.U01",
+      "order": 2,
+      "source": "levels/c2.md",
+      "source_line": 118,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U01.L03",
+      "title": "Adapt two audience versions",
+      "lesson_type": "essay_analysis",
+      "scenario": "produce two audience-specific versions and explain one deliberate change that does not alter the evidence.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Adapt two audience versions”?",
+          "answer": "produce two audience-specific versions and explain one deliberate change that does not alter the evidence.",
+          "phonetic": "",
+          "id": "C2.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "both versions preserve the provisional decision and the missing causal evidence.",
+        "C2-T-U01 transfer."
+      ],
+      "unit_id": "C2.U01",
+      "order": 3,
+      "source": "levels/c2.md",
+      "source_line": 122,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U02.L01",
+      "title": "Reconstruct premises",
+      "lesson_type": "essay_analysis",
+      "scenario": "distinguish explicit proposition, presupposition, entailment, and defeasible implication in a dense short argument.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Reconstruct premises”?",
+          "answer": "distinguish explicit proposition, presupposition, entailment, and defeasible implication in a dense short argument.",
+          "phonetic": "",
+          "id": "C2.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "categories are correctly assigned and supported by wording."
+      ],
+      "unit_id": "C2.U02",
+      "order": 4,
+      "source": "levels/c2.md",
+      "source_line": 126,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U02.L02",
+      "title": "Rank competing readings",
+      "lesson_type": "essay_analysis",
+      "scenario": "rank three interpretations by textual support and explain why one plausible claim is unsupported.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Rank competing readings”?",
+          "answer": "rank three interpretations by textual support and explain why one plausible claim is unsupported.",
+          "phonetic": "",
+          "id": "C2.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "strongest reading is supported; contradiction and absence of evidence are distinguished."
+      ],
+      "unit_id": "C2.U02",
+      "order": 5,
+      "source": "levels/c2.md",
+      "source_line": 130,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U02.L03",
+      "title": "Write interpretive commentary",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 120–160-word commentary separating explicit content, inference, and unknown, with an alternative interpretation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write interpretive commentary”?",
+          "answer": "write a 120–160-word commentary separating explicit content, inference, and unknown, with an alternative interpretation.",
+          "phonetic": "",
+          "id": "C2.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "every interpretive claim cites a cue and at least one plausible alternative is acknowledged.",
+        "C2-T-U02 transfer."
+      ],
+      "unit_id": "C2.U02",
+      "order": 6,
+      "source": "levels/c2.md",
+      "source_line": 134,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U03.L01",
+      "title": "Shape an address for an audience",
+      "lesson_type": "essay_analysis",
+      "scenario": "organize an address with a claim, progression, and close suited to a stated audience.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Shape an address for an audience”?",
+          "answer": "organize an address with a claim, progression, and close suited to a stated audience.",
+          "phonetic": "",
+          "id": "C2.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "audience can restate the recommendation without mistaking it for cancellation."
+      ],
+      "unit_id": "C2.U03",
+      "order": 7,
+      "source": "levels/c2.md",
+      "source_line": 138,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U03.L02",
+      "title": "Control parallelism and emphasis",
+      "lesson_type": "essay_analysis",
+      "scenario": "use one parallel contrast to sharpen a distinction without exaggerating evidence.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Control parallelism and emphasis”?",
+          "answer": "use one parallel contrast to sharpen a distinction without exaggerating evidence.",
+          "phonetic": "",
+          "id": "C2.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "wording is parallel and the listener identifies output versus outcome."
+      ],
+      "unit_id": "C2.U03",
+      "order": 8,
+      "source": "levels/c2.md",
+      "source_line": 142,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U03.L03",
+      "title": "Answer adversarial questions",
+      "lesson_type": "role_play",
+      "scenario": "answer two challenging questions by acknowledging their premise, addressing evidence or values, and preserving qualifications.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Answer adversarial questions”?",
+          "answer": "answer two challenging questions by acknowledging their premise, addressing evidence or values, and preserving qualifications.",
+          "phonetic": "",
+          "id": "C2.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "direct response, evidence boundary, and one useful clarification/repair are observable.",
+        "C2-T-U03 transfer."
+      ],
+      "unit_id": "C2.U03",
+      "order": 9,
+      "source": "levels/c2.md",
+      "source_line": 146,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U04.L01",
+      "title": "Map authority, interests, and unknowns",
+      "lesson_type": "essay_analysis",
+      "scenario": "record each stakeholder's position, condition, authority, and unknown before negotiation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Map authority, interests, and unknowns”?",
+          "answer": "record each stakeholder's position, condition, authority, and unknown before negotiation.",
+          "phonetic": "",
+          "id": "C2.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "preferences are not presented as commitments, and scope is accurate."
+      ],
+      "unit_id": "C2.U04",
+      "order": 10,
+      "source": "levels/c2.md",
+      "source_line": 150,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U04.L02",
+      "title": "Make a high-stakes recommendation with precision",
+      "lesson_type": "essay_analysis",
+      "scenario": "“Operations supports a pilot if weekend data are collected. Finance prefers a cap on overtime. The service lead says any cap must not leave the busiest shift uncovered. No team has yet estimated the effect on customer satisfaction.”",
+      "flashcards": [
+        {
+          "question": "What does the proposed pilot test?",
+          "answer": "longer response times in two peak periods; weekend performance and broader causes; whether temporary staffing improves service within an acceptable cost",
+          "phonetic": "",
+          "id": "C2.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "0–2 each for factual fidelity, explicit uncertainty, workable safeguards, and concise register. Success: 6/8 with no invented facts; specialist review is required for actual operational decisions.",
+        "state one condition from each function and one missing measure."
+      ],
+      "unit_id": "C2.U04",
+      "order": 11,
+      "source": "levels/c2.md",
+      "source_line": 154,
+      "scenario_source": "listening_script",
+      "workshop_source_id": "C2.U04.L02"
+    },
+    {
+      "id": "C2.U04.L03",
+      "title": "Write and verify a decision record",
+      "lesson_type": "essay_analysis",
+      "scenario": "produce a concise record that names decision, actor, condition, owner, measure, review date, and unresolved issue.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write and verify a decision record”?",
+          "answer": "produce a concise record that names decision, actor, condition, owner, measure, review date, and unresolved issue.",
+          "phonetic": "",
+          "id": "C2.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "a reader can identify exactly what was authorized and what was not.",
+        "C2-T-U04 transfer."
+      ],
+      "unit_id": "C2.U04",
+      "order": 12,
+      "source": "levels/c2.md",
+      "source_line": 158,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U05.L01",
+      "title": "Audit the claim chain",
+      "lesson_type": "essay_analysis",
+      "scenario": "trace a report's evidence, alternative explanation, limit, and recommendation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Audit the claim chain”?",
+          "answer": "trace a report's evidence, alternative explanation, limit, and recommendation.",
+          "phonetic": "",
+          "id": "C2.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "staffing is not named as the sole cause."
+      ],
+      "unit_id": "C2.U05",
+      "order": 13,
+      "source": "levels/c2.md",
+      "source_line": 162,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U05.L02",
+      "title": "Revise information focus and rhythm",
+      "lesson_type": "essay_analysis",
+      "scenario": "revise sentence order and rhythm to foreground the decision boundary without changing claim strength.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Revise information focus and rhythm”?",
+          "answer": "revise sentence order and rhythm to foreground the decision boundary without changing claim strength.",
+          "phonetic": "",
+          "id": "C2.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "focus improves while scope and qualification remain unchanged."
+      ],
+      "unit_id": "C2.U05",
+      "order": 14,
+      "source": "levels/c2.md",
+      "source_line": 166,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U05.L03",
+      "title": "Edit for fidelity and concision",
+      "lesson_type": "essay_analysis",
+      "scenario": "produce a 180–230-word evidence-based note and a revision note explaining an improvement that preserves meaning.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Edit for fidelity and concision”?",
+          "answer": "produce a 180–230-word evidence-based note and a revision note explaining an improvement that preserves meaning.",
+          "phonetic": "",
+          "id": "C2.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "no invented evidence, exact causal limit, and a defensible audience choice.",
+        "C2-T-U05 transfer."
+      ],
+      "unit_id": "C2.U05",
+      "order": 15,
+      "source": "levels/c2.md",
+      "source_line": 170,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U06.L01",
+      "title": "Track exact commitments",
+      "lesson_type": "essay_analysis",
+      "scenario": "distinguish a stated commitment, conditional plan, opinion, and inference in conflicting accounts.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Track exact commitments”?",
+          "answer": "distinguish a stated commitment, conditional plan, opinion, and inference in conflicting accounts.",
+          "phonetic": "",
+          "id": "C2.U06.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "no one is reported as saying analysis is complete."
+      ],
+      "unit_id": "C2.U06",
+      "order": 16,
+      "source": "levels/c2.md",
+      "source_line": 174,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U06.L02",
+      "title": "Test and repair understanding",
+      "lesson_type": "role_play",
+      "scenario": "ask a clarification question that tests scope or deadline and reformulate a partner's position for confirmation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Test and repair understanding”?",
+          "answer": "ask a clarification question that tests scope or deadline and reformulate a partner's position for confirmation.",
+          "phonetic": "",
+          "id": "C2.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "ambiguity is surfaced and correction incorporated."
+      ],
+      "unit_id": "C2.U06",
+      "order": 17,
+      "source": "levels/c2.md",
+      "source_line": 178,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C2.U06.L03",
+      "title": "Mediate for two audiences",
+      "lesson_type": "role_play",
+      "scenario": "create specialist and public summaries that preserve the same condition and uncertainty.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Mediate for two audiences”?",
+          "answer": "create specialist and public summaries that preserve the same condition and uncertainty.",
+          "phonetic": "",
+          "id": "C2.U06.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "both accounts preserve the completeness condition and do not call Friday unconditional.",
+        "C2-T-U06 transfer."
+      ],
+      "unit_id": "C2.U06",
+      "order": 18,
+      "source": "levels/c2.md",
+      "source_line": 182,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

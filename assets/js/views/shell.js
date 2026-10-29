@@ -3,7 +3,7 @@ import { t as uiText } from '../core/i18n.js';
 import { t } from '../core/i18n.js';
 import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
-import { progress, settings } from '../core/store.js';
+import { progress, settings, isEshSandbox } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
 import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 
@@ -41,7 +41,8 @@ export function renderNav() {
         <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
         <span><b>English Academy</b><small>${uiText('ui.literal.70104948')} </small></span>
       </div>
-      <a class="zero-nav" href="./zero.html" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
+      `;
+    if (!isEshSandbox) html += `<a class="zero-nav" href="./zero.html" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
         <span class="zero-nav__badge" aria-hidden="true">A0</span>
         <span class="zero-nav__txt">
           <b>${uiText('ui.literal.ef3e7371')} A0</b>
@@ -52,7 +53,10 @@ export function renderNav() {
       </a>`;
 
     let lastGroup = '';
-    for (const item of NAV_ITEMS) {
+    const navItems = isEshSandbox
+      ? NAV_ITEMS.filter((item) => ['nav.home', 'nav.lessons', 'nav.drills', 'nav.flashcards', 'nav.stats', 'nav.notebook', 'nav.settings'].includes(item.key))
+      : NAV_ITEMS;
+    for (const item of navItems) {
       if (item.group !== lastGroup) {
         html += `<div class="sidenav__group">${t(item.group)}</div>`;
         lastGroup = item.group;
@@ -64,8 +68,10 @@ export function renderNav() {
       html += `<a href="#/level/${lv.id}" data-nav data-route="#/level/${lv.id}" title="${esc(lv.label)}"><span class="ico" aria-hidden="true">${lv.icon}</span><span class="lbl">${esc(lv.label)}</span></a>`;
     });
     html += `<div class="sidenav__group">${t('nav.group.me')}</div>`;
-    html += `<a href="#/about" data-nav data-route="#/about" title="${t('nav.about')}"><span class="ico" aria-hidden="true">ℹ️</span><span class="lbl">${t('nav.about')}</span></a>`;
-    html += `<a href="#/support" data-nav data-route="#/support" title="${t('nav.support')}"><span class="ico" aria-hidden="true">💛</span><span class="lbl">${t('nav.support')}</span></a>`;
+    if (!isEshSandbox) {
+      html += `<a href="#/about" data-nav data-route="#/about" title="${t('nav.about')}"><span class="ico" aria-hidden="true">ℹ️</span><span class="lbl">${t('nav.about')}</span></a>`;
+      html += `<a href="#/support" data-nav data-route="#/support" title="${t('nav.support')}"><span class="ico" aria-hidden="true">💛</span><span class="lbl">${t('nav.support')}</span></a>`;
+    }
     side.innerHTML = html;
   }
 
@@ -125,7 +131,7 @@ export function renderSidebarStats() {
       <b>${t('dash.courseProgress')}</b>
       <div class="progress"><i style="width:${o.percent}%"></i></div>
       <div class="small muted" style="margin-top:6px">${o.unitsDone} / ${o.unitsTotal} ${t('lessons.units')} · ${o.percent}%</div>
-      <div class="small muted">🌱 ${uiText('ui.literal.e4013531')} A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} ${uiText('ui.literal.000ac055')} </div>
+      ${isEshSandbox ? '' : `<div class="small muted">🌱 ${uiText('ui.literal.e4013531')} A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} ${uiText('ui.literal.000ac055')} </div>`}
       <div class="small muted">⭐ ${progress.points || 0} ${t('common.points')}</div>`;
   }
 }

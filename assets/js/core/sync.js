@@ -1,6 +1,6 @@
-import { exportCloudProgress } from './store.js';
+import { exportCloudProgress, isEshSandbox, KEYS } from './store.js';
 
-export const SYNC_QUEUE_KEY = 'lea.sync.queue.v1';
+export const SYNC_QUEUE_KEY = KEYS.K_SYNC_QUEUE;
 let configuredTransport = null;
 let onlineHandlerRegistered = false;
 
@@ -23,6 +23,7 @@ function validatePayload(payload) {
 }
 
 export function getSyncQueueStatus() {
+  if (isEshSandbox) return { pending: false, queuedAt: '', lastError: '', cardCount: 0 };
   const queue = readQueue();
   return {
     pending: Boolean(queue),
@@ -33,6 +34,7 @@ export function getSyncQueueStatus() {
 }
 
 export function queueSyncProgress(payload = exportCloudProgress()) {
+  if (isEshSandbox) throw new Error('Cloud sync is disabled in the ESH curriculum sandbox.');
   validatePayload(payload);
   const queue = {
     schemaVersion: 1,
@@ -45,6 +47,7 @@ export function queueSyncProgress(payload = exportCloudProgress()) {
 }
 
 export async function flushSyncQueue(transport) {
+  if (isEshSandbox) return { status: 'disabled' };
   const queue = readQueue();
   if (!queue) return { status: 'empty' };
   if (typeof transport !== 'function') return { status: 'queued', ...getSyncQueueStatus() };
@@ -64,6 +67,7 @@ export async function flushSyncQueue(transport) {
 }
 
 export function configureSyncTransport(transport) {
+  if (isEshSandbox) return Promise.resolve({ status: 'disabled' });
   if (typeof transport !== 'function') throw new TypeError('Sync transport must be a function.');
   configuredTransport = transport;
   if (!onlineHandlerRegistered && typeof window !== 'undefined') {

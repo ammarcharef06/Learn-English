@@ -73,7 +73,7 @@ export async function hashPassword(password, salt = '') {
 }
 
 /* ---------- حالة المصادقة ---------- */
-import { readAuth, writeAuth, readSession, writeSession, settings, saveSettings } from './store.js';
+import { readAuth, writeAuth, readSession, writeSession, settings, saveSettings, isEshSandbox } from './store.js';
 
 export function hasPassword() {
   const a = readAuth();
@@ -97,10 +97,14 @@ async function verify(password) {
 
 /* حماية من التخمين */
 function attempts() {
-  try { return JSON.parse(localStorage.getItem('lea.attempts.v1') || '{"n":0,"until":0}'); }
+  const key = isEshSandbox ? 'lea.esh.attempts.v1' : 'lea.attempts.v1';
+  try { return JSON.parse(localStorage.getItem(key) || '{"n":0,"until":0}'); }
   catch { return { n: 0, until: 0 }; }
 }
-function setAttempts(v) { try { localStorage.setItem('lea.attempts.v1', JSON.stringify(v)); } catch {} }
+function setAttempts(v) {
+  const key = isEshSandbox ? 'lea.esh.attempts.v1' : 'lea.attempts.v1';
+  try { localStorage.setItem(key, JSON.stringify(v)); } catch {}
+}
 
 export function lockRemainingMs() {
   const a = attempts();

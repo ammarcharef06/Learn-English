@@ -26,6 +26,7 @@ for (const file of rootFiles) {
   await writeFile(resolve(out, file), nativeContent);
 }
 await cp(resolve(root, 'assets'), resolve(out, 'assets'), { recursive: true });
+await cp(resolve(root, 'curriculum'), resolve(out, 'curriculum'), { recursive: true });
 await cp(resolve(root, 'node_modules/@capacitor/core/dist/capacitor.js'), resolve(out, 'capacitor.js'));
 await mkdir(resolve(out, 'assets/js/vendor'), { recursive: true });
 await build({

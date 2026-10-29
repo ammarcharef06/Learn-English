@@ -1,0 +1,443 @@
+{
+  "level": "C1",
+  "title": "C1 — Advanced",
+  "units": [
+    {
+      "id": "C1.U01",
+      "title": "Reading and analytic comprehension",
+      "order": 1
+    },
+    {
+      "id": "C1.U02",
+      "title": "Academic and professional writing",
+      "order": 2
+    },
+    {
+      "id": "C1.U03",
+      "title": "Oral argumentation and presentations",
+      "order": 3
+    },
+    {
+      "id": "C1.U04",
+      "title": "Implicit meaning and nuance",
+      "order": 4
+    },
+    {
+      "id": "C1.U05",
+      "title": "Research and synthesis",
+      "order": 5
+    },
+    {
+      "id": "C1.U06",
+      "title": "Negotiation and complex interaction",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "C1.U01.L01",
+      "title": "Map an argument",
+      "lesson_type": "essay_analysis",
+      "scenario": "label a passage's claim, evidence, qualification, and conclusion, each with a text cue.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Map an argument”?",
+          "answer": "label a passage's claim, evidence, qualification, and conclusion, each with a text cue.",
+          "phonetic": "",
+          "id": "C1.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "all four functions are located and the qualification is not mistaken for a refutation."
+      ],
+      "unit_id": "C1.U01",
+      "order": 1,
+      "source": "levels/c1.md",
+      "source_line": 133,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U01.L02",
+      "title": "Follow cohesion and scope",
+      "lesson_type": "essay_analysis",
+      "scenario": "trace two reference or connective links and identify the scope of a claim.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Follow cohesion and scope”?",
+          "answer": "trace two reference or connective links and identify the scope of a claim.",
+          "phonetic": "",
+          "id": "C1.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "both links are accurate and no broader population or causal claim is invented."
+      ],
+      "unit_id": "C1.U01",
+      "order": 2,
+      "source": "levels/c1.md",
+      "source_line": 137,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U01.L03",
+      "title": "Write an analytical summary",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 70–90-word summary retaining evidence, limitation, and implication.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write an analytical summary”?",
+          "answer": "write a 70–90-word summary retaining evidence, limitation, and implication.",
+          "phonetic": "",
+          "id": "C1.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "includes all three required relations and makes no unsupported causal claim.",
+        "C1-T-U01 transfer."
+      ],
+      "unit_id": "C1.U01",
+      "order": 3,
+      "source": "levels/c1.md",
+      "source_line": 141,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U02.L01",
+      "title": "Plan for a decision reader",
+      "lesson_type": "essay_analysis",
+      "scenario": "organize a report note around a decision question, evidence, limitation, recommendation, and next check.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Plan for a decision reader”?",
+          "answer": "organize a report note around a decision question, evidence, limitation, recommendation, and next check.",
+          "phonetic": "",
+          "id": "C1.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "all five functions appear in a logical order and the recommendation remains limited."
+      ],
+      "unit_id": "C1.U02",
+      "order": 4,
+      "source": "levels/c1.md",
+      "source_line": 145,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U02.L02",
+      "title": "Edit agency and register",
+      "lesson_type": "sentence_builder",
+      "scenario": "revise nominalized or passive wording when it hides a relevant actor, without making the tone less professional.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Edit agency and register”?",
+          "answer": "revise nominalized or passive wording when it hides a relevant actor, without making the tone less professional.",
+          "phonetic": "",
+          "id": "C1.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "actor and meaning are preserved; tone is direct, not inflated.",
+        "C1-T-U02 language item."
+      ],
+      "unit_id": "C1.U02",
+      "order": 5,
+      "source": "levels/c1.md",
+      "source_line": 149,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U02.L03",
+      "title": "Draft an evidence-based note",
+      "lesson_type": "essay_analysis",
+      "scenario": "produce a 70–100-word manager note including evidence, limitation, and action.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Draft an evidence-based note”?",
+          "answer": "produce a 70–100-word manager note including evidence, limitation, and action.",
+          "phonetic": "",
+          "id": "C1.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "all three elements are present and the guide is not credited with an effect that may also come from demonstrations.",
+        "C1-T-U02 transfer."
+      ],
+      "unit_id": "C1.U02",
+      "order": 6,
+      "source": "levels/c1.md",
+      "source_line": 153,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U03.L01",
+      "title": "Build a spoken argument map",
+      "lesson_type": "essay_analysis",
+      "scenario": "plan a short talk with claim, evidence, limitation, and decision rule.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Build a spoken argument map”?",
+          "answer": "plan a short talk with claim, evidence, limitation, and decision rule.",
+          "phonetic": "",
+          "id": "C1.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "no evidence point is used to prove an unmeasured outcome."
+      ],
+      "unit_id": "C1.U03",
+      "order": 7,
+      "source": "levels/c1.md",
+      "source_line": 157,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U03.L02",
+      "title": "Make relations audible",
+      "lesson_type": "essay_analysis",
+      "scenario": "use signposting and pausing to make two reasoning relations clear in a spoken explanation.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Make relations audible”?",
+          "answer": "use signposting and pausing to make two reasoning relations clear in a spoken explanation.",
+          "phonetic": "",
+          "id": "C1.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "listener identifies the intended relation without seeing the notes."
+      ],
+      "unit_id": "C1.U03",
+      "order": 8,
+      "source": "levels/c1.md",
+      "source_line": 161,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U03.L03",
+      "title": "Respond and repair",
+      "lesson_type": "role_play",
+      "scenario": "answer a challenge question relevantly and clarify one ambiguous term.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Respond and repair”?",
+          "answer": "answer a challenge question relevantly and clarify one ambiguous term.",
+          "phonetic": "",
+          "id": "C1.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "direct response, accurate qualification, and successful clarification/repair.",
+        "C1-T-U03 transfer."
+      ],
+      "unit_id": "C1.U03",
+      "order": 9,
+      "source": "levels/c1.md",
+      "source_line": 165,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U04.L01",
+      "title": "Infer stance from cues",
+      "lesson_type": "essay_analysis",
+      "scenario": "support a stance inference with two wording/context cues and label it as inference.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Infer stance from cues”?",
+          "answer": "support a stance inference with two wording/context cues and label it as inference.",
+          "phonetic": "",
+          "id": "C1.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "two cues cited; no inferred emotion is stated as fact."
+      ],
+      "unit_id": "C1.U04",
+      "order": 10,
+      "source": "levels/c1.md",
+      "source_line": 169,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U04.L02",
+      "title": "Interpret irony cautiously",
+      "lesson_type": "essay_analysis",
+      "scenario": "compare a literal and a plausible ironic reading and state what remains uncertain.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Interpret irony cautiously”?",
+          "answer": "compare a literal and a plausible ironic reading and state what remains uncertain.",
+          "phonetic": "",
+          "id": "C1.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "the challenge is recognized while hostility/sarcasm is not assumed."
+      ],
+      "unit_id": "C1.U04",
+      "order": 11,
+      "source": "levels/c1.md",
+      "source_line": 173,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U04.L03",
+      "title": "Paraphrase implication",
+      "lesson_type": "essay_analysis",
+      "scenario": "produce a neutral paraphrase and a clearly labeled inference from the same input.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Paraphrase implication”?",
+          "answer": "produce a neutral paraphrase and a clearly labeled inference from the same input.",
+          "phonetic": "",
+          "id": "C1.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "explicit content and inference remain distinct and cue-supported.",
+        "C1-T-U04 transfer."
+      ],
+      "unit_id": "C1.U04",
+      "order": 12,
+      "source": "levels/c1.md",
+      "source_line": 177,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U05.L01",
+      "title": "Compare methods and constructs",
+      "lesson_type": "essay_analysis",
+      "scenario": "state what two sources measure and whether they support a common outcome claim.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Compare methods and constructs”?",
+          "answer": "state what two sources measure and whether they support a common outcome claim.",
+          "phonetic": "",
+          "id": "C1.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "no learning-effect claim is inferred from preference or tutor views alone."
+      ],
+      "unit_id": "C1.U05",
+      "order": 13,
+      "source": "levels/c1.md",
+      "source_line": 181,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U05.L02",
+      "title": "Synthesize sources and communicate uncertainty",
+      "lesson_type": "essay_analysis",
+      "scenario": "read aloud: “Both reports suggest that schedule flexibility affects people differently. One emphasizes commute experience; the other highlights coordination. A policy may therefore need a shared collaboration window, but the evidence does not establish a single best arrangement.”",
+      "flashcards": [
+        {
+          "question": "Can either source prove that flexible schedules improve productivity?",
+          "answer": "self-reported commute stress; difficulty collaborating without shared hours; no, neither measures productivity causally",
+          "phonetic": "",
+          "id": "C1.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "0–2 each for accurate attribution, synthesis, qualification, and audience clarity. Success: 6/8 and no misrepresentation. Teacher checks paraphrase and language use.",
+        "name one focus of each report and the policy implication."
+      ],
+      "unit_id": "C1.U05",
+      "order": 14,
+      "source": "levels/c1.md",
+      "source_line": 185,
+      "scenario_source": "listening_script",
+      "workshop_source_id": "C1.U05.L02"
+    },
+    {
+      "id": "C1.U05.L03",
+      "title": "Synthesize and qualify",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 70–100-word synthesis that attributes both sources, identifies one shared theme and one difference, and proposes no unsupported conclusion.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Synthesize and qualify”?",
+          "answer": "write a 70–100-word synthesis that attributes both sources, identifies one shared theme and one difference, and proposes no unsupported conclusion.",
+          "phonetic": "",
+          "id": "C1.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "attribution and distinction are accurate; no causal outcome is invented.",
+        "C1-T-U05 transfer."
+      ],
+      "unit_id": "C1.U05",
+      "order": 15,
+      "source": "levels/c1.md",
+      "source_line": 189,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U06.L01",
+      "title": "Listen for interests",
+      "lesson_type": "essay_analysis",
+      "scenario": "distinguish a stakeholder's stated position from the interest or constraint it may represent.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Listen for interests”?",
+          "answer": "distinguish a stakeholder's stated position from the interest or constraint it may represent.",
+          "phonetic": "",
+          "id": "C1.U06.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "label proposals as proposals and do not assign motives as facts."
+      ],
+      "unit_id": "C1.U06",
+      "order": 16,
+      "source": "levels/c1.md",
+      "source_line": 193,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U06.L02",
+      "title": "Negotiate conditional options",
+      "lesson_type": "role_play",
+      "scenario": "formulate an option with a clear condition and confirm whether it is accepted.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Negotiate conditional options”?",
+          "answer": "formulate an option with a clear condition and confirm whether it is accepted.",
+          "phonetic": "",
+          "id": "C1.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "every condition is retained and no discussion is reported as consensus."
+      ],
+      "unit_id": "C1.U06",
+      "order": 17,
+      "source": "levels/c1.md",
+      "source_line": 197,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "C1.U06.L03",
+      "title": "Mediate the decision",
+      "lesson_type": "role_play",
+      "scenario": "relay the decision and one unresolved issue to a new audience without altering either.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Mediate the decision”?",
+          "answer": "relay the decision and one unresolved issue to a new audience without altering either.",
+          "phonetic": "",
+          "id": "C1.U06.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "condition, common ground, and unresolved matter are all accurately represented.",
+        "C1-T-U06 transfer."
+      ],
+      "unit_id": "C1.U06",
+      "order": 18,
+      "source": "levels/c1.md",
+      "source_line": 201,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

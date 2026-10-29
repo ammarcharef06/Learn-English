@@ -45,6 +45,7 @@ const ICON = {
  */
 export function topbarHTML(mode = 'site') {
   const isZero = mode === 'zero';
+  const isEsh = document.documentElement.dataset.curriculum === 'esh';
   const brandHref = isZero ? '#/zero' : '#/';
   const name = isZero ? uiText('ui.literal.454f7262') : t('brand.name');
   const tag = isZero ? uiText('ui.literal.fd190e5d') : t('brand.tag');
@@ -62,9 +63,9 @@ export function topbarHTML(mode = 'site') {
 
     <div class="topbar__actions">
       <button class="icon-btn" id="btnInstall" type="button" hidden title="${t('set.install')}" aria-label="${t('set.install')}">${ICON.install}</button>
-      <button class="icon-btn" id="btnLang" type="button" title="${uiText('ui.literal.57707b8d')} " aria-label="${uiText('ui.literal.57707b8d')} ">
+      ${isEsh ? '' : `<button class="icon-btn" id="btnLang" type="button" title="${uiText('ui.literal.57707b8d')} " aria-label="${uiText('ui.literal.57707b8d')} ">
         <span class="icon-btn__text" id="langLabel">${settings.uiLang === 'en' ? 'ع' : 'EN'}</span>
-      </button>
+      </button>`}
     </div>`;
 }
 

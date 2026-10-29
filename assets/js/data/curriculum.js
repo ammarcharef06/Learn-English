@@ -14,6 +14,7 @@ import {
 import { READINGS } from './readings.js';
 import { progress } from '../core/store.js';
 import { attachCurriculumAudio } from './curriculum-audio.js';
+import { loadEshCurriculum } from '../../../curriculum/esh/adapter.js';
 
 export { READINGS };
 export {
@@ -35,6 +36,7 @@ export const LEVELS = [LEVEL_A1, LEVEL_A2, LEVEL_B1].map((level) => ({
   ...level,
   units: level.units.map(normalizeCurriculumUnit),
 }));
+export let activeCurriculum = 'learn-english';
 
 export const ALL_UNITS = LEVELS.flatMap((l) => l.units.map((u) => ({
   id: u.id,
@@ -86,6 +88,18 @@ for (const stagedLevel of [C1_STAGED_CURRICULUM, C2_STAGED_CURRICULUM]) {
 export function getLevel(id) { return LEVELS.find((l) => l.id === id) || null; }
 export function getUnit(unitId) { return ALL_UNITS.find((u) => u.id === unitId) || null; }
 export function unitsOfLevel(levelId) { return ALL_UNITS.filter((u) => u.levelId === levelId); }
+
+export async function activateEshCurriculum() {
+  const adapted = await loadEshCurriculum();
+  LEVELS.splice(0, LEVELS.length, ...adapted.levels);
+  ALL_UNITS.splice(0, ALL_UNITS.length, ...adapted.units.map((unit) => ({
+    ...normalizeCurriculumUnit(unit),
+    levelColor: '#22c55e',
+    levelIcon: unit.icon,
+  })));
+  activeCurriculum = 'esh';
+  return { levels: LEVELS.length, units: ALL_UNITS.length };
+}
 
 export function levelDone(levelId) {
   const lv = getLevel(levelId);

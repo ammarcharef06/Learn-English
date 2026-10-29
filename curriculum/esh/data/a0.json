@@ -1,0 +1,555 @@
+{
+  "level": "A0",
+  "title": "A0 / Pre-A1 — First usable English",
+  "units": [
+    {
+      "id": "A0.U01",
+      "title": "People, names, numbers, and dates",
+      "order": 1
+    },
+    {
+      "id": "A0.U02",
+      "title": "Family, objects, articles, and ownership",
+      "order": 2
+    },
+    {
+      "id": "A0.U03",
+      "title": "Clock time, daily routines, and present simple",
+      "order": 3
+    },
+    {
+      "id": "A0.U04",
+      "title": "Familiar places, locations, and requests",
+      "order": 4
+    },
+    {
+      "id": "A0.U05",
+      "title": "Build, read, write, and retrieve",
+      "order": 5
+    }
+  ],
+  "lessons": [
+    {
+      "id": "A0.U01.L01",
+      "title": "Subject pronouns and `be`",
+      "lesson_type": "sentence_builder",
+      "scenario": "complete 8/10 sentence prompts with the correct subject pronoun and present be.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Subject pronouns and `be`”?",
+          "answer": "complete 8/10 sentence prompts with the correct subject pronoun and present be.",
+          "phonetic": "",
+          "id": "A0.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 correct in a new mixed set; include at least two different be forms."
+      ],
+      "unit_id": "A0.U01",
+      "order": 1,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 39,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U01.L02",
+      "title": "Affirmative, negative, and `be` questions",
+      "lesson_type": "sentence_builder",
+      "scenario": "turn 4/5 statements into accurate negatives and 4/5 into appropriate be questions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Affirmative, negative, and `be` questions”?",
+          "answer": "turn 4/5 statements into accurate negatives and 4/5 into appropriate be questions.",
+          "phonetic": "",
+          "id": "A0.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 transformations with correct order and be."
+      ],
+      "unit_id": "A0.U01",
+      "order": 2,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 65,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U01.L03",
+      "title": "Numbers, age, and spelling personal details",
+      "lesson_type": "sentence_builder",
+      "scenario": "identify, say, and write 18/20 numbers from 1–20 and the taught tens; state age using a complete phrase.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Numbers, age, and spelling personal details”?",
+          "answer": "identify, say, and write 18/20 numbers from 1–20 and the taught tens; state age using a complete phrase.",
+          "phonetic": "",
+          "id": "A0.U01.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "18/20 number recognition/writing including at least three teen/tens contrasts."
+      ],
+      "unit_id": "A0.U01",
+      "order": 3,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 98,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U01.L04",
+      "title": "A simple personal introduction",
+      "lesson_type": "sentence_builder",
+      "scenario": "“My name is Lina. I am nineteen and I live in Rabat. I have one brother. My brother is a student.”",
+      "flashcards": [
+        {
+          "question": "What is her brother?",
+          "answer": "Rabat; one; a student",
+          "phonetic": "",
+          "id": "A0.U01.L04-FC01"
+        },
+        {
+          "question": "How many sisters does he have?",
+          "answer": "twenty; Tunis; two",
+          "phonetic": "",
+          "id": "A0.U01.L04-FC02"
+        }
+      ],
+      "assessment": [
+        "at least 4/5 profile details conveyed correctly; 4 sentences use be/have accurately; question uses appropriate word order. Correct errors by sorting examples into be questions and do questions."
+      ],
+      "unit_id": "A0.U01",
+      "order": 4,
+      "source": "resources/integrated-skill-labs.md",
+      "source_line": 31,
+      "scenario_source": "reading",
+      "workshop_source_id": "A0.U01.L04"
+    },
+    {
+      "id": "A0.U01.L05",
+      "title": "Days, months, dates, and birthdays",
+      "lesson_type": "sentence_builder",
+      "scenario": "sequence days and months, understand 4/5 read dates, and say or write a personal date using an appropriate preposition.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Days, months, dates, and birthdays”?",
+          "answer": "sequence days and months, understand 4/5 read dates, and say or write a personal date using an appropriate preposition.",
+          "phonetic": "",
+          "id": "A0.U01.L05-FC01"
+        }
+      ],
+      "assessment": [
+        "correctly sequence 6/7 days and 10/12 months (two rounds); 4/5 date/preposition items."
+      ],
+      "unit_id": "A0.U01",
+      "order": 5,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 127,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U02.L01",
+      "title": "Family and basic plural nouns",
+      "lesson_type": "sentence_builder",
+      "scenario": "identify 10 family words and form the plural of 8/10 taught regular nouns.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Family and basic plural nouns”?",
+          "answer": "identify 10 family words and form the plural of 8/10 taught regular nouns.",
+          "phonetic": "",
+          "id": "A0.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 plural forms and 8/10 picture-word matches."
+      ],
+      "unit_id": "A0.U02",
+      "order": 6,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 156,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U02.L02",
+      "title": "`a/an`, `the`, and familiar objects",
+      "lesson_type": "sentence_builder",
+      "scenario": "I have an apple. The apple is red.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “`a/an`, `the`, and familiar objects”?",
+          "answer": "choose a suitable article in 8/10 familiar noun phrases and identify when the object is already known.",
+          "phonetic": "",
+          "id": "A0.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 choices, judged by beginning sound and reference."
+      ],
+      "unit_id": "A0.U02",
+      "order": 7,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 173,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A0.U02.L03",
+      "title": "Basic adjectives and describing objects",
+      "lesson_type": "sentence_builder",
+      "scenario": "produce five noun phrases with a correct simple adjective-before-noun order and matching be sentence.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Basic adjectives and describing objects”?",
+          "answer": "produce five noun phrases with a correct simple adjective-before-noun order and matching be sentence.",
+          "phonetic": "",
+          "id": "A0.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "five phrases have adjective+noun order and no plural adjective ending."
+      ],
+      "unit_id": "A0.U02",
+      "order": 8,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 198,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U02.L04",
+      "title": "Possessive adjectives, `have/has`, and `’s`",
+      "lesson_type": "sentence_builder",
+      "scenario": "use four possessive adjectives and have/has in 8/10 descriptions; identify ownership with a name + 's.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Possessive adjectives, `have/has`, and `’s`”?",
+          "answer": "use four possessive adjectives and have/has in 8/10 descriptions; identify ownership with a name + 's.",
+          "phonetic": "",
+          "id": "A0.U02.L04-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 correct possessive/verb pairings and explain whose object is meant."
+      ],
+      "unit_id": "A0.U02",
+      "order": 9,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 217,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U02.L05",
+      "title": "Read and describe a family/home profile",
+      "lesson_type": "sentence_builder",
+      "scenario": "This is Hana's family. Her parents are at home. Hana has one brother and two sisters. Their home is small. It has a blue door and a big kitchen.",
+      "flashcards": [
+        {
+          "question": "What color is the door?",
+          "answer": "Hana's; two; at home; blue",
+          "phonetic": "",
+          "id": "A0.U02.L05-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 factual details; writing contains at least four understandable sentences, at least one possessive and one be/have form. If not, revisit the specific earlier lesson."
+      ],
+      "unit_id": "A0.U02",
+      "order": 10,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 242,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A0.U03.L01",
+      "title": "Clock time and time prepositions",
+      "lesson_type": "sentence_builder",
+      "scenario": "identify 8/10 full-hour/half-hour clock times and choose at/on/in in 8/10 taught time phrases.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Clock time and time prepositions”?",
+          "answer": "identify 8/10 full-hour/half-hour clock times and choose at/on/in in 8/10 taught time phrases.",
+          "phonetic": "",
+          "id": "A0.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "8/10 clock matches and 4/5 prepositions."
+      ],
+      "unit_id": "A0.U03",
+      "order": 11,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 279,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U03.L02",
+      "title": "Everyday verbs and present-simple statements",
+      "lesson_type": "role_play",
+      "scenario": "produce 6/7 short present-simple routine sentences with a subject and correct base/third-person verb form.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Everyday verbs and present-simple statements”?",
+          "answer": "produce 6/7 short present-simple routine sentences with a subject and correct base/third-person verb form.",
+          "phonetic": "",
+          "id": "A0.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "6/7 verbs appropriate for subject."
+      ],
+      "unit_id": "A0.U03",
+      "order": 12,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 298,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U03.L03",
+      "title": "Frequency words and negative routines",
+      "lesson_type": "sentence_builder",
+      "scenario": "place always, usually, sometimes, and never appropriately in 4/5 sentences and form 4/5 present-simple negatives.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Frequency words and negative routines”?",
+          "answer": "place always, usually, sometimes, and never appropriately in 4/5 sentences and form 4/5 present-simple negatives.",
+          "phonetic": "",
+          "id": "A0.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 adverb placements and 4/5 negatives."
+      ],
+      "unit_id": "A0.U03",
+      "order": 13,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 327,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U03.L04",
+      "title": "`Do/does` questions and short answers",
+      "lesson_type": "sentence_builder",
+      "scenario": "ask 4/5 present-simple questions with correct order and give a matching short answer.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “`Do/does` questions and short answers”?",
+          "answer": "ask 4/5 present-simple questions with correct order and give a matching short answer.",
+          "phonetic": "",
+          "id": "A0.U03.L04-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 question forms plus 4 matched short answers."
+      ],
+      "unit_id": "A0.U03",
+      "order": 14,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 350,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U03.L05",
+      "title": "Read a simple timetable and report a routine",
+      "lesson_type": "essay_analysis",
+      "scenario": "retrieve 4/5 timetable facts and give a short oral routine with three time phrases.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Read a simple timetable and report a routine”?",
+          "answer": "retrieve 4/5 timetable facts and give a short oral routine with three time phrases.",
+          "phonetic": "",
+          "id": "A0.U03.L05-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 facts and 4/5 sentences with correct subject/verb/time phrase."
+      ],
+      "unit_id": "A0.U03",
+      "order": 15,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 383,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U04.L01",
+      "title": "Prepositions of place",
+      "lesson_type": "sentence_builder",
+      "scenario": "describe 5/6 object locations using a taught preposition.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Prepositions of place”?",
+          "answer": "describe 5/6 object locations using a taught preposition.",
+          "phonetic": "",
+          "id": "A0.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "5/6 accurate descriptions and partner can reproduce 4/5 arrangements."
+      ],
+      "unit_id": "A0.U04",
+      "order": 16,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 414,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U04.L02",
+      "title": "`there is/there are` and local places",
+      "lesson_type": "sentence_builder",
+      "scenario": "describe a simple picture/map with 5/6 correct singular/plural there is/are statements and answer 3 location questions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “`there is/there are` and local places”?",
+          "answer": "describe a simple picture/map with 5/6 correct singular/plural there is/are statements and answer 3 location questions.",
+          "phonetic": "",
+          "id": "A0.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "5/6 agreement and three understandable questions."
+      ],
+      "unit_id": "A0.U04",
+      "order": 17,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 431,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U04.L03",
+      "title": "`can/can't` for ability and polite requests",
+      "lesson_type": "role_play",
+      "scenario": "express 3 abilities/inabilities and make 3 understandable requests using can.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “`can/can't` for ability and polite requests”?",
+          "answer": "express 3 abilities/inabilities and make 3 understandable requests using can.",
+          "phonetic": "",
+          "id": "A0.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "5/6 correct base-verb forms and requests include an understandable request plus polite marker where suitable."
+      ],
+      "unit_id": "A0.U04",
+      "order": 18,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 460,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U04.L04",
+      "title": "Ask for help and give simple directions",
+      "lesson_type": "sentence_builder",
+      "scenario": "complete a map-based exchange by asking where one place is and giving two-step directions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Ask for help and give simple directions”?",
+          "answer": "complete a map-based exchange by asking where one place is and giving two-step directions.",
+          "phonetic": "",
+          "id": "A0.U04.L04-FC01"
+        }
+      ],
+      "assessment": [],
+      "unit_id": "A0.U04",
+      "order": 19,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 485,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U05.L01",
+      "title": "Word order, capitals, full stops, and `and/but`",
+      "lesson_type": "sentence_builder",
+      "scenario": "arrange 5/6 word sets into simple statements and punctuate 4/5 sentences appropriately.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Word order, capitals, full stops, and `and/but`”?",
+          "answer": "arrange 5/6 word sets into simple statements and punctuate 4/5 sentences appropriately.",
+          "phonetic": "",
+          "id": "A0.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "5/6 word orders and 4/5 capitalization/end marks."
+      ],
+      "unit_id": "A0.U05",
+      "order": 20,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 526,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U05.L02",
+      "title": "Integrated personal-profile workshop",
+      "lesson_type": "sentence_builder",
+      "scenario": "",
+      "flashcards": [],
+      "assessment": [],
+      "unit_id": "A0.U05",
+      "order": 21,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 551,
+      "scenario_source": "not_provided"
+    },
+    {
+      "id": "A0.U05.L03",
+      "title": "Read a message and find the useful details",
+      "lesson_type": "sentence_builder",
+      "scenario": "retrieve 4/5 literal details from a short familiar message and identify its practical purpose.",
+      "flashcards": [
+        {
+          "question": "What color is the book?",
+          "answer": "Lina; at the library; four o'clock; Lina's book; blue",
+          "phonetic": "",
+          "id": "A0.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 facts and practical purpose."
+      ],
+      "unit_id": "A0.U05",
+      "order": 22,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 557,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A0.U05.L04",
+      "title": "Write a short connected profile",
+      "lesson_type": "essay_analysis",
+      "scenario": "My name is Huda. I am 20. I live in a small city. I have one brother. Our home is near a park. I study in the morning. I go to the library at four.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a short connected profile”?",
+          "answer": "write 6–8 connected sentences about self, family, home, or routine, including at least one be, one have/has, and two routine/location details.",
+          "phonetic": "",
+          "id": "A0.U05.L04-FC01"
+        }
+      ],
+      "assessment": [],
+      "unit_id": "A0.U05",
+      "order": 23,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 574,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A0.U05.L05",
+      "title": "Retrieval, diagnostic repair, and transition practice",
+      "lesson_type": "sentence_builder",
+      "scenario": "retrieve at least one target from each unit and identify one personal review need.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Retrieval, diagnostic repair, and transition practice”?",
+          "answer": "retrieve at least one target from each unit and identify one personal review need.",
+          "phonetic": "",
+          "id": "A0.U05.L05-FC01"
+        }
+      ],
+      "assessment": [
+        "complete resources/foundation-assessment.md diagnostic repair check, then final transition gate on a later day. Link results to the specific outcome/lesson; do not average a missed listening skill away with strong writing."
+      ],
+      "unit_id": "A0.U05",
+      "order": 24,
+      "source": "levels/a0-pre-a1.md",
+      "source_line": 607,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

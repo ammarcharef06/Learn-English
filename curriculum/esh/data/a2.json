@@ -1,0 +1,451 @@
+{
+  "level": "A2",
+  "title": "A2 — Pre-intermediate",
+  "units": [
+    {
+      "id": "A2.U01",
+      "title": "Past experiences",
+      "order": 1
+    },
+    {
+      "id": "A2.U02",
+      "title": "Travel and services",
+      "order": 2
+    },
+    {
+      "id": "A2.U03",
+      "title": "Health and body",
+      "order": 3
+    },
+    {
+      "id": "A2.U04",
+      "title": "Work and daily obligations",
+      "order": 4
+    },
+    {
+      "id": "A2.U05",
+      "title": "Future plans and predictions",
+      "order": 5
+    },
+    {
+      "id": "A2.U06",
+      "title": "Preferences and comparisons",
+      "order": 6
+    }
+  ],
+  "lessons": [
+    {
+      "id": "A2.U01.L01",
+      "title": "Build a past-time account",
+      "lesson_type": "sentence_builder",
+      "scenario": "tell a real or imagined account using these or six learner-created events.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Build a past-time account”?",
+          "answer": "tell a six-event weekend account using at least four accurate past forms and three sequence markers.",
+          "phonetic": "",
+          "id": "A2.U01.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "at least four accurate past forms and three sequence markers in logical order."
+      ],
+      "unit_id": "A2.U01",
+      "order": 1,
+      "source": "levels/a2.md",
+      "source_line": 104,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A2.U01.L02",
+      "title": "Add a reaction and a reason",
+      "lesson_type": "role_play",
+      "scenario": "On Sunday, I took my niece to the science museum. We saw a robot show and made a paper bridge. The museum was busy, but the staff were helpful. I enjoyed the visit because my niece asked many questions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Add a reaction and a reason”?",
+          "answer": "write a 70–90-word account with an event, reaction, reason, and contrast.",
+          "phonetic": "",
+          "id": "A2.U01.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "70–90 words, 3 accurate past verbs, one reason and one contrast, clear event order."
+      ],
+      "unit_id": "A2.U01",
+      "order": 2,
+      "source": "levels/a2.md",
+      "source_line": 114,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A2.U01.L03",
+      "title": "A past visit and a future arrangement",
+      "lesson_type": "role_play",
+      "scenario": "“On Saturday, Huda visited the old market with her cousin. They bought fruit and had lunch at a small café. Huda liked the market because it was lively, although it was crowded. She is going to return next month.”",
+      "flashcards": [
+        {
+          "question": "Why did she like the market?",
+          "answer": "her cousin; fruit; it was lively",
+          "phonetic": "",
+          "id": "A2.U01.L03-FC01"
+        },
+        {
+          "question": "Why are they leaving home later today?",
+          "answer": "10:30; yesterday; because the station is quieter in the morning",
+          "phonetic": "",
+          "id": "A2.U01.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "correctly answer all 3 content questions; use two past forms and a clearly marked intention; writing contains the three required features. Review irregular past forms in a fresh sentence if missed."
+      ],
+      "unit_id": "A2.U01",
+      "order": 3,
+      "source": "resources/integrated-skill-labs.md",
+      "source_line": 101,
+      "scenario_source": "reading",
+      "workshop_source_id": "A2.U01.L03"
+    },
+    {
+      "id": "A2.U02.L01",
+      "title": "Plan a journey from a timetable",
+      "lesson_type": "role_play",
+      "scenario": "use a second timetable card to plan a trip; ask a partner two questions and repeat the answer to confirm.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Plan a journey from a timetable”?",
+          "answer": "retrieve four journey details and ask two accurate timetable questions.",
+          "phonetic": "",
+          "id": "A2.U02.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 details, both questions understandable, no confusion of departure and arrival."
+      ],
+      "unit_id": "A2.U02",
+      "order": 4,
+      "source": "levels/a2.md",
+      "source_line": 134,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A2.U02.L02",
+      "title": "Explain a travel problem and request help",
+      "lesson_type": "role_play",
+      "scenario": "Platform 2 is closed. For trains to Hilltown, use platform 4. Ask staff if you need assistance. Which platform? 4. What is closed? Platform 2.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Explain a travel problem and request help”?",
+          "answer": "explain a travel problem and complete a four-turn help exchange, including one clarification.",
+          "phonetic": "",
+          "id": "A2.U02.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "problem, request, relevant question, accurate confirmation all present."
+      ],
+      "unit_id": "A2.U02",
+      "order": 5,
+      "source": "levels/a2.md",
+      "source_line": 146,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A2.U02.L03",
+      "title": "Compare accommodation and confirm a booking",
+      "lesson_type": "role_play",
+      "scenario": "compare two lodging options and confirm three booking details in a role-play.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Compare accommodation and confirm a booking”?",
+          "answer": "compare two lodging options and confirm three booking details in a role-play.",
+          "phonetic": "",
+          "id": "A2.U02.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "comparison accurate, all three details repeated, no invented amenities."
+      ],
+      "unit_id": "A2.U02",
+      "order": 6,
+      "source": "levels/a2.md",
+      "source_line": 158,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U03.L01",
+      "title": "Describe symptoms and ask for help",
+      "lesson_type": "role_play",
+      "scenario": "use a fictional symptom card to explain problem and duration; partner asks one follow-up.",
+      "flashcards": [
+        {
+          "question": "I feel tired, but I don't have a fever.” Ask symptom, start, fever?",
+          "answer": "sore throat; yesterday; no",
+          "phonetic": "",
+          "id": "A2.U03.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "symptom, time, and effect conveyed; partner accurately repeats them."
+      ],
+      "unit_id": "A2.U03",
+      "order": 7,
+      "source": "levels/a2.md",
+      "source_line": 172,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A2.U03.L02",
+      "title": "Give simple advice and understand instructions",
+      "lesson_type": "role_play",
+      "scenario": "give two relevant suggestions and follow three short care instructions.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Give simple advice and understand instructions”?",
+          "answer": "give two relevant suggestions and follow three short care instructions.",
+          "phonetic": "",
+          "id": "A2.U03.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "3/3 instructions understood and advice form is grammatical/relevant."
+      ],
+      "unit_id": "A2.U03",
+      "order": 8,
+      "source": "levels/a2.md",
+      "source_line": 186,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U03.L03",
+      "title": "Make an appointment and summarize instructions",
+      "lesson_type": "role_play",
+      "scenario": "Clinic: appointments Tuesday–Friday. Bring your appointment card. If you cannot attend, call before 9 a.m. Ask available days, what to bring, and when to call if unable to attend.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Make an appointment and summarize instructions”?",
+          "answer": "arrange an appointment by phone and accurately relay three appointment details.",
+          "phonetic": "",
+          "id": "A2.U03.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "all three details accurate and at least one clarification/confirmation phrase."
+      ],
+      "unit_id": "A2.U03",
+      "order": 9,
+      "source": "levels/a2.md",
+      "source_line": 198,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A2.U04.L01",
+      "title": "Describe duties and schedules",
+      "lesson_type": "role_play",
+      "scenario": "describe four work/study duties and compare a weekly schedule using have to accurately.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Describe duties and schedules”?",
+          "answer": "describe four work/study duties and compare a weekly schedule using have to accurately.",
+          "phonetic": "",
+          "id": "A2.U04.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 modal/subject forms; correctly distinguish optional from forbidden."
+      ],
+      "unit_id": "A2.U04",
+      "order": 10,
+      "source": "levels/a2.md",
+      "source_line": 214,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U04.L02",
+      "title": "Give advice and make a request at work",
+      "lesson_type": "role_play",
+      "scenario": "The shared printer is out of paper. The report is due at 3 p.m. Ask the office assistant for more paper or use the printer on floor two. What is wrong? printer has no paper. When is report due? 3 p.m. What alternatives are stated? ask assistant/use floor two.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Give advice and make a request at work”?",
+          "answer": "respond to a workplace problem with relevant advice and make one polite request.",
+          "phonetic": "",
+          "id": "A2.U04.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "relevant suggestion, understandable request, no unsupported “must.”"
+      ],
+      "unit_id": "A2.U04",
+      "order": 11,
+      "source": "levels/a2.md",
+      "source_line": 224,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A2.U04.L03",
+      "title": "Write a practical work message",
+      "lesson_type": "essay_analysis",
+      "scenario": "write an 80–100-word work/study message with a problem, relevant detail, request, and next step.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Write a practical work message”?",
+          "answer": "write an 80–100-word work/study message with a problem, relevant detail, request, and next step.",
+          "phonetic": "",
+          "id": "A2.U04.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "four content elements, appropriate tone, readable sequence."
+      ],
+      "unit_id": "A2.U04",
+      "order": 12,
+      "source": "levels/a2.md",
+      "source_line": 236,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U05.L01",
+      "title": "Explain intentions and arrangements",
+      "lesson_type": "role_play",
+      "scenario": "explain a plan, reason, and one arrangement; partner asks when/where.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Explain intentions and arrangements”?",
+          "answer": "describe three plans and distinguish an intention from a fixed arrangement.",
+          "phonetic": "",
+          "id": "A2.U05.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "3/4 choices fit context, arrangement details included."
+      ],
+      "unit_id": "A2.U05",
+      "order": 13,
+      "source": "levels/a2.md",
+      "source_line": 262,
+      "scenario_source": "source_task"
+    },
+    {
+      "id": "A2.U05.L02",
+      "title": "Make predictions and spontaneous offers",
+      "lesson_type": "role_play",
+      "scenario": "respond to four situations using a context-appropriate prediction, offer, or intention.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Make predictions and spontaneous offers”?",
+          "answer": "respond to four situations using a context-appropriate prediction, offer, or intention.",
+          "phonetic": "",
+          "id": "A2.U05.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "3/4 forms fit the supplied context and function is explained."
+      ],
+      "unit_id": "A2.U05",
+      "order": 14,
+      "source": "levels/a2.md",
+      "source_line": 272,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U05.L03",
+      "title": "Negotiate a plan and send a confirmation",
+      "lesson_type": "role_play",
+      "scenario": "negotiate a plan, resolve one conflict, and write a 70–90-word confirmation with complete details.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Negotiate a plan and send a confirmation”?",
+          "answer": "negotiate a plan, resolve one conflict, and write a 70–90-word confirmation with complete details.",
+          "phonetic": "",
+          "id": "A2.U05.L03-FC01"
+        }
+      ],
+      "assessment": [
+        "no constraint violated, final details repeated accurately, message includes all five elements."
+      ],
+      "unit_id": "A2.U05",
+      "order": 15,
+      "source": "levels/a2.md",
+      "source_line": 282,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U06.L01",
+      "title": "Compare choices using evidence",
+      "lesson_type": "essay_analysis",
+      "scenario": "compare two options in four accurate sentences and justify a preference with two details.",
+      "flashcards": [
+        {
+          "question": "given three prices (£6, £8, £10), which is the cheapest?",
+          "answer": "the £6 option",
+          "phonetic": "",
+          "id": "A2.U06.L01-FC01"
+        }
+      ],
+      "assessment": [
+        "4/5 comparison forms/facts accurate and reasons support stated preference."
+      ],
+      "unit_id": "A2.U06",
+      "order": 16,
+      "source": "levels/a2.md",
+      "source_line": 296,
+      "scenario_source": "source_outcome"
+    },
+    {
+      "id": "A2.U06.L02",
+      "title": "Compare experiences and express preferences",
+      "lesson_type": "role_play",
+      "scenario": "Maya prefers the train: it is faster and she can read. Rafi prefers the bus because it is cheaper and stops near his home. Neither travels every day. Ask who values price, who values speed, and whether either goes daily.",
+      "flashcards": [
+        {
+          "question": "What is the goal of “Compare experiences and express preferences”?",
+          "answer": "give an opinion with two supporting comparisons and respond to a different preference.",
+          "phonetic": "",
+          "id": "A2.U06.L02-FC01"
+        }
+      ],
+      "assessment": [
+        "two accurate comparisons and one respectful follow-up."
+      ],
+      "unit_id": "A2.U06",
+      "order": 17,
+      "source": "levels/a2.md",
+      "source_line": 308,
+      "scenario_source": "reading"
+    },
+    {
+      "id": "A2.U06.L03",
+      "title": "Write a short recommendation",
+      "lesson_type": "essay_analysis",
+      "scenario": "write a 90–110-word recommendation comparing two familiar choices and acknowledging one trade-off.",
+      "flashcards": [
+        {
+          "question": "Where did the learner go?",
+          "answer": "What did they do",
+          "phonetic": "",
+          "id": "A2.U06.L03-FC01"
+        },
+        {
+          "question": "What was the weather like?",
+          "answer": "What is planned for next month",
+          "phonetic": "",
+          "id": "A2.U06.L03-FC02"
+        }
+      ],
+      "assessment": [
+        "90–110 words, two supported comparisons, one trade-off, audience-based conclusion.",
+        "Where did the learner go?",
+        "What did they do?",
+        "What was the weather like?",
+        "What is planned for next month?"
+      ],
+      "unit_id": "A2.U06",
+      "order": 18,
+      "source": "levels/a2.md",
+      "source_line": 320,
+      "scenario_source": "source_outcome"
+    }
+  ]
+}

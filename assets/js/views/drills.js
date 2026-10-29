@@ -3,7 +3,7 @@ import { t as uiText } from '../core/i18n.js';
 import { t } from '../core/i18n.js';
 import { esc, qs, toast } from '../core/utils.js';
 import { progress, goalForToday } from '../core/store.js';
-import { buildQuestions, SOURCES } from '../core/quizgen.js';
+import { buildQuestions, sourcesForCurriculum } from '../core/quizgen.js';
 import { navigate } from '../core/router.js';
 import { pageHead, renderSidebarStats } from './shell.js';
 import { runQuiz } from './quiz-runner.js';
@@ -51,7 +51,7 @@ export function renderDrills(host, query = {}) {
     adaptive: true,
   };
 
-  const opts = SOURCES.concat([{ id: 'notebook', ar: uiText('ui.literal.a5f8878f'), en: 'My notebook' }]);
+  const opts = sourcesForCurriculum().concat([{ id: 'notebook', ar: uiText('ui.literal.a5f8878f'), en: 'My notebook' }]);
 
   host.innerHTML = `
     ${pageHead({ icon: '🎯', title: t('drills.title'), subtitle: t('drills.subtitle') })}
@@ -138,4 +138,3 @@ export function renderDrills(host, query = {}) {
     setTimeout(() => { if (document.body.contains(host)) start(); }, 200);
   }
 }
-
