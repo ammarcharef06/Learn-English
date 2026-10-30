@@ -1773,5 +1773,275 @@
       "قراءة عبارات قصيرة مألوفة ونسخ بيانات بسيطة."
     ],
     "boundary": "إكمال L0–L3 يثبت أساس محو الأمية فقط؛ لا يمنح Pre-A1 تلقائيًا. يبدأ Pre-A1 بتقييم تشخيصي لمهارات اللغة الأربع."
-  }
+  },
+  "transferChecks": [
+    {
+      "id": "L0",
+      "title": "تقييم نقل المهارات · التهيئة",
+      "description": "أسئلة جديدة لقياس فهم اتجاه الكتابة والرموز والتمييز البصري. لا يقيس هذا التقييم الوعي الصوتي.",
+      "modality": "visual",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l0a",
+          "prompt": "أي سلسلة تمثل كلمة مكتوبة لا حرفًا واحدًا؟",
+          "choices": [
+            "r",
+            "moon",
+            "★"
+          ],
+          "answer": "moon"
+        },
+        {
+          "id": "l0b",
+          "prompt": "أي رمز يطابق الرمز المعروض: p",
+          "choices": [
+            "q",
+            "p",
+            "b"
+          ],
+          "answer": "p"
+        },
+        {
+          "id": "l0c",
+          "prompt": "أين يبدأ سطر إنجليزي عادي؟",
+          "choices": [
+            "من اليسار",
+            "من اليمين",
+            "من الوسط"
+          ],
+          "answer": "من اليسار"
+        },
+        {
+          "id": "l0d",
+          "prompt": "أي خيار صورة وليس حرفًا؟",
+          "choices": [
+            "T",
+            "☂️",
+            "g"
+          ],
+          "answer": "☂️"
+        },
+        {
+          "id": "l0e",
+          "prompt": "أي رمز مختلف في السلسلة: n n h n",
+          "choices": [
+            "الأول",
+            "الثاني",
+            "الثالث",
+            "الرابع"
+          ],
+          "answer": "الثالث"
+        },
+        {
+          "id": "l0f",
+          "prompt": "أي خيار يتكون من ثلاثة أحرف؟",
+          "choices": [
+            "A",
+            "bed",
+            "&"
+          ],
+          "answer": "bed"
+        },
+        {
+          "id": "l0g",
+          "prompt": "ما المطابق تمامًا للرمز: R",
+          "choices": [
+            "P",
+            "R",
+            "B"
+          ],
+          "answer": "R"
+        },
+        {
+          "id": "l0h",
+          "prompt": "أي خيار حرف صغير؟",
+          "choices": [
+            "G",
+            "Q",
+            "g"
+          ],
+          "answer": "g"
+        }
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "تقييم نقل المهارات · الأصوات وفك الرموز",
+      "description": "تقييم بصري كتابي لأنماط الحروف والكلمات التي دُرست. لا يقيس الاستماع أو النطق، ولا يعوض الاختبار الصوتي.",
+      "modality": "visual-text-only",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l2a",
+          "prompt": "أي كلمة تبدأ بالحرف c؟",
+          "choices": [
+            "cat",
+            "map",
+            "sun"
+          ],
+          "answer": "cat"
+        },
+        {
+          "id": "l2b",
+          "prompt": "اختر التهجئة التي تنتهي بالنمط ck.",
+          "choices": [
+            "duck",
+            "duch",
+            "dusk"
+          ],
+          "answer": "duck"
+        },
+        {
+          "id": "l2c",
+          "prompt": "أي كلمة تحتوي sh؟",
+          "choices": [
+            "ship",
+            "shop?",
+            "sip"
+          ],
+          "answer": "ship"
+        },
+        {
+          "id": "l2d",
+          "prompt": "أي كلمة تبدأ بتجمع consonant blend st؟",
+          "choices": [
+            "stop",
+            "top",
+            "shop"
+          ],
+          "answer": "stop"
+        },
+        {
+          "id": "l2e",
+          "prompt": "أي كلمة تحتوي th؟",
+          "choices": [
+            "thin",
+            "fin",
+            "tin"
+          ],
+          "answer": "thin"
+        },
+        {
+          "id": "l2f",
+          "prompt": "أي كلمة تبدأ بالصوت/الحرف المكتوب m؟",
+          "choices": [
+            "map",
+            "cap",
+            "tap"
+          ],
+          "answer": "map"
+        },
+        {
+          "id": "l2g",
+          "prompt": "اختر الكلمة ذات النمط القصير a كما في cat.",
+          "choices": [
+            "bag",
+            "bike",
+            "boat"
+          ],
+          "answer": "bag"
+        },
+        {
+          "id": "l2h",
+          "prompt": "أي تهجئة تمثل كلمة brush؟",
+          "choices": [
+            "brush",
+            "brash",
+            "b rush"
+          ],
+          "answer": "brush"
+        }
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "تقييم نقل المهارات · القراءة والكتابة",
+      "description": "أمثلة جديدة نسبيًا لقياس القراءة والفهم والتهجئة ضمن الأنماط المحدودة التي دُرست. لا يمثل تقييمًا عامًا لمحو الأمية.",
+      "modality": "reading-writing",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l3a",
+          "prompt": "اقرأ: The dog is on a bed. أين الكلب؟",
+          "choices": [
+            "on a bed",
+            "in a bag",
+            "on a mat"
+          ],
+          "answer": "on a bed"
+        },
+        {
+          "id": "l3b",
+          "prompt": "اقرأ: Ben has a red pen. ماذا يملك Ben؟",
+          "choices": [
+            "a red pen",
+            "a big bag",
+            "a cat"
+          ],
+          "answer": "a red pen"
+        },
+        {
+          "id": "l3c",
+          "prompt": "كم كلمة في الجملة: A dog can run.",
+          "choices": [
+            "3",
+            "4",
+            "5"
+          ],
+          "answer": "4"
+        },
+        {
+          "id": "l3d",
+          "prompt": "اختر الجملة المكتوبة بعلامة ترقيم صحيحة.",
+          "choices": [
+            "The dog ran.",
+            "the dog ran",
+            "The dog ran"
+          ],
+          "answer": "The dog ran."
+        },
+        {
+          "id": "l3e",
+          "prompt": "اقرأ: A hen is in a pen. ما الحيوان المذكور؟",
+          "choices": [
+            "hen",
+            "dog",
+            "cat"
+          ],
+          "answer": "hen"
+        },
+        {
+          "id": "l3f",
+          "prompt": "اختر التهجئة الصحيحة للكلمة: bed",
+          "choices": [
+            "bed",
+            "deb",
+            "bad"
+          ],
+          "answer": "bed"
+        },
+        {
+          "id": "l3g",
+          "prompt": "اقرأ: Kim has a big hat. ما صفة القبعة؟",
+          "choices": [
+            "big",
+            "red",
+            "hot"
+          ],
+          "answer": "big"
+        },
+        {
+          "id": "l3h",
+          "prompt": "اختر الجملة التي تبدأ بحرف كبير.",
+          "choices": [
+            "Sam can hop.",
+            "sam can hop.",
+            "SAM CAN HOP"
+          ],
+          "answer": "Sam can hop."
+        }
+      ]
+    }
+  ]
 }
