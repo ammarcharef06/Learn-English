@@ -4,6 +4,7 @@ const $ = (s,r=document)=>r.querySelector(s);
 const esc = v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let data, progress={}, stageId="L0";
 function load(){try{progress=JSON.parse(localStorage.getItem(KEY)||"{}")}catch{progress={}}}
+function localDate(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(progress))}catch{}}
 function state(id){return progress.lessons?.[id]||{attempts:0,best:0,mastered:false}}
 function lessons(stage){return stage.units.flatMap(u=>u.lessons)}
@@ -12,17 +13,18 @@ function render(){
  const host=$("#literacy-app");
  const lessonCount=stage.units.reduce((n,u)=>n+u.lessons.length,0)+(stageId==="L1"?26:0);
  const mastered=stage.units.reduce((n,u)=>n+u.lessons.filter(l=>state(l.id).mastered).length,0)+(stageId==="L1"?data.letters.filter(x=>state(x.id).mastered).length:0);
- let unitHtml=stage.units.map(u=>"<section><h2>"+esc(u.title)+"</h2>"+u.lessons.map(l=>'<button class="lit-lesson" data-lesson="'+l.id+'">'+esc(l.title)+' <small>'+(state(l.id).mastered?"متقن":"تدرّب")+"</small></button>").join("")+"</section>").join("");
+ let unitHtml=stageId==="L1"?stage.units.map(u=>'<section class="lit-unit-nav"><h2>'+esc(u.title)+'</h2><p>'+esc(u.objective||"") +'</p><button type="button" data-unit="'+u.id+'">انتقل إلى المجموعة</button></section>').join(""):stage.units.map(u=>"<section><h2>"+esc(u.title)+"</h2>"+u.lessons.map(l=>'<button class="lit-lesson" data-lesson="'+l.id+'">'+esc(l.title)+' <small>'+(state(l.id).mastered?"متقن":"تدرّب")+"</small></button>").join("")+"</section>").join("");
  host.innerHTML='<header class="lit-head"><a href="./index.html">← العودة للأكاديمية</a><span>مسار محو أمية الإنجليزية</span></header><section class="lit-intro"><p class="eyebrow">LEARNING PATH · '+stageId+'</p><h1>'+esc(stage.title)+'</h1><p>'+esc(stage.outcome)+'</p><div class="lit-progress"><span style="width:'+(lessonCount?Math.round(mastered/lessonCount*100):0)+'%"></span></div><small>إتقان '+mastered+' من '+lessonCount+' عنصرًا تعليميًا</small></section><nav class="lit-tabs">'+data.stages.map(s=>'<button data-stage="'+s.id+'" class="'+(s.id===stageId?"active":"")+'">'+s.id+' · '+esc(s.title)+'</button>').join("")+'</nav><div class="lit-layout"><aside class="lit-units">'+unitHtml+'</aside><main id="lesson-panel" class="lit-panel">'+(stageId==="L1"?renderLetters():'<div class="lit-empty"><div>🌱</div><h2>اختر درسًا للبدء</h2><p>ابدأ بالدرس الأول ثم تابع بالتدرج.</p></div>')+'</main></div><section class="prea1-bridge"><p class="eyebrow">NEXT · PRE-A1</p><h2>'+esc(data.transition.title)+'</h2><p>'+esc(data.transition.description)+'</p><h3>شروط الانتقال</h3><ul>'+data.transition.entryRequirements.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="bridge-note">'+esc(data.transition.boundary)+'</p></section><p id="notice" class="lit-notice" role="status"></p>';
  host.querySelectorAll("[data-stage]").forEach(b=>b.onclick=()=>{stageId=b.dataset.stage;render()});
  host.querySelectorAll("[data-lesson]").forEach(b=>b.onclick=()=>renderLesson(b.dataset.lesson));
  host.querySelectorAll("[data-letter]").forEach(b=>b.onclick=()=>renderLetterTask(b.dataset.letter));
+ host.querySelectorAll("[data-unit]").forEach(b=>b.onclick=()=>host.querySelector('[data-group="'+b.dataset.unit+'"]')?.scrollIntoView({behavior:"smooth",block:"start"}));
 }
 function renderLetters(){
  const units=data.stages.find(s=>s.id==="L1").units;
  const groups=units.map(u=>{
   const letters=data.letters.filter(x=>u.letterIds?.includes(x.id));
-  return '<section class="lit-letter-group"><h3>'+esc(u.title)+'</h3><p>'+esc(u.objective||"")+'</p><div class="letter-grid">'+letters.map(x=>{
+  return '<section class="lit-letter-group" data-group="'+u.id+'"><h3>'+esc(u.title)+'</h3><p>'+esc(u.objective||"")+'</p><div class="letter-grid">'+letters.map(x=>{
    const p=state(x.id),done=["case","name","identify","write"].filter(k=>(p.skills?.[k]?.correctDates||[]).length>=2).length;
    return '<button class="letter-card" data-letter="'+x.id+'"><b>'+x.upper+'</b><strong>'+x.lower+'</strong><small>'+esc(x.name)+'</small><span>'+(p.mastered?"متقن":done+"/4 مهارات")+'</span></button>';
   }).join("")+'</div><small class="lit-group-note">'+esc(u.completionNote||"")+'</small></section>';
@@ -50,7 +52,7 @@ function renderLesson(id){
    if(value){answered++;const accepted=[item.answer,...(item.accepted||[])].map(x=>String(x).trim().replace(/\s+/g," "));if(accepted.includes(value.replace(/\s+/g," ")))correct++;}
   });
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أكمل جميع الإجابات أولًا.";return}
-  const old=state(id),score=lesson.items.length?correct/lesson.items.length:0,today=new Date().toISOString().slice(0,10);
+  const old=state(id),score=lesson.items.length?correct/lesson.items.length:0,today=localDate();
   const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];
   progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||(!lesson.audioRequiredForMastery&&qualifying.length>=2),visualPracticeComplete:lesson.audioRequiredForMastery&&qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
   save();render();renderLesson(id);
