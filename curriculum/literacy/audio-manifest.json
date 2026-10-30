@@ -1,25 +1,29 @@
 {
   "schemaVersion": 1,
   "curriculumId": "english-literacy-ar",
-  "status": "awaiting-recording",
+  "status": "partially-recorded-existing-bank",
   "pronunciationVariety": {
-    "status": "decision-required",
-    "value": null,
-    "note": "لا تُسجّل النماذج قبل اعتماد التنوع اللهجي/النطقي المستهدف."
+    "status": "selected-existing-recordings",
+    "value": "General American (en-US)",
+    "source": {
+      "type": "project-embedded-recorded-audio",
+      "module": "assets/js/core/zero-audio.js",
+      "voice": "Microsoft Aria",
+      "locale": "en-US",
+      "assetRoot": "assets/audio/zero/",
+      "note": "تسجيلات ثابتة موجودة داخل المشروع؛ ليست صوت SpeechSynthesis المتغير حسب المتصفح."
+    },
+    "note": "هذا يحدد مصدر التسجيلات الموجودة فقط. لا يعني أن جميع فونيمات الحروف مسجلة."
   },
   "recordingStandards": {
-    "format": "wav",
-    "sampleRateHz": 48000,
-    "channels": 1,
-    "bitDepth": 24,
-    "noiseFloor": "quiet treated room",
-    "speaker": "one consistent proficient speaker",
-    "normalization": "consistent loudness without clipping",
+    "format": "mp3",
+    "speaker": "Microsoft Aria (en-US), as identified by the embedded audio-bank module",
+    "sourceOfTruth": "assets/js/core/zero-audio.js and assets/js/data/zero-audio-map.js",
     "notes": [
-      "ملف مستقل لاسم الحرف وملف مستقل لصوته/فونيمه.",
-      "لا يُستخدم اسم الحرف بديلًا عن صوته.",
-      "تسجيل الصوت داخل كلمة مثال يكون ملفًا ثالثًا عند الحاجة.",
-      "تُراجع الملفات لغويًا وصوتيًا قبل نشرها."
+      "إعادة استخدام التسجيلات المضمنة كما هي دون استبدالها بصوت المتصفح.",
+      "اسم الحرف مستقل عن فونيمه؛ لا يُستخدم nameAudio بديلًا عن phonemeAudio.",
+      "exampleAudio هو تسجيل كلمة المثال كاملة، وليس تسجيلًا للفونيم منفردًا.",
+      "لا تُضاف تسجيلات مولّدة إلى الحزمة إلا إذا أمكن إنتاجها من مصدر Aria الأصلي وبالصوت نفسه والتحقق منها."
     ]
   },
   "letters": [
@@ -27,261 +31,377 @@
       "id": "letter-a",
       "lower": "a",
       "upper": "A",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-a.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-a.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-b",
       "lower": "b",
       "upper": "B",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-b.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-b.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-c",
       "lower": "c",
       "upper": "C",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-c.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-c.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-d",
       "lower": "d",
       "upper": "D",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-d.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-d.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-e",
       "lower": "e",
       "upper": "E",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-e.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-e.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-f",
       "lower": "f",
       "upper": "F",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-f.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-f.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-g",
       "lower": "g",
       "upper": "G",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-g.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-g.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-h",
       "lower": "h",
       "upper": "H",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-h.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-h.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-i",
       "lower": "i",
       "upper": "I",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-i.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-i.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-j",
       "lower": "j",
       "upper": "J",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-j.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-j.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-k",
       "lower": "k",
       "upper": "K",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-k.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-k.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-l",
       "lower": "l",
       "upper": "L",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-l.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-l.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-m",
       "lower": "m",
       "upper": "M",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-m.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-m.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-n",
       "lower": "n",
       "upper": "N",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-n.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-n.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-o",
       "lower": "o",
       "upper": "O",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-o.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-o.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-p",
       "lower": "p",
       "upper": "P",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-p.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-p.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-q",
       "lower": "q",
       "upper": "Q",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-q.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-q.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-r",
       "lower": "r",
       "upper": "R",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-r.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-r.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-s",
       "lower": "s",
       "upper": "S",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-s.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-s.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-t",
       "lower": "t",
       "upper": "T",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-t.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-t.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-u",
       "lower": "u",
       "upper": "U",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-u.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-u.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-v",
       "lower": "v",
       "upper": "V",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-v.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-v.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-w",
       "lower": "w",
       "upper": "W",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-w.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-w.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-x",
       "lower": "x",
       "upper": "X",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-x.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-x.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-y",
       "lower": "y",
       "upper": "Y",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-y.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-y.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     },
     {
       "id": "letter-z",
       "lower": "z",
       "upper": "Z",
-      "nameAudio": null,
+      "nameAudio": "assets/audio/zero/n/name-z.mp3",
       "phonemeAudio": null,
-      "exampleAudio": null,
+      "exampleAudio": "assets/audio/zero/n/word-z.mp3",
       "ipa": null,
-      "status": "not-recorded"
+      "status": "name-and-example-recorded-phoneme-missing"
     }
-  ]
+  ],
+  "phonemeGroups": [
+    {
+      "id": "sh",
+      "grapheme": "sh",
+      "ipa": "ʃ",
+      "phonemeAudio": "assets/audio/zero/d/sh.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-sh.mp3",
+      "exampleWord": "ship",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ch",
+      "grapheme": "ch",
+      "ipa": "tʃ",
+      "phonemeAudio": "assets/audio/zero/d/ch.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ch.mp3",
+      "exampleWord": "chair",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "th-voiceless",
+      "grapheme": "th",
+      "ipa": "θ",
+      "phonemeAudio": "assets/audio/zero/d/th-voiceless.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-th-voiceless.mp3",
+      "exampleWord": "three",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "th-voiced",
+      "grapheme": "th",
+      "ipa": "ð",
+      "phonemeAudio": "assets/audio/zero/d/th-voiced.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-th-voiced.mp3",
+      "exampleWord": "this",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ph",
+      "grapheme": "ph",
+      "ipa": "f",
+      "phonemeAudio": "assets/audio/zero/d/ph.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ph.mp3",
+      "exampleWord": "phone",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ck",
+      "grapheme": "ck",
+      "ipa": "k",
+      "phonemeAudio": "assets/audio/zero/d/ck.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ck.mp3",
+      "exampleWord": "duck",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ng",
+      "grapheme": "ng",
+      "ipa": "ŋ",
+      "phonemeAudio": "assets/audio/zero/d/ng.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ng.mp3",
+      "exampleWord": "king",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "oo-long",
+      "grapheme": "oo",
+      "ipa": "uː",
+      "phonemeAudio": "assets/audio/zero/d/oo-long.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-oo-long.mp3",
+      "exampleWord": "spoon",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "oo-short",
+      "grapheme": "oo",
+      "ipa": "ʊ",
+      "phonemeAudio": "assets/audio/zero/d/oo-short.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-oo-short.mp3",
+      "exampleWord": "book",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ee",
+      "grapheme": "ee",
+      "ipa": "iː",
+      "phonemeAudio": "assets/audio/zero/d/ee.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ee.mp3",
+      "exampleWord": "bee",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ea",
+      "grapheme": "ea",
+      "ipa": "iː",
+      "phonemeAudio": "assets/audio/zero/d/ea.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ea.mp3",
+      "exampleWord": "sea",
+      "status": "phoneme-and-example-recorded"
+    },
+    {
+      "id": "ou",
+      "grapheme": "ou",
+      "ipa": "aʊ",
+      "phonemeAudio": "assets/audio/zero/d/ou.mp3",
+      "exampleAudio": "assets/audio/zero/n/word-ou.mp3",
+      "exampleWord": "mouse",
+      "status": "phoneme-and-example-recorded"
+    }
+  ],
+  "audioGeneration": {
+    "status": "blocked-original-voice-generator-not-found",
+    "requiredVoice": "Microsoft Aria (en-US)",
+    "policy": "لا تستخدم TTS خارجيًا أو صوت المتصفح لتوليد ملفات بديلة. يلزم توفير مولّد Aria الأصلي/المعتمد لإضافة ملفات جديدة بنفس الصوت.",
+    "missingAssets": "تُترك null أو غير مسجلة حتى يتوفر المصدر الأصلي؛ لا تُختلق ملفات صوتية."
+  }
 }
