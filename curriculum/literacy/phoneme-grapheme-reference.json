@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "curriculumId": "english-literacy-ar",
+  "status": "reference-only-awaiting-accent-review",
+  "purpose": "مرجع تحريري أولي للتمييز بين الحرف/التهجئة والفونيم. ليس تسجيلًا صوتيًا ولا اختبار نطق.",
+  "pronunciationVariety": null,
+  "phonemes": [
+    {"ipa":"/p/","type":"consonant","example":"pen","graphemes":["p"],"arabicNote":"انفجاري مهموس؛ لا تخلطه باسم الحرف P."},
+    {"ipa":"/b/","type":"consonant","example":"bed","graphemes":["b"],"arabicNote":"انفجاري مجهور."},
+    {"ipa":"/t/","type":"consonant","example":"ten","graphemes":["t"],"arabicNote":"انفجاري مهموس."},
+    {"ipa":"/d/","type":"consonant","example":"dog","graphemes":["d"],"arabicNote":"انفجاري مجهور."},
+    {"ipa":"/k/","type":"consonant","example":"cat","graphemes":["c","k","ck"],"arabicNote":"قد تمثله تهجئات مختلفة حسب الكلمة."},
+    {"ipa":"/g/","type":"consonant","example":"go","graphemes":["g"],"arabicNote":"القيمة الصلبة الشائعة للحرف g؛ له قيم أخرى."},
+    {"ipa":"/f/","type":"consonant","example":"fish","graphemes":["f","ph"],"arabicNote":"احتكاكي مهموس."},
+    {"ipa":"/v/","type":"consonant","example":"van","graphemes":["v"],"arabicNote":"احتكاكي مجهور."},
+    {"ipa":"/θ/","type":"consonant","example":"thin","graphemes":["th"],"arabicNote":"قيمة مهموسة للتهجئة th."},
+    {"ipa":"/ð/","type":"consonant","example":"this","graphemes":["th"],"arabicNote":"قيمة مجهورة أخرى للتهجئة th."},
+    {"ipa":"/s/","type":"consonant","example":"sun","graphemes":["s","c"],"arabicNote":"القيمة تعتمد على التهجئة والسياق."},
+    {"ipa":"/z/","type":"consonant","example":"zoo","graphemes":["z","s"],"arabicNote":"قد تمثلها s في بعض الكلمات."},
+    {"ipa":"/ʃ/","type":"consonant","example":"ship","graphemes":["sh"],"arabicNote":"صوت مركب التهجئة."},
+    {"ipa":"/tʃ/","type":"consonant","example":"chip","graphemes":["ch"],"arabicNote":"صوت مركب التهجئة."},
+    {"ipa":"/m/","type":"consonant","example":"man","graphemes":["m"],"arabicNote":"أنفي."},
+    {"ipa":"/n/","type":"consonant","example":"net","graphemes":["n"],"arabicNote":"أنفي."},
+    {"ipa":"/ŋ/","type":"consonant","example":"sing","graphemes":["ng"],"arabicNote":"يظهر غالبًا في نهاية المقطع."},
+    {"ipa":"/l/","type":"consonant","example":"leg","graphemes":["l"],"arabicNote":"قد يختلف تحقيقه الصوتي بحسب الموقع واللهجة."},
+    {"ipa":"/r/","type":"consonant","example":"red","graphemes":["r"],"arabicNote":"تحقيقه يختلف بوضوح بين اللهجات."},
+    {"ipa":"/h/","type":"consonant","example":"hat","graphemes":["h"],"arabicNote":"احتكاكي مهموس."},
+    {"ipa":"/w/","type":"consonant","example":"wet","graphemes":["w"],"arabicNote":"تقريبي شفوي."},
+    {"ipa":"/j/","type":"consonant","example":"yes","graphemes":["y"],"arabicNote":"رمز IPA /j/ يمثل بداية yes وليس صوت الجيم العربية."}
+  ],
+  "vowelPolicy": {
+    "status": "not-finalized",
+    "note": "لا تعتمد خريطة نهائية لأصوات الحركات قبل اعتماد اللهجة المستهدفة؛ تختلف أنظمة الحركات والاندماجات بين اللهجات.",
+    "rule": "يُدرّس اسم حرف العلة منفصلًا عن أصواته القصيرة والطويلة والتهجئات المركبة."
+  },
+  "qualityRules": [
+    "اسم الحرف ليس اسم الفونيم ولا بديلًا عن تسجيله.",
+    "الحرف الواحد قد يمثل أكثر من فونيم، والفونيم الواحد قد تمثله أكثر من تهجئة.",
+    "لا تُسجّل مهارة الاستماع أو النطق متقنة اعتمادًا على أسئلة مكتوبة.",
+    "يجب مراجعة الأمثلة والرموز الصوتية بعد اختيار تنوع النطق."
+  ]
+}
