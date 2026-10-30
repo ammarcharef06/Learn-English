@@ -4,13 +4,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { LETTER_IDS, LETTER_WORDS, DIGRAPH_SOUND_IDS, DIGRAPH_WORDS } from "../assets/js/core/zero-audio.js";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),".."),OUT=resolve(ROOT,"assets/audio/zero/precision");
-const IPA={"sh":"ʃ","ch":"tʃ","th-voiceless":"θ","th-voiced":"ð","ph":"f","ck":"k","ng":"ŋ","oo-long":"uː","oo-short":"ʊ","ee":"iː","ea":"iː","ou":"aʊ"};
+const IPA={"sh":"ʃ","ch":"tʃ","th-voiceless":"θ","th-voiced":"ð","ph":"f","ck":"k","ng":"ŋ"};
 const esc=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 async function main(){const write=process.argv.includes("--write"),force=process.argv.includes("--force");const ref=JSON.parse(await readFile(resolve(ROOT,"curriculum/literacy/phoneme-grapheme-reference.json"),"utf8"));const jobs=[];
 for(const c of LETTER_IDS)jobs.push({kind:"letter-name",text:c.toUpperCase(),file:"name-"+c+".mp3"});
-for(const [c,w] of Object.entries(LETTER_WORDS))jobs.push({kind:"letter-word",text:w,file:"word-letter-"+c+".mp3"});
-for(const id of DIGRAPH_SOUND_IDS)if(IPA[id])jobs.push({kind:"grapheme-phoneme",text:IPA[id],ipa:IPA[id],file:"sound-"+id+".mp3"});
+for(const [c,w] of Object.entries(LETTER_WORDS))jobs.push({kind:"letter-word",text:w,file:"word-"+c+".mp3"});
+for(const id of DIGRAPH_SOUND_IDS)if(IPA[id])jobs.push({kind:"grapheme-phoneme",text:IPA[id],ipa:IPA[id],file:id+".mp3"});
 for(const [id,w] of Object.entries(DIGRAPH_WORDS))jobs.push({kind:"digraph-word",text:w,file:"word-"+id+".mp3"});
 for(const p of ref.phonemes||[]){const ipa=p.ipa.replaceAll("/","");if(!jobs.some(j=>j.ipa===ipa))jobs.push({kind:"consonant-phoneme",text:ipa,ipa,file:"phoneme-"+slug(ipa)+".mp3"});}
 console.log(JSON.stringify({voice:"en-US-Emma:DragonHDLatestNeural",mode:write?"write":"dry-run",jobs:jobs.length,credentialsReady:Boolean(process.env.SPEECH_KEY&&process.env.SPEECH_REGION),counts:jobs.reduce((a,j)=>(a[j.kind]=(a[j.kind]||0)+1,a),{})},null,2));if(!write)return;
