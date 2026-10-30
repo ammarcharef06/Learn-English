@@ -251,6 +251,19 @@
       "arabicNote": "رمز IPA /j/ يمثل بداية yes وليس صوت الجيم العربية.",
       "audio": "assets/audio/zero/p/phoneme-y.mp3",
       "exampleAudio": "assets/audio/zero/n/phoneme-word-y.mp3"
+    },
+    {
+      "ipa": "/dʒ/",
+      "type": "consonant",
+      "example": "jam",
+      "graphemes": [
+        "j",
+        "g",
+        "dge"
+      ],
+      "arabicNote": "صوت affricate مجهور؛ القيمة الشائعة للحرف j.",
+      "audio": "assets/audio/zero/p/phoneme-jh.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-jh.mp3"
     }
   ],
   "vowelPolicy": {
