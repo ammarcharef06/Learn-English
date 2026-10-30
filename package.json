@@ -21,7 +21,9 @@
     "android:open": "cap open android",
     "validate:literacy": "node scripts/validate-literacy.mjs",
     "audio:emma": "node scripts/generate-emma-audio.mjs",
-    "audio:emma:migrate": "node scripts/migrate-audio-to-emma.mjs"
+    "audio:emma:migrate": "node scripts/migrate-audio-to-emma.mjs",
+    "audio:emma:sentences": "node scripts/generate-emma-sentences.mjs",
+    "audio:emma:precision": "node scripts/generate-emma-precision.mjs"
   },
   "devDependencies": {
     "@capacitor-community/admob": "^8.2.1",
