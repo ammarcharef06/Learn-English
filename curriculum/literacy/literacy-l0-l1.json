@@ -439,35 +439,114 @@
               "title": "مربعات الأصوات",
               "objective": "يمثل كل فونيم في كلمة قصيرة بمربع مستقل.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "كلمة map تتكون من كم صوتًا منفصلًا؟",
+                  "input": true,
+                  "answer": "3",
+                  "accepted": [
+                    "ثلاثة",
+                    "ثلاث"
+                  ]
+                },
+                {
+                  "prompt": "اكتب الأصوات بالترتيب في كلمة sun مفصولة بمسافات (استخدم الحروف لتمثيلها مؤقتًا).",
+                  "input": true,
+                  "answer": "s u n",
+                  "accepted": [
+                    "s-u-n",
+                    "s, u, n"
+                  ]
+                }
+              ]
             },
             {
               "id": "L2-U3-L02",
               "title": "اختيار حرف لكل صوت",
               "objective": "يختار الغرافيم المناسب لكل فونيم مدروس.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اختر الحروف التي تمثل الأصوات /m/ /æ/ /p/ بالترتيب.",
+                  "choices": [
+                    "m a p",
+                    "m p a",
+                    "a m p"
+                  ],
+                  "answer": "m a p"
+                },
+                {
+                  "prompt": "أي حرف يمثل الصوت الأول في كلمة fish؟",
+                  "choices": [
+                    "f",
+                    "i",
+                    "sh"
+                  ],
+                  "answer": "f"
+                }
+              ]
             },
             {
               "id": "L2-U3-L03",
               "title": "بناء كلمة ببطاقات الحروف",
               "objective": "يرتب الحروف لتكوين كلمة مملاة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "رتّب الحروف لتكوين كلمة: p – a – m (المطلوب: map).",
+                  "input": true,
+                  "answer": "map"
+                },
+                {
+                  "prompt": "اكتب كلمة sun من الذاكرة.",
+                  "input": true,
+                  "answer": "sun"
+                }
+              ]
             },
             {
               "id": "L2-U3-L04",
               "title": "تغيير صوت واحد",
               "objective": "يغير فونيمًا واحدًا لإنتاج كلمة أخرى.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "غيّر الصوت الأول في map إلى /t/. ما الكلمة الجديدة؟",
+                  "choices": [
+                    "tap",
+                    "top",
+                    "cap"
+                  ],
+                  "answer": "tap"
+                },
+                {
+                  "prompt": "غيّر الصوت الأخير في sit إلى /p/. ما الكلمة الجديدة؟",
+                  "choices": [
+                    "sip",
+                    "sat",
+                    "sit"
+                  ],
+                  "answer": "sip"
+                }
+              ]
             },
             {
               "id": "L2-U3-L05",
               "title": "الإملاء من الذاكرة",
               "objective": "يكتب كلمة قصيرة بعد سماعها دون نموذج بصري.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اكتب الكلمة التي تمثلها الأصوات /m/ /æ/ /t/.",
+                  "input": true,
+                  "answer": "mat"
+                },
+                {
+                  "prompt": "اكتب الكلمة التي تمثلها الأصوات /p/ /ɪ/ /n/.",
+                  "input": true,
+                  "answer": "pin"
+                }
+              ]
             }
           ]
         },
@@ -606,28 +685,100 @@
               "title": "المسافات بين الكلمات",
               "objective": "يميز حدود الكلمات والمسافات.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "أعد كتابة الكلمات مع وضع المسافات: IamSam",
+                  "input": true,
+                  "answer": "I am Sam",
+                  "accepted": [
+                    "I am Sam."
+                  ]
+                },
+                {
+                  "prompt": "كم كلمة في الجملة: The cat sat.",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                }
+              ]
             },
             {
               "id": "L3-U2-L02",
               "title": "الحرف الكبير في بداية الجملة",
               "objective": "يحدد بداية الجملة ويستخدم الحرف الكبير.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "صحح بداية الجملة: the cat sat.",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                },
+                {
+                  "prompt": "أي كتابة تبدأ بحرف كبير صحيح؟",
+                  "choices": [
+                    "sam sat.",
+                    "Sam sat.",
+                    "sam Sat."
+                  ],
+                  "answer": "Sam sat."
+                }
+              ]
             },
             {
               "id": "L3-U2-L03",
               "title": "النقطة وعلامة الاستفهام",
               "objective": "يميز علامتي الوقف والسؤال في نص قصير.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اختر علامة الترقيم المناسبة للسؤال: Are you Sam__",
+                  "choices": [
+                    ".",
+                    "?",
+                    "!"
+                  ],
+                  "answer": "?"
+                },
+                {
+                  "prompt": "اختر علامة نهاية الجملة الخبرية: The cat is big__",
+                  "choices": [
+                    "?",
+                    ".",
+                    ","
+                  ],
+                  "answer": "."
+                }
+              ]
             },
             {
               "id": "L3-U2-L04",
               "title": "ترتيب الكلمات",
               "objective": "يرتب كلمات لتكوين جملة بسيطة ذات معنى.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "رتّب الكلمات لتكوين جملة: Sam / is / here",
+                  "input": true,
+                  "answer": "Sam is here.",
+                  "accepted": [
+                    "Sam is here"
+                  ]
+                },
+                {
+                  "prompt": "رتّب الكلمات لتكوين جملة: cat / The / sat",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -681,7 +832,18 @@
               "title": "كتابة كلمة من الذاكرة",
               "objective": "يسترجع تهجئة كلمة سبق تعلمها.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اكتب كلمة cat من الذاكرة.",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب كلمة map من الذاكرة.",
+                  "input": true,
+                  "answer": "map"
+                }
+              ]
             },
             {
               "id": "L3-U4-L03",
@@ -695,7 +857,24 @@
               "title": "كتابة جملة قصيرة",
               "objective": "ينتج جملة مفهومة مع مسافات وحرف كبير ونقطة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اكتب جملة قصيرة باستخدام الكلمات: I / am / Sam",
+                  "input": true,
+                  "answer": "I am Sam.",
+                  "accepted": [
+                    "I am Sam"
+                  ]
+                },
+                {
+                  "prompt": "أعد كتابة الجملة مع الحرف الكبير والنقطة: the cat sat",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -715,7 +894,25 @@
               "title": "قائمة ومعلومات بسيطة",
               "objective": "يكتب قائمة أو بيانات شخصية شديدة البساطة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اكتب قائمة من كلمتين تفصل بينهما فاصلة: cat و dog",
+                  "input": true,
+                  "answer": "cat, dog",
+                  "accepted": [
+                    "cat dog",
+                    "cat and dog"
+                  ]
+                },
+                {
+                  "prompt": "اكتب بيانات بسيطة: الاسم Sam والعمر 6 (اكتب: Name: Sam, Age: 6).",
+                  "input": true,
+                  "answer": "Name: Sam, Age: 6",
+                  "accepted": [
+                    "Name: Sam Age: 6"
+                  ]
+                }
+              ]
             },
             {
               "id": "L3-U5-L03",
