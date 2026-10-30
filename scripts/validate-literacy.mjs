@@ -9,6 +9,7 @@ const audioMapFile = resolve(root, "assets/js/data/zero-audio-map.js");
 const data = JSON.parse(readFileSync(file, "utf8"));
 const audioManifest = JSON.parse(readFileSync(manifestFile, "utf8"));
 const { AUDIO_MAP } = await import(new URL("../assets/js/data/zero-audio-map.js", import.meta.url));
+const { LETTER_WORDS, DIGRAPH_WORDS, resolveSound } = await import(new URL("../assets/js/core/zero-audio.js", import.meta.url));
 const errors = [];
 const warnings = [];
 const lessons = data.stages.flatMap(stage => stage.units.flatMap(unit => unit.lessons || []));
@@ -20,6 +21,16 @@ for (const id of new Set(lessonIds)) {
 
 for (const lesson of lessons) {
   for (const [index, item] of (lesson.items || []).entries()) {
+    if (item.audioText) {
+      const key = String(item.audioText).trim().toLowerCase();
+      let asset = AUDIO_MAP[key];
+      if (!asset) {
+        const letter = Object.entries(LETTER_WORDS).find(([, word]) => word === key);
+        const digraph = Object.entries(DIGRAPH_WORDS).find(([, word]) => word === key);
+        asset = letter ? resolveSound("word:letter:" + letter[0]) : digraph ? resolveSound("word:" + digraph[0]) : /^[a-z]$/.test(key) ? resolveSound("name:letter:" + key) : null;
+      }
+      if (!asset || !existsSync(resolve(root, asset))) errors.push(`${lesson.id} item ${index + 1}: audioText has no verified embedded recording: ${key}`);
+    }
     if (item.choices && !item.choices.includes(item.answer)) {
       errors.push(`${lesson.id} item ${index + 1}: answer is not one of the choices`);
     }
