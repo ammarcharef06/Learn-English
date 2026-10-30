@@ -808,6 +808,11 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(/registerZeroSounds/.test(zeroMain), 'صفحة A0 لا تُسجّل الحزمة');
     assert(/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8')), 'مدخل التطبيق الرئيسي لا يُسجّل أصوات A0');
     registerZeroSounds();
+    const consonants = ["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","jh","m","n","eng","l","r","h","w","y"];
+    for (const id of consonants) {
+      eq(resolveSound(`phoneme:${id}`), `./assets/audio/zero/p/phoneme-${id}.mp3`, `phoneme asset ${id}`);
+      assert(hasRecordedSound(`phoneme:${id}`), `phoneme ${id} must be registered for playback`);
+    }
     const directSounds = {
       th: 'th-voiceless', ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea',
     };
