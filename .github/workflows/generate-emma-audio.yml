@@ -7,6 +7,10 @@ on:
       - development
     paths:
       - .github/workflows/generate-emma-audio.yml
+      - scripts/generate-emma-*.mjs
+      - assets/js/core/zero-audio.js
+      - assets/js/data/zero-audio-map.js
+      - package.json
 
 permissions:
   contents: write
@@ -48,11 +52,15 @@ jobs:
         run: npm run audio:emma:precision
 
       - name: Generate precision bank when Azure credentials are configured
-        if: ${{ secrets.SPEECH_KEY != '' && secrets.SPEECH_REGION != '' }}
         env:
           SPEECH_KEY: ${{ secrets.SPEECH_KEY }}
           SPEECH_REGION: ${{ secrets.SPEECH_REGION }}
-        run: npm run audio:emma:precision -- --write --force
+        run: |
+          if [ -n "$SPEECH_KEY" ] && [ -n "$SPEECH_REGION" ]; then
+            npm run audio:emma:precision -- --write --force
+          else
+            echo "Azure Speech secrets not configured; HD precision bank remains pending."
+          fi
 
       - name: Verify complete conversion map (dry run)
         run: npm run audio:emma:migrate
