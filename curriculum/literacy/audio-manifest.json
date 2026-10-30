@@ -453,7 +453,7 @@
     }
   },
   "precisionBank": {
-    "status": "open-model-generation-configured-awaiting-workflow-run",
+    "status": "generation-running-verified-by-ci-pending",
     "engine": "Kokoro-82M",
     "model": "hexgrad/Kokoro-82M",
     "modelLicense": "Apache-2.0",
@@ -465,8 +465,166 @@
       "letterExamples": 26,
       "graphemeSounds": 12,
       "graphemeExamples": 12,
-      "total": 76
+      "consonantPhonemes": 22,
+      "consonantExamples": 22,
+      "total": 120
     },
-    "note": "هذه الحزمة مخصصة للأسماء والأمثلة وأصوات الحروف المركبة. لا تُعد ملفات IPA المنفردة معتمدة؛ يلزم اعتماد لهجة الحركات ومراجعة صوتية بشرية."
-  }
+    "note": "Kokoro-82M (Apache-2.0), voice af_heart. Includes 22 consonant IPA recordings and example words. Human listening and accent QA remain required; vowels are intentionally not finalized."
+  },
+  "consonantPhonemes": [
+    {
+      "ipa": "/p/",
+      "example": "pen",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-p.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-p.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/b/",
+      "example": "bed",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-b.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-b.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/t/",
+      "example": "ten",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-t.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-t.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/d/",
+      "example": "dog",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-d.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-d.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/k/",
+      "example": "cat",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-k.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-k.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/g/",
+      "example": "go",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-g.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-g.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/f/",
+      "example": "fish",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-f.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-f.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/v/",
+      "example": "van",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-v.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-v.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/θ/",
+      "example": "thin",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-theta.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-theta.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/ð/",
+      "example": "this",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-eth.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-eth.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/s/",
+      "example": "sun",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-s.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-s.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/z/",
+      "example": "zoo",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-z.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-z.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/ʃ/",
+      "example": "ship",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-sh.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-sh.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/tʃ/",
+      "example": "chip",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-ch.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-ch.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/m/",
+      "example": "man",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-m.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-m.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/n/",
+      "example": "net",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-n.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-n.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/ŋ/",
+      "example": "sing",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-eng.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-eng.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/l/",
+      "example": "leg",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-l.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-l.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/r/",
+      "example": "red",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-r.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-r.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/h/",
+      "example": "hat",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-h.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-h.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/w/",
+      "example": "wet",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-w.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-w.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/j/",
+      "example": "yes",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-y.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-y.mp3",
+      "status": "generated-pending-audio-qa"
+    }
+  ]
 }
