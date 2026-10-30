@@ -186,43 +186,108 @@
         {
           "id": "L1-U1",
           "title": "المجموعة الأولى: m, s, a, t",
-          "lessons": []
+          "lessons": [],
+          "objective": "التعرّف على أشكال m وs وa وt، والتمييز بين الحرف الكبير والصغير واسم الحرف.",
+          "completionNote": "لا تنتقل قبل تمييز الأشكال الأربعة في أكثر من سياق.",
+          "letterIds": [
+            "letter-m",
+            "letter-s",
+            "letter-a",
+            "letter-t"
+          ]
         },
         {
           "id": "L1-U2",
           "title": "المجموعة الثانية: p, i, n",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة p وi وn، ومراجعة المجموعة الأولى باسترجاع متباعد.",
+          "completionNote": "راجع الحروف السابقة مع كل حرف جديد.",
+          "letterIds": [
+            "letter-p",
+            "letter-i",
+            "letter-n"
+          ]
         },
         {
           "id": "L1-U3",
           "title": "المجموعة الثالثة: c, k, e",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة c وk وe، ومقارنة الحروف المتشابهة بصريًا.",
+          "completionNote": "انتبه إلى اختلاف الشكل بين c وe وبين الحروف الكبيرة والصغيرة.",
+          "letterIds": [
+            "letter-c",
+            "letter-k",
+            "letter-e"
+          ]
         },
         {
           "id": "L1-U4",
           "title": "المجموعة الرابعة: h, r, d",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة h وr وd، وتوسيع التعرف البصري والاسترجاع.",
+          "completionNote": "اخلط حروف المجموعات السابقة في المراجعة.",
+          "letterIds": [
+            "letter-h",
+            "letter-r",
+            "letter-d"
+          ]
         },
         {
           "id": "L1-U5",
           "title": "المجموعة الخامسة: o, g, l",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة o وg وl، وتثبيت أسماء الحروف وأشكالها.",
+          "completionNote": "لا تعتمد على ترتيب الأبجدية وحده في الإجابة.",
+          "letterIds": [
+            "letter-o",
+            "letter-g",
+            "letter-l"
+          ]
         },
         {
           "id": "L1-U6",
           "title": "المجموعة السادسة: f, b, u",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة f وb وu، والتدرب على الاسترجاع المختلط.",
+          "completionNote": "ميّز بين اسم الحرف وصوته؛ هذا المسار يختبر الاسم والشكل فقط.",
+          "letterIds": [
+            "letter-f",
+            "letter-b",
+            "letter-u"
+          ]
         },
         {
           "id": "L1-U7",
           "title": "المجموعة السابعة: j, v, w",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة j وv وw مع مراجعة تراكمية.",
+          "completionNote": "راجع الحروف في ترتيب عشوائي.",
+          "letterIds": [
+            "letter-j",
+            "letter-v",
+            "letter-w"
+          ]
         },
         {
           "id": "L1-U8",
           "title": "المجموعة الثامنة: y, z, x, q",
-          "lessons": []
+          "lessons": [],
+          "objective": "إضافة y وz وx وq، ثم مراجعة شاملة للحروف الستة والعشرين.",
+          "completionNote": "إتمام هذه المجموعة لا يعني إتقان أصوات الحروف أو القراءة.",
+          "letterIds": [
+            "letter-y",
+            "letter-z",
+            "letter-x",
+            "letter-q"
+          ]
         }
+      ],
+      "masteryCriteria": [
+        "نجاح في مطابقة الكبير والصغير في يومين مختلفين",
+        "استرجاع اسم الحرف في يومين مختلفين",
+        "التعرف إلى الحرف الصغير من الكبير في يومين مختلفين",
+        "كتابة الحرفين الصغير والكبير من الذاكرة في يومين مختلفين",
+        "لا تقيس هذه المعايير نطق الفونيمات أو مهارة الكتابة اليدوية بالقلم"
       ]
     },
     {
