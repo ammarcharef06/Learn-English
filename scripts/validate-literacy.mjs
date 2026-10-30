@@ -6,8 +6,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const file = resolve(root, "curriculum/literacy/literacy-l0-l1.json");
 const manifestFile = resolve(root, "curriculum/literacy/audio-manifest.json");
 const audioMapFile = resolve(root, "assets/js/data/zero-audio-map.js");
+const literacyEngineFile = resolve(root, "assets/js/literacy/engine.js");
+const speechEngineFile = resolve(root, "assets/js/core/speech.js");
 const data = JSON.parse(readFileSync(file, "utf8"));
 const audioManifest = JSON.parse(readFileSync(manifestFile, "utf8"));
+const literacyEngineSource = readFileSync(literacyEngineFile, "utf8");
+const speechEngineSource = readFileSync(speechEngineFile, "utf8");
 const { AUDIO_MAP } = await import(new URL("../assets/js/data/zero-audio-map.js", import.meta.url));
 const coreExampleInitials = { moon: "m", sun: "s", tree: "t", cat: "c", dog: "d" };
 const errors = [];
@@ -50,6 +54,8 @@ if (data.pronunciationPolicy?.status !== "selected-existing-project-source") {
   errors.push("Pronunciation policy must identify the selected embedded project audio source");
 }
 if (!existsSync(audioMapFile)) errors.push("Embedded zero-audio map is missing");
+if (!literacyEngineSource.includes("recordedOnly: true")) errors.push("Literacy activities must request approved recorded audio only");
+if (!speechEngineSource.includes("if (opts.recordedOnly) return false;")) errors.push("Speech engine must not fall back to browser voice in recorded-only mode");
 for (const [text, asset] of Object.entries(AUDIO_MAP || {})) {
   if (typeof asset !== "string" || !asset.startsWith("./assets/audio/zero/") || !existsSync(resolve(root, asset))) {
     errors.push(`Invalid or missing embedded audio map asset for "${text}": ${asset}`);
