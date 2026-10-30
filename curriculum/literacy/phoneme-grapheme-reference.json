@@ -63,7 +63,7 @@
       "exampleAudio": "assets/audio/zero/n/phoneme-word-k.mp3"
     },
     {
-      "ipa": "/g/",
+      "ipa": "/ɡ/",
       "type": "consonant",
       "example": "go",
       "graphemes": [
@@ -209,7 +209,7 @@
       "exampleAudio": "assets/audio/zero/n/phoneme-word-l.mp3"
     },
     {
-      "ipa": "/r/",
+      "ipa": "/ɹ/",
       "type": "consonant",
       "example": "red",
       "graphemes": [
