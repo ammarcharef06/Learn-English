@@ -52,7 +52,8 @@ const summary = {
   stages: data.stages.length,
   lessons: lessons.length,
   lessonsWithActivities: lessons.filter(lesson => lesson.items?.length).length,
-  alphabetLetters: alphabet.length,\n  transferChecks: (data.transferChecks || []).length,
+  alphabetLetters: alphabet.length,
+  transferChecks: (data.transferChecks || []).length,
   errors,
   warnings
 };
