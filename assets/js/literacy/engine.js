@@ -55,7 +55,6 @@ function renderLetterTask(id,selectedMode){
   progress.lessons||={};progress.lessons[id]={...current,attempts:(current.attempts||0)+1,best:Math.max(current.best||0,ok?1:0),skills,mastered,lastScore:ok?1:0,lastAttempt:new Date().toISOString()};
   save();$("#letter-feedback").textContent=ok?"إجابة صحيحة. أعد هذا النوع في يوم آخر لترسيخ الاسترجاع.":"ليست الإجابة الصحيحة. راجع الحرف ثم حاول لاحقًا.";
   const card=target.closest(".lit-layout")?.querySelector('[data-letter="'+id+'"]');if(card)card.querySelector("span").textContent=mastered?"متقن":"تدرّب";
- });
  };
  target.querySelectorAll("[data-choice]").forEach(btn=>btn.onclick=()=>submitAnswer(btn.dataset.choice));
  const writeButton=$("#check-write");if(writeButton)writeButton.onclick=()=>submitAnswer($("#letter-write").value.trim());
