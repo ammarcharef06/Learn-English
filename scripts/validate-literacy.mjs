@@ -101,8 +101,10 @@ if (audioManifest.audioGeneration?.status !== "generator-identified-redistributi
 }
 if (audioManifest.audioGeneration?.requiredVoice !== "en-US-AriaNeural" ||
     audioManifest.audioGeneration?.generator !== "edge-tts Python client using Microsoft Edge online TTS" ||
-    audioManifest.audioGeneration?.provenanceCommit !== "a3d9553698d85719710d1a40c5532409af7c1478") {
-  errors.push("Aria generator provenance must match the documented original edge-tts voice and commit");
+    !Array.isArray(audioManifest.audioGeneration?.provenanceCommits) ||
+    !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286") ||
+    !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "a3d9553698d85719710d1a40c5532409af7c1478")) {
+  errors.push("Aria generator provenance must match both historical edge-tts voice-generation commits");
 }
 const ariaGeneratorFile = resolve(root, "scripts/generate-aria-audio.mjs");
 if (!existsSync(ariaGeneratorFile)) errors.push("The reproducible Aria text-audio generator is missing");
