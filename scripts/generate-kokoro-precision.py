@@ -15,6 +15,14 @@ DIGRAPHS = {
  "ee":("/iː/","bee"), "ea":("/iː/","sea"), "ou":("/aʊ/","mouse")
 }
 def slug(s): return re.sub(r"[^a-z0-9]+","-",s.lower()).strip("-")
+PHONEMES = {
+ "p":("/p/","pen"), "b":("/b/","bed"), "t":("/t/","ten"), "d":("/d/","dog"),
+ "k":("/k/","cat"), "g":("/ɡ/","go"), "f":("/f/","fish"), "v":("/v/","van"),
+ "theta":("/θ/","thin"), "eth":("/ð/","this"), "s":("/s/","sun"), "z":("/z/","zoo"),
+ "sh":("/ʃ/","ship"), "ch":("/tʃ/","chip"), "m":("/m/","man"), "n":("/n/","net"),
+ "eng":("/ŋ/","sing"), "l":("/l/","leg"), "r":("/ɹ/","red"), "h":("/h/","hat"),
+ "w":("/w/","wet"), "y":("/j/","yes")
+}
 def jobs():
     result=[]
     for c in LETTERS: result.append((f"n/name-{c}.mp3", c.upper(), "letter-name"))
@@ -22,6 +30,9 @@ def jobs():
     for key,(sound,word) in DIGRAPHS.items():
         result.append((f"d/{key}.mp3", sound, "grapheme-sound"))
         result.append((f"n/word-{key}.mp3", word, "grapheme-example"))
+    for key,(ipa,word) in PHONEMES.items():
+        result.append((f"p/phoneme-{key}.mp3", ipa, "phoneme"))
+        result.append((f"n/phoneme-word-{key}.mp3", word, "phoneme-example"))
     return result
 def main():
     ap=argparse.ArgumentParser()
@@ -42,7 +53,7 @@ def main():
         if dest.exists() and dest.stat().st_size>1024 and not args.force:
             skipped+=1; continue
         chunks=[]
-        if kind == "grapheme-sound":
+        if kind in ("grapheme-sound", "phoneme"):
             # Raw IPA must bypass English G2P; otherwise symbols such as /ʃ/ are discarded.
             phonemes = text.strip("/")
             results = pipe.generate_from_tokens(phonemes, voice=VOICE, speed=0.92)
