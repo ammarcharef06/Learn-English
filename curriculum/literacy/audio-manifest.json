@@ -447,7 +447,7 @@
       "voice": "Kokoro-82M af_heart",
       "provider": "Open-weight local TTS",
       "path": "assets/audio/zero/{n,d,p}/",
-      "scope": "26 letter names, 26 letter examples, 12 grapheme phonemes and examples, 22 consonant phonemes and example words.",
+      "scope": "26 letter names, 26 letter examples, 12 grapheme phonemes and examples, 23 consonant phonemes and example words.",
       "license": "Apache-2.0",
       "note": "No paid API credentials required. Recordings remain subject to human listening and phonetic QA."
     }
