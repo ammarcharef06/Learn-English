@@ -19,7 +19,7 @@ export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 /** الحروف المركّبة الاثنا عشر (لكل منها تسجيل مستقل عن كلمة المثال) */
 export const CONSONANT_PHONEME_IDS = [
   'p', 'b', 't', 'd', 'k', 'g', 'f', 'v', 'theta', 'eth', 's', 'z',
-  'sh', 'ch', 'm', 'n', 'eng', 'l', 'r', 'h', 'w', 'y',
+  'sh', 'ch', 'jh', 'm', 'n', 'eng', 'l', 'r', 'h', 'w', 'y',
 ];
 
 export const DIGRAPH_SOUND_IDS = [
