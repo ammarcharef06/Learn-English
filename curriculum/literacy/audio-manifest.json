@@ -408,7 +408,7 @@
     }
   ],
   "audioGeneration": {
-    "status": "emma-selected-migration-tool-ready-legacy-bank-not-yet-migrated",
+    "status": "emma-generated-awaiting-human-audio-qa",
     "requiredVoice": "en-US-EmmaNeural",
     "displayName": "English - United States - Emma",
     "generator": "edge-tts Python client using Microsoft Edge online TTS",
@@ -427,6 +427,13 @@
     "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
     "policy": "Use en-US-EmmaNeural for all new recordings. Do not use Aria, EmmaMultilingual, Google Translate, browser SpeechSynthesis, or any other voice as a silent substitute. Review Microsoft service terms and redistribution rights before publishing generated files.",
     "bulkMigrationTool": "scripts/migrate-audio-to-emma.mjs",
-    "bulkMigrationScope": "344 ordinary-text jobs: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review."
+    "bulkMigrationScope": "344 ordinary-text jobs: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.",
+    "lastGeneration": {
+      "voice": "en-US-EmmaNeural",
+      "generatedTextFiles": 344,
+      "manualPhonemeFilesExcluded": 38,
+      "result": "generation-successful; listening-and-phonetic-QA-required",
+      "generatedByWorkflow": "Generate Emma audio bank"
+    }
   }
 }
