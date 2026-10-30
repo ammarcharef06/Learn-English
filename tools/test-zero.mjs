@@ -725,44 +725,27 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     assert(!/zero-entry\.js/.test(app), 'app.js ما زال يحمّل شاشة اختيار A0/A1');
     assert(/route\('\/'/.test(app), 'الموقع لا يفتح لوحة البداية مباشرة');
   });
-  it('صفحة A0 مستقلة تماماً وبنفس هيكل الموقع', () => {
-    for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
-      assert(zeroHtml.includes(id), `zero.html ينقصه ${id}`);
-    }
-    assert(/class="topbar" id="topbar"/.test(zeroHtml), 'شريط A0 لا يستخدم شريط الموقع نفسه');
-    assert(/class="view" id="view"/.test(zeroHtml), 'محتوى A0 لا يستخدم .view الخاص بالموقع');
-    assert(zeroHtml.includes('./assets/js/zero-main.js'), 'zero.html لا يُحمّل نقطة دخول A0');
-    assert(!/assets\/js\/app\.js/.test(zeroHtml), 'zero.html يُحمّل app.js — ليست مستقلة');
-    for (const chrome of ['assets/js/app.js']) {
-      assert(!zeroHtml.includes(chrome), `zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
-    }
-    assert(zeroHtml.includes('class="mobile-nav" id="bottomnav"'), 'غلاف A0 لا يحتوي تنقّلاً سفلياً للهاتف');
-    for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
-      assert(zeroHtml.includes(need), `zero.html ينقصه ${need} — الدرج المشترك`);
-    }
-    assert(/manifest-zero\.webmanifest/.test(zeroHtml), 'zero.html بلا بيان تثبيت خاص');
-    assert(manZero.start_url === './zero.html', 'start_url لبيان A0 غير صحيح');
-    assert(zeroHtml.includes('./assets/css/zero.css') && zeroHtml.includes('./assets/css/zero-pad.css'), 'zero.html لا يُحمّل أنماط A0');
+  it('صفحة محو الأمية تستخدم نقطة دخول واحدة قابلة للتشغيل', () => {
+    assert(zeroHtml.includes('id="literacy-app"'), 'حاوية محو الأمية غير موجودة');
+    assert(zeroHtml.includes('./assets/js/literacy/engine.js'), 'محرّك محو الأمية غير مربوط');
+    assert(zeroHtml.includes('./assets/css/literacy.css'), 'تنسيقات محو الأمية غير مربوطة');
+    assert(!zeroHtml.includes('./assets/js/zero-main.js'), 'يوجد مدخلا تشغيل متعارضان في صفحة الصفر');
+    assert(!zeroHtml.includes('./assets/js/app.js'), 'صفحة الصفر يجب أن تبقى مستقلة عن إقلاع الموقع العام');
+    assert(/zero\.html/.test(manZero.start_url), 'بيان تثبيت صفحة الصفر غير مربوط بصفحتها');
   });
-  it('صفحة A0 تستخدم درجها المستقل والموقع يضيف تنقّلاً سفلياً للهاتف', () => {
-    assert(/renderZeroDrawer/.test(shellSrc), 'درج A0 غير معرّف');
-    assert(/sidenav/.test(shellSrc), 'درج A0 لا يستخدم .sidenav');
-    for (const [label, key] of [
-      ['المراحل الخمس', 'ui.literal.6574c53b'],
-      ['الاختبار النهائي', 'ui.literal.cea94354'],
-      ['شهادة التأسيس', 'ui.literal.07e8f3c3'],
-      ['لوح الكتابة', 'ui.literal.cc3d1c0c'],
-      ['إعدادات التأسيس', 'ui.literal.462965d1'],
-      ['المستويات A1–B1', 'ui.literal.112885cf'],
-    ]) {
-      assert(shellSrc.includes(key) && (label === 'المستويات A1–B1' ? shellSrc.includes('A1–B1') : true), `درج A0 ينقصه: ${label}`);
+  it('مسار محو الأمية يدمج التسجيلات المضمنة وأنشطة الاستماع الفعلية', () => {
+    const literacyEngine = readFileSync(join(ROOT, 'assets/js/literacy/engine.js'), 'utf8');
+    const literacyData = JSON.parse(readFileSync(join(ROOT, 'curriculum/literacy/literacy-l0-l1.json'), 'utf8'));
+    assert(/registerZeroSounds/.test(literacyEngine), 'بنك التسجيلات لا يُسجّل عند تشغيل المسار');
+    assert(/data-speak/.test(literacyEngine), 'أزرار تشغيل التسجيلات غير موجودة');
+    assert(/item\.audioText/.test(literacyEngine), 'أنشطة الاستماع لا تعرض الصوت المطلوب');
+    assert(/bootLiteracy/.test(literacyEngine), 'إقلاع المسار غير قابل للاختبار');
+    const lessons = literacyData.stages.flatMap(stage => stage.units.flatMap(unit => unit.lessons));
+    for (const id of ['L0-U3-L01', 'L0-U4-L01', 'L3-U4-L03']) {
+      const lesson = lessons.find(item => item.id === id);
+      assert(lesson?.items?.length >= 3, `الدرس ${id} ما زال بلا أنشطة كافية`);
+      assert(lesson.items.every(item => item.audioText), `الدرس ${id} يجب أن يستخدم تسجيلات صوتية محددة`);
     }
-    const topbarJs = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
-    assert(/topbarHTML/.test(topbarJs) && /renderTopbar/.test(topbarJs), 'الشريط العلوي المشترك مفقود');
-    assert(/renderTopbar/.test(zeroMain), 'صفحة A0 لا ترسم الشريط المشترك');
-    assert(/renderTopbar/.test(app), 'صفحة الموقع لا ترسم الشريط المشترك');
-    assert(/class="mobile-nav" id="bottomnav"/.test(html), 'تنقّل الهاتف غير موجود في غلاف الموقع');
-    assert(/id="bottomnav"/.test(zeroHtml) && /MOBILE_NAV/.test(shellSrc), 'التنقّل السفلي لا يظهر في غلاف A0 المستقل');
   });
   it('واجهات A0 كلها بمكوّنات الموقع لا بمكوّنات خاصة', () => {
     for (const cls of ['page-head', 'card', 'btn', 'chip', 'item-row', 'seg', 'stat', 'progress']) {
