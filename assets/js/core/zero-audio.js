@@ -9,8 +9,8 @@
 import { registerSoundBank } from './speech.js';
 import { AUDIO_MAP } from '../data/zero-audio-map.js';
 
-const N = './assets/audio/zero/n/';
-const D = './assets/audio/zero/d/';
+const N = './assets/audio/zero/precision/';
+const D = './assets/audio/zero/precision/';
 
 /** أسماء الحروف الستة والعشرين */
 export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
