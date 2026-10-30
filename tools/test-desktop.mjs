@@ -79,7 +79,7 @@ assert.match(shellView, /key: 'nav\.journey'/);
 assert.match(shellView, /key: 'nav\.conversations'/);
 assert.match(serviceWorker, /'\.\/assets\/js\/views\/journey\.js'/);
 assert.match(serviceWorker, /'\.\/assets\/js\/views\/conversations\.js'/);
-assert.match(serviceWorker, /const VERSION = 'v4\.16\.1'/);
+assert.match(serviceWorker, /const VERSION = 'v4.16.4'/);
 assert.match(serviceWorker, /'\.\/assets\/css\/main\.css'/);
 assert.match(progressStore, /const K_PROGRESS = isEshSandbox \? 'lea\.esh\.progress\.v1' : 'lea\.progress\.v1'/);
 assert.match(journeyView, /weeklySummary/);
