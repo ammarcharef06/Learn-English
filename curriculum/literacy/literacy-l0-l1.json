@@ -623,36 +623,186 @@
               "id": "L2-U4-L01",
               "title": "التمييز بين /p/ و/b/",
               "objective": "يميز زوجًا صوتيًا متقاربًا عند الاستماع.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "في التمثيل الكتابي، أي حرف يقابل /p/ في كلمة pin؟",
+                  "choices": [
+                    "p",
+                    "b",
+                    "m"
+                  ],
+                  "answer": "p"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف الذي يمثل /b/؟",
+                  "choices": [
+                    "bat",
+                    "pat",
+                    "mat"
+                  ],
+                  "answer": "bat"
+                },
+                {
+                  "prompt": "أي زوج يختلف في الحرف الأول المكتوب فقط؟",
+                  "choices": [
+                    "pat / bat",
+                    "pin / pen",
+                    "map / man"
+                  ],
+                  "answer": "pat / bat"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U4-L02",
               "title": "التمييز بين /t/ و/d/",
               "objective": "يصنف الصوت المسموع دون الاستناد إلى اسم الحرف.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يمثل /t/ في بداية كلمة ten؟",
+                  "choices": [
+                    "t",
+                    "d",
+                    "n"
+                  ],
+                  "answer": "t"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف d؟",
+                  "choices": [
+                    "dog",
+                    "tog",
+                    "log"
+                  ],
+                  "answer": "dog"
+                },
+                {
+                  "prompt": "اختر الزوج الذي يختلف في الحرف الأول: ten / den.",
+                  "choices": [
+                    "t / d",
+                    "e / e",
+                    "n / n"
+                  ],
+                  "answer": "t / d"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U4-L03",
               "title": "التمييز بين /f/ و/v/",
               "objective": "يربط التمييز السمعي بملاحظة اهتزاز الحنجرة.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يبدأ به لفظ كلمة fish في الكتابة؟",
+                  "choices": [
+                    "f",
+                    "v",
+                    "s"
+                  ],
+                  "answer": "f"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف v؟",
+                  "choices": [
+                    "van",
+                    "fan",
+                    "man"
+                  ],
+                  "answer": "van"
+                },
+                {
+                  "prompt": "أي زوج يختلف في الحرف الأول المكتوب؟",
+                  "choices": [
+                    "fan / van",
+                    "fin / fan",
+                    "vat / van"
+                  ],
+                  "answer": "fan / van"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U4-L04",
               "title": "التمييز بين /s/ و/z/",
               "objective": "يميز الاحتكاك المهموس والمجهور.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يبدأ به لفظ كلمة sun في الكتابة؟",
+                  "choices": [
+                    "s",
+                    "z",
+                    "n"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف z؟",
+                  "choices": [
+                    "zip",
+                    "sip",
+                    "lip"
+                  ],
+                  "answer": "zip"
+                },
+                {
+                  "prompt": "اختر الزوج الذي يختلف في الحرف الأول المكتوب.",
+                  "choices": [
+                    "sip / zip",
+                    "sun / sit",
+                    "zip / zap"
+                  ],
+                  "answer": "sip / zip"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U4-L05",
               "title": "أصوات /ʃ/ و/tʃ/ و/th/",
               "objective": "يتعرف الفروق الصوتية تمهيدًا لتهجئاتها.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة ship؟",
+                  "choices": [
+                    "sh",
+                    "ch",
+                    "th"
+                  ],
+                  "answer": "sh"
+                },
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة chin؟",
+                  "choices": [
+                    "ch",
+                    "sh",
+                    "th"
+                  ],
+                  "answer": "ch"
+                },
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة thin؟",
+                  "choices": [
+                    "th",
+                    "sh",
+                    "ch"
+                  ],
+                  "answer": "th"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             }
           ]
         },
@@ -664,36 +814,185 @@
               "id": "L2-U5-L01",
               "title": "sh وch",
               "objective": "يتعرف تهجئتين مركبتين في كلمات مألوفة.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "اختر الكلمة التي تبدأ بـ sh.",
+                  "choices": [
+                    "ship",
+                    "chip",
+                    "thin"
+                  ],
+                  "answer": "ship"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تبدأ بـ ch.",
+                  "choices": [
+                    "chat",
+                    "shut",
+                    "that"
+                  ],
+                  "answer": "chat"
+                },
+                {
+                  "prompt": "أي تهجئة في كلمة fish تمثل الصوت الأخير المكتوب؟",
+                  "choices": [
+                    "sh",
+                    "ch",
+                    "th"
+                  ],
+                  "answer": "sh"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U5-L02",
               "title": "th بقيمتيه",
               "objective": "يميز /θ/ عن /ð/ في أمثلة مسموعة.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تبدأ بالتهجئة th؟",
+                  "choices": [
+                    "thin",
+                    "ship",
+                    "chin"
+                  ],
+                  "answer": "thin"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالتهجئة th أيضًا؟",
+                  "choices": [
+                    "this",
+                    "wish",
+                    "chip"
+                  ],
+                  "answer": "this"
+                },
+                {
+                  "prompt": "ملاحظة: th قد يمثل صوتين مختلفين؛ ما الذي لا يمكن إثباته من النص وحده؟",
+                  "choices": [
+                    "التمييز السمعي بين الصوتين",
+                    "وجود الحرفين t وh",
+                    "موضع التهجئة"
+                  ],
+                  "answer": "التمييز السمعي بين الصوتين"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U5-L03",
               "title": "ck وng",
               "objective": "يتعرف الأنماط في مواضعها الشائعة.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تنتهي بالتهجئة ck؟",
+                  "choices": [
+                    "back",
+                    "bag",
+                    "ban"
+                  ],
+                  "answer": "back"
+                },
+                {
+                  "prompt": "أي كلمة تنتهي بالتهجئة ng؟",
+                  "choices": [
+                    "sing",
+                    "sit",
+                    "sip"
+                  ],
+                  "answer": "sing"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تحتوي ck في وسط/نهاية الكلمة.",
+                  "choices": [
+                    "duck",
+                    "dish",
+                    "dune"
+                  ],
+                  "answer": "duck"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U5-L04",
               "title": "التجمعات الساكنة",
               "objective": "يفك بدايات ونهايات مثل st وnd دون إضافة حركات.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تبدأ بتجمع ساكن من حرفين st؟",
+                  "choices": [
+                    "stop",
+                    "top",
+                    "sip"
+                  ],
+                  "answer": "stop"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بتجمع sp؟",
+                  "choices": [
+                    "spin",
+                    "pin",
+                    "sin"
+                  ],
+                  "answer": "spin"
+                },
+                {
+                  "prompt": "في كلمة flag، ما التجمع الساكن الأول المكتوب؟",
+                  "choices": [
+                    "fl",
+                    "la",
+                    "ag"
+                  ],
+                  "answer": "fl"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             },
             {
               "id": "L2-U5-L05",
               "title": "مراجعة فك الرموز",
               "objective": "يقرأ كلمات جديدة تجمع الأنماط التي تعلمها.",
-              "activity": "guided",
-              "items": []
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "اختر الكلمة التي تطابق التهجئة sh.",
+                  "choices": [
+                    "shop",
+                    "chop",
+                    "top"
+                  ],
+                  "answer": "shop"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تنتهي بـ ng.",
+                  "choices": [
+                    "ring",
+                    "rip",
+                    "rid"
+                  ],
+                  "answer": "ring"
+                },
+                {
+                  "prompt": "هل يثبت هذا الاختبار النصي وحده أنك تميز الأصوات عند الاستماع؟",
+                  "choices": [
+                    "لا، يلزم اختبار صوتي",
+                    "نعم، دائمًا"
+                  ],
+                  "answer": "لا، يلزم اختبار صوتي"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true
             }
           ]
         }
