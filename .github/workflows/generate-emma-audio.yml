@@ -49,7 +49,7 @@ jobs:
       - name: Preview exact bank coverage
         run: npm run audio:precision:dry
       - name: Generate all precision recordings
-        run: npm run audio:precision -- --write --force
+        run: npm run audio:precision -- --write
       - name: Verify generated MP3 inventory
         run: |
           python - <<'PY'
