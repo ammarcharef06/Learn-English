@@ -19,7 +19,8 @@
     "test": "node tools/check.mjs && node scripts/validate-literacy.mjs && node tools/validate-foundation-curriculum.mjs && node tools/test-logic.mjs && node tools/test-journey.mjs && node tools/test-zero.mjs && node tools/test-desktop.mjs && node tools/test-esh-adapter.mjs && node tools/test-esh-personalization.mjs",
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android",
-    "validate:literacy": "node scripts/validate-literacy.mjs"
+    "validate:literacy": "node scripts/validate-literacy.mjs",
+    "audio:aria": "node scripts/generate-aria-audio.mjs"
   },
   "devDependencies": {
     "@capacitor-community/admob": "^8.2.1",
