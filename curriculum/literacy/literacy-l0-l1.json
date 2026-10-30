@@ -233,7 +233,7 @@
                 {
                   "id": "L0-U4-Q3",
                   "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
-                  "audioText": "top",
+                  "audioText": "tree",
                   "choices": [
                     "t",
                     "b",
