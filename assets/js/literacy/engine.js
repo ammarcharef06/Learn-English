@@ -1,8 +1,12 @@
+import { initSpeech, speak } from "../core/speech.js";
+import { registerZeroSounds, LETTER_WORDS } from "../core/zero-audio.js";
+
 const DATA_URL = new URL("../../curriculum/literacy/literacy-l0-l1.json", import.meta.url);
 const KEY = "lea.literacy.progress.v1";
 const $ = (s,r=document)=>r.querySelector(s);
 const esc = v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let data, progress={}, stageId="L0";
+let appHost=null;
 function load(){try{progress=JSON.parse(localStorage.getItem(KEY)||"{}")}catch{progress={}}}
 function localDate(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(progress))}catch{}}
@@ -26,7 +30,7 @@ function stageReadiness(id){
 }
 function render(){
  const stage=data.stages.find(s=>s.id===stageId);
- const host=$("#literacy-app");
+ const host=appHost || $("#literacy-app");
  const lessonCount=stage.units.reduce((n,u)=>n+u.lessons.length,0)+(stageId==="L1"?26:0);
  const mastered=stage.units.reduce((n,u)=>n+u.lessons.filter(l=>state(l.id).mastered).length,0)+(stageId==="L1"?data.letters.filter(x=>state(x.id).mastered).length:0);
  let unitHtml=stageId==="L1"?stage.units.map(u=>'<section class="lit-unit-nav"><h2>'+esc(u.title)+'</h2><p>'+esc(u.objective||"") +'</p><button type="button" data-unit="'+u.id+'">انتقل إلى المجموعة</button></section>').join(""):stage.units.map(u=>"<section><h2>"+esc(u.title)+"</h2>"+u.lessons.map(l=>'<button class="lit-lesson" data-lesson="'+l.id+'">'+esc(l.title)+' <small>'+(state(l.id).mastered?"متقن":(l.items?.length?"تدرّب":"قيد الإعداد"))+"</small></button>").join("")+"</section>").join("");
@@ -122,6 +126,7 @@ function renderLetterTask(id,selectedMode){
  ];
  const mode=modes.find(m=>m.id===selectedMode)||modes[Math.floor(Math.random()*modes.length)],choices=[...new Set(mode.choices||[])].sort(()=>Math.random()-.5),old=state(id);
  target.innerHTML='<section class="lit-letter-task"><div class="lit-mode-tabs">'+modes.map(m=>'<button type="button" data-mode="'+m.id+'" class="'+(m.id===mode.id?"active":"")+'">'+m.label+'</button>').join("")+'</div><p class="eyebrow">'+mode.label+'</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>'+mode.prompt+'</p>'+(mode.input?'<div class="lit-write-row"><input id="letter-write" type="text" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="3" placeholder="m M"><button type="button" id="check-write">تحقق</button></div>':'<div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div>')+'<p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. لا يختبر هذا النشاط صوت الحرف أو نطقه.</small><p class="lit-progress-note">الإتقان يتطلب نجاحًا في المهارات الأربع في يومين مختلفين لكل مهارة.</p></section>';
+ target.querySelectorAll("[data-speak]").forEach(btn=>btn.onclick=()=>speak(btn.dataset.speak));
  target.querySelectorAll("[data-mode]").forEach(btn=>btn.onclick=()=>renderLetterTask(id,btn.dataset.mode));
  const submitAnswer=(answer)=>{
   target.querySelectorAll("[data-choice]").forEach(x=>x.disabled=true);
@@ -135,5 +140,27 @@ function renderLetterTask(id,selectedMode){
  target.querySelectorAll("[data-choice]").forEach(btn=>btn.onclick=()=>submitAnswer(btn.dataset.choice));
  const writeButton=$("#check-write");if(writeButton)writeButton.onclick=()=>submitAnswer($("#letter-write").value.trim());
 }
-async function boot(){load();const r=await fetch(DATA_URL);if(!r.ok)throw Error("curriculum unavailable");data=await r.json();render()}
-boot().catch(e=>{console.error(e);$("#literacy-app").textContent="تعذر تحميل مسار التأسيس."});
+export async function bootLiteracy(host = $("#literacy-app")) {
+ if (!host) return false;
+ appHost=host;
+ load();
+ initSpeech();
+ registerZeroSounds();
+ const r=await fetch(DATA_URL);
+ if(!r.ok)throw Error("curriculum unavailable");
+ data=await r.json();
+ render();
+ host.addEventListener("click", event => {
+  const button=event.target.closest("[data-speak]");
+  if(button && host.contains(button)) speak(button.dataset.speak);
+ });
+ return true;
+}
+
+if (typeof document !== "undefined" && document.querySelector("#literacy-app")) {
+ bootLiteracy().catch(e=>{
+  console.error(e);
+  const host=$("#literacy-app");
+  if(host)host.textContent="تعذر تحميل مسار التأسيس.";
+ });
+}
