@@ -139,6 +139,8 @@ export function speak(text, opts = {}) {
   }
   const src = soundBank.get(String(text || '').trim().toLowerCase());
   if (src) return playRecorded(src, opts, 'Recorded pronunciation');
+  // Strict recorded mode prevents a device/browser voice from silently replacing the approved voice bank.
+  if (opts.recordedOnly) return false;
   return speakBuiltIn(text, opts);
 }
 
