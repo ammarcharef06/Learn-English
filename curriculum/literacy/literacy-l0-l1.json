@@ -158,8 +158,43 @@
               "id": "L0-U3-L01",
               "title": "الانتباه للصوت",
               "objective": "يتعرف وجود الصوت ويقارن بين نماذج مسموعة.",
-              "activity": "listening-ready",
-              "items": []
+              "activity": "recorded-letter-name-listening",
+              "items": [
+                {
+                  "id": "L0-U3-Q1",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "m",
+                  "choices": [
+                    "m",
+                    "s",
+                    "a"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "id": "L0-U3-Q2",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "s",
+                  "choices": [
+                    "m",
+                    "s",
+                    "t"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "id": "L0-U3-Q3",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "a",
+                  "choices": [
+                    "a",
+                    "e",
+                    "i"
+                  ],
+                  "answer": "a"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-visual-choice"
             }
           ]
         },
@@ -171,8 +206,43 @@
               "id": "L0-U4-L01",
               "title": "ملاحظة أصوات الكلام",
               "objective": "يلاحظ أن الأصوات الكلامية تنتج بحركات أعضاء النطق.",
-              "activity": "guided",
-              "items": []
+              "activity": "recorded-word-onset-listening",
+              "items": [
+                {
+                  "id": "L0-U4-Q1",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "moon",
+                  "choices": [
+                    "m",
+                    "s",
+                    "t"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "id": "L0-U4-Q2",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "sun",
+                  "choices": [
+                    "m",
+                    "s",
+                    "p"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "id": "L0-U4-Q3",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "top",
+                  "choices": [
+                    "t",
+                    "b",
+                    "d"
+                  ],
+                  "answer": "t"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-visual-choice"
             }
           ]
         }
@@ -1393,8 +1463,31 @@
               "id": "L3-U4-L03",
               "title": "كتابة كلمة مملاة",
               "objective": "يحول الكلمة المسموعة إلى تهجئة.",
-              "activity": "guided",
-              "items": []
+              "activity": "recorded-word-dictation",
+              "items": [
+                {
+                  "id": "L3-U4-Q1",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "cat",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "id": "L3-U4-Q2",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "dog",
+                  "input": true,
+                  "answer": "dog"
+                },
+                {
+                  "id": "L3-U4-Q3",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "sun",
+                  "input": true,
+                  "answer": "sun"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-written-response"
             },
             {
               "id": "L3-U4-L04",
