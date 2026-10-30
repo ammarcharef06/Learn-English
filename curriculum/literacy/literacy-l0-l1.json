@@ -665,14 +665,52 @@
               "title": "كلمات عالية التواتر",
               "objective": "يتعرف كلمات شائعة غير منتظمة تدريجيًا.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "أي كلمة قصيرة شائعة نستخدمها قبل اسم مفرد؟",
+                  "choices": [
+                    "a",
+                    "map",
+                    "sat"
+                  ],
+                  "answer": "a"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تراها في بداية عبارة التعريف: the cat",
+                  "choices": [
+                    "the",
+                    "cat",
+                    "sat"
+                  ],
+                  "answer": "the"
+                }
+              ]
             },
             {
               "id": "L3-U1-L03",
               "title": "قراءة كلمات في سياق",
               "objective": "يقرأ كلمات ضمن عبارات قصيرة مع الحفاظ على فك الرموز.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ: a red cat. كم كلمة في العبارة؟",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                },
+                {
+                  "prompt": "اقرأ: The cat is on a mat. أين القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "in a bag",
+                    "on a map"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
             }
           ]
         },
