@@ -42,8 +42,15 @@ def main():
         if dest.exists() and dest.stat().st_size>1024 and not args.force:
             skipped+=1; continue
         chunks=[]
-        for _,_,audio in pipe(text, voice=VOICE, speed=0.92):
-            if audio is not None: chunks.append(np.asarray(audio,dtype=np.float32))
+        if kind == "grapheme-sound":
+            # Raw IPA must bypass English G2P; otherwise symbols such as /ʃ/ are discarded.
+            phonemes = text.strip("/")
+            results = pipe.generate_from_tokens(phonemes, voice=VOICE, speed=0.92)
+            for result in results:
+                if result.audio is not None: chunks.append(np.asarray(result.audio,dtype=np.float32))
+        else:
+            for result in pipe(text, voice=VOICE, speed=0.92):
+                if result.audio is not None: chunks.append(np.asarray(result.audio,dtype=np.float32))
         if not chunks: raise RuntimeError(f"No audio generated for {rel}: {text}")
         audio=np.concatenate(chunks)
         if audio.size < 1000: raise RuntimeError(f"Audio too short for {rel}")
