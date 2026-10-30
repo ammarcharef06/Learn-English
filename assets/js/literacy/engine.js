@@ -19,7 +19,16 @@ function render(){
  host.querySelectorAll("[data-letter]").forEach(b=>b.onclick=()=>renderLetterTask(b.dataset.letter));
 }
 function renderLetters(){
- return '<h2>الحروف الإنجليزية الـ26</h2><p>تعرف إلى الشكل الكبير والصغير واسم الحرف، ثم اختبر نفسك في المطابقة والاسترجاع والكتابة. الصوت والنطق مسار منفصل.</p><div class="letter-grid">'+data.letters.map(x=>{const p=state(x.id),done=["case","name","identify","write"].filter(k=>(p.skills?.[k]?.correctDates||[]).length>=2).length;return '<button class="letter-card" data-letter="'+x.id+'"><b>'+x.upper+'</b><strong>'+x.lower+'</strong><small>'+esc(x.name)+'</small><span>'+(p.mastered?"متقن":done+"/4 مهارات")+'</span></button>'}).join("")+'</div><div id="letter-task"></div>';
+ const units=data.stages.find(s=>s.id==="L1").units;
+ const groups=units.map(u=>{
+  const letters=data.letters.filter(x=>u.letterIds?.includes(x.id));
+  return '<section class="lit-letter-group"><h3>'+esc(u.title)+'</h3><p>'+esc(u.objective||"")+'</p><div class="letter-grid">'+letters.map(x=>{
+   const p=state(x.id),done=["case","name","identify","write"].filter(k=>(p.skills?.[k]?.correctDates||[]).length>=2).length;
+   return '<button class="letter-card" data-letter="'+x.id+'"><b>'+x.upper+'</b><strong>'+x.lower+'</strong><small>'+esc(x.name)+'</small><span>'+(p.mastered?"متقن":done+"/4 مهارات")+'</span></button>';
+  }).join("")+'</div><small class="lit-group-note">'+esc(u.completionNote||"")+'</small></section>';
+ }).join("");
+ const criteria=data.stages.find(s=>s.id==="L1").masteryCriteria||[];
+ return '<h2>الحروف الإنجليزية الـ26</h2><p>تعلم مجموعة بعد أخرى. لكل حرف أربع مهارات: مطابقة الشكلين، واسترجاع الاسم، والتعرف إلى الصغير، وكتابة الشكلين من الذاكرة. هذه التدريبات لا تختبر نطق الصوت ولا الكتابة اليدوية بالقلم.</p>'+groups+'<section class="lit-mastery"><h3>ما معنى إتقان الحروف؟</h3><ul>'+criteria.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></section><div id="letter-task"></div>';
 }
 function renderLesson(id){
  const lesson=lessons(data.stages.find(s=>s.id===stageId)).find(l=>l.id===id);
