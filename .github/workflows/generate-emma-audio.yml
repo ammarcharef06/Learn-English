@@ -77,12 +77,13 @@ jobs:
           manifest.audioGeneration.status = 'emma-generated-awaiting-human-audio-qa';
           manifest.audioGeneration.lastGeneration = {
             voice: 'en-US-EmmaNeural',
-            generatedTextFiles: 344,
+            generatedTextFiles: 277,
             manualPhonemeFilesExcluded: 38,
+          dedicatedSentenceFilesGenerated: 67,
             result: 'generation-successful; listening-and-phonetic-QA-required',
             generatedByWorkflow: 'Generate Emma audio bank'
           };
-          manifest.audioGeneration.bulkMigrationScope = '344 ordinary-text jobs: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.';
+          manifest.audioGeneration.bulkMigrationScope = '277 ordinary-text jobs: 213 non-sentence AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 67 sentence recordings are generated separately into assets/audio/zero/sentences/. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.';
           fs.writeFileSync(path, JSON.stringify(manifest, null, 2) + '\n');
           NODE
 
