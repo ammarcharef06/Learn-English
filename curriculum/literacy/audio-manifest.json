@@ -17,14 +17,15 @@
   },
   "recordingStandards": {
     "format": "mp3",
-    "speaker": "Microsoft Aria (en-US), as identified by the embedded audio-bank module",
+    "speaker": "Aria (as labeled by the embedded zero-audio module)",
     "sourceOfTruth": "assets/js/core/zero-audio.js and assets/js/data/zero-audio-map.js",
     "notes": [
       "إعادة استخدام التسجيلات المضمنة كما هي دون استبدالها بصوت المتصفح.",
       "اسم الحرف مستقل عن فونيمه؛ لا يُستخدم nameAudio بديلًا عن phonemeAudio.",
       "exampleAudio هو تسجيل كلمة المثال كاملة، وليس تسجيلًا للفونيم منفردًا.",
       "لا تُضاف تسجيلات مولّدة إلى الحزمة إلا إذا أمكن إنتاجها من مصدر Aria الأصلي وبالصوت نفسه والتحقق منها."
-    ]
+    ],
+    "sourceIdentity": "The repository identifies the recordings as Aria/en-US, but does not record the exact synthesis engine, model version, or generation command."
   },
   "letters": [
     {
@@ -399,9 +400,17 @@
     }
   ],
   "audioGeneration": {
-    "status": "blocked-original-voice-generator-not-found",
-    "requiredVoice": "Microsoft Aria (en-US)",
-    "policy": "لا تستخدم TTS خارجيًا أو صوت المتصفح لتوليد ملفات بديلة. يلزم توفير مولّد Aria الأصلي/المعتمد لإضافة ملفات جديدة بنفس الصوت.",
-    "missingAssets": "تُترك null أو غير مسجلة حتى يتوفر المصدر الأصلي؛ لا تُختلق ملفات صوتية."
+    "status": "blocked-original-generator-and-provenance-unavailable",
+    "requiredVoice": "Aria (en-US; project label)",
+    "knownGeneratorScripts": [
+      {
+        "path": "scripts/generate-audio.mjs",
+        "provider": "Google Translate TTS",
+        "compatible": false,
+        "note": "Not used: it would introduce a different voice source."
+      }
+    ],
+    "policy": "لا تُولّد ملفات جديدة عبر Google Translate TTS أو SpeechSynthesis أو أي صوت بديل. لا يمكن إعادة إنتاج هوية Aria من ملفات MP3 الموجودة وحدها. يلزم توفير أداة/نموذج Aria الأصلي مع حقوق استخدام وإعادة توزيع واضحة.",
+    "missingAssets": "تظل الفونيمات المستقلة غير المتوفرة معلّمة كمفقودة؛ لا يُعاد استخدام اسم الحرف أو كلمة المثال بدلًا منها."
   }
 }
