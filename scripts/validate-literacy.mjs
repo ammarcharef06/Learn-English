@@ -80,8 +80,8 @@ for (const group of audioManifest.phonemeGroups || []) {
     }
   }
 }
-if (audioManifest.audioGeneration?.status !== "blocked-original-voice-generator-not-found") {
-  errors.push("Missing-audio generation must not claim same-voice generation without the original voice generator");
+if (audioManifest.audioGeneration?.status !== "blocked-original-generator-and-provenance-unavailable") {
+  errors.push("Missing-audio generation must remain blocked until the original voice generator and provenance are available");
 }
 
 const alphabet = data.letters || [];
