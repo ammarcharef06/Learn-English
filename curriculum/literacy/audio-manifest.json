@@ -444,12 +444,12 @@
       "scope": "Sentence-only playback; separate from isolated words."
     },
     "precisionBank": {
-      "voice": "Kokoro af_heart",
-      "provider": "Kokoro-82M open-weight local TTS",
-      "path": "assets/audio/zero/{n,d}/",
-      "scope": "26 letter names, 26 letter examples, 12 IPA grapheme sounds, and 12 grapheme examples.",
+      "voice": "Kokoro-82M af_heart",
+      "provider": "Open-weight local TTS",
+      "path": "assets/audio/zero/{n,d,p}/",
+      "scope": "26 letter names, 26 letter examples, 12 grapheme phonemes and examples, 22 consonant phonemes and example words.",
       "license": "Apache-2.0",
-      "note": "Replaces the previous Azure-only precision generator; no credentials or paid service required."
+      "note": "No paid API credentials required. Recordings remain subject to human listening and phonetic QA."
     }
   },
   "precisionBank": {
