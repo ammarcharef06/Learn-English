@@ -83,7 +83,7 @@ function renderLetters(){
   }).join("")+'</div><small class="lit-group-note">'+esc(u.completionNote||"")+'</small></section>';
  }).join("");
  const criteria=data.stages.find(s=>s.id==="L1").masteryCriteria||[];
- return '<h2>الحروف الإنجليزية الـ26</h2><p>تعلم مجموعة بعد أخرى. لكل حرف أربع مهارات: مطابقة الشكلين، واسترجاع الاسم، والتعرف إلى الصغير، وكتابة الشكلين من الذاكرة. هذه التدريبات لا تختبر نطق الصوت ولا الكتابة اليدوية بالقلم.</p>'+groups+'<section class="lit-mastery"><h3>ما معنى إتقان الحروف؟</h3><ul>'+criteria.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></section><div id="letter-task"></div>';
+ return '<h2>الحروف الإنجليزية الـ26</h2><button type="button" id="open-transfer" class="lit-primary">ابدأ تقييم نقل مهارات الحروف</button><p>تعلم مجموعة بعد أخرى. لكل حرف أربع مهارات: مطابقة الشكلين، واسترجاع الاسم، والتعرف إلى الصغير، وكتابة الشكلين من الذاكرة. هذه التدريبات لا تختبر نطق الصوت ولا الكتابة اليدوية بالقلم.</p>'+groups+'<section class="lit-mastery"><h3>ما معنى إتقان الحروف؟</h3><ul>'+criteria.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></section><div id="letter-task"></div>';
 }
 function renderLesson(id){
  const lesson=lessons(data.stages.find(s=>s.id===stageId)).find(l=>l.id===id);
