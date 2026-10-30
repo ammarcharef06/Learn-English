@@ -119,6 +119,9 @@ else {
       !ariaGeneratorSource.includes("isolated IPA sounds")) {
     errors.push("Aria generator must explicitly prohibit treating ordinary TTS text as isolated phoneme audio");
   }
+  if (!ariaGeneratorSource.includes("pathToFileURL(resolve(process.argv[1])).href")) {
+    errors.push("Aria generator must not execute when imported by project validation tools");
+  }
 }
 
 const alphabet = data.letters || [];
