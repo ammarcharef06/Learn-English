@@ -38,13 +38,21 @@ function renderLesson(id){
 }
 function renderLetterTask(id){
  const item=data.letters.find(x=>x.id===id),target=$("#letter-task");if(!item||!target)return;
- const distractors=data.letters.filter(x=>x.id!==id).slice((item.order*3)%20,(item.order*3)%20+2);
- const choices=[item.upper,...distractors.map(x=>x.upper)].sort(()=>Math.random()-.5);
- target.innerHTML='<section class="lit-letter-task"><p class="eyebrow">تدريب اسم الحرف وشكله</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>اختر الحرف الكبير المطابق للحرف الصغير '+item.lower+'</p><div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+c+'">'+c+'</button>').join("")+'</div><p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. هذا ليس اختبارًا لصوت الحرف.</small></section>';
- target.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
-  const ok=b.dataset.choice===item.upper,old=state(id),attempts=old.attempts+1;
-  progress.lessons||={};const today=new Date().toISOString().slice(0,10);const skills={...(old.skills||{}),[taskMode]:{...(old.skills?.[taskMode]||{}),attempts:(old.skills?.[taskMode]?.attempts||0)+1,correctDates:[...new Set([...(old.skills?.[taskMode]?.correctDates||[]),...(ok?[today]:[])])]}};const mastered=Object.keys(skills).filter(k=>skills[k].correctDates.length>=2).length>=3;progress.lessons[id]={attempts,best:Math.max(old.best,ok?1:0),skills,mastered,lastScore:ok?1:0,lastAttempt:new Date().toISOString()};
-  save();$("#letter-feedback").textContent=ok?"صحيح. أعد التدريب في محاولة لاحقة لتأكيد الاسترجاع.":"ليست المطابقة الصحيحة؛ راجع الشكلين ثم أعد المحاولة.";
+ const modes=[
+  {id:"case",label:"مطابقة الكبير والصغير",prompt:"اختر الحرف الكبير المطابق للحرف الصغير "+item.lower,answer:item.upper,choices:[item.upper,...data.letters.filter(x=>x.id!==id).slice((item.order*3)%20,(item.order*3)%20+2).map(x=>x.upper)]},
+  {id:"name",label:"استرجاع اسم الحرف",prompt:"أي حرف اسمه "+item.name+"؟",answer:item.upper,choices:[item.upper,...data.letters.filter(x=>x.id!==id).slice((item.order*5+2)%21,(item.order*5+2)%21+2).map(x=>x.upper)]},
+  {id:"identify",label:"التعرف إلى الحرف",prompt:"اختر الحرف الصغير الذي يقابل "+item.upper,answer:item.lower,choices:[item.lower,...data.letters.filter(x=>x.id!==id).slice((item.order*7+1)%21,(item.order*7+1)%21+2).map(x=>x.lower)]}
+ ];
+ const mode=modes[Math.floor(Math.random()*modes.length)],choices=[...new Set(mode.choices)].sort(()=>Math.random()-.5),old=state(id);
+ target.innerHTML='<section class="lit-letter-task"><p class="eyebrow">'+mode.label+'</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>'+mode.prompt+'</p><div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div><p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. لا يختبر هذا النشاط صوت الحرف أو نطقه.</small><p class="lit-progress-note">لإثبات الإتقان: نجاح في الأنواع الثلاثة، في يومين مختلفين لكل نوع.</p></section>';
+ target.querySelectorAll("[data-choice]").forEach(btn=>btn.onclick=()=>{
+  target.querySelectorAll("[data-choice]").forEach(x=>x.disabled=true);
+  const ok=btn.dataset.choice===mode.answer,today=new Date().toISOString().slice(0,10),current=state(id),skills={...(current.skills||{})},skill={...(skills[mode.id]||{})};
+  skill.attempts=(skill.attempts||0)+1;skill.correctDates=[...new Set([...(skill.correctDates||[]),...(ok?[today]:[])])];skills[mode.id]=skill;
+  const mastered=modes.every(m=>(skills[m.id]?.correctDates||[]).length>=2);
+  progress.lessons||={};progress.lessons[id]={...current,attempts:(current.attempts||0)+1,best:Math.max(current.best||0,ok?1:0),skills,mastered,lastScore:ok?1:0,lastAttempt:new Date().toISOString()};
+  save();$("#letter-feedback").textContent=ok?"إجابة صحيحة. أعد هذا النوع في يوم آخر لترسيخ الاسترجاع.":"ليست الإجابة الصحيحة. راجع الحرف ثم حاول لاحقًا.";
+  const card=target.closest(".lit-layout")?.querySelector('[data-letter="'+id+'"]');if(card)card.querySelector("span").textContent=mastered?"متقن":"تدرّب";
  });
 }
 async function boot(){load();const r=await fetch(DATA_URL);if(!r.ok)throw Error("curriculum unavailable");data=await r.json();render()}
