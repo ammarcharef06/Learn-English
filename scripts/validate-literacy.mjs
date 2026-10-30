@@ -96,7 +96,7 @@ for (const group of audioManifest.phonemeGroups || []) {
     }
   }
 }
-if (audioManifest.audioGeneration?.status !== "emma-selected-legacy-bank-migration-pending") {
+if (audioManifest.audioGeneration?.status !== "emma-selected-migration-tool-ready-legacy-bank-not-yet-migrated") {
   errors.push("Audio generation must identify Emma as target and retain legacy-bank migration status");
 }
 if (audioManifest.audioGeneration?.requiredVoice !== "en-US-EmmaNeural" ||
@@ -121,6 +121,16 @@ else {
   }
   if (!ariaGeneratorSource.includes("pathToFileURL(resolve(process.argv[1])).href")) {
     errors.push("Emma generator must not execute when imported by project validation tools");
+  }
+}
+
+
+const bulkEmmaFile = resolve(root, "scripts/migrate-audio-to-emma.mjs");
+if (!existsSync(bulkEmmaFile)) errors.push("Bulk Emma audio migration tool is missing");
+else {
+  const bulkEmmaSource = readFileSync(bulkEmmaFile, "utf8");
+  for (const required of ['"en-US-EmmaNeural"', '"--write"', '"--force"', "phonemeOnlyAssetsExcluded"]) {
+    if (!bulkEmmaSource.includes(required)) errors.push("Bulk Emma migration tool is missing required safeguard: " + required);
   }
 }
 
