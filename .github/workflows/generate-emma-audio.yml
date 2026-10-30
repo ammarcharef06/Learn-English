@@ -58,6 +58,9 @@ jobs:
           ids=["sh","ch","th-voiceless","th-voiced","ph","ck","ng","oo-long","oo-short","ee","ea","ou"]
           expected += [root/"d"/f"{x}.mp3" for x in ids]
           expected += [root/"n"/f"word-{x}.mp3" for x in ids]
+          phonemes=["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","m","n","eng","l","r","h","w","y"]
+          expected += [root/"p"/f"phoneme-{x}.mp3" for x in phonemes]
+          expected += [root/"n"/f"phoneme-word-{x}.mp3" for x in phonemes]
           missing=[str(p) for p in expected if not p.exists() or p.stat().st_size<1024]
           print(f"Expected {len(expected)} files; missing/invalid: {len(missing)}")
           if missing: raise SystemExit("\\n".join(missing))
