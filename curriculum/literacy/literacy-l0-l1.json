@@ -1,0 +1,517 @@
+{
+  "schemaVersion": 1,
+  "curriculumId": "english-literacy-ar",
+  "language": "ar",
+  "status": "pilot",
+  "stages": [
+    {
+      "id": "L0",
+      "title": "التهيئة قبل الحروف",
+      "outcome": "الاستعداد للتعامل مع نظام الكتابة اللاتيني والتمييز البصري والسمعي الأولي.",
+      "units": [
+        {
+          "id": "L0-U1",
+          "title": "التعرف إلى نظام الكتابة",
+          "lessons": [
+            {
+              "id": "L0-U1-L01",
+              "title": "اللغة المنطوقة والكتابة والرمز",
+              "objective": "يميز بين الصوت المكتوب والرمز والصورة.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي خيار يمثل حرفًا مكتوبًا؟",
+                  "choices": [
+                    "A",
+                    "🔊",
+                    "🌳"
+                  ],
+                  "answer": "A"
+                },
+                {
+                  "prompt": "أي خيار يمثل صورة لا حرفًا؟",
+                  "choices": [
+                    "m",
+                    "☀️",
+                    "s"
+                  ],
+                  "answer": "☀️"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L02",
+              "title": "مطابقة الرموز",
+              "objective": "يطابق الرمز بنسخة مطابقة له.",
+              "activity": "match",
+              "items": [
+                {
+                  "prompt": "اختر الرمز المطابق: b",
+                  "choices": [
+                    "d",
+                    "b",
+                    "p"
+                  ],
+                  "answer": "b"
+                },
+                {
+                  "prompt": "اختر الرمز المطابق: M",
+                  "choices": [
+                    "W",
+                    "N",
+                    "M"
+                  ],
+                  "answer": "M"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L03",
+              "title": "الحرف والكلمة والسطر",
+              "objective": "يميز الحرف المفرد عن سلسلة الحروف.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي خيار حرف واحد؟",
+                  "choices": [
+                    "cat",
+                    "m",
+                    "sun"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "prompt": "أي خيار سلسلة حروف تكوّن كلمة مكتوبة؟",
+                  "choices": [
+                    "A",
+                    "dog",
+                    "/"
+                  ],
+                  "answer": "dog"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L04",
+              "title": "اتجاه الكتابة اللاتينية",
+              "objective": "يتعرف أن السطر الإنجليزي يبدأ من اليسار إلى اليمين.",
+              "activity": "sequence",
+              "items": [
+                {
+                  "prompt": "في أي اتجاه نقرأ هذا السطر؟",
+                  "choices": [
+                    "من اليسار إلى اليمين",
+                    "من اليمين إلى اليسار"
+                  ],
+                  "answer": "من اليسار إلى اليمين"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L0-U2",
+          "title": "التمييز البصري",
+          "lessons": [
+            {
+              "id": "L0-U2-L01",
+              "title": "المتشابه والمختلف",
+              "objective": "يكتشف اختلافًا بصريًا بين رموز متقاربة.",
+              "activity": "match",
+              "items": [
+                {
+                  "prompt": "ما الرمز المختلف؟ b  b  d  b",
+                  "choices": [
+                    "الأول",
+                    "الثاني",
+                    "الثالث",
+                    "الرابع"
+                  ],
+                  "answer": "الثالث"
+                }
+              ]
+            },
+            {
+              "id": "L0-U2-L02",
+              "title": "الموقع والاتجاه",
+              "objective": "يميز مواضع الرموز واتجاهها.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي حرف له ساق صاعدة في هذا الخط؟",
+                  "choices": [
+                    "b",
+                    "o",
+                    "c"
+                  ],
+                  "answer": "b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L0-U3",
+          "title": "الاستعداد السمعي",
+          "lessons": [
+            {
+              "id": "L0-U3-L01",
+              "title": "الانتباه للصوت",
+              "objective": "يتعرف وجود الصوت ويقارن بين نماذج مسموعة.",
+              "activity": "listening-ready",
+              "items": []
+            }
+          ]
+        },
+        {
+          "id": "L0-U4",
+          "title": "الوعي الأولي بأصوات الكلام",
+          "lessons": [
+            {
+              "id": "L0-U4-L01",
+              "title": "ملاحظة أصوات الكلام",
+              "objective": "يلاحظ أن الأصوات الكلامية تنتج بحركات أعضاء النطق.",
+              "activity": "guided",
+              "items": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "L1",
+      "title": "الأبجدية وأسماء الحروف",
+      "outcome": "يتعرف الحروف الكبيرة والصغيرة ويسميها ويكتبها؛ ويظل اختبار الأصوات منفصلًا إلى حين توفير تسجيلات موثوقة.",
+      "units": [
+        {
+          "id": "L1-U1",
+          "title": "المجموعة الأولى: m, s, a, t",
+          "lessons": []
+        },
+        {
+          "id": "L1-U2",
+          "title": "المجموعة الثانية: p, i, n",
+          "lessons": []
+        },
+        {
+          "id": "L1-U3",
+          "title": "المجموعة الثالثة: c, k, e",
+          "lessons": []
+        },
+        {
+          "id": "L1-U4",
+          "title": "المجموعة الرابعة: h, r, d",
+          "lessons": []
+        },
+        {
+          "id": "L1-U5",
+          "title": "المجموعة الخامسة: o, g, l",
+          "lessons": []
+        },
+        {
+          "id": "L1-U6",
+          "title": "المجموعة السادسة: f, b, u",
+          "lessons": []
+        },
+        {
+          "id": "L1-U7",
+          "title": "المجموعة السابعة: j, v, w",
+          "lessons": []
+        },
+        {
+          "id": "L1-U8",
+          "title": "المجموعة الثامنة: y, z, x, q",
+          "lessons": []
+        }
+      ]
+    }
+  ],
+  "letters": [
+    {
+      "id": "letter-m",
+      "lower": "m",
+      "upper": "M",
+      "name": "em",
+      "order": 1,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-s",
+      "lower": "s",
+      "upper": "S",
+      "name": "ess",
+      "order": 2,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-a",
+      "lower": "a",
+      "upper": "A",
+      "name": "ay",
+      "order": 3,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-t",
+      "lower": "t",
+      "upper": "T",
+      "name": "tee",
+      "order": 4,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-p",
+      "lower": "p",
+      "upper": "P",
+      "name": "pee",
+      "order": 5,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-i",
+      "lower": "i",
+      "upper": "I",
+      "name": "eye",
+      "order": 6,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-n",
+      "lower": "n",
+      "upper": "N",
+      "name": "en",
+      "order": 7,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-c",
+      "lower": "c",
+      "upper": "C",
+      "name": "see",
+      "order": 8,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-k",
+      "lower": "k",
+      "upper": "K",
+      "name": "kay",
+      "order": 9,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-e",
+      "lower": "e",
+      "upper": "E",
+      "name": "ee",
+      "order": 10,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-h",
+      "lower": "h",
+      "upper": "H",
+      "name": "aitch",
+      "order": 11,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-r",
+      "lower": "r",
+      "upper": "R",
+      "name": "ar",
+      "order": 12,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-d",
+      "lower": "d",
+      "upper": "D",
+      "name": "dee",
+      "order": 13,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-o",
+      "lower": "o",
+      "upper": "O",
+      "name": "oh",
+      "order": 14,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-g",
+      "lower": "g",
+      "upper": "G",
+      "name": "gee",
+      "order": 15,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-l",
+      "lower": "l",
+      "upper": "L",
+      "name": "el",
+      "order": 16,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-f",
+      "lower": "f",
+      "upper": "F",
+      "name": "ef",
+      "order": 17,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-b",
+      "lower": "b",
+      "upper": "B",
+      "name": "bee",
+      "order": 18,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-u",
+      "lower": "u",
+      "upper": "U",
+      "name": "you",
+      "order": 19,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-j",
+      "lower": "j",
+      "upper": "J",
+      "name": "jay",
+      "order": 20,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-v",
+      "lower": "v",
+      "upper": "V",
+      "name": "vee",
+      "order": 21,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-w",
+      "lower": "w",
+      "upper": "W",
+      "name": "double-u",
+      "order": 22,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-y",
+      "lower": "y",
+      "upper": "Y",
+      "name": "why",
+      "order": 23,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-z",
+      "lower": "z",
+      "upper": "Z",
+      "name": "zee / zed",
+      "order": 24,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-x",
+      "lower": "x",
+      "upper": "X",
+      "name": "ex",
+      "order": 25,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-q",
+      "lower": "q",
+      "upper": "Q",
+      "name": "cue",
+      "order": 26,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    }
+  ]
+}
