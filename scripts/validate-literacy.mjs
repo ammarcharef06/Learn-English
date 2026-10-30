@@ -120,6 +120,7 @@ const summary = {
   stages: data.stages.length,
   lessons: lessons.length,
   lessonsWithActivities: lessons.filter(lesson => lesson.items?.length).length,
+  recordedAudioActivities: lessons.reduce((count, lesson) => count + (lesson.items || []).filter(item => item.audioText).length, 0),
   alphabetLetters: alphabet.length,
   transferChecks: (data.transferChecks || []).length,
   embeddedAudioMapEntries: Object.keys(AUDIO_MAP || {}).length,
