@@ -417,11 +417,9 @@
     "reproducibility": "The voice ID is pinned, but Microsoft may update the server-side model; exact acoustic identity across time is not guaranteed.",
     "legacyBank": {
       "voice": "en-US-AriaNeural",
-      "status": "existing-assets-not-yet-migrated",
-      "provenanceCommits": [
-        "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286",
-        "a3d9553698d85719710d1a40c5532409af7c1478"
-      ]
+      "status": "legacy-assets-regenerated-with-Emma-in-successful-workflow",
+      "migrationCommit": "5eaa5d5439ebc4a7a690b3664952babc2be2134c",
+      "note": "The successful Emma workflow ran with --force across all 344 ordinary-text conversion-map jobs. Git recorded 300 MP3 blobs as changed in the generation commit; remaining generated outputs may have been byte-identical. Human listening and phonetic QA remains required."
     },
     "migrationRequirement": "Regenerate every required legacy MP3 with en-US-EmmaNeural, compare listenability and phonetic accuracy, then update the bank provenance. Do not relabel existing Aria bytes as Emma.",
     "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
@@ -433,7 +431,10 @@
       "generatedTextFiles": 344,
       "manualPhonemeFilesExcluded": 38,
       "result": "generation-successful; listening-and-phonetic-QA-required",
-      "generatedByWorkflow": "Generate Emma audio bank"
+      "generatedByWorkflow": "Generate Emma audio bank",
+      "commit": "5eaa5d5439ebc4a7a690b3664952babc2be2134c",
+      "gitChangedMp3Files": 300,
+      "totalMp3FilesInZeroBank": 356
     }
   }
 }
