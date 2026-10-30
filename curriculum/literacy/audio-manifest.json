@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "curriculumId": "english-literacy-ar",
+  "status": "awaiting-recording",
+  "pronunciationVariety": {
+    "status": "decision-required",
+    "value": null,
+    "note": "لا تُسجّل النماذج قبل اعتماد التنوع اللهجي/النطقي المستهدف."
+  },
+  "recordingStandards": {
+    "format": "wav",
+    "sampleRateHz": 48000,
+    "channels": 1,
+    "bitDepth": 24,
+    "noiseFloor": "quiet treated room",
+    "speaker": "one consistent proficient speaker",
+    "normalization": "consistent loudness without clipping",
+    "notes": [
+      "ملف مستقل لاسم الحرف وملف مستقل لصوته/فونيمه.",
+      "لا يُستخدم اسم الحرف بديلًا عن صوته.",
+      "تسجيل الصوت داخل كلمة مثال يكون ملفًا ثالثًا عند الحاجة.",
+      "تُراجع الملفات لغويًا وصوتيًا قبل نشرها."
+    ]
+  },
+  "letters": [
+    {
+      "id": "letter-a",
+      "lower": "a",
+      "upper": "A",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-b",
+      "lower": "b",
+      "upper": "B",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-c",
+      "lower": "c",
+      "upper": "C",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-d",
+      "lower": "d",
+      "upper": "D",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-e",
+      "lower": "e",
+      "upper": "E",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-f",
+      "lower": "f",
+      "upper": "F",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-g",
+      "lower": "g",
+      "upper": "G",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-h",
+      "lower": "h",
+      "upper": "H",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-i",
+      "lower": "i",
+      "upper": "I",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-j",
+      "lower": "j",
+      "upper": "J",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-k",
+      "lower": "k",
+      "upper": "K",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-l",
+      "lower": "l",
+      "upper": "L",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-m",
+      "lower": "m",
+      "upper": "M",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-n",
+      "lower": "n",
+      "upper": "N",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-o",
+      "lower": "o",
+      "upper": "O",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-p",
+      "lower": "p",
+      "upper": "P",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-q",
+      "lower": "q",
+      "upper": "Q",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-r",
+      "lower": "r",
+      "upper": "R",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-s",
+      "lower": "s",
+      "upper": "S",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-t",
+      "lower": "t",
+      "upper": "T",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-u",
+      "lower": "u",
+      "upper": "U",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-v",
+      "lower": "v",
+      "upper": "V",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-w",
+      "lower": "w",
+      "upper": "W",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-x",
+      "lower": "x",
+      "upper": "X",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-y",
+      "lower": "y",
+      "upper": "Y",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    },
+    {
+      "id": "letter-z",
+      "lower": "z",
+      "upper": "Z",
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "exampleAudio": null,
+      "ipa": null,
+      "status": "not-recorded"
+    }
+  ]
+}
