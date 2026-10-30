@@ -129,7 +129,7 @@ const bulkEmmaFile = resolve(root, "scripts/migrate-audio-to-emma.mjs");
 if (!existsSync(bulkEmmaFile)) errors.push("Bulk Emma audio migration tool is missing");
 else {
   const bulkEmmaSource = readFileSync(bulkEmmaFile, "utf8");
-  for (const required of ['"en-US-EmmaNeural"', '"--write"', '"--force"', "phonemeOnlyAssetsExcluded"]) {
+  for (const required of ['"en-US-EmmaNeural"', '"--write"', '"--force"', '"EMMA_AUDIO_CONVERSION_MAP.csv"', '"letter_example"', '"digraph_example" ]) {
     if (!bulkEmmaSource.includes(required)) errors.push("Bulk Emma migration tool is missing required safeguard: " + required);
   }
 }
