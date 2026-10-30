@@ -34,3 +34,8 @@
 .lit-intro .lit-info li{margin:5px 0;font-size:13px}
 .lit-intro .lit-info p{margin-bottom:0;font-size:13px}
 #open-transfer{margin:12px 0}
+
+/* Audio controls backed by the project's recorded voice bank */
+.lit-audio-tools{display:flex;flex-wrap:wrap;gap:.65rem;margin:1rem 0}
+.lit-audio-tools button{border:1px solid var(--lit-border,#cbd5e1);border-radius:.7rem;padding:.65rem .9rem;background:var(--lit-card,#fff);color:inherit;cursor:pointer;font:inherit}
+.lit-audio-tools button:focus-visible{outline:3px solid var(--lit-focus,#2563eb);outline-offset:2px}
