@@ -99,28 +99,28 @@ for (const group of audioManifest.phonemeGroups || []) {
 if (audioManifest.audioGeneration?.status !== "generator-identified-redistribution-review-required") {
   errors.push("Audio generation must identify the historical Aria generator and retain redistribution review status");
 }
-if (audioManifest.audioGeneration?.requiredVoice !== "en-US-AriaNeural" ||
+if (audioManifest.audioGeneration?.requiredVoice !== "en-US-EmmaNeural" ||
     audioManifest.audioGeneration?.generator !== "edge-tts Python client using Microsoft Edge online TTS" ||
     !Array.isArray(audioManifest.audioGeneration?.provenanceCommits) ||
     !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286") ||
     !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "a3d9553698d85719710d1a40c5532409af7c1478")) {
   errors.push("Aria generator provenance must match both historical edge-tts voice-generation commits");
 }
-const ariaGeneratorFile = resolve(root, "scripts/generate-aria-audio.mjs");
+const ariaGeneratorFile = resolve(root, "scripts/generate-emma-audio.mjs");
 if (!existsSync(ariaGeneratorFile)) errors.push("The reproducible Aria text-audio generator is missing");
 else {
   const ariaGeneratorSource = readFileSync(ariaGeneratorFile, "utf8");
-  if (!ariaGeneratorSource.includes('"en-US-AriaNeural"') ||
+  if (!ariaGeneratorSource.includes('"en-US-EmmaNeural"') ||
       !ariaGeneratorSource.includes('"--voice"') ||
       !ariaGeneratorSource.includes('"--write-media"')) {
-    errors.push("Aria generator must request the original en-US-AriaNeural voice and MP3 output");
+    errors.push("Emma generator must request en-US-EmmaNeural and MP3 output");
   }
   if (!ariaGeneratorSource.includes("must not be used to fake") ||
       !ariaGeneratorSource.includes("isolated IPA sounds")) {
-    errors.push("Aria generator must explicitly prohibit treating ordinary TTS text as isolated phoneme audio");
+    errors.push("Emma generator must explicitly prohibit treating ordinary TTS text as isolated phoneme audio");
   }
   if (!ariaGeneratorSource.includes("pathToFileURL(resolve(process.argv[1])).href")) {
-    errors.push("Aria generator must not execute when imported by project validation tools");
+    errors.push("Emma generator must not execute when imported by project validation tools");
   }
 }
 
