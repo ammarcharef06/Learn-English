@@ -25,15 +25,27 @@ function renderLesson(id){
  const lesson=lessons(data.stages.find(s=>s.id===stageId)).find(l=>l.id===id);
  if(!lesson)return;
  const panel=$("#lesson-panel");
- let questions=lesson.items.map((item,i)=>'<fieldset class="lit-question"><legend>'+esc(item.prompt)+'</legend>'+item.choices.map(c=>'<label><input type="radio" name="q'+i+'" value="'+esc(c)+'"> '+esc(c)+'</label>').join("")+'</fieldset>').join("");
- panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(questions||'<div class="lit-info">هذا الدرس تمهيدي. ستضاف له مادة صوتية وتمارين بعد مراجعة الأصول التعليمية.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
+ const questions=lesson.items.map((item,i)=>{
+  const control=item.input
+   ? '<label class="lit-text-answer"><span>اكتب إجابتك بالإنجليزية</span><input type="text" dir="ltr" autocomplete="off" spellcheck="false" data-answer="'+i+'" placeholder="اكتب هنا"></label>'
+   : '<div class="lit-choice-row">'+(item.choices||[]).map(c=>'<label class="lit-option"><input type="radio" name="q'+i+'" value="'+esc(c)+'"> '+esc(c)+'</label>').join("")+'</div>';
+  return '<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend>'+control+'</fieldset>';
+ }).join("");
+ panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(questions||'<div class="lit-info">هذا الدرس يحتاج إلى مادة تعليمية إضافية قبل تفعيله. لن يُحتسب إتقانه بعد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
  $("#check-lesson").onclick=()=>{
   let correct=0,answered=0;
-  lesson.items.forEach((item,i)=>{const p=panel.querySelector('input[name="q'+i+'"]:checked');if(p){answered++;if(p.value===item.answer)correct++}});
-  if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أجب عن جميع الأسئلة أولًا.";return}
-  const old=state(id),score=lesson.items.length?correct/lesson.items.length:0;
-  progress.lessons||={};const today=new Date().toISOString().slice(0,10);const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];progress.lessons[id]={attempts:old.attempts+1,best:Math.max(old.best,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
-  save();render();renderLesson(id);$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم تحقيق 90% على الأقل في يومين مختلفين.");
+  lesson.items.forEach((item,i)=>{
+   let value="";
+   if(item.input){const field=panel.querySelector('[data-answer="'+i+'"]');value=field?.value.trim()||"";}
+   else {const selected=panel.querySelector('input[name="q'+i+'"]:checked');value=selected?.value||"";}
+   if(value){answered++;const accepted=[item.answer,...(item.accepted||[])].map(x=>String(x).trim().replace(/\s+/g," "));if(accepted.includes(value.replace(/\s+/g," ")))correct++;}
+  });
+  if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أكمل جميع الإجابات أولًا.";return}
+  const old=state(id),score=lesson.items.length?correct/lesson.items.length:0,today=new Date().toISOString().slice(0,10);
+  const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];
+  progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
+  save();render();renderLesson(id);
+  $("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"أُثبت الإتقان عبر يومين مختلفين.":"يلزم تحقيق 90% على الأقل في يومين مختلفين.");
  };
 }
 function renderLetterTask(id,selectedMode){
