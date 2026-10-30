@@ -2,11 +2,6 @@ import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
-if (typeof globalThis.localStorage === "undefined") {
-  const memory = new Map();
-  globalThis.localStorage = { getItem: key => memory.get(key) ?? null, setItem: (key, value) => memory.set(key, String(value)), removeItem: key => memory.delete(key) };
-}
-
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const file = resolve(root, "curriculum/literacy/literacy-l0-l1.json");
 const manifestFile = resolve(root, "curriculum/literacy/audio-manifest.json");
