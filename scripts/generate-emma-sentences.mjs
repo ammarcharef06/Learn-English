@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { AUDIO_MAP } from "../assets/js/data/zero-audio-map.js";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
-const isSentence=s=>/[.!?]$/.test(s.trim())&&s.trim().split(/\\s+/).length>=3;
+const isSentence=s=>/[.!?]$/.test(s.trim())&&s.trim().split(/\s+/).length>=3;
 async function main(){
  const write=process.argv.includes("--write"),force=process.argv.includes("--force");
  const jobs=Object.entries(AUDIO_MAP).filter(([t])=>isSentence(t));
