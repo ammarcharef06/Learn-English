@@ -465,11 +465,11 @@
       "letterExamples": 26,
       "graphemeSounds": 12,
       "graphemeExamples": 12,
-      "consonantPhonemes": 22,
-      "consonantExamples": 22,
-      "total": 120
+      "consonantPhonemes": 23,
+      "consonantExamples": 23,
+      "total": 122
     },
-    "note": "Kokoro-82M (Apache-2.0), voice af_heart. Includes 22 consonant IPA recordings and example words. Human listening and accent QA remain required; vowels are intentionally not finalized."
+    "note": "Kokoro-82M (Apache-2.0), voice af_heart. Includes 23 consonant IPA recordings and example words. Human listening and accent QA remain required; vowels are intentionally not finalized."
   },
   "consonantPhonemes": [
     {
@@ -624,6 +624,13 @@
       "example": "yes",
       "phonemeAudio": "assets/audio/zero/p/phoneme-y.mp3",
       "exampleAudio": "assets/audio/zero/n/phoneme-word-y.mp3",
+      "status": "generated-pending-audio-qa"
+    },
+    {
+      "ipa": "/dʒ/",
+      "example": "jam",
+      "phonemeAudio": "assets/audio/zero/p/phoneme-jh.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-jh.mp3",
       "status": "generated-pending-audio-qa"
     }
   ]
