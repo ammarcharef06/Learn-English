@@ -323,7 +323,10 @@
                   ],
                   "answer": "p"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U1-L02",
@@ -349,7 +352,10 @@
                   ],
                   "answer": "sit"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U1-L03",
@@ -366,7 +372,10 @@
                   ],
                   "answer": "mat"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U1-L04",
@@ -383,7 +392,10 @@
                   ],
                   "answer": "3"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
         },
@@ -406,7 +418,10 @@
                   ],
                   "answer": "/æ/ /m/"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U2-L02",
@@ -423,7 +438,10 @@
                   ],
                   "answer": "map"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U2-L03",
@@ -440,7 +458,10 @@
                   ],
                   "answer": "pin"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U2-L04",
@@ -457,7 +478,10 @@
                   ],
                   "answer": "bed"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U2-L05",
@@ -474,7 +498,10 @@
                   ],
                   "answer": "sun"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U2-L06",
@@ -491,7 +518,10 @@
                   ],
                   "answer": "ten"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
         },
@@ -523,7 +553,10 @@
                     "s, u, n"
                   ]
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U3-L02",
@@ -549,7 +582,10 @@
                   ],
                   "answer": "f"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U3-L03",
@@ -567,7 +603,10 @@
                   "input": true,
                   "answer": "sun"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U3-L04",
@@ -593,7 +632,10 @@
                   ],
                   "answer": "sip"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U3-L05",
@@ -611,7 +653,10 @@
                   "input": true,
                   "answer": "pin"
                 }
-              ]
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
         },
@@ -654,7 +699,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U4-L02",
@@ -691,7 +737,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U4-L03",
@@ -728,7 +775,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U4-L04",
@@ -765,7 +813,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U4-L05",
@@ -802,7 +851,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
         },
@@ -845,7 +895,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U5-L02",
@@ -882,7 +933,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U5-L03",
@@ -919,7 +971,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U5-L04",
@@ -956,7 +1009,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
               "id": "L2-U5-L05",
@@ -992,7 +1046,8 @@
                 }
               ],
               "assessmentModality": "visual-text-only",
-              "audioRequiredForMastery": true
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
         }
@@ -2043,5 +2098,15 @@
         }
       ]
     }
-  ]
+  ],
+  "pronunciationPolicy": {
+    "status": "pending-accent-selection",
+    "note": "رموز IPA والأمثلة الصوتية في دروس L2 مؤشرات تحريرية أولية فقط وليست نموذج نطق معتمدًا. لا تُستخدم لتسجيل إتقان سمعي أو نطقي قبل اختيار معيار النطق ومراجعته.",
+    "accentOptions": [
+      "General American",
+      "Standard Southern British English",
+      "مدخل مقارن يوضح الاختلافات الأساسية"
+    ],
+    "rule": "كل دروس L2 التي تتناول الفونيمات أو الدمج الصوتي موسومة بأنها تتطلب صوتًا؛ يمكن التدريب النصي عليها، لكنه لا يمنح إتقانًا صوتيًا."
+  }
 }
