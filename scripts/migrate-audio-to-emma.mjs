@@ -1,60 +1,95 @@
 #!/usr/bin/env node
 /**
- * Bulk migration of ordinary text audio to the user-selected Microsoft Edge
- * voice. Phoneme-only clips are intentionally excluded: reading "sh" or IPA
- * text aloud does not create a valid isolated phoneme recording.
- *
- * Install: python -m pip install edge-tts
+ * Complete Emma speech-bank generator.
+ * Source: docs/curriculum/EMMA_AUDIO_CONVERSION_MAP.csv
+ * Voice: en-US-EmmaNeural
  * Preview: npm run audio:emma:migrate
- * Generate/replace: npm run audio:emma:migrate -- --write --force
- * Limit: npm run audio:emma:migrate -- --write --force --limit=20
+ * Generate: npm run audio:emma:migrate -- --write
+ * Replace: npm run audio:emma:migrate -- --write --force
+ * IPA/isolated phoneme rows are excluded and require specialist recording.
  */
 import { spawnSync } from "node:child_process";
-import { mkdir, rename, rm, stat } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, stat } from "node:fs/promises";
 import { dirname, extname, isAbsolute, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { AUDIO_MAP } from "../assets/js/data/zero-audio-map.js";
-import manifest from "../curriculum/literacy/audio-manifest.json" with { type: "json" };
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const AUDIO_ROOT = resolve(ROOT, "assets/audio/zero");
+const CSV_PATH = resolve(ROOT, "docs/curriculum/EMMA_AUDIO_CONVERSION_MAP.csv");
+const MANIFEST_PATH = resolve(ROOT, "curriculum/literacy/audio-manifest.json");
 const VOICE = "en-US-EmmaNeural";
+const CATEGORIES = new Set(["audio_map_text", "letter_name", "letter_example", "digraph_example"]);
 
-function fail(message) {
-  console.error(message);
-  process.exitCode = 1;
-  throw new Error(message);
+function parseCsvLine(line) {
+  const cells = [];
+  let value = "";
+  let quoted = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"' && quoted && line[i + 1] === '"') { value += '"'; i++; }
+    else if (c === '"') quoted = !quoted;
+    else if (c === "," && !quoted) { cells.push(value); value = ""; }
+    else value += c;
+  }
+  if (quoted) throw new Error("Malformed CSV: unclosed quoted field.");
+  cells.push(value);
+  return cells;
 }
 
-function collectJobs() {
-  const jobs = new Map();
-  for (const [spokenText, relativeUrl] of Object.entries(AUDIO_MAP)) {
-    const relativePath = relativeUrl.replace(/^\.\//, "");
-    jobs.set(relativePath, spokenText);
+async function loadJobs() {
+  const csv = await readFile(CSV_PATH, "utf8");
+  const lines = csv.replace(/^\uFEFF/, "").split(/\r?\n/).filter(x => x.trim());
+  const headers = parseCsvLine(lines.shift() || "");
+  for (const h of ["category", "spoken_text", "target_voice", "output_path"]) {
+    if (!headers.includes(h)) throw new Error("CSV missing column: " + h);
   }
+  const ix = Object.fromEntries(headers.map((h, i) => [h, i]));
+  const jobs = new Map();
+  let excluded = 0;
+  for (let n = 0; n < lines.length; n++) {
+    const row = parseCsvLine(lines[n]);
+    const category = row[ix.category] || "";
+    const text = row[ix.spoken_text] || "";
+    const voice = row[ix.target_voice] || "";
+    const outputPath = row[ix.output_path] || "";
+    if (!CATEGORIES.has(category)) { excluded++; continue; }
+    if (voice !== VOICE || !text.trim() || !outputPath) {
+      throw new Error("Invalid text/voice/path in conversion CSV line " + (n + 2));
+    }
+    const output = resolve(ROOT, outputPath);
+    const rel = relative(AUDIO_ROOT, output);
+    if (!outputPath.startsWith("assets/audio/zero/") || !rel || rel === ".." ||
+        rel.startsWith(".." + sep) || isAbsolute(rel) || extname(output).toLowerCase() !== ".mp3") {
+      throw new Error("Unsafe output path: " + outputPath);
+    }
+    const old = jobs.get(outputPath);
+    if (old && old.spokenText !== text) throw new Error("Conflicting text for " + outputPath);
+    jobs.set(outputPath, { category, spokenText: text, outputPath, output });
+  }
+
+  for (const [spokenText, asset] of Object.entries(AUDIO_MAP)) {
+    const path = asset.replace(/^\.\//, "");
+    const job = jobs.get(path);
+    if (!job || job.spokenText.trim().toLowerCase() !== spokenText.trim().toLowerCase()) {
+      throw new Error("Conversion CSV does not cover AUDIO_MAP entry: " + spokenText + " -> " + path);
+    }
+  }
+  const manifest = JSON.parse(await readFile(MANIFEST_PATH, "utf8"));
   for (const letter of manifest.letters || []) {
-    if (letter.nameAudio) jobs.set(letter.nameAudio, letter.upper || letter.lower);
-    // Example-word files are already represented in the general audio map
-    // when available. Never infer a missing word from the letter itself.
+    for (const field of ["nameAudio", "exampleAudio"]) {
+      if (letter[field] && !jobs.has(letter[field])) {
+        throw new Error("CSV missing alphabet audio: " + letter.id + " " + field);
+      }
+    }
   }
   for (const group of manifest.phonemeGroups || []) {
-    if (group.exampleAudio && group.exampleWord) {
-      jobs.set(group.exampleAudio, group.exampleWord);
+    if (group.exampleAudio && !jobs.has(group.exampleAudio)) {
+      throw new Error("CSV missing digraph example audio: " + group.id);
     }
+    // group.phonemeAudio is deliberately manual: IPA text-to-speech is not phoneme synthesis.
   }
-  return [...jobs.entries()].map(([relativePath, spokenText]) => {
-    const output = resolve(ROOT, relativePath);
-    const rel = relative(AUDIO_ROOT, output);
-    if (!relativePath.startsWith("assets/audio/zero/") ||
-        !rel || rel === ".." || rel.startsWith(".." + sep) ||
-        isAbsolute(rel) || extname(output).toLowerCase() !== ".mp3") {
-      fail("Unsafe or unsupported audio output path: " + relativePath);
-    }
-    if (!spokenText || !spokenText.trim() || spokenText.length > 500) {
-      fail("Invalid spoken text for " + relativePath);
-    }
-    return { relativePath, output, spokenText };
-  });
+  return { jobs: [...jobs.values()], excluded };
 }
 
 async function generate(job, force) {
@@ -62,63 +97,68 @@ async function generate(job, force) {
   const temp = job.output + ".emma-tmp.mp3";
   if (!force) {
     try {
-      await stat(job.output);
-      return { path: job.relativePath, status: "skipped-existing" };
-    } catch (error) {
-      if (error?.code !== "ENOENT") throw error;
-    }
+      const existing = await stat(job.output);
+      if (existing.size >= 1024) return { path: job.outputPath, status: "skipped-existing", bytes: existing.size };
+      await rm(job.output, { force: true });
+    } catch (e) { if (e.code !== "ENOENT") throw e; }
   }
   await rm(temp, { force: true });
   const python = process.env.PYTHON || (process.platform === "win32" ? "python" : "python3");
-  const result = spawnSync(python, [
-    "-m", "edge_tts", "--voice", VOICE, "--text", job.spokenText,
-    "--write-media", temp
-  ], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  const result = spawnSync(python, ["-m", "edge_tts", "--voice", VOICE, "--text", job.spokenText,
+    "--write-media", temp], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], maxBuffer: 4 * 1024 * 1024 });
   if (result.error || result.status !== 0) {
     await rm(temp, { force: true });
     throw new Error(result.error?.message || result.stderr || result.stdout || "edge-tts failed");
   }
-  const generated = await stat(temp);
-  if (generated.size < 1024) {
-    await rm(temp, { force: true });
-    throw new Error("Generated MP3 is unexpectedly small: " + job.relativePath);
-  }
+  const info = await stat(temp);
+  if (info.size < 1024) { await rm(temp, { force: true }); throw new Error("MP3 too small: " + job.outputPath); }
   await rename(temp, job.output);
-  return { path: job.relativePath, status: "generated", bytes: generated.size };
+  return { path: job.outputPath, status: "generated", bytes: info.size };
 }
 
 async function main() {
   const args = process.argv.slice(2);
+  if (args.includes("--help")) {
+    console.log("Preview by default. --write generates; --force replaces; --limit=N caps jobs; --category=NAME filters.");
+    console.log("Categories: " + [...CATEGORIES].join(", "));
+    return;
+  }
   const write = args.includes("--write");
   const force = args.includes("--force");
-  const limitArg = args.find(arg => arg.startsWith("--limit="));
+  const limitArg = args.find(x => x.startsWith("--limit="));
+  const categoryArg = args.find(x => x.startsWith("--category="));
   const limit = limitArg ? Number(limitArg.slice(8)) : Infinity;
-  if (args.includes("--help")) {
-    console.log("Preview by default. Use --write to generate; --force to replace; --limit=N to cap jobs.");
-    return;
-  }
-  if (!Number.isInteger(limit) && limit !== Infinity || limit < 1) fail("--limit must be a positive integer");
-  const jobs = collectJobs().slice(0, limit);
-  console.log(JSON.stringify({
-    voice: VOICE, mode: write ? "write" : "dry-run",
-    totalJobs: jobs.length, phonemeOnlyAssetsExcluded: true,
-    firstJobs: jobs.slice(0, 8).map(({ relativePath, spokenText }) => ({ relativePath, spokenText }))
-  }, null, 2));
-  if (!write) {
-    console.log("Preview only. Add --write to generate MP3 files.");
-    return;
-  }
+  const category = categoryArg ? categoryArg.slice(11) : "";
+  if ((!Number.isInteger(limit) && limit !== Infinity) || limit < 1) throw new Error("--limit must be a positive integer.");
+  if (category && !CATEGORIES.has(category)) throw new Error("Unknown category: " + category);
+
+  const loaded = await loadJobs();
+  const filtered = category ? loaded.jobs.filter(j => j.category === category) : loaded.jobs;
+  const jobs = filtered.slice(0, limit);
+  const counts = Object.fromEntries([...CATEGORIES].map(c => [c, filtered.filter(j => j.category === c).length]));
+  console.log(JSON.stringify({ voice: VOICE, mode: write ? "write" : "dry-run",
+    totalTextJobs: loaded.jobs.length, selectedJobs: jobs.length, categoryCounts: counts,
+    manualPhonemeRowsExcluded: loaded.excluded, firstJobs: jobs.slice(0, 8).map(({category, spokenText, outputPath}) => ({category, spokenText, outputPath})),
+    replacement: force }, null, 2));
+  if (!write) { console.log("Preview only. Add --write to generate missing MP3 files."); return; }
+
   let generated = 0, skipped = 0;
+  const errors = [];
   for (const job of jobs) {
-    const result = await generate(job, force);
-    if (result.status === "generated") generated++;
-    else skipped++;
-    console.log(JSON.stringify(result));
+    try {
+      const result = await generate(job, force);
+      if (result.status === "generated") generated++; else skipped++;
+      console.log(JSON.stringify(result));
+    } catch (e) {
+      errors.push({ path: job.outputPath, error: e.message });
+      console.error(JSON.stringify({ path: job.outputPath, status: "failed", error: e.message }));
+    }
   }
-  console.log(JSON.stringify({ voice: VOICE, generated, skipped, total: jobs.length }));
-  console.log("Listen to the generated files before marking the migration complete.");
+  console.log(JSON.stringify({ voice: VOICE, generated, skipped, failed: errors.length, attempted: jobs.length, errors }, null, 2));
+  if (errors.length) process.exitCode = 1;
+  else console.log("Generation finished. Listen to the audio and complete content/phonetic QA before publishing.");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  await main();
+  main().catch(e => { console.error("Emma generator failed: " + e.message); process.exitCode = 1; });
 }
