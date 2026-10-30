@@ -508,7 +508,7 @@
       "status": "generated-pending-audio-qa"
     },
     {
-      "ipa": "/g/",
+      "ipa": "/ɡ/",
       "example": "go",
       "phonemeAudio": "assets/audio/zero/p/phoneme-g.mp3",
       "exampleAudio": "assets/audio/zero/n/phoneme-word-g.mp3",
@@ -599,7 +599,7 @@
       "status": "generated-pending-audio-qa"
     },
     {
-      "ipa": "/r/",
+      "ipa": "/ɹ/",
       "example": "red",
       "phonemeAudio": "assets/audio/zero/p/phoneme-r.mp3",
       "exampleAudio": "assets/audio/zero/n/phoneme-word-r.mp3",
