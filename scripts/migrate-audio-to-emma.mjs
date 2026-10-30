@@ -20,7 +20,7 @@ const CSV_PATH = resolve(ROOT, "docs/curriculum/EMMA_AUDIO_CONVERSION_MAP.csv");
 const MANIFEST_PATH = resolve(ROOT, "curriculum/literacy/audio-manifest.json");
 const VOICE = "en-US-EmmaNeural";
 const CATEGORIES = new Set(["audio_map_text", "letter_name", "letter_example", "digraph_example"]);
-const isSentence = text => /[.!?]$/.test(text.trim()) && text.trim().split(/\\s+/).length >= 3;
+const isSentence = text => /[.!?]$/.test(text.trim()) && text.trim().split(/\s+/).length >= 3;
 const isDedicatedSentencePath = path => path.startsWith("assets/audio/zero/sentences/");
 
 function parseCsvLine(line) {
