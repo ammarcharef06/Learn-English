@@ -1,12 +1,14 @@
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const file = resolve(root, "curriculum/literacy/literacy-l0-l1.json");
 const manifestFile = resolve(root, "curriculum/literacy/audio-manifest.json");
+const audioMapFile = resolve(root, "assets/js/data/zero-audio-map.js");
 const data = JSON.parse(readFileSync(file, "utf8"));
 const audioManifest = JSON.parse(readFileSync(manifestFile, "utf8"));
+const { AUDIO_MAP } = await import(new URL("../assets/js/data/zero-audio-map.js", import.meta.url));
 const errors = [];
 const warnings = [];
 const lessons = data.stages.flatMap(stage => stage.units.flatMap(unit => unit.lessons || []));
@@ -36,6 +38,26 @@ for (const lesson of l2?.units.flatMap(unit => unit.lessons || []) || []) {
 }
 if (data.pronunciationPolicy?.status !== "selected-existing-project-source") {
   errors.push("Pronunciation policy must identify the selected embedded project audio source");
+}
+if (!existsSync(audioMapFile)) errors.push("Embedded zero-audio map is missing");
+for (const [text, asset] of Object.entries(AUDIO_MAP || {})) {
+  if (typeof asset !== "string" || !asset.startsWith("./assets/audio/zero/") || !existsSync(resolve(root, asset))) {
+    errors.push(`Invalid or missing embedded audio map asset for "${text}": ${asset}`);
+  }
+}
+const lettersInBank = "abcdefghijklmnopqrstuvwxyz".split("");
+for (const letter of lettersInBank) {
+  for (const kind of ["name", "word"]) {
+    const asset = `assets/audio/zero/n/${kind}-${letter}.mp3`;
+    if (!existsSync(resolve(root, asset))) errors.push(`Missing core alphabet audio: ${asset}`);
+  }
+}
+const digraphIds = ["sh", "ch", "th-voiceless", "th-voiced", "ph", "ck", "ng", "oo-long", "oo-short", "ee", "ea", "ou"];
+for (const id of digraphIds) {
+  for (const [folder, prefix] of [["d", ""], ["n", "word-"]]) {
+    const asset = `assets/audio/zero/${folder}/${prefix}${id}.mp3`;
+    if (!existsSync(resolve(root, asset))) errors.push(`Missing core digraph audio: ${asset}`);
+  }
 }
 if (audioManifest.pronunciationVariety?.source?.module !== "assets/js/core/zero-audio.js") {
   errors.push("Audio manifest must use the embedded zero-audio source");
@@ -90,6 +112,7 @@ const summary = {
   lessonsWithActivities: lessons.filter(lesson => lesson.items?.length).length,
   alphabetLetters: alphabet.length,
   transferChecks: (data.transferChecks || []).length,
+  embeddedAudioMapEntries: Object.keys(AUDIO_MAP || {}).length,
   errors,
   warnings
 };
