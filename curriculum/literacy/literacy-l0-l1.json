@@ -791,28 +791,104 @@
               "title": "قراءة عبارة قصيرة",
               "objective": "يقرأ عبارة مألوفة ويفهم معناها المباشر.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ العبارة: Sam sat. ماذا فعل Sam؟",
+                  "choices": [
+                    "sat",
+                    "map",
+                    "tap"
+                  ],
+                  "answer": "sat"
+                },
+                {
+                  "prompt": "اقرأ: The cat sat. من جلس؟",
+                  "choices": [
+                    "The cat",
+                    "Sam",
+                    "The dog"
+                  ],
+                  "answer": "The cat"
+                }
+              ]
             },
             {
               "id": "L3-U3-L02",
               "title": "العثور على معلومة صريحة",
               "objective": "يستخرج معلومة محددة من جملة قصيرة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ: Sam has a map. ما الشيء الذي يملكه Sam؟",
+                  "choices": [
+                    "a map",
+                    "a cat",
+                    "a pen"
+                  ],
+                  "answer": "a map"
+                },
+                {
+                  "prompt": "اقرأ: The cat is on a mat. أين القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "in a bag",
+                    "on a bed"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
             },
             {
               "id": "L3-U3-L03",
               "title": "فهم نص قصير جدًا",
               "objective": "يحدد الفكرة العامة وتفصيلًا صريحًا.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ النص: Sam has a cat. The cat sat on a mat. ما الحيوان المذكور؟",
+                  "choices": [
+                    "cat",
+                    "dog",
+                    "hen"
+                  ],
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "أين جلست القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "on a map",
+                    "in a box"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
             },
             {
               "id": "L3-U3-L04",
               "title": "قراءة دون تخمين من الصورة",
               "objective": "يثبت فهمه عبر نص جديد مع دعم بصري غير كاشف للإجابة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ الجملة واختر معناها المباشر: The cat sat.",
+                  "choices": [
+                    "القطة جلست",
+                    "القطة ركضت",
+                    "الكلب جلس"
+                  ],
+                  "answer": "القطة جلست"
+                },
+                {
+                  "prompt": "اقرأ دون الاعتماد على صورة: Sam has a pen. ماذا يملك Sam؟",
+                  "choices": [
+                    "a pen",
+                    "a pin",
+                    "a pan"
+                  ],
+                  "answer": "a pen"
+                }
+              ]
             }
           ]
         },
@@ -825,7 +901,18 @@
               "title": "نسخ الحروف والكلمات",
               "objective": "ينسخ نموذجًا مع أشكال مقروءة ومسافات مناسبة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "انسخ الكلمة كما تراها: map",
+                  "input": true,
+                  "answer": "map"
+                },
+                {
+                  "prompt": "انسخ العبارة مع المسافة: a cat",
+                  "input": true,
+                  "answer": "a cat"
+                }
+              ]
             },
             {
               "id": "L3-U4-L02",
@@ -887,7 +974,18 @@
               "title": "تسمية أشياء مألوفة",
               "objective": "يكتب تسميات قصيرة مدعومة بصور.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اكتب اسم الحيوان: cat",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب اسم الشيء: pen",
+                  "input": true,
+                  "answer": "pen"
+                }
+              ]
             },
             {
               "id": "L3-U5-L02",
@@ -919,14 +1017,47 @@
               "title": "مراجعة القراءة والكتابة",
               "objective": "ينجز مهمة تجمع القراءة والفهم والتهجئة والكتابة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ: The cat sat. كم كلمة في الجملة؟",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                },
+                {
+                  "prompt": "اكتب كلمة cat من الذاكرة.",
+                  "input": true,
+                  "answer": "cat"
+                }
+              ]
             },
             {
               "id": "L3-U5-L04",
               "title": "مشروع ختامي لمحو الأمية",
               "objective": "يقرأ تعليمات قصيرة وينفذها ويكتب استجابة بسيطة.",
               "activity": "guided",
-              "items": []
+              "items": [
+                {
+                  "prompt": "اقرأ: Sam has a cat. ما الحيوان الذي يملكه Sam؟",
+                  "choices": [
+                    "cat",
+                    "dog",
+                    "hen"
+                  ],
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب جملة قصيرة من الكلمات: Sam / sat",
+                  "input": true,
+                  "answer": "Sam sat.",
+                  "accepted": [
+                    "Sam sat"
+                  ]
+                }
+              ]
             }
           ]
         }
