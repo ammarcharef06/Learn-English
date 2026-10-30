@@ -11,11 +11,11 @@ OUT = ROOT / "assets/audio/zero"
 VOICE = "af_heart"
 LETTERS = dict(zip("abcdefghijklmnopqrstuvwxyz", ["apple","ball","cat","dog","egg","fish","goat","hat","ice","juice","key","lion","moon","nose","orange","pen","queen","rabbit","sun","tree","umbrella","van","water","xylophone","yogurt","zebra"]))
 DIGRAPHS = {
- "sh":("shh","ship"), "ch":("ch","chair"),
- "th-voiceless":("th","three"), "th-voiced":("th","this"),
- "ph":("f","phone"), "ck":("k","duck"), "ng":("ng","king"),
- "oo-long":("oo","spoon"), "oo-short":("oo","book"),
- "ee":("ee","bee"), "ea":("ee","sea"), "ou":("ow","mouse")
+ "sh":("/ʃ/","ship"), "ch":("/tʃ/","chair"),
+ "th-voiceless":("/θ/","three"), "th-voiced":("/ð/","this"),
+ "ph":("/f/","phone"), "ck":("/k/","duck"), "ng":("/ŋ/","king"),
+ "oo-long":("/uː/","spoon"), "oo-short":("/ʊ/","book"),
+ "ee":("/iː/","bee"), "ea":("/iː/","sea"), "ou":("/aʊ/","mouse")
 }
 def slug(s): return re.sub(r"[^a-z0-9]+","-",s.lower()).strip("-")
 def jobs():
