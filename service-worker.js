@@ -2,12 +2,16 @@
    Service Worker — offline cache and browser-local notifications
    ============================================================ */
 
-const VERSION = 'v4.16.1';
+const VERSION = 'v4.16.2';
 const CACHE = `lea-${VERSION}`;
 const CORE = [
   './',
   './index.html',
   './zero.html',
+  './literacy.html',
+  './assets/css/literacy.css',
+  './assets/js/literacy/engine.js',
+  './curriculum/literacy/literacy-l0-l1.json',
   './manifest.webmanifest',
   './manifest-zero.webmanifest',
   './assets/css/main.css',
