@@ -20,7 +20,6 @@
     "cap:sync:android": "npm run build:web && cap sync android",
     "android:open": "cap open android",
     "validate:literacy": "node scripts/validate-literacy.mjs",
-    "audio:aria": "node scripts/generate-aria-audio.mjs",
     "audio:emma": "node scripts/generate-emma-audio.mjs"
   },
   "devDependencies": {
