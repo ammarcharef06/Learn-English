@@ -18,3 +18,10 @@
 .lit-option{display:inline-flex;align-items:center;gap:8px;margin:5px 12px 5px 0;padding:9px 12px;border:1px solid #ffffff22;border-radius:9px;color:#e6eff9;cursor:pointer}
 .lit-question{margin:12px 0;padding:14px;border:1px solid #ffffff20;border-radius:12px}
 .lit-question legend{padding:0 5px;color:#fff;line-height:1.8}
+
+.lit-letter-group{margin:24px 0;padding:18px;border:1px solid #ffffff20;border-radius:16px;background:#ffffff06}
+.lit-letter-group h3,.lit-mastery h3{margin:0 0 8px;color:#fff}
+.lit-letter-group>p{color:#bfd0e2;line-height:1.8}
+.lit-group-note{display:block;margin-top:12px;color:#a9bfd7;line-height:1.8}
+.lit-mastery{margin:24px 0;padding:18px;border-radius:14px;background:#14243a;color:#dce8f5}
+.lit-mastery li{margin:8px 0;line-height:1.7}
