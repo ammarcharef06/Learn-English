@@ -69,6 +69,15 @@ for (const letter of lettersInBank) {
   }
 }
 const digraphIds = ["sh", "ch", "th-voiceless", "th-voiced", "ph", "ck", "ng", "oo-long", "oo-short", "ee", "ea", "ou"];
+const consonantPhonemeIds = ["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","m","n","eng","l","r","h","w","y"];
+for (const id of consonantPhonemeIds) {
+  for (const asset of [
+    `assets/audio/zero/p/phoneme-${id}.mp3`,
+    `assets/audio/zero/n/phoneme-word-${id}.mp3`
+  ]) {
+    if (!existsSync(resolve(root, asset))) errors.push(`Missing consonant phoneme audio asset: ${asset}`);
+  }
+}
 for (const id of digraphIds) {
   for (const [folder, prefix] of [["d", ""], ["n", "word-"]]) {
     const asset = `assets/audio/zero/${folder}/${prefix}${id}.mp3`;
