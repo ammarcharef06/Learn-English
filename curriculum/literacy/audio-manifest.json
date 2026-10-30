@@ -3,35 +3,37 @@
   "curriculumId": "english-literacy-ar",
   "status": "partially-recorded-existing-bank",
   "pronunciationVariety": {
-    "status": "selected-existing-recordings",
+    "status": "selected-target-voice-migration-pending",
     "value": "General American (en-US)",
     "source": {
       "type": "project-embedded-recorded-audio",
       "module": "assets/js/core/zero-audio.js",
-      "voice": "Microsoft Edge TTS — en-US-AriaNeural",
+      "voice": "Microsoft Edge TTS — en-US-EmmaNeural (target voice)",
       "locale": "en-US",
       "assetRoot": "assets/audio/zero/",
-      "note": "سجلّا الالتزام 286eb39 وa3d9553 يوثّقان توليد أصوات الحروف المركبة الـ12، ثم 64 مقطعاً لأسماء الحروف وكلمات الأمثلة، باستخدام edge-tts والصوت en-US-AriaNeural.",
+      "note": "الصوت المستهدف الذي اختاره المستخدم من لقطة Edge هو English - United States - Emma، ومعرّفه المطابق في قائمة Microsoft الرسمية هو en-US-EmmaNeural. التسجيلات المضمّنة الحالية موثقة تاريخياً بصوت Aria وتبقى كذلك حتى إعادة توليدها والاستماع إليها.",
       "generator": "edge-tts (Python client for Microsoft Edge online TTS)",
       "provenanceCommit": "a3d9553698d85719710d1a40c5532409af7c1478",
       "provenanceCommits": [
         "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286",
         "a3d9553698d85719710d1a40c5532409af7c1478"
-      ]
+      ],
+      "targetVoiceId": "en-US-EmmaNeural",
+      "targetDisplayName": "English - United States - Emma"
     },
     "note": "هذا يحدد مصدر التسجيلات الموجودة فقط. لا يعني أن جميع فونيمات الحروف مسجلة."
   },
   "recordingStandards": {
     "format": "mp3",
-    "speaker": "Microsoft Edge TTS voice en-US-AriaNeural (Aria)",
+    "speaker": "Target: Microsoft Edge TTS en-US-EmmaNeural (Emma). Existing embedded MP3 bank: historical en-US-AriaNeural; migration pending.",
     "sourceOfTruth": "assets/js/core/zero-audio.js and assets/js/data/zero-audio-map.js",
     "notes": [
-      "إعادة استخدام التسجيلات المضمنة كما هي دون استبدالها بصوت المتصفح.",
-      "اسم الحرف مستقل عن فونيمه؛ لا يُستخدم nameAudio بديلًا عن phonemeAudio.",
-      "exampleAudio هو تسجيل كلمة المثال كاملة، وليس تسجيلًا للفونيم منفردًا.",
-      "لا تُضاف تسجيلات مولّدة إلى الحزمة إلا إذا أمكن إنتاجها من مصدر Aria الأصلي وبالصوت نفسه والتحقق منها."
+      "الصوت المعتمد للمحتوى الجديد هو en-US-EmmaNeural، وليس EmmaMultilingualNeural.",
+      "التسجيلات القديمة لا تُنسب إلى Emma حتى إعادة توليدها والتحقق منها؛ مصدرها التاريخي Aria.",
+      "لا تخلط بين اسم الحرف وفونيمه وكلمة المثال.",
+      "لا تُضف صوتاً بديلاً من المتصفح عند غياب التسجيل."
     ],
-    "sourceIdentity": "Two repository commits document the complete 76-file core pack: 286eb39 records replacing the 12 digraph sound clips with edge-tts en-US-AriaNeural; a3d9553 records generating 64 letter-name and example-word clips with the same voice ID. The original edge-tts package version and server-side model version were not recorded."
+    "sourceIdentity": "The user's screenshot identifies the desired display voice as English - United States - Emma. Microsoft Learn lists the matching standard voice ID as en-US-EmmaNeural. Existing 76 core recordings are historically documented as en-US-AriaNeural and must not be mislabeled as Emma; they require regeneration and audio QA."
   },
   "letters": [
     {
@@ -406,40 +408,23 @@
     }
   ],
   "audioGeneration": {
-    "status": "generator-identified-redistribution-review-required",
-    "requiredVoice": "en-US-AriaNeural",
+    "status": "emma-selected-legacy-bank-migration-pending",
+    "requiredVoice": "en-US-EmmaNeural",
+    "displayName": "English - United States - Emma",
     "generator": "edge-tts Python client using Microsoft Edge online TTS",
-    "provenanceCommit": "a3d9553698d85719710d1a40c5532409af7c1478",
-    "generatorVersion": "not-recorded-in-original-commit",
-    "modelVersion": "server-managed; not recorded",
-    "reproducibility": "The same voice ID can be requested, but Microsoft may update the server-side voice model; exact acoustic identity with historical MP3 files cannot be guaranteed.",
-    "knownGeneratorScripts": [
-      {
-        "path": "scripts/generate-audio.mjs",
-        "provider": "Google Translate TTS",
-        "compatible": false,
-        "note": "Not used for the Aria bank."
-      },
-      {
-        "path": "edge-tts (Python package)",
-        "provider": "Microsoft Edge online TTS",
-        "compatible": true,
-        "note": "Original commit explicitly records this generator and voice ID for the 64 letter-name/example recordings."
-      }
-    ],
-    "policy": "استخدم فقط en-US-AriaNeural عبر edge-tts عند الحاجة إلى توليد كلام نصي أو مقاطع صوتية تعليمية جديدة. لا تستخدم Google Translate أو SpeechSynthesis أو صوتاً آخر. يجب مراجعة شروط Microsoft وحقوق إعادة توزيع المخرجات قبل نشر الملفات الجديدة. لا يُدّعى التطابق الصوتي الحرفي مع تسجيلات قديمة لأن إصدار النموذج الخلفي غير محفوظ.",
-    "missingAssets": "الفونيمات المستقلة للحروف الـ26 لا تُنشأ آلياً بمجرد نطق رمز IPA أو اسم الحرف؛ edge-tts لا يقبل SSML مخصصاً لفرض نطق فونيمي دقيق. تبقى هذه الأصول غير متاحة حتى اعتماد طريقة فونيتية صحيحة ومراجعتها.",
-    "provenanceCommits": [
-      {
-        "sha": "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286",
-        "scope": "12 digraph sound clips",
-        "url": "https://github.com/ammarcharef06/Learn-English/commit/286eb39dc4a781a8b0e0f9b5d9c612d48cb22286"
-      },
-      {
-        "sha": "a3d9553698d85719710d1a40c5532409af7c1478",
-        "scope": "26 letter names + 26 letter example words + 12 digraph example words",
-        "url": "https://github.com/ammarcharef06/Learn-English/commit/a3d9553698d85719710d1a40c5532409af7c1478"
-      }
-    ]
+    "voiceType": "Microsoft standard Neural voice",
+    "modelVersion": "server-managed; not pinned",
+    "reproducibility": "The voice ID is pinned, but Microsoft may update the server-side model; exact acoustic identity across time is not guaranteed.",
+    "legacyBank": {
+      "voice": "en-US-AriaNeural",
+      "status": "existing-assets-not-yet-migrated",
+      "provenanceCommits": [
+        "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286",
+        "a3d9553698d85719710d1a40c5532409af7c1478"
+      ]
+    },
+    "migrationRequirement": "Regenerate every required legacy MP3 with en-US-EmmaNeural, compare listenability and phonetic accuracy, then update the bank provenance. Do not relabel existing Aria bytes as Emma.",
+    "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
+    "policy": "Use en-US-EmmaNeural for all new recordings. Do not use Aria, EmmaMultilingual, Google Translate, browser SpeechSynthesis, or any other voice as a silent substitute. Review Microsoft service terms and redistribution rights before publishing generated files."
   }
 }
