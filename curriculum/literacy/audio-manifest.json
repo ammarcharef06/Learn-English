@@ -408,7 +408,7 @@
     }
   ],
   "audioGeneration": {
-    "status": "emma-generated-awaiting-human-audio-qa",
+    "status": "emma-selected-migration-tool-ready-legacy-bank-not-yet-migrated",
     "requiredVoice": "en-US-EmmaNeural",
     "displayName": "English - United States - Emma",
     "generator": "edge-tts Python client using Microsoft Edge online TTS",
@@ -419,7 +419,11 @@
       "voice": "en-US-AriaNeural",
       "status": "legacy-assets-regenerated-with-Emma-in-successful-workflow",
       "migrationCommit": "5eaa5d5439ebc4a7a690b3664952babc2be2134c",
-      "note": "The successful Emma workflow ran with --force across all 344 ordinary-text conversion-map jobs. Git recorded 300 MP3 blobs as changed in the generation commit; remaining generated outputs may have been byte-identical. Human listening and phonetic QA remains required."
+      "note": "The successful Emma workflow ran with --force across all 344 ordinary-text conversion-map jobs. Git recorded 300 MP3 blobs as changed in the generation commit; remaining generated outputs may have been byte-identical. Human listening and phonetic QA remains required.",
+      "provenanceCommits": [
+        "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286",
+        "a3d9553698d85719710d1a40c5532409af7c1478"
+      ]
     },
     "migrationRequirement": "Regenerate every required legacy MP3 with en-US-EmmaNeural, compare listenability and phonetic accuracy, then update the bank provenance. Do not relabel existing Aria bytes as Emma.",
     "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
@@ -440,15 +444,12 @@
       "scope": "Sentence-only playback; separate from isolated words."
     },
     "precisionBank": {
-      "voice": "en-US-Emma:DragonHDLatestNeural",
-      "provider": "Azure AI Speech REST API",
-      "path": "assets/audio/zero/precision/",
-      "scope": "Letter names, letter examples, digraph phonemes and examples, and consonant phonemes.",
-      "requiresSecrets": [
-        "SPEECH_KEY",
-        "SPEECH_REGION"
-      ],
-      "note": "Neural HD is the higher-definition Emma persona. This generator requires Azure credentials and never falls back to standard TTS."
+      "voice": "Kokoro af_heart",
+      "provider": "Kokoro-82M open-weight local TTS",
+      "path": "assets/audio/zero/{n,d}/",
+      "scope": "26 letter names, 26 letter examples, 12 IPA grapheme sounds, and 12 grapheme examples.",
+      "license": "Apache-2.0",
+      "note": "Replaces the previous Azure-only precision generator; no credentials or paid service required."
     }
   },
   "precisionBank": {
