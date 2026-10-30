@@ -1,10 +1,12 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const file = resolve(root, "curriculum/literacy/literacy-l0-l1.json");
+const manifestFile = resolve(root, "curriculum/literacy/audio-manifest.json");
 const data = JSON.parse(readFileSync(file, "utf8"));
+const audioManifest = JSON.parse(readFileSync(manifestFile, "utf8"));
 const errors = [];
 const warnings = [];
 const lessons = data.stages.flatMap(stage => stage.units.flatMap(unit => unit.lessons || []));
@@ -32,8 +34,32 @@ for (const lesson of l2?.units.flatMap(unit => unit.lessons || []) || []) {
     errors.push(`L2 phoneme lesson must remain audio-gated: ${lesson.id}`);
   }
 }
-if (data.pronunciationPolicy?.status !== "pending-accent-selection") {
-  errors.push("Pronunciation policy must remain pending until an accent is selected and reviewed");
+if (data.pronunciationPolicy?.status !== "selected-existing-project-source") {
+  errors.push("Pronunciation policy must identify the selected embedded project audio source");
+}
+if (audioManifest.pronunciationVariety?.source?.module !== "assets/js/core/zero-audio.js") {
+  errors.push("Audio manifest must use the embedded zero-audio source");
+}
+for (const letter of audioManifest.letters || []) {
+  for (const field of ["nameAudio", "exampleAudio", "phonemeAudio"]) {
+    const asset = letter[field];
+    if (asset && (!asset.startsWith("assets/audio/zero/") || !existsSync(resolve(root, asset)))) {
+      errors.push(`Missing or out-of-bank audio asset: ${letter.id} ${field} -> ${asset}`);
+    }
+  }
+  if (letter.nameAudio && !letter.exampleAudio) warnings.push(`Letter lacks example recording: ${letter.id}`);
+  if (!letter.phonemeAudio) warnings.push(`Standalone letter phoneme is not recorded: ${letter.id}`);
+}
+for (const group of audioManifest.phonemeGroups || []) {
+  for (const field of ["phonemeAudio", "exampleAudio"]) {
+    const asset = group[field];
+    if (!asset || !asset.startsWith("assets/audio/zero/") || !existsSync(resolve(root, asset))) {
+      errors.push(`Missing digraph audio asset: ${group.id} ${field} -> ${asset}`);
+    }
+  }
+}
+if (audioManifest.audioGeneration?.status !== "blocked-original-voice-generator-not-found") {
+  errors.push("Missing-audio generation must not claim same-voice generation without the original voice generator");
 }
 
 const alphabet = data.letters || [];
