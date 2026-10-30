@@ -25,3 +25,12 @@
 .lit-group-note{display:block;margin-top:12px;color:#a9bfd7;line-height:1.8}
 .lit-mastery{margin:24px 0;padding:18px;border-radius:14px;background:#14243a;color:#dce8f5}
 .lit-mastery li{margin:8px 0;line-height:1.7}
+
+.lit-unit-nav{padding:12px 0;border-bottom:1px solid #ffffff18}
+.lit-unit-nav p{font-size:13px;color:#aebfd3;line-height:1.8}
+.lit-unit-nav button{font:inherit;font-size:13px;color:#eaf4ff;background:#203b5b;border:1px solid #76b5ef66;border-radius:9px;padding:8px 12px;cursor:pointer}
+.lit-intro .lit-info{color:#dce9f7}
+.lit-intro .lit-info ul{margin:8px 0;padding-right:22px}
+.lit-intro .lit-info li{margin:5px 0;font-size:13px}
+.lit-intro .lit-info p{margin-bottom:0;font-size:13px}
+#open-transfer{margin:12px 0}
