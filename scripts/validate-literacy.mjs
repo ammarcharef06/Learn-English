@@ -26,6 +26,16 @@ for (const lesson of lessons) {
   if (!lesson.items?.length) warnings.push(`No activities yet: ${lesson.id} — ${lesson.title}`);
 }
 
+const l2 = data.stages.find(stage => stage.id === "L2");
+for (const lesson of l2?.units.flatMap(unit => unit.lessons || []) || []) {
+  if (lesson.audioRequiredForMastery !== true) {
+    errors.push(`L2 phoneme lesson must remain audio-gated: ${lesson.id}`);
+  }
+}
+if (data.pronunciationPolicy?.status !== "pending-accent-selection") {
+  errors.push("Pronunciation policy must remain pending until an accent is selected and reviewed");
+}
+
 const alphabet = data.letters || [];
 const letterIds = alphabet.map(letter => letter.id);
 if (new Set(letterIds).size !== letterIds.length) errors.push("Duplicate alphabet letter id");
