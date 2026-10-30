@@ -1,102 +1,78 @@
-name: Generate Emma audio bank
+name: Generate free Kokoro precision audio bank
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - development
+    branches: [development]
     paths:
       - .github/workflows/generate-emma-audio.yml
-      - scripts/generate-emma-*.mjs
+      - scripts/generate-kokoro-precision.py
+      - scripts/generate-emma-precision.mjs
       - assets/js/core/zero-audio.js
-      - assets/js/data/zero-audio-map.js
       - package.json
 
 permissions:
   contents: write
 
 concurrency:
-  group: emma-audio-generation-development
+  group: precision-audio-development
   cancel-in-progress: false
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
-      - name: Check out development
+      - name: Checkout development
         uses: actions/checkout@v4
         with:
           ref: development
           fetch-depth: 0
-
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Edge TTS client
-        run: python -m pip install --upgrade pip edge-tts
-
-      - name: Preview and generate sentence-only bank
+      - name: Install system audio dependencies
         run: |
-          npm run audio:emma:sentences
-          npm run audio:emma:sentences -- --write --force
-
-      - name: Preview precision Emma Neural HD bank
-        run: npm run audio:emma:precision
-
-      - name: Generate precision bank when Azure credentials are configured
-        env:
-          SPEECH_KEY: ${{ secrets.SPEECH_KEY }}
-          SPEECH_REGION: ${{ secrets.SPEECH_REGION }}
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng
+      - name: Install Kokoro runtime
         run: |
-          if [ -n "$SPEECH_KEY" ] && [ -n "$SPEECH_REGION" ]; then
-            npm run audio:emma:precision -- --write --force
-          else
-            echo "Azure Speech secrets not configured; HD precision bank remains pending."
-          fi
-
-      - name: Verify complete conversion map (dry run)
-        run: npm run audio:emma:migrate
-
-      - name: Generate and replace the complete Emma speech bank
-        run: npm run audio:emma:migrate -- --write --force
-
-      - name: Record generated-bank status
+          python -m pip install --upgrade pip
+          python -m pip install "kokoro>=0.9.4" soundfile numpy
+      - name: Preview exact bank coverage
+        run: npm run audio:precision:dry
+      - name: Generate all precision recordings
+        run: npm run audio:precision -- --write --force
+      - name: Verify generated MP3 inventory
         run: |
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const path = 'curriculum/literacy/audio-manifest.json';
-          const manifest = JSON.parse(fs.readFileSync(path, 'utf8'));
-          manifest.audioGeneration.status = 'emma-generated-awaiting-human-audio-qa';
-          manifest.audioGeneration.lastGeneration = {
-            voice: 'en-US-EmmaNeural',
-            generatedTextFiles: 277,
-            manualPhonemeFilesExcluded: 38,
-          dedicatedSentenceFilesGenerated: 67,
-            result: 'generation-successful; listening-and-phonetic-QA-required',
-            generatedByWorkflow: 'Generate Emma audio bank'
-          };
-          manifest.audioGeneration.bulkMigrationScope = '277 ordinary-text jobs: 213 non-sentence AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 67 sentence recordings are generated separately into assets/audio/zero/sentences/. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.';
-          fs.writeFileSync(path, JSON.stringify(manifest, null, 2) + '\n');
-          NODE
-
-      - name: Commit generated audio and manifest to development
+          python - <<'PY'
+          from pathlib import Path
+          root=Path("assets/audio/zero")
+          expected=[root/"n"/f"name-{c}.mp3" for c in "abcdefghijklmnopqrstuvwxyz"]
+          expected += [root/"n"/f"word-{c}.mp3" for c in "abcdefghijklmnopqrstuvwxyz"]
+          ids=["sh","ch","th-voiceless","th-voiced","ph","ck","ng","oo-long","oo-short","ee","ea","ou"]
+          expected += [root/"d"/f"{x}.mp3" for x in ids]
+          expected += [root/"n"/f"word-{x}.mp3" for x in ids]
+          missing=[str(p) for p in expected if not p.exists() or p.stat().st_size<1024]
+          print(f"Expected {len(expected)} files; missing/invalid: {len(missing)}")
+          if missing: raise SystemExit("\\n".join(missing))
+          PY
+      - name: Run project checks
+        run: |
+          npm ci
+          npm test
+      - name: Commit generated bank
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/audio/zero curriculum/literacy/audio-manifest.json
-          if git diff --cached --quiet; then
-            echo "No audio or manifest changes to commit."
-            exit 0
-          fi
-          git commit -m "Generate complete Emma audio bank"
+          git add assets/audio/zero/n assets/audio/zero/d curriculum/literacy/audio-manifest.json
+          if git diff --cached --quiet; then echo "No generated audio changes."; exit 0; fi
+          git commit -m "Generate free Kokoro precision audio bank"
           git fetch origin development
           git rebase origin/development
           git push origin HEAD:development
