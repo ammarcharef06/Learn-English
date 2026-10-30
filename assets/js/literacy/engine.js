@@ -40,7 +40,7 @@ function renderLesson(id){
    : '<div class="lit-choice-row">'+(item.choices||[]).map(c=>'<label class="lit-option"><input type="radio" name="q'+i+'" value="'+esc(c)+'"> '+esc(c)+'</label>').join("")+'</div>';
   return '<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend>'+control+'</fieldset>';
  }).join("");
- panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(questions||'<div class="lit-info">هذا الدرس يحتاج إلى مادة تعليمية إضافية قبل تفعيله. لن يُحتسب إتقانه بعد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
+ panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(lesson.audioRequiredForMastery?'<div class="lit-info">هذا تدريب بصري وكتابي على التهجئة فقط. لا يختبر التمييز السمعي أو نطق الصوت، ولن يُسجّل إتقان المهارة الصوتية قبل إضافة تسجيلات واختبار استماع.</div>':'')+(questions||'<div class="lit-info">هذا الدرس يحتاج إلى مادة تعليمية إضافية قبل تفعيله. لن يُحتسب إتقانه بعد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
  $("#check-lesson").onclick=()=>{
   let correct=0,answered=0;
   lesson.items.forEach((item,i)=>{
@@ -52,7 +52,7 @@ function renderLesson(id){
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أكمل جميع الإجابات أولًا.";return}
   const old=state(id),score=lesson.items.length?correct/lesson.items.length:0,today=new Date().toISOString().slice(0,10);
   const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];
-  progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
+  progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||(!lesson.audioRequiredForMastery&&qualifying.length>=2),visualPracticeComplete:lesson.audioRequiredForMastery&&qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
   save();render();renderLesson(id);
   $("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"أُثبت الإتقان عبر يومين مختلفين.":"يلزم تحقيق 90% على الأقل في يومين مختلفين.");
  };
