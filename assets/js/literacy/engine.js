@@ -33,8 +33,7 @@ function renderLesson(id){
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أجب عن جميع الأسئلة أولًا.";return}
   const old=state(id),score=lesson.items.length?correct/lesson.items.length:0;
   progress.lessons||={};progress.lessons[id]={attempts:old.attempts+1,best:Math.max(old.best,score),mastered:old.mastered||(old.attempts+1>=2&&score>=.9),lastScore:score,lastAttempt:new Date().toISOString()};
-  save();$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم محاولتان على الأقل ونتيجة 90% في إحداهما أو أفضل أداء متكرر.");
-  render();
+  save();render();renderLesson(id);$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم محاولتان على الأقل ونتيجة 90% في إحداهما أو أفضل أداء متكرر.");
  };
 }
 function renderLetterTask(id){
