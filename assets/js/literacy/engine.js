@@ -97,7 +97,7 @@ function renderLesson(id){
   const control=item.input
    ? '<label class="lit-text-answer"><span>اكتب إجابتك بالإنجليزية</span><input type="text" dir="ltr" autocomplete="off" spellcheck="false" data-answer="'+i+'" placeholder="اكتب هنا"></label>'
    : '<div class="lit-choice-row">'+(item.choices||[]).map(c=>'<label class="lit-option"><input type="radio" name="q'+i+'" value="'+esc(c)+'"> '+esc(c)+'</label>').join("")+'</div>';
-  return '<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend>'+control+'</fieldset>';
+  return '<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend>'+(item.audioText?'<button type="button" class="lit-audio-button" data-speak="'+esc(item.audioText)+'">🔊 استمع إلى التسجيل</button>':'')+control+'</fieldset>';
  }).join("");
  panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(lesson.audioRequiredForMastery?'<div class="lit-info">هذا تدريب بصري وكتابي على التهجئة فقط. لا يختبر التمييز السمعي أو نطق الصوت، ولن يُسجّل إتقان المهارة الصوتية قبل إضافة تسجيلات واختبار استماع.</div>':'')+(questions||'<div class="lit-info">هذا الدرس غير مفعّل بعد لعدم توفر مادته الأساسية (مثل التسجيل الصوتي أو نشاط التوجيه). لا يمكن احتسابه إتقانًا، وسيظل ظاهرًا بوضوح على أنه قيد الإعداد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
  $("#check-lesson").onclick=()=>{
