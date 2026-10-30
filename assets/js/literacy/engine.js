@@ -151,7 +151,11 @@ export async function bootLiteracy(host = $("#literacy-app")) {
  render();
  host.addEventListener("click", event => {
   const button=event.target.closest("[data-speak]");
-  if(button && host.contains(button)) speak(button.dataset.speak);
+  if(button && host.contains(button)) {
+   const played=speak(button.dataset.speak,{recordedOnly:true});
+   const notice=$("#notice",host);
+   if(notice) notice.textContent=played?"":"هذا التسجيل غير متوفر في بنك الصوت المعتمد؛ لم نشغّل صوتًا بديلًا.";
+  }
  });
  return true;
 }
