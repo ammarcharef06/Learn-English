@@ -96,8 +96,13 @@ for (const group of audioManifest.phonemeGroups || []) {
     }
   }
 }
-if (audioManifest.audioGeneration?.status !== "blocked-original-generator-and-provenance-unavailable") {
-  errors.push("Missing-audio generation must remain blocked until the original voice generator and provenance are available");
+if (audioManifest.audioGeneration?.status !== "generator-identified-redistribution-review-required") {
+  errors.push("Audio generation must identify the historical Aria generator and retain redistribution review status");
+}
+if (audioManifest.audioGeneration?.requiredVoice !== "en-US-AriaNeural" ||
+    audioManifest.audioGeneration?.generator !== "edge-tts Python client using Microsoft Edge online TTS" ||
+    audioManifest.audioGeneration?.provenanceCommit !== "a3d9553698d85719710d1a40c5532409af7c1478") {
+  errors.push("Aria generator provenance must match the documented original edge-tts voice and commit");
 }
 
 const alphabet = data.letters || [];
