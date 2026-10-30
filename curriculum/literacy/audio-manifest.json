@@ -425,16 +425,14 @@
     "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
     "policy": "Use en-US-EmmaNeural for all new recordings. Do not use Aria, EmmaMultilingual, Google Translate, browser SpeechSynthesis, or any other voice as a silent substitute. Review Microsoft service terms and redistribution rights before publishing generated files.",
     "bulkMigrationTool": "scripts/migrate-audio-to-emma.mjs",
-    "bulkMigrationScope": "344 ordinary-text jobs: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.",
+    "bulkMigrationScope": "277 ordinary-text jobs: 213 non-sentence AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 67 sentence recordings are generated separately into assets/audio/zero/sentences/. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.",
     "lastGeneration": {
       "voice": "en-US-EmmaNeural",
-      "generatedTextFiles": 344,
+      "generatedTextFiles": 277,
       "manualPhonemeFilesExcluded": 38,
+      "dedicatedSentenceFilesGenerated": 67,
       "result": "generation-successful; listening-and-phonetic-QA-required",
-      "generatedByWorkflow": "Generate Emma audio bank",
-      "commit": "5eaa5d5439ebc4a7a690b3664952babc2be2134c",
-      "gitChangedMp3Files": 300,
-      "totalMp3FilesInZeroBank": 356
+      "generatedByWorkflow": "Generate Emma audio bank"
     },
     "sentenceBank": {
       "voice": "en-US-EmmaNeural",
