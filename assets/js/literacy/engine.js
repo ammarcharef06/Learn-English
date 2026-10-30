@@ -8,13 +8,29 @@ function localDate(){const d=new Date();return [d.getFullYear(),String(d.getMont
 function save(){try{localStorage.setItem(KEY,JSON.stringify(progress))}catch{}}
 function state(id){return progress.lessons?.[id]||{attempts:0,best:0,mastered:false}}
 function lessons(stage){return stage.units.flatMap(u=>u.lessons)}
+function stageReadiness(id){
+ const stage=data.stages.find(x=>x.id===id);
+ if(!stage)return {ready:false,reasons:["مرحلة غير معروفة"]};
+ const missing=[];
+ if(id==="L1"&&!data.letters.every(letter=>state(letter.id).mastered))missing.push("إتقان مهارات الحروف الـ26 في يومين مختلفين لكل مهارة");
+ if(id!=="L1"){
+  for(const lesson of lessons(stage)){
+   if(!lesson.items?.length)missing.push("مادة غير متاحة: "+lesson.title);
+   else if(!state(lesson.id).mastered)missing.push("إتقان: "+lesson.title);
+  }
+ }
+ const check=(data.transferChecks||[]).find(x=>x.id===id);
+ if(check&&(progress.stageChecks?.[id]?.qualifyingDates||[]).length<2)missing.push("نجاح في تقييمين مؤجلين في يومين مختلفين");
+ if(id==="L1"&&(progress.stageChecks?.L1?.qualifyingDates||[]).length<2)missing.push("اجتياز تقييم نقل الحروف في يومين مختلفين");
+ return {ready:missing.length===0,reasons:missing};
+}
 function render(){
  const stage=data.stages.find(s=>s.id===stageId);
  const host=$("#literacy-app");
  const lessonCount=stage.units.reduce((n,u)=>n+u.lessons.length,0)+(stageId==="L1"?26:0);
  const mastered=stage.units.reduce((n,u)=>n+u.lessons.filter(l=>state(l.id).mastered).length,0)+(stageId==="L1"?data.letters.filter(x=>state(x.id).mastered).length:0);
  let unitHtml=stageId==="L1"?stage.units.map(u=>'<section class="lit-unit-nav"><h2>'+esc(u.title)+'</h2><p>'+esc(u.objective||"") +'</p><button type="button" data-unit="'+u.id+'">انتقل إلى المجموعة</button></section>').join(""):stage.units.map(u=>"<section><h2>"+esc(u.title)+"</h2>"+u.lessons.map(l=>'<button class="lit-lesson" data-lesson="'+l.id+'">'+esc(l.title)+' <small>'+(state(l.id).mastered?"متقن":(l.items?.length?"تدرّب":"قيد الإعداد"))+"</small></button>").join("")+"</section>").join("");
- host.innerHTML='<header class="lit-head"><a href="./index.html">← العودة للأكاديمية</a><span>مسار محو أمية الإنجليزية</span></header><section class="lit-intro"><p class="eyebrow">LEARNING PATH · '+stageId+'</p><h1>'+esc(stage.title)+'</h1><p>'+esc(stage.outcome)+'</p><div class="lit-progress"><span style="width:'+(lessonCount?Math.round(mastered/lessonCount*100):0)+'%"></span></div><small>إتقان '+mastered+' من '+lessonCount+' عنصرًا تعليميًا</small></section><nav class="lit-tabs">'+data.stages.map(s=>'<button data-stage="'+s.id+'" class="'+(s.id===stageId?"active":"")+'">'+s.id+' · '+esc(s.title)+'</button>').join("")+'</nav><div class="lit-layout"><aside class="lit-units">'+unitHtml+'</aside><main id="lesson-panel" class="lit-panel">'+(stageId==="L1"?renderLetters():renderStageStart())+'</main></div><section class="prea1-bridge"><p class="eyebrow">NEXT · PRE-A1</p><h2>'+esc(data.transition.title)+'</h2><p>'+esc(data.transition.description)+'</p><h3>شروط الانتقال</h3><ul>'+data.transition.entryRequirements.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="bridge-note">'+esc(data.transition.boundary)+'</p></section><p id="notice" class="lit-notice" role="status"></p>';
+ const readiness=stageReadiness(stageId);\n host.innerHTML='<header class="lit-head"><a href="./index.html">← العودة للأكاديمية</a><span>مسار محو أمية الإنجليزية</span></header><section class="lit-intro"><p class="eyebrow">LEARNING PATH · '+stageId+'</p><h1>'+esc(stage.title)+'</h1><p>'+esc(stage.outcome)+'</p><div class="lit-progress"><span style="width:'+(lessonCount?Math.round(mastered/lessonCount*100):0)+'%"></span></div><small>إتقان '+mastered+' من '+lessonCount+' عنصرًا تعليميًا</small><div class="lit-info" style="margin-top:14px">حالة المرحلة: <strong>'+(readiness.ready?"استوفت شروط الإتقان المسجلة":"لم تستوفِ جميع الشروط بعد") +'</strong>'+(readiness.ready?"":'<ul>'+readiness.reasons.slice(0,5).map(x=>'<li>'+esc(x)+'</li>').join("")+(readiness.reasons.length>5?"<li>ومتطلبات أخرى…</li>":"")+'</ul>')+'<p>يمكنك استكشاف المراحل، لكن الاستكشاف لا يعني اجتيازها.</p></div></section><nav class="lit-tabs">'+data.stages.map(s=>'<button data-stage="'+s.id+'" class="'+(s.id===stageId?"active":"")+'">'+s.id+' · '+esc(s.title)+'</button>').join("")+'</nav><div class="lit-layout"><aside class="lit-units">'+unitHtml+'</aside><main id="lesson-panel" class="lit-panel">'+(stageId==="L1"?renderLetters():renderStageStart())+'</main></div><section class="prea1-bridge"><p class="eyebrow">NEXT · PRE-A1</p><h2>'+esc(data.transition.title)+'</h2><p>'+esc(data.transition.description)+'</p><h3>شروط الانتقال</h3><ul>'+data.transition.entryRequirements.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="bridge-note">'+esc(data.transition.boundary)+'</p></section><p id="notice" class="lit-notice" role="status"></p>';
  host.querySelectorAll("[data-stage]").forEach(b=>b.onclick=()=>{stageId=b.dataset.stage;render()});
  host.querySelectorAll("[data-lesson]").forEach(b=>b.onclick=()=>renderLesson(b.dataset.lesson));
  host.querySelectorAll("[data-letter]").forEach(b=>b.onclick=()=>renderLetterTask(b.dataset.letter));
@@ -23,16 +39,29 @@ function render(){
 }
 function renderStageStart(){
  const check=(data.transferChecks||[]).find(x=>x.id===stageId);
- return '<div class="lit-empty"><div>🌱</div><h2>اختر درسًا للبدء</h2><p>ابدأ بالدرس الأول ثم تابع بالتدرج.</p>'+(check?'<button type="button" id="open-transfer" class="lit-primary">ابدأ تقييم نقل المهارات</button>':'')+'</div>';
+ return '<div class="lit-empty"><div>🌱</div><h2>اختر درسًا للبدء</h2><p>ابدأ بالدرس الأول ثم تابع بالتدرج.</p>'+(check||stageId==="L1"?'<button type="button" id="open-transfer" class="lit-primary">ابدأ تقييم نقل المهارات</button>':'')+'</div>';
 }
 function renderTransferCheck(){
- const check=(data.transferChecks||[]).find(x=>x.id===stageId),panel=$("#lesson-panel");
+ let check=(data.transferChecks||[]).find(x=>x.id===stageId);
+ const panel=$("#lesson-panel");
+ if(stageId==="L1"){
+  const alphabet=data.letters;
+  check={id:"L1",title:"تقييم نقل مهارات الأبجدية",description:"اختبار تعرّف واسترجاع على حروف مختارة عشوائيًا. لا يختبر النطق أو الصوت أو الكتابة اليدوية.",passMark:.8,modality:"visual",items:alphabet.map((letter,index)=>({id:"l1-"+letter.id,prompt:"اختر الحرف الصغير المطابق لـ "+letter.upper,choices:[letter.lower,...alphabet.filter(x=>x.id!==letter.id).slice((index*3)%23,(index*3)%23+2).map(x=>x.lower)],answer:letter.lower}))};
+ }
  if(!check||!panel)return;
  const today=localDate(),old=progress.stageChecks?.[stageId]||{attempts:0,qualifyingDates:[]};
  const prior=old.forms?.[today]||[];
- const pool=[...check.items],chosen=prior.length?pool.filter(x=>prior.includes(x.id)):[...pool].sort(()=>Math.random()-.5).slice(0,5);
- if(!prior.length){progress.stageChecks||={};progress.stageChecks[stageId]={...old,forms:{...(old.forms||{}),[today]:chosen.map(x=>x.id)}};save();}
- panel.innerHTML='<p class="eyebrow">TRANSFER CHECK · '+stageId+'</p><h2>'+esc(check.title)+'</h2><p>'+esc(check.description)+'</p>'+(check.modality==="visual-text-only"?'<div class="lit-info">هذا تقييم بصري وكتابي فقط، وليس اختبار استماع أو نطق.</div>':'')+chosen.map((item,i)=>'<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend><div class="lit-choice-row">'+item.choices.map(choice=>'<label class="lit-option"><input type="radio" name="transfer'+i+'" value="'+esc(choice)+'"> '+esc(choice)+'</label>').join('')+'</div></fieldset>').join('')+'<button type="button" id="submit-transfer" class="lit-primary">تصحيح التقييم</button><div id="transfer-feedback" role="status"></div><p class="lit-progress-note">النجاح هنا دليل نقل مهارة في هذا النموذج فقط، ولا يمنح إتقان المرحلة. يلزم تكرار التقييم بنموذج آخر في يوم مختلف واستيفاء جميع متطلبات المرحلة.</p>';
+ const pool=[...check.items];
+ let chosen;
+ if(prior.length)chosen=pool.filter(x=>prior.includes(x.id));
+ else {
+  const past=Object.values(old.forms||{}).map(ids=>[...ids].sort().join("|"));
+  const candidates=[];
+  for(let n=0;n<40;n++){const candidate=[...pool].sort(()=>Math.random()-.5).slice(0,5);if(!past.includes(candidate.map(x=>x.id).sort().join("|")))candidates.push(candidate);}
+  chosen=(candidates[0]||[...pool].sort(()=>Math.random()-.5).slice(0,5));
+  progress.stageChecks||={};progress.stageChecks[stageId]={...old,forms:{...(old.forms||{}),[today]:chosen.map(x=>x.id)}};save();
+ }
+ panel.innerHTML='<p class="eyebrow">TRANSFER CHECK · '+stageId+'</p><h2>'+esc(check.title)+'</h2><p>'+esc(check.description)+'</p>'+(check.modality==="visual-text-only"?'<div class="lit-info">هذا تقييم بصري وكتابي فقط، وليس اختبار استماع أو نطق.</div>':'')+chosen.map((item,i)=>'<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend><div class="lit-choice-row">'+[...item.choices].sort(()=>Math.random()-.5).map(choice=>'<label class="lit-option"><input type="radio" name="transfer'+i+'" value="'+esc(choice)+'"> '+esc(choice)+'</label>').join('')+'</div></fieldset>').join('')+'<button type="button" id="submit-transfer" class="lit-primary">تصحيح التقييم</button><div id="transfer-feedback" role="status"></div><p class="lit-progress-note">النجاح هنا دليل نقل مهارة في هذا النموذج فقط، ولا يمنح إتقان المرحلة. يلزم تكرار التقييم بنموذج آخر في يوم مختلف واستيفاء جميع متطلبات المرحلة.</p>';
  $("#submit-transfer").onclick=()=>{
   let correct=0,answered=0;
   chosen.forEach((item,i)=>{const selected=panel.querySelector('input[name="transfer'+i+'"]:checked');if(selected){answered++;if(selected.value===item.answer)correct++;}});
