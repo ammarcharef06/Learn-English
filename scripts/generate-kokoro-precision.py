@@ -2,9 +2,6 @@
 """Generate the literacy precision bank with the open Kokoro-82M TTS model."""
 from pathlib import Path
 import argparse, json, re, subprocess, tempfile
-import numpy as np
-import soundfile as sf
-from kokoro import KPipeline
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/audio/zero"
@@ -34,6 +31,9 @@ def main():
     todo=jobs()
     print(json.dumps({"engine":"Kokoro-82M","license":"Apache-2.0","voice":VOICE,"mode":"write" if args.write else "dry-run","count":len(todo),"categories":{k:sum(1 for x in todo if x[2]==k) for k in sorted({x[2] for x in todo})}},ensure_ascii=False))
     if not args.write: return
+    import numpy as np
+    import soundfile as sf
+    from kokoro import KPipeline
     pipe=KPipeline(lang_code="a")
     generated=skipped=0
     for rel,text,kind in todo:
