@@ -104,6 +104,20 @@ if (audioManifest.audioGeneration?.requiredVoice !== "en-US-AriaNeural" ||
     audioManifest.audioGeneration?.provenanceCommit !== "a3d9553698d85719710d1a40c5532409af7c1478") {
   errors.push("Aria generator provenance must match the documented original edge-tts voice and commit");
 }
+const ariaGeneratorFile = resolve(root, "scripts/generate-aria-audio.mjs");
+if (!existsSync(ariaGeneratorFile)) errors.push("The reproducible Aria text-audio generator is missing");
+else {
+  const ariaGeneratorSource = readFileSync(ariaGeneratorFile, "utf8");
+  if (!ariaGeneratorSource.includes('"en-US-AriaNeural"') ||
+      !ariaGeneratorSource.includes('"--voice"') ||
+      !ariaGeneratorSource.includes('"--write-media"')) {
+    errors.push("Aria generator must request the original en-US-AriaNeural voice and MP3 output");
+  }
+  if (!ariaGeneratorSource.includes("must not be used to fake") ||
+      !ariaGeneratorSource.includes("isolated IPA sounds")) {
+    errors.push("Aria generator must explicitly prohibit treating ordinary TTS text as isolated phoneme audio");
+  }
+}
 
 const alphabet = data.letters || [];
 const letterIds = alphabet.map(letter => letter.id);
