@@ -2,7 +2,10 @@
 import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { LETTER_IDS, LETTER_WORDS, DIGRAPH_SOUND_IDS, DIGRAPH_WORDS } from "../assets/js/core/zero-audio.js";
+const LETTER_IDS="abcdefghijklmnopqrstuvwxyz".split("");
+const LETTER_WORDS={a:"apple",b:"ball",c:"cat",d:"dog",e:"egg",f:"fish",g:"goat",h:"hat",i:"ice",j:"juice",k:"key",l:"lion",m:"moon",n:"nose",o:"orange",p:"pen",q:"queen",r:"rabbit",s:"sun",t:"tree",u:"umbrella",v:"van",w:"water",x:"xylophone",y:"yogurt",z:"zebra"};
+const DIGRAPH_SOUND_IDS=["sh","ch","th-voiceless","th-voiced","ph","ck","ng","oo-long","oo-short","ee","ea","ou"];
+const DIGRAPH_WORDS={sh:"ship",ch:"chair","th-voiceless":"three","th-voiced":"this",ph:"phone",ck:"duck",ng:"king","oo-long":"spoon","oo-short":"book",ee:"bee",ea:"sea",ou:"mouse"};
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),".."),OUT=resolve(ROOT,"assets/audio/zero/precision");
 const IPA={"sh":"ʃ","ch":"tʃ","th-voiceless":"θ","th-voiced":"ð","ph":"f","ck":"k","ng":"ŋ"};
 const esc=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
