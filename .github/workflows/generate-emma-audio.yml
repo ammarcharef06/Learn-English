@@ -45,14 +45,34 @@ jobs:
       - name: Generate and replace the complete Emma speech bank
         run: npm run audio:emma:migrate -- --write --force
 
-      - name: Commit generated audio to development
+      - name: Record generated-bank status
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path = 'curriculum/literacy/audio-manifest.json';
+          const manifest = JSON.parse(fs.readFileSync(path, 'utf8'));
+          manifest.audioGeneration.status = 'emma-generated-awaiting-human-audio-qa';
+          manifest.audioGeneration.lastGeneration = {
+            voice: 'en-US-EmmaNeural',
+            generatedTextFiles: 344,
+            manualPhonemeFilesExcluded: 38,
+            result: 'generation-successful; listening-and-phonetic-QA-required',
+            generatedByWorkflow: 'Generate Emma audio bank'
+          };
+          manifest.audioGeneration.bulkMigrationScope = '344 ordinary-text jobs: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. 38 standalone phoneme rows remain excluded for specialist recording and human phonetic review.';
+          fs.writeFileSync(path, JSON.stringify(manifest, null, 2) + '\n');
+          NODE
+
+      - name: Commit generated audio and manifest to development
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/audio/zero
+          git add assets/audio/zero curriculum/literacy/audio-manifest.json
           if git diff --cached --quiet; then
-            echo "No audio changes to commit."
-          else
-            git commit -m "Generate complete Emma audio bank"
-            git push origin HEAD:development
+            echo "No audio or manifest changes to commit."
+            exit 0
           fi
+          git commit -m "Generate complete Emma audio bank"
+          git fetch origin development
+          git rebase origin/development
+          git push origin HEAD:development
