@@ -35,11 +35,24 @@ if (new Set(assigned).size !== assigned.length) errors.push("A letter is assigne
 for (const id of letterIds) if (!assigned.includes(id)) errors.push(`Letter not assigned to an L1 group: ${id}`);
 for (const id of assigned) if (!letterIds.includes(id)) errors.push(`Unknown letter assigned to L1: ${id}`);
 
+for (const check of data.transferChecks || []) {
+  const ids = (check.items || []).map(item => item.id);
+  if (new Set(ids).size !== ids.length) errors.push(`Duplicate transfer item id in ${check.id}`);
+  if (!Number.isFinite(check.passMark) || check.passMark <= 0 || check.passMark > 1) {
+    errors.push(`Invalid transfer pass mark: ${check.id}`);
+  }
+  for (const [index, item] of (check.items || []).entries()) {
+    if (!Array.isArray(item.choices) || !item.choices.includes(item.answer)) {
+      errors.push(`${check.id} transfer item ${index + 1}: answer is not one of the choices`);
+    }
+  }
+}
+
 const summary = {
   stages: data.stages.length,
   lessons: lessons.length,
   lessonsWithActivities: lessons.filter(lesson => lesson.items?.length).length,
-  alphabetLetters: alphabet.length,
+  alphabetLetters: alphabet.length,\n  transferChecks: (data.transferChecks || []).length,
   errors,
   warnings
 };
