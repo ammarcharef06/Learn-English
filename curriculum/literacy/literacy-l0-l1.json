@@ -1897,7 +1897,7 @@
           "prompt": "أي كلمة تحتوي sh؟",
           "choices": [
             "ship",
-            "shop?",
+            "shop",
             "sip"
           ],
           "answer": "ship"
