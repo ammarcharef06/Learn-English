@@ -39,6 +39,21 @@ jobs:
       - name: Install Edge TTS client
         run: python -m pip install --upgrade pip edge-tts
 
+      - name: Preview and generate sentence-only bank
+        run: |
+          npm run audio:emma:sentences
+          npm run audio:emma:sentences -- --write --force
+
+      - name: Preview precision Emma Neural HD bank
+        run: npm run audio:emma:precision
+
+      - name: Generate precision bank when Azure credentials are configured
+        if: ${{ secrets.SPEECH_KEY != '' && secrets.SPEECH_REGION != '' }}
+        env:
+          SPEECH_KEY: ${{ secrets.SPEECH_KEY }}
+          SPEECH_REGION: ${{ secrets.SPEECH_REGION }}
+        run: npm run audio:emma:precision -- --write --force
+
       - name: Verify complete conversion map (dry run)
         run: npm run audio:emma:migrate
 
