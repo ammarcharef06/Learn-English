@@ -96,18 +96,18 @@ for (const group of audioManifest.phonemeGroups || []) {
     }
   }
 }
-if (audioManifest.audioGeneration?.status !== "generator-identified-redistribution-review-required") {
-  errors.push("Audio generation must identify the historical Aria generator and retain redistribution review status");
+if (audioManifest.audioGeneration?.status !== "emma-selected-legacy-bank-migration-pending") {
+  errors.push("Audio generation must identify Emma as target and retain legacy-bank migration status");
 }
 if (audioManifest.audioGeneration?.requiredVoice !== "en-US-EmmaNeural" ||
     audioManifest.audioGeneration?.generator !== "edge-tts Python client using Microsoft Edge online TTS" ||
-    !Array.isArray(audioManifest.audioGeneration?.provenanceCommits) ||
-    !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "286eb39dc4a781a8b0e0f9b5d9c612d48cb22286") ||
-    !audioManifest.audioGeneration.provenanceCommits.some(item => item.sha === "a3d9553698d85719710d1a40c5532409af7c1478")) {
-  errors.push("Aria generator provenance must match both historical edge-tts voice-generation commits");
+    !Array.isArray(audioManifest.audioGeneration?.legacyBank?.provenanceCommits) ||
+    !audioManifest.audioGeneration.legacyBank.provenanceCommits.includes("286eb39dc4a781a8b0e0f9b5d9c612d48cb22286") ||
+    !audioManifest.audioGeneration.legacyBank.provenanceCommits.includes("a3d9553698d85719710d1a40c5532409af7c1478")) {
+  errors.push("Legacy Aria bank provenance must match both historical edge-tts voice-generation commits");
 }
 const ariaGeneratorFile = resolve(root, "scripts/generate-emma-audio.mjs");
-if (!existsSync(ariaGeneratorFile)) errors.push("The reproducible Aria text-audio generator is missing");
+if (!existsSync(ariaGeneratorFile)) errors.push("The Emma text-audio generator is missing");
 else {
   const ariaGeneratorSource = readFileSync(ariaGeneratorFile, "utf8");
   if (!ariaGeneratorSource.includes('"en-US-EmmaNeural"') ||
