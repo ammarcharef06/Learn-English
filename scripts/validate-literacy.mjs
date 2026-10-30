@@ -69,7 +69,7 @@ for (const letter of lettersInBank) {
   }
 }
 const digraphIds = ["sh", "ch", "th-voiceless", "th-voiced", "ph", "ck", "ng", "oo-long", "oo-short", "ee", "ea", "ou"];
-const consonantPhonemeIds = ["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","m","n","eng","l","r","h","w","y"];
+const consonantPhonemeIds = ["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","jh","m","n","eng","l","r","h","w","y"];
 for (const id of consonantPhonemeIds) {
   for (const asset of [
     `assets/audio/zero/p/phoneme-${id}.mp3`,
