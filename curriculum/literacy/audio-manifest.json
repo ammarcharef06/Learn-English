@@ -427,6 +427,6 @@
     "phonemeWarning": "Ordinary TTS text is not a reliable isolated phoneme generator; phoneme recordings require reviewed phonetic prompts and human listening QA.",
     "policy": "Use en-US-EmmaNeural for all new recordings. Do not use Aria, EmmaMultilingual, Google Translate, browser SpeechSynthesis, or any other voice as a silent substitute. Review Microsoft service terms and redistribution rights before publishing generated files.",
     "bulkMigrationTool": "scripts/migrate-audio-to-emma.mjs",
-    "bulkMigrationScope": "All ordinary-text entries in AUDIO_MAP plus letter names and digraph example words. Isolated phoneme recordings are excluded."
+    "bulkMigrationScope": "All 356 ordinary-text jobs from EMMA_AUDIO_CONVERSION_MAP.csv: 280 AUDIO_MAP texts, 26 letter names, 26 letter example words, and 12 digraph example words. The 38 standalone phoneme inventory rows are excluded for manual phonetic recording and review."
   }
 }
