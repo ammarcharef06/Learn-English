@@ -126,7 +126,6 @@ function renderLetterTask(id,selectedMode){
  ];
  const mode=modes.find(m=>m.id===selectedMode)||modes[Math.floor(Math.random()*modes.length)],choices=[...new Set(mode.choices||[])].sort(()=>Math.random()-.5),old=state(id);
  target.innerHTML='<section class="lit-letter-task"><div class="lit-mode-tabs">'+modes.map(m=>'<button type="button" data-mode="'+m.id+'" class="'+(m.id===mode.id?"active":"")+'">'+m.label+'</button>').join("")+'</div><p class="eyebrow">'+mode.label+'</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>'+mode.prompt+'</p>'+(mode.input?'<div class="lit-write-row"><input id="letter-write" type="text" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="3" placeholder="m M"><button type="button" id="check-write">تحقق</button></div>':'<div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div>')+'<p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. لا يختبر هذا النشاط صوت الحرف أو نطقه.</small><p class="lit-progress-note">الإتقان يتطلب نجاحًا في المهارات الأربع في يومين مختلفين لكل مهارة.</p></section>';
- target.querySelectorAll("[data-speak]").forEach(btn=>btn.onclick=()=>speak(btn.dataset.speak));
  target.querySelectorAll("[data-mode]").forEach(btn=>btn.onclick=()=>renderLetterTask(id,btn.dataset.mode));
  const submitAnswer=(answer)=>{
   target.querySelectorAll("[data-choice]").forEach(x=>x.disabled=true);
