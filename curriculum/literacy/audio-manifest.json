@@ -450,5 +450,22 @@
       ],
       "note": "Neural HD is the higher-definition Emma persona. This generator requires Azure credentials and never falls back to standard TTS."
     }
+  },
+  "precisionBank": {
+    "status": "open-model-generation-configured-awaiting-workflow-run",
+    "engine": "Kokoro-82M",
+    "model": "hexgrad/Kokoro-82M",
+    "modelLicense": "Apache-2.0",
+    "voice": "af_heart",
+    "locale": "en-US",
+    "outputRoot": "assets/audio/zero/",
+    "files": {
+      "letterNames": 26,
+      "letterExamples": 26,
+      "graphemeSounds": 12,
+      "graphemeExamples": 12,
+      "total": 76
+    },
+    "note": "هذه الحزمة مخصصة للأسماء والأمثلة وأصوات الحروف المركبة. لا تُعد ملفات IPA المنفردة معتمدة؛ يلزم اعتماد لهجة الحركات ومراجعة صوتية بشرية."
   }
 }
