@@ -33,18 +33,19 @@ function renderLesson(id){
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أجب عن جميع الأسئلة أولًا.";return}
   const old=state(id),score=lesson.items.length?correct/lesson.items.length:0;
   progress.lessons||={};const today=new Date().toISOString().slice(0,10);const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];progress.lessons[id]={attempts:old.attempts+1,best:Math.max(old.best,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
-  save();render();renderLesson(id);$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم محاولتان على الأقل ونتيجة 90% في إحداهما أو أفضل أداء متكرر.");
+  save();render();renderLesson(id);$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم تحقيق 90% على الأقل في يومين مختلفين.");
  };
 }
-function renderLetterTask(id){
+function renderLetterTask(id,selectedMode){
  const item=data.letters.find(x=>x.id===id),target=$("#letter-task");if(!item||!target)return;
  const modes=[
   {id:"case",label:"مطابقة الكبير والصغير",prompt:"اختر الحرف الكبير المطابق للحرف الصغير "+item.lower,answer:item.upper,choices:[item.upper,...data.letters.filter(x=>x.id!==id).slice((item.order*3)%20,(item.order*3)%20+2).map(x=>x.upper)]},
   {id:"name",label:"استرجاع اسم الحرف",prompt:"أي حرف اسمه "+item.name+"؟",answer:item.upper,choices:[item.upper,...data.letters.filter(x=>x.id!==id).slice((item.order*5+2)%21,(item.order*5+2)%21+2).map(x=>x.upper)]},
   {id:"identify",label:"التعرف إلى الحرف",prompt:"اختر الحرف الصغير الذي يقابل "+item.upper,answer:item.lower,choices:[item.lower,...data.letters.filter(x=>x.id!==id).slice((item.order*7+1)%21,(item.order*7+1)%21+2).map(x=>x.lower)]}
  ];
- const mode=modes[Math.floor(Math.random()*modes.length)],choices=[...new Set(mode.choices)].sort(()=>Math.random()-.5),old=state(id);
- target.innerHTML='<section class="lit-letter-task"><p class="eyebrow">'+mode.label+'</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>'+mode.prompt+'</p><div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div><p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. لا يختبر هذا النشاط صوت الحرف أو نطقه.</small><p class="lit-progress-note">لإثبات الإتقان: نجاح في الأنواع الثلاثة، في يومين مختلفين لكل نوع.</p></section>';
+ const mode=modes.find(m=>m.id===selectedMode)||modes[Math.floor(Math.random()*modes.length)],choices=[...new Set(mode.choices)].sort(()=>Math.random()-.5),old=state(id);
+ target.innerHTML='<section class="lit-letter-task"><div class="lit-mode-tabs">'+modes.map(m=>'<button type="button" data-mode="'+m.id+'" class="'+(m.id===mode.id?"active":"")+'">'+m.label+'</button>').join("")+'</div><p class="eyebrow">'+mode.label+'</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>'+mode.prompt+'</p><div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+esc(c)+'">'+esc(c)+'</button>').join("")+'</div><p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. لا يختبر هذا النشاط صوت الحرف أو نطقه.</small><p class="lit-progress-note">لإثبات الإتقان: نجاح في الأنواع الثلاثة، في يومين مختلفين لكل نوع.</p></section>';
+ target.querySelectorAll("[data-mode]").forEach(btn=>btn.onclick=()=>renderLetterTask(id,btn.dataset.mode));
  target.querySelectorAll("[data-choice]").forEach(btn=>btn.onclick=()=>{
   target.querySelectorAll("[data-choice]").forEach(x=>x.disabled=true);
   const ok=btn.dataset.choice===mode.answer,today=new Date().toISOString().slice(0,10),current=state(id),skills={...(current.skills||{})},skill={...(skills[mode.id]||{})};
