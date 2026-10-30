@@ -65,6 +65,17 @@ jobs:
           print(f"Expected {len(expected)} files; missing/invalid: {len(missing)}")
           if missing: raise SystemExit("\\n".join(missing))
           PY
+      - name: Mark verified precision inventory in manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path("curriculum/literacy/audio-manifest.json")
+          data=json.loads(path.read_text(encoding="utf-8"))
+          data["precisionBank"]["status"]="generated-in-ci-awaiting-human-audio-qa"
+          data["precisionBank"]["verifiedFiles"]=120
+          path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+          PY
       - name: Run project checks
         run: |
           npm ci
