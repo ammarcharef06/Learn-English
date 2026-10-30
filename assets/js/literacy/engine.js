@@ -32,7 +32,7 @@ function renderLesson(id){
   lesson.items.forEach((item,i)=>{const p=panel.querySelector('input[name="q'+i+'"]:checked');if(p){answered++;if(p.value===item.answer)correct++}});
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أجب عن جميع الأسئلة أولًا.";return}
   const old=state(id),score=lesson.items.length?correct/lesson.items.length:0;
-  progress.lessons||={};progress.lessons[id]={attempts:old.attempts+1,best:Math.max(old.best,score),mastered:old.mastered||(old.attempts+1>=2&&score>=.9),lastScore:score,lastAttempt:new Date().toISOString()};
+  progress.lessons||={};const today=new Date().toISOString().slice(0,10);const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];progress.lessons[id]={attempts:old.attempts+1,best:Math.max(old.best,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
   save();render();renderLesson(id);$("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"تم تسجيل الإتقان.":"يلزم محاولتان على الأقل ونتيجة 90% في إحداهما أو أفضل أداء متكرر.");
  };
 }
@@ -43,7 +43,7 @@ function renderLetterTask(id){
  target.innerHTML='<section class="lit-letter-task"><p class="eyebrow">تدريب اسم الحرف وشكله</p><div class="letter-focus">'+item.lower+' <span>'+item.upper+'</span></div><p>اختر الحرف الكبير المطابق للحرف الصغير '+item.lower+'</p><div class="lit-choice-row">'+choices.map(c=>'<button data-choice="'+c+'">'+c+'</button>').join("")+'</div><p id="letter-feedback" role="status"></p><small>اسم الحرف: '+esc(item.name)+'. هذا ليس اختبارًا لصوت الحرف.</small></section>';
  target.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
   const ok=b.dataset.choice===item.upper,old=state(id),attempts=old.attempts+1;
-  progress.lessons||={};progress.lessons[id]={attempts,best:Math.max(old.best,ok?1:0),mastered:old.mastered||(attempts>=2&&ok),lastScore:ok?1:0,lastAttempt:new Date().toISOString()};
+  progress.lessons||={};const today=new Date().toISOString().slice(0,10);const skills={...(old.skills||{}),[taskMode]:{...(old.skills?.[taskMode]||{}),attempts:(old.skills?.[taskMode]?.attempts||0)+1,correctDates:[...new Set([...(old.skills?.[taskMode]?.correctDates||[]),...(ok?[today]:[])])]}};const mastered=Object.keys(skills).filter(k=>skills[k].correctDates.length>=2).length>=3;progress.lessons[id]={attempts,best:Math.max(old.best,ok?1:0),skills,mastered,lastScore:ok?1:0,lastAttempt:new Date().toISOString()};
   save();$("#letter-feedback").textContent=ok?"صحيح. أعد التدريب في محاولة لاحقة لتأكيد الاسترجاع.":"ليست المطابقة الصحيحة؛ راجع الشكلين ثم أعد المحاولة.";
  });
 }
