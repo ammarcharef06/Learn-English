@@ -1,0 +1,49 @@
+name: Literacy and project validation
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'assets/js/literacy/**'
+      - 'assets/css/literacy.css'
+      - 'curriculum/literacy/**'
+      - 'scripts/validate-literacy.mjs'
+      - 'zero.html'
+      - 'service-worker.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/literacy-validation.yml'
+  pull_request:
+    branches: [main, development]
+    paths:
+      - 'assets/js/literacy/**'
+      - 'assets/css/literacy.css'
+      - 'curriculum/literacy/**'
+      - 'scripts/validate-literacy.mjs'
+      - 'zero.html'
+      - 'service-worker.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/literacy-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate literacy curriculum
+        run: npm run validate:literacy
+      - name: Run project test suite
+        run: npm test
