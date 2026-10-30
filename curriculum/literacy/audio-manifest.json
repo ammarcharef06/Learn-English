@@ -435,6 +435,22 @@
       "commit": "5eaa5d5439ebc4a7a690b3664952babc2be2134c",
       "gitChangedMp3Files": 300,
       "totalMp3FilesInZeroBank": 356
+    },
+    "sentenceBank": {
+      "voice": "en-US-EmmaNeural",
+      "path": "assets/audio/zero/sentences/",
+      "scope": "Sentence-only playback; separate from isolated words."
+    },
+    "precisionBank": {
+      "voice": "en-US-Emma:DragonHDLatestNeural",
+      "provider": "Azure AI Speech REST API",
+      "path": "assets/audio/zero/precision/",
+      "scope": "Letter names, letter examples, digraph phonemes and examples, and consonant phonemes.",
+      "requiresSecrets": [
+        "SPEECH_KEY",
+        "SPEECH_REGION"
+      ],
+      "note": "Neural HD is the higher-definition Emma persona. This generator requires Azure credentials and never falls back to standard TTS."
     }
   }
 }
