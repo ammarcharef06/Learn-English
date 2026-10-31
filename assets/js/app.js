@@ -46,6 +46,16 @@ function setupRoutes() {
   route('/', () => renderDashboard(view()));
   route('/onboarding', () => renderEshOnboarding(view()));
   route('/lessons', () => renderLessons(view()));
+  route('/literacy', () => {
+    const host = view();
+    host.innerHTML = '<section id="literacy-experience"><div id="literacy-app" aria-live="polite">جارٍ تحميل مسار محو الأمية…</div></section>';
+    import('./literacy/engine.js').then(({ bootLiteracy }) => bootLiteracy(qs('#literacy-app')))
+      .catch((error) => {
+        console.error('Could not open the literacy path.', error);
+        const target = qs('#literacy-app');
+        if (target) target.innerHTML = '<div class="lit-info" role="alert">تعذر تحميل مسار محو الأمية. أعد المحاولة بعد تحديث الصفحة.</div>';
+      });
+  });
   route('/level/:levelId', (p) => renderLevel(view(), p.levelId));
   route('/unit/:unitId', (p) => renderUnit(view(), p.unitId));
   route('/lesson/:unitId/:index', (p) => renderLesson(view(), p.unitId, p.index));
