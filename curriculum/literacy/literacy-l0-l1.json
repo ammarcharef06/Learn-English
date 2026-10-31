@@ -409,7 +409,7 @@
                   "choices": [
                     "/p/",
                     "/b/",
-                    "/s/"
+                    "/t/"
                   ],
                   "answer": "/p/"
                 }
@@ -447,8 +447,8 @@
                   "audioText": "phoneme:ash",
                   "choices": [
                     "/æ/",
-                    "/p/",
-                    "/b/"
+                    "/ɪ/",
+                    "/ɛ/"
                   ],
                   "answer": "/æ/"
                 },
@@ -457,8 +457,8 @@
                   "audioText": "phoneme:ih",
                   "choices": [
                     "/ɪ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɛ/"
                   ],
                   "answer": "/ɪ/"
                 }
@@ -553,8 +553,8 @@
                   "audioText": "phoneme:ash",
                   "choices": [
                     "/æ/",
-                    "/p/",
-                    "/b/"
+                    "/ɪ/",
+                    "/ɛ/"
                   ],
                   "answer": "/æ/"
                 }
@@ -583,8 +583,8 @@
                   "audioText": "phoneme:ash",
                   "choices": [
                     "/æ/",
-                    "/p/",
-                    "/b/"
+                    "/ɪ/",
+                    "/ɛ/"
                   ],
                   "answer": "/æ/"
                 }
@@ -613,8 +613,8 @@
                   "audioText": "phoneme:ih",
                   "choices": [
                     "/ɪ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɛ/"
                   ],
                   "answer": "/ɪ/"
                 }
@@ -643,8 +643,8 @@
                   "audioText": "phoneme:eh",
                   "choices": [
                     "/ɛ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɪ/"
                   ],
                   "answer": "/ɛ/"
                 }
@@ -673,8 +673,8 @@
                   "audioText": "phoneme:uh",
                   "choices": [
                     "/ʌ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɪ/"
                   ],
                   "answer": "/ʌ/"
                 }
@@ -703,8 +703,8 @@
                   "audioText": "phoneme:eh",
                   "choices": [
                     "/ɛ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɪ/"
                   ],
                   "answer": "/ɛ/"
                 }
@@ -749,7 +749,7 @@
                   "choices": [
                     "/p/",
                     "/b/",
-                    "/s/"
+                    "/t/"
                   ],
                   "answer": "/p/"
                 }
@@ -858,7 +858,7 @@
                   "choices": [
                     "/p/",
                     "/b/",
-                    "/s/"
+                    "/t/"
                   ],
                   "answer": "/p/"
                 }
@@ -888,8 +888,8 @@
                   "audioText": "phoneme:ih",
                   "choices": [
                     "/ɪ/",
-                    "/p/",
-                    "/b/"
+                    "/æ/",
+                    "/ɛ/"
                   ],
                   "answer": "/ɪ/"
                 }
@@ -943,7 +943,7 @@
                   "choices": [
                     "/p/",
                     "/b/",
-                    "/s/"
+                    "/t/"
                   ],
                   "answer": "/p/"
                 }
