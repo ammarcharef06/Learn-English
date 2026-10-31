@@ -716,7 +716,7 @@ check('الإصدار الأول يعرض A1 وA2 فقط ويحتفظ بالمس
   && cur.FUTURE_LEVELS.some((level) => level.id === 'b1'));
 check('الوحدات النشطة تخص A1 وA2 فقط', cur.ALL_UNITS.length === 17
   && cur.ALL_UNITS.every((unit) => ['a1', 'a2'].includes(unit.levelId)));
-check('المطالعات النشطة تخص A1 وA2 فقط', cur.READINGS.length === 9
+check('المطالعات النشطة تخص A1 وA2 فقط', cur.READINGS.length === 13
   && cur.READINGS.every((reading) => ['a1', 'a2'].includes(reading.level)));
 check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
 check('المطالعات موزعة على المستويات', cur.readingsOfLevel('a1').length === 8
