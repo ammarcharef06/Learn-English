@@ -137,7 +137,7 @@ try {
   ok(`المنهج: ${LEVELS.length} مستويات · ${stats.units} وحدة · ${stats.vocab} كلمة · ${stats.grammar} درس قواعد · ${stats.sentences} جملة`);
   if (LEVELS.length !== 2 || LEVELS.some((level) => !['a1', 'a2'].includes(level.id))) bad('المستويات النشطة يجب أن تكون A1 وA2 فقط');
   if (ALL_UNITS.some((unit) => !['a1', 'a2'].includes(unit.levelId))) bad('يوجد مستوى مستقبلي ضمن الوحدات النشطة');
-  if (READINGS.length !== 9 || READINGS.some((reading) => !['a1', 'a2'].includes(reading.level))) bad('المطالعات النشطة يجب أن تخص A1 وA2 فقط');
+  if (READINGS.length !== 13 || READINGS.some((reading) => !['a1', 'a2'].includes(reading.level))) bad('المطالعات النشطة يجب أن تخص A1 وA2 فقط');
 
   const unitIds = new Set();
   for (const u of ALL_UNITS) {
@@ -192,7 +192,7 @@ try {
 /* ---------- 6. مولّد الأسئلة ---------- */
 try {
   const qg = await import(pathToFileURL(join(ROOT, 'assets/js/core/quizgen.js')).href);
-  const sources = ['all', 'pronouns', 'connectors', 'questions', 'vocab', 'sentences', 'reading', 'key', 'level:a1', 'level:a2', 'level:b1', 'unit:a1u1'];
+  const sources = ['all', 'pronouns', 'connectors', 'questions', 'vocab', 'sentences', 'reading', 'key', 'level:a1', 'level:a2', 'unit:a1u1'];
   for (const src of sources) {
     const entries = qg.entriesForSource(src);
     if (!entries.length) bad(`المصدر «${src}» لا يعطي عناصر`);
