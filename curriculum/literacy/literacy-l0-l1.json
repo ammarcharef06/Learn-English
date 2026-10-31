@@ -1,0 +1,2203 @@
+{
+  "schemaVersion": 1,
+  "curriculumId": "english-literacy-ar",
+  "language": "ar",
+  "status": "active-pilot",
+  "stages": [
+    {
+      "id": "L0",
+      "title": "التهيئة قبل الحروف",
+      "outcome": "الاستعداد للتعامل مع نظام الكتابة اللاتيني والتمييز البصري والسمعي الأولي.",
+      "units": [
+        {
+          "id": "L0-U1",
+          "title": "التعرف إلى نظام الكتابة",
+          "lessons": [
+            {
+              "id": "L0-U1-L01",
+              "title": "اللغة المنطوقة والكتابة والرمز",
+              "objective": "يميز بين الصوت المكتوب والرمز والصورة.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي خيار يمثل حرفًا مكتوبًا؟",
+                  "choices": [
+                    "A",
+                    "🔊",
+                    "🌳"
+                  ],
+                  "answer": "A"
+                },
+                {
+                  "prompt": "أي خيار يمثل صورة لا حرفًا؟",
+                  "choices": [
+                    "m",
+                    "☀️",
+                    "s"
+                  ],
+                  "answer": "☀️"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L02",
+              "title": "مطابقة الرموز",
+              "objective": "يطابق الرمز بنسخة مطابقة له.",
+              "activity": "match",
+              "items": [
+                {
+                  "prompt": "اختر الرمز المطابق: b",
+                  "choices": [
+                    "d",
+                    "b",
+                    "p"
+                  ],
+                  "answer": "b"
+                },
+                {
+                  "prompt": "اختر الرمز المطابق: M",
+                  "choices": [
+                    "W",
+                    "N",
+                    "M"
+                  ],
+                  "answer": "M"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L03",
+              "title": "الحرف والكلمة والسطر",
+              "objective": "يميز الحرف المفرد عن سلسلة الحروف.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي خيار حرف واحد؟",
+                  "choices": [
+                    "cat",
+                    "m",
+                    "sun"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "prompt": "أي خيار سلسلة حروف تكوّن كلمة مكتوبة؟",
+                  "choices": [
+                    "A",
+                    "dog",
+                    "/"
+                  ],
+                  "answer": "dog"
+                }
+              ]
+            },
+            {
+              "id": "L0-U1-L04",
+              "title": "اتجاه الكتابة اللاتينية",
+              "objective": "يتعرف أن السطر الإنجليزي يبدأ من اليسار إلى اليمين.",
+              "activity": "sequence",
+              "items": [
+                {
+                  "prompt": "في أي اتجاه نقرأ هذا السطر؟",
+                  "choices": [
+                    "من اليسار إلى اليمين",
+                    "من اليمين إلى اليسار"
+                  ],
+                  "answer": "من اليسار إلى اليمين"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L0-U2",
+          "title": "التمييز البصري",
+          "lessons": [
+            {
+              "id": "L0-U2-L01",
+              "title": "المتشابه والمختلف",
+              "objective": "يكتشف اختلافًا بصريًا بين رموز متقاربة.",
+              "activity": "match",
+              "items": [
+                {
+                  "prompt": "ما الرمز المختلف؟ b  b  d  b",
+                  "choices": [
+                    "الأول",
+                    "الثاني",
+                    "الثالث",
+                    "الرابع"
+                  ],
+                  "answer": "الثالث"
+                }
+              ]
+            },
+            {
+              "id": "L0-U2-L02",
+              "title": "الموقع والاتجاه",
+              "objective": "يميز مواضع الرموز واتجاهها.",
+              "activity": "classify",
+              "items": [
+                {
+                  "prompt": "أي حرف له ساق صاعدة في هذا الخط؟",
+                  "choices": [
+                    "b",
+                    "o",
+                    "c"
+                  ],
+                  "answer": "b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L0-U3",
+          "title": "الاستعداد السمعي",
+          "lessons": [
+            {
+              "id": "L0-U3-L01",
+              "title": "الانتباه للصوت",
+              "objective": "يتعرف وجود الصوت ويقارن بين نماذج مسموعة.",
+              "activity": "recorded-letter-name-listening",
+              "items": [
+                {
+                  "id": "L0-U3-Q1",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "m",
+                  "choices": [
+                    "m",
+                    "s",
+                    "a"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "id": "L0-U3-Q2",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "s",
+                  "choices": [
+                    "m",
+                    "s",
+                    "t"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "id": "L0-U3-Q3",
+                  "prompt": "استمع إلى اسم الحرف، ثم اختر الحرف الذي سمعت اسمه.",
+                  "audioText": "a",
+                  "choices": [
+                    "a",
+                    "e",
+                    "i"
+                  ],
+                  "answer": "a"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-visual-choice"
+            }
+          ]
+        },
+        {
+          "id": "L0-U4",
+          "title": "الوعي الأولي بأصوات الكلام",
+          "lessons": [
+            {
+              "id": "L0-U4-L01",
+              "title": "ملاحظة أصوات الكلام",
+              "objective": "يلاحظ أن الأصوات الكلامية تنتج بحركات أعضاء النطق.",
+              "activity": "recorded-word-onset-listening",
+              "items": [
+                {
+                  "id": "L0-U4-Q1",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "moon",
+                  "choices": [
+                    "m",
+                    "s",
+                    "t"
+                  ],
+                  "answer": "m"
+                },
+                {
+                  "id": "L0-U4-Q2",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "sun",
+                  "choices": [
+                    "m",
+                    "s",
+                    "p"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "id": "L0-U4-Q3",
+                  "prompt": "استمع إلى الكلمة. ما الحرف الذي يبدأ به صوتها؟",
+                  "audioText": "tree",
+                  "choices": [
+                    "t",
+                    "b",
+                    "d"
+                  ],
+                  "answer": "t"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-visual-choice"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "L1",
+      "title": "الأبجدية وأسماء الحروف",
+      "outcome": "يتعرف الحروف الكبيرة والصغيرة ويسميها ويكتبها؛ ويظل اختبار الأصوات منفصلًا إلى حين توفير تسجيلات موثوقة.",
+      "units": [
+        {
+          "id": "L1-U1",
+          "title": "المجموعة الأولى: m, s, a, t",
+          "lessons": [],
+          "objective": "التعرّف على أشكال m وs وa وt، والتمييز بين الحرف الكبير والصغير واسم الحرف.",
+          "completionNote": "لا تنتقل قبل تمييز الأشكال الأربعة في أكثر من سياق.",
+          "letterIds": [
+            "letter-m",
+            "letter-s",
+            "letter-a",
+            "letter-t"
+          ]
+        },
+        {
+          "id": "L1-U2",
+          "title": "المجموعة الثانية: p, i, n",
+          "lessons": [],
+          "objective": "إضافة p وi وn، ومراجعة المجموعة الأولى باسترجاع متباعد.",
+          "completionNote": "راجع الحروف السابقة مع كل حرف جديد.",
+          "letterIds": [
+            "letter-p",
+            "letter-i",
+            "letter-n"
+          ]
+        },
+        {
+          "id": "L1-U3",
+          "title": "المجموعة الثالثة: c, k, e",
+          "lessons": [],
+          "objective": "إضافة c وk وe، ومقارنة الحروف المتشابهة بصريًا.",
+          "completionNote": "انتبه إلى اختلاف الشكل بين c وe وبين الحروف الكبيرة والصغيرة.",
+          "letterIds": [
+            "letter-c",
+            "letter-k",
+            "letter-e"
+          ]
+        },
+        {
+          "id": "L1-U4",
+          "title": "المجموعة الرابعة: h, r, d",
+          "lessons": [],
+          "objective": "إضافة h وr وd، وتوسيع التعرف البصري والاسترجاع.",
+          "completionNote": "اخلط حروف المجموعات السابقة في المراجعة.",
+          "letterIds": [
+            "letter-h",
+            "letter-r",
+            "letter-d"
+          ]
+        },
+        {
+          "id": "L1-U5",
+          "title": "المجموعة الخامسة: o, g, l",
+          "lessons": [],
+          "objective": "إضافة o وg وl، وتثبيت أسماء الحروف وأشكالها.",
+          "completionNote": "لا تعتمد على ترتيب الأبجدية وحده في الإجابة.",
+          "letterIds": [
+            "letter-o",
+            "letter-g",
+            "letter-l"
+          ]
+        },
+        {
+          "id": "L1-U6",
+          "title": "المجموعة السادسة: f, b, u",
+          "lessons": [],
+          "objective": "إضافة f وb وu، والتدرب على الاسترجاع المختلط.",
+          "completionNote": "ميّز بين اسم الحرف وصوته؛ هذا المسار يختبر الاسم والشكل فقط.",
+          "letterIds": [
+            "letter-f",
+            "letter-b",
+            "letter-u"
+          ]
+        },
+        {
+          "id": "L1-U7",
+          "title": "المجموعة السابعة: j, v, w",
+          "lessons": [],
+          "objective": "إضافة j وv وw مع مراجعة تراكمية.",
+          "completionNote": "راجع الحروف في ترتيب عشوائي.",
+          "letterIds": [
+            "letter-j",
+            "letter-v",
+            "letter-w"
+          ]
+        },
+        {
+          "id": "L1-U8",
+          "title": "المجموعة الثامنة: y, z, x, q",
+          "lessons": [],
+          "objective": "إضافة y وz وx وq، ثم مراجعة شاملة للحروف الستة والعشرين.",
+          "completionNote": "إتمام هذه المجموعة لا يعني إتقان أصوات الحروف أو القراءة.",
+          "letterIds": [
+            "letter-y",
+            "letter-z",
+            "letter-x",
+            "letter-q"
+          ]
+        }
+      ],
+      "masteryCriteria": [
+        "نجاح في مطابقة الكبير والصغير في يومين مختلفين",
+        "استرجاع اسم الحرف في يومين مختلفين",
+        "التعرف إلى الحرف الصغير من الكبير في يومين مختلفين",
+        "كتابة الحرفين الصغير والكبير من الذاكرة في يومين مختلفين",
+        "لا تقيس هذه المعايير نطق الفونيمات أو مهارة الكتابة اليدوية بالقلم"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "الأصوات وفك الرموز",
+      "outcome": "يحلل أصوات الكلمات المنطوقة، ويربط الفونيمات بالتهجئات المدروسة، ويدمجها لقراءة كلمات جديدة ويتهجاها.",
+      "units": [
+        {
+          "id": "L2-U1",
+          "title": "الوعي الصوتي والفونيمي",
+          "lessons": [
+            {
+              "id": "L2-U1-L01",
+              "title": "الصوت الأول والأخير",
+              "objective": "يحدد الصوت الأول والأخير في كلمة منطوقة.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "في كلمة sun، ما الحرف الذي يمثل الصوت الأول؟",
+                  "choices": [
+                    "s",
+                    "u",
+                    "n"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "prompt": "في كلمة map، ما الحرف الذي يمثل الصوت الأخير؟",
+                  "choices": [
+                    "m",
+                    "a",
+                    "p"
+                  ],
+                  "answer": "p"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U1-L02",
+              "title": "أصوات الوسط والحركات القصيرة",
+              "objective": "يميز صوت العلة القصير في كلمات CVC.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي حرف يمثل صوت الوسط في cat؟",
+                  "choices": [
+                    "c",
+                    "a",
+                    "t"
+                  ],
+                  "answer": "a"
+                },
+                {
+                  "prompt": "أي كلمة تحتوي على الصوت القصير /ɪ/؟",
+                  "choices": [
+                    "sit",
+                    "sat",
+                    "set"
+                  ],
+                  "answer": "sit"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U1-L03",
+              "title": "دمج الأصوات وفصلها",
+              "objective": "يدمج ثلاثة أصوات ويفصل كلمة قصيرة إلى أصواتها.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "ما الكلمة الناتجة عن /m/ /æ/ /t/؟",
+                  "choices": [
+                    "mat",
+                    "met",
+                    "man"
+                  ],
+                  "answer": "mat"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U1-L04",
+              "title": "عدّ الأصوات لا أسماء الحروف",
+              "objective": "يميز عدد الفونيمات في كلمات قصيرة.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "كم صوتًا أساسيًا في كلمة ship؟",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            }
+          ]
+        },
+        {
+          "id": "L2-U2",
+          "title": "قراءة أنماط الكلمات القصيرة",
+          "lessons": [
+            {
+              "id": "L2-U2-L01",
+              "title": "النمط VC",
+              "objective": "يفك كلمات قصيرة من نمط حرف علة ثم ساكن.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي تسلسل يقرأ كلمة am؟",
+                  "choices": [
+                    "/æ/ /m/",
+                    "/m/ /æ/",
+                    "/s/ /m/"
+                  ],
+                  "answer": "/æ/ /m/"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U2-L02",
+              "title": "النمط CVC: صوت /æ/",
+              "objective": "يقرأ كلمات قصيرة جديدة تحتوي /æ/.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "اختر الكلمة التي تبدأ بـ /m/ وتنتهي بـ /p/ وفي وسطها /æ/.",
+                  "choices": [
+                    "map",
+                    "mip",
+                    "mop"
+                  ],
+                  "answer": "map"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U2-L03",
+              "title": "النمط CVC: صوت /ɪ/",
+              "objective": "يفك كلمات من نمط CVC بصوت /ɪ/.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي كلمة توافق /p/ /ɪ/ /n/؟",
+                  "choices": [
+                    "pen",
+                    "pin",
+                    "pan"
+                  ],
+                  "answer": "pin"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U2-L04",
+              "title": "النمط CVC: صوت /ɛ/",
+              "objective": "يفك كلمات من نمط CVC بصوت /ɛ/.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي كلمة توافق /b/ /ɛ/ /d/؟",
+                  "choices": [
+                    "bad",
+                    "bed",
+                    "bid"
+                  ],
+                  "answer": "bed"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U2-L05",
+              "title": "الحركات القصيرة الأخرى",
+              "objective": "يميز أنماط الحركات القصيرة وفق النموذج الصوتي المعتمد.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي كلمة توافق /s/ /ʌ/ /n/؟",
+                  "choices": [
+                    "sun",
+                    "sin",
+                    "son"
+                  ],
+                  "answer": "sun"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U2-L06",
+              "title": "كلمات جديدة غير محفوظة",
+              "objective": "ينقل استراتيجية الدمج إلى كلمات لم يتدرب عليها حرفيًا.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي كلمة جديدة توافق /t/ /ɛ/ /n/؟",
+                  "choices": [
+                    "ten",
+                    "tan",
+                    "tin"
+                  ],
+                  "answer": "ten"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            }
+          ]
+        },
+        {
+          "id": "L2-U3",
+          "title": "التهجئة وبناء الكلمات",
+          "lessons": [
+            {
+              "id": "L2-U3-L01",
+              "title": "مربعات الأصوات",
+              "objective": "يمثل كل فونيم في كلمة قصيرة بمربع مستقل.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "كلمة map تتكون من كم صوتًا منفصلًا؟",
+                  "input": true,
+                  "answer": "3",
+                  "accepted": [
+                    "ثلاثة",
+                    "ثلاث"
+                  ]
+                },
+                {
+                  "prompt": "اكتب الأصوات بالترتيب في كلمة sun مفصولة بمسافات (استخدم الحروف لتمثيلها مؤقتًا).",
+                  "input": true,
+                  "answer": "s u n",
+                  "accepted": [
+                    "s-u-n",
+                    "s, u, n"
+                  ]
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U3-L02",
+              "title": "اختيار حرف لكل صوت",
+              "objective": "يختار الغرافيم المناسب لكل فونيم مدروس.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اختر الحروف التي تمثل الأصوات /m/ /æ/ /p/ بالترتيب.",
+                  "choices": [
+                    "m a p",
+                    "m p a",
+                    "a m p"
+                  ],
+                  "answer": "m a p"
+                },
+                {
+                  "prompt": "أي حرف يمثل الصوت الأول في كلمة fish؟",
+                  "choices": [
+                    "f",
+                    "i",
+                    "sh"
+                  ],
+                  "answer": "f"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U3-L03",
+              "title": "بناء كلمة ببطاقات الحروف",
+              "objective": "يرتب الحروف لتكوين كلمة مملاة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "رتّب الحروف لتكوين كلمة: p – a – m (المطلوب: map).",
+                  "input": true,
+                  "answer": "map"
+                },
+                {
+                  "prompt": "اكتب كلمة sun من الذاكرة.",
+                  "input": true,
+                  "answer": "sun"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U3-L04",
+              "title": "تغيير صوت واحد",
+              "objective": "يغير فونيمًا واحدًا لإنتاج كلمة أخرى.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "غيّر الصوت الأول في map إلى /t/. ما الكلمة الجديدة؟",
+                  "choices": [
+                    "tap",
+                    "top",
+                    "cap"
+                  ],
+                  "answer": "tap"
+                },
+                {
+                  "prompt": "غيّر الصوت الأخير في sit إلى /p/. ما الكلمة الجديدة؟",
+                  "choices": [
+                    "sip",
+                    "sat",
+                    "sit"
+                  ],
+                  "answer": "sip"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U3-L05",
+              "title": "الإملاء من الذاكرة",
+              "objective": "يكتب كلمة قصيرة بعد سماعها دون نموذج بصري.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اكتب الكلمة التي تمثلها الأصوات /m/ /æ/ /t/.",
+                  "input": true,
+                  "answer": "mat"
+                },
+                {
+                  "prompt": "اكتب الكلمة التي تمثلها الأصوات /p/ /ɪ/ /n/.",
+                  "input": true,
+                  "answer": "pin"
+                }
+              ],
+              "audioRequiredForMastery": true,
+              "assessmentModality": "visual-text-only",
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            }
+          ]
+        },
+        {
+          "id": "L2-U4",
+          "title": "الأصوات الساكنة المتقاربة",
+          "lessons": [
+            {
+              "id": "L2-U4-L01",
+              "title": "التمييز بين /p/ و/b/",
+              "objective": "يميز زوجًا صوتيًا متقاربًا عند الاستماع.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "في التمثيل الكتابي، أي حرف يقابل /p/ في كلمة pin؟",
+                  "choices": [
+                    "p",
+                    "b",
+                    "m"
+                  ],
+                  "answer": "p"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف الذي يمثل /b/؟",
+                  "choices": [
+                    "bat",
+                    "pat",
+                    "mat"
+                  ],
+                  "answer": "bat"
+                },
+                {
+                  "prompt": "أي زوج يختلف في الحرف الأول المكتوب فقط؟",
+                  "choices": [
+                    "pat / bat",
+                    "pin / pen",
+                    "map / man"
+                  ],
+                  "answer": "pat / bat"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U4-L02",
+              "title": "التمييز بين /t/ و/d/",
+              "objective": "يصنف الصوت المسموع دون الاستناد إلى اسم الحرف.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يمثل /t/ في بداية كلمة ten؟",
+                  "choices": [
+                    "t",
+                    "d",
+                    "n"
+                  ],
+                  "answer": "t"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف d؟",
+                  "choices": [
+                    "dog",
+                    "tog",
+                    "log"
+                  ],
+                  "answer": "dog"
+                },
+                {
+                  "prompt": "اختر الزوج الذي يختلف في الحرف الأول: ten / den.",
+                  "choices": [
+                    "t / d",
+                    "e / e",
+                    "n / n"
+                  ],
+                  "answer": "t / d"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U4-L03",
+              "title": "التمييز بين /f/ و/v/",
+              "objective": "يربط التمييز السمعي بملاحظة اهتزاز الحنجرة.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يبدأ به لفظ كلمة fish في الكتابة؟",
+                  "choices": [
+                    "f",
+                    "v",
+                    "s"
+                  ],
+                  "answer": "f"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف v؟",
+                  "choices": [
+                    "van",
+                    "fan",
+                    "man"
+                  ],
+                  "answer": "van"
+                },
+                {
+                  "prompt": "أي زوج يختلف في الحرف الأول المكتوب؟",
+                  "choices": [
+                    "fan / van",
+                    "fin / fan",
+                    "vat / van"
+                  ],
+                  "answer": "fan / van"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U4-L04",
+              "title": "التمييز بين /s/ و/z/",
+              "objective": "يميز الاحتكاك المهموس والمجهور.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي حرف يبدأ به لفظ كلمة sun في الكتابة؟",
+                  "choices": [
+                    "s",
+                    "z",
+                    "n"
+                  ],
+                  "answer": "s"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالحرف z؟",
+                  "choices": [
+                    "zip",
+                    "sip",
+                    "lip"
+                  ],
+                  "answer": "zip"
+                },
+                {
+                  "prompt": "اختر الزوج الذي يختلف في الحرف الأول المكتوب.",
+                  "choices": [
+                    "sip / zip",
+                    "sun / sit",
+                    "zip / zap"
+                  ],
+                  "answer": "sip / zip"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U4-L05",
+              "title": "أصوات /ʃ/ و/tʃ/ و/th/",
+              "objective": "يتعرف الفروق الصوتية تمهيدًا لتهجئاتها.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة ship؟",
+                  "choices": [
+                    "sh",
+                    "ch",
+                    "th"
+                  ],
+                  "answer": "sh"
+                },
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة chin؟",
+                  "choices": [
+                    "ch",
+                    "sh",
+                    "th"
+                  ],
+                  "answer": "ch"
+                },
+                {
+                  "prompt": "أي تهجئة تبدأ بها كلمة thin؟",
+                  "choices": [
+                    "th",
+                    "sh",
+                    "ch"
+                  ],
+                  "answer": "th"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            }
+          ]
+        },
+        {
+          "id": "L2-U5",
+          "title": "الحروف المركبة والتجمعات",
+          "lessons": [
+            {
+              "id": "L2-U5-L01",
+              "title": "sh وch",
+              "objective": "يتعرف تهجئتين مركبتين في كلمات مألوفة.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "اختر الكلمة التي تبدأ بـ sh.",
+                  "choices": [
+                    "ship",
+                    "chip",
+                    "thin"
+                  ],
+                  "answer": "ship"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تبدأ بـ ch.",
+                  "choices": [
+                    "chat",
+                    "shut",
+                    "that"
+                  ],
+                  "answer": "chat"
+                },
+                {
+                  "prompt": "أي تهجئة في كلمة fish تمثل الصوت الأخير المكتوب؟",
+                  "choices": [
+                    "sh",
+                    "ch",
+                    "th"
+                  ],
+                  "answer": "sh"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U5-L02",
+              "title": "th بقيمتيه",
+              "objective": "يميز /θ/ عن /ð/ في أمثلة مسموعة.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تبدأ بالتهجئة th؟",
+                  "choices": [
+                    "thin",
+                    "ship",
+                    "chin"
+                  ],
+                  "answer": "thin"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بالتهجئة th أيضًا؟",
+                  "choices": [
+                    "this",
+                    "wish",
+                    "chip"
+                  ],
+                  "answer": "this"
+                },
+                {
+                  "prompt": "ملاحظة: th قد يمثل صوتين مختلفين؛ ما الذي لا يمكن إثباته من النص وحده؟",
+                  "choices": [
+                    "التمييز السمعي بين الصوتين",
+                    "وجود الحرفين t وh",
+                    "موضع التهجئة"
+                  ],
+                  "answer": "التمييز السمعي بين الصوتين"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U5-L03",
+              "title": "ck وng",
+              "objective": "يتعرف الأنماط في مواضعها الشائعة.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تنتهي بالتهجئة ck؟",
+                  "choices": [
+                    "back",
+                    "bag",
+                    "ban"
+                  ],
+                  "answer": "back"
+                },
+                {
+                  "prompt": "أي كلمة تنتهي بالتهجئة ng؟",
+                  "choices": [
+                    "sing",
+                    "sit",
+                    "sip"
+                  ],
+                  "answer": "sing"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تحتوي ck في وسط/نهاية الكلمة.",
+                  "choices": [
+                    "duck",
+                    "dish",
+                    "dune"
+                  ],
+                  "answer": "duck"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U5-L04",
+              "title": "التجمعات الساكنة",
+              "objective": "يفك بدايات ونهايات مثل st وnd دون إضافة حركات.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "أي كلمة تبدأ بتجمع ساكن من حرفين st؟",
+                  "choices": [
+                    "stop",
+                    "top",
+                    "sip"
+                  ],
+                  "answer": "stop"
+                },
+                {
+                  "prompt": "أي كلمة تبدأ بتجمع sp؟",
+                  "choices": [
+                    "spin",
+                    "pin",
+                    "sin"
+                  ],
+                  "answer": "spin"
+                },
+                {
+                  "prompt": "في كلمة flag، ما التجمع الساكن الأول المكتوب؟",
+                  "choices": [
+                    "fl",
+                    "la",
+                    "ag"
+                  ],
+                  "answer": "fl"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            },
+            {
+              "id": "L2-U5-L05",
+              "title": "مراجعة فك الرموز",
+              "objective": "يقرأ كلمات جديدة تجمع الأنماط التي تعلمها.",
+              "activity": "grapheme-study",
+              "items": [
+                {
+                  "prompt": "اختر الكلمة التي تطابق التهجئة sh.",
+                  "choices": [
+                    "shop",
+                    "chop",
+                    "top"
+                  ],
+                  "answer": "shop"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تنتهي بـ ng.",
+                  "choices": [
+                    "ring",
+                    "rip",
+                    "rid"
+                  ],
+                  "answer": "ring"
+                },
+                {
+                  "prompt": "هل يثبت هذا الاختبار النصي وحده أنك تميز الأصوات عند الاستماع؟",
+                  "choices": [
+                    "لا، يلزم اختبار صوتي",
+                    "نعم، دائمًا"
+                  ],
+                  "answer": "لا، يلزم اختبار صوتي"
+                }
+              ],
+              "assessmentModality": "visual-text-only",
+              "audioRequiredForMastery": true,
+              "pronunciationStatus": "provisional-awaiting-accent-review"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "القراءة والكتابة الأولية",
+      "outcome": "يقرأ كلمات وجملًا ونصوصًا قصيرة مضبوطة، ويفهمها، ويكتب كلمات وجملًا ذات معنى.",
+      "units": [
+        {
+          "id": "L3-U1",
+          "title": "قراءة الكلمات وفهم المعنى",
+          "lessons": [
+            {
+              "id": "L3-U1-L01",
+              "title": "من فك الكلمة إلى معناها",
+              "objective": "يربط كلمة مفكوكة بمعناها دون الاعتماد على الصورة وحدها.",
+              "activity": "quiz",
+              "items": [
+                {
+                  "prompt": "أي كلمة تعني قطة؟",
+                  "choices": [
+                    "cat",
+                    "cap",
+                    "can"
+                  ],
+                  "answer": "cat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U1-L02",
+              "title": "كلمات عالية التواتر",
+              "objective": "يتعرف كلمات شائعة غير منتظمة تدريجيًا.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "أي كلمة قصيرة شائعة نستخدمها قبل اسم مفرد؟",
+                  "choices": [
+                    "a",
+                    "map",
+                    "sat"
+                  ],
+                  "answer": "a"
+                },
+                {
+                  "prompt": "اختر الكلمة التي تراها في بداية عبارة التعريف: the cat",
+                  "choices": [
+                    "the",
+                    "cat",
+                    "sat"
+                  ],
+                  "answer": "the"
+                }
+              ]
+            },
+            {
+              "id": "L3-U1-L03",
+              "title": "قراءة كلمات في سياق",
+              "objective": "يقرأ كلمات ضمن عبارات قصيرة مع الحفاظ على فك الرموز.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ: a red cat. كم كلمة في العبارة؟",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                },
+                {
+                  "prompt": "اقرأ: The cat is on a mat. أين القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "in a bag",
+                    "on a map"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L3-U2",
+          "title": "بناء الجملة المطبوعة",
+          "lessons": [
+            {
+              "id": "L3-U2-L01",
+              "title": "المسافات بين الكلمات",
+              "objective": "يميز حدود الكلمات والمسافات.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "أعد كتابة الكلمات مع وضع المسافات: IamSam",
+                  "input": true,
+                  "answer": "I am Sam",
+                  "accepted": [
+                    "I am Sam."
+                  ]
+                },
+                {
+                  "prompt": "كم كلمة في الجملة: The cat sat.",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                }
+              ]
+            },
+            {
+              "id": "L3-U2-L02",
+              "title": "الحرف الكبير في بداية الجملة",
+              "objective": "يحدد بداية الجملة ويستخدم الحرف الكبير.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "صحح بداية الجملة: the cat sat.",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                },
+                {
+                  "prompt": "أي كتابة تبدأ بحرف كبير صحيح؟",
+                  "choices": [
+                    "sam sat.",
+                    "Sam sat.",
+                    "sam Sat."
+                  ],
+                  "answer": "Sam sat."
+                }
+              ]
+            },
+            {
+              "id": "L3-U2-L03",
+              "title": "النقطة وعلامة الاستفهام",
+              "objective": "يميز علامتي الوقف والسؤال في نص قصير.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اختر علامة الترقيم المناسبة للسؤال: Are you Sam__",
+                  "choices": [
+                    ".",
+                    "?",
+                    "!"
+                  ],
+                  "answer": "?"
+                },
+                {
+                  "prompt": "اختر علامة نهاية الجملة الخبرية: The cat is big__",
+                  "choices": [
+                    "?",
+                    ".",
+                    ","
+                  ],
+                  "answer": "."
+                }
+              ]
+            },
+            {
+              "id": "L3-U2-L04",
+              "title": "ترتيب الكلمات",
+              "objective": "يرتب كلمات لتكوين جملة بسيطة ذات معنى.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "رتّب الكلمات لتكوين جملة: Sam / is / here",
+                  "input": true,
+                  "answer": "Sam is here.",
+                  "accepted": [
+                    "Sam is here"
+                  ]
+                },
+                {
+                  "prompt": "رتّب الكلمات لتكوين جملة: cat / The / sat",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L3-U3",
+          "title": "فهم المقروء الأولي",
+          "lessons": [
+            {
+              "id": "L3-U3-L01",
+              "title": "قراءة عبارة قصيرة",
+              "objective": "يقرأ عبارة مألوفة ويفهم معناها المباشر.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ العبارة: Sam sat. ماذا فعل Sam؟",
+                  "choices": [
+                    "sat",
+                    "map",
+                    "tap"
+                  ],
+                  "answer": "sat"
+                },
+                {
+                  "prompt": "اقرأ: The cat sat. من جلس؟",
+                  "choices": [
+                    "The cat",
+                    "Sam",
+                    "The dog"
+                  ],
+                  "answer": "The cat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U3-L02",
+              "title": "العثور على معلومة صريحة",
+              "objective": "يستخرج معلومة محددة من جملة قصيرة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ: Sam has a map. ما الشيء الذي يملكه Sam؟",
+                  "choices": [
+                    "a map",
+                    "a cat",
+                    "a pen"
+                  ],
+                  "answer": "a map"
+                },
+                {
+                  "prompt": "اقرأ: The cat is on a mat. أين القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "in a bag",
+                    "on a bed"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U3-L03",
+              "title": "فهم نص قصير جدًا",
+              "objective": "يحدد الفكرة العامة وتفصيلًا صريحًا.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ النص: Sam has a cat. The cat sat on a mat. ما الحيوان المذكور؟",
+                  "choices": [
+                    "cat",
+                    "dog",
+                    "hen"
+                  ],
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "أين جلست القطة؟",
+                  "choices": [
+                    "on a mat",
+                    "on a map",
+                    "in a box"
+                  ],
+                  "answer": "on a mat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U3-L04",
+              "title": "قراءة دون تخمين من الصورة",
+              "objective": "يثبت فهمه عبر نص جديد مع دعم بصري غير كاشف للإجابة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ الجملة واختر معناها المباشر: The cat sat.",
+                  "choices": [
+                    "القطة جلست",
+                    "القطة ركضت",
+                    "الكلب جلس"
+                  ],
+                  "answer": "القطة جلست"
+                },
+                {
+                  "prompt": "اقرأ دون الاعتماد على صورة: Sam has a pen. ماذا يملك Sam؟",
+                  "choices": [
+                    "a pen",
+                    "a pin",
+                    "a pan"
+                  ],
+                  "answer": "a pen"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L3-U4",
+          "title": "الكتابة والتهجئة الأولية",
+          "lessons": [
+            {
+              "id": "L3-U4-L01",
+              "title": "نسخ الحروف والكلمات",
+              "objective": "ينسخ نموذجًا مع أشكال مقروءة ومسافات مناسبة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "انسخ الكلمة كما تراها: map",
+                  "input": true,
+                  "answer": "map"
+                },
+                {
+                  "prompt": "انسخ العبارة مع المسافة: a cat",
+                  "input": true,
+                  "answer": "a cat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U4-L02",
+              "title": "كتابة كلمة من الذاكرة",
+              "objective": "يسترجع تهجئة كلمة سبق تعلمها.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اكتب كلمة cat من الذاكرة.",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب كلمة map من الذاكرة.",
+                  "input": true,
+                  "answer": "map"
+                }
+              ]
+            },
+            {
+              "id": "L3-U4-L03",
+              "title": "كتابة كلمة مملاة",
+              "objective": "يحول الكلمة المسموعة إلى تهجئة.",
+              "activity": "recorded-word-dictation",
+              "items": [
+                {
+                  "id": "L3-U4-Q1",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "cat",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "id": "L3-U4-Q2",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "dog",
+                  "input": true,
+                  "answer": "dog"
+                },
+                {
+                  "id": "L3-U4-Q3",
+                  "prompt": "استمع إلى الكلمة ثم اكتب تهجئتها الإنجليزية.",
+                  "audioText": "sun",
+                  "input": true,
+                  "answer": "sun"
+                }
+              ],
+              "assessmentModality": "recorded-audio-plus-written-response"
+            },
+            {
+              "id": "L3-U4-L04",
+              "title": "كتابة جملة قصيرة",
+              "objective": "ينتج جملة مفهومة مع مسافات وحرف كبير ونقطة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اكتب جملة قصيرة باستخدام الكلمات: I / am / Sam",
+                  "input": true,
+                  "answer": "I am Sam.",
+                  "accepted": [
+                    "I am Sam"
+                  ]
+                },
+                {
+                  "prompt": "أعد كتابة الجملة مع الحرف الكبير والنقطة: the cat sat",
+                  "input": true,
+                  "answer": "The cat sat.",
+                  "accepted": [
+                    "The cat sat"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "L3-U5",
+          "title": "الكتابة ذات المعنى والاستعداد اللغوي",
+          "lessons": [
+            {
+              "id": "L3-U5-L01",
+              "title": "تسمية أشياء مألوفة",
+              "objective": "يكتب تسميات قصيرة مدعومة بصور.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اكتب اسم الحيوان: cat",
+                  "input": true,
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب اسم الشيء: pen",
+                  "input": true,
+                  "answer": "pen"
+                }
+              ]
+            },
+            {
+              "id": "L3-U5-L02",
+              "title": "قائمة ومعلومات بسيطة",
+              "objective": "يكتب قائمة أو بيانات شخصية شديدة البساطة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اكتب قائمة من كلمتين تفصل بينهما فاصلة: cat و dog",
+                  "input": true,
+                  "answer": "cat, dog",
+                  "accepted": [
+                    "cat dog",
+                    "cat and dog"
+                  ]
+                },
+                {
+                  "prompt": "اكتب بيانات بسيطة: الاسم Sam والعمر 6 (اكتب: Name: Sam, Age: 6).",
+                  "input": true,
+                  "answer": "Name: Sam, Age: 6",
+                  "accepted": [
+                    "Name: Sam Age: 6"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "L3-U5-L03",
+              "title": "مراجعة القراءة والكتابة",
+              "objective": "ينجز مهمة تجمع القراءة والفهم والتهجئة والكتابة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ: The cat sat. كم كلمة في الجملة؟",
+                  "choices": [
+                    "2",
+                    "3",
+                    "4"
+                  ],
+                  "answer": "3"
+                },
+                {
+                  "prompt": "اكتب كلمة cat من الذاكرة.",
+                  "input": true,
+                  "answer": "cat"
+                }
+              ]
+            },
+            {
+              "id": "L3-U5-L04",
+              "title": "مشروع ختامي لمحو الأمية",
+              "objective": "يقرأ تعليمات قصيرة وينفذها ويكتب استجابة بسيطة.",
+              "activity": "guided",
+              "items": [
+                {
+                  "prompt": "اقرأ: Sam has a cat. ما الحيوان الذي يملكه Sam؟",
+                  "choices": [
+                    "cat",
+                    "dog",
+                    "hen"
+                  ],
+                  "answer": "cat"
+                },
+                {
+                  "prompt": "اكتب جملة قصيرة من الكلمات: Sam / sat",
+                  "input": true,
+                  "answer": "Sam sat.",
+                  "accepted": [
+                    "Sam sat"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "letters": [
+    {
+      "id": "letter-m",
+      "lower": "m",
+      "upper": "M",
+      "name": "em",
+      "order": 1,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-s",
+      "lower": "s",
+      "upper": "S",
+      "name": "ess",
+      "order": 2,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-a",
+      "lower": "a",
+      "upper": "A",
+      "name": "ay",
+      "order": 3,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-t",
+      "lower": "t",
+      "upper": "T",
+      "name": "tee",
+      "order": 4,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-p",
+      "lower": "p",
+      "upper": "P",
+      "name": "pee",
+      "order": 5,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-i",
+      "lower": "i",
+      "upper": "I",
+      "name": "eye",
+      "order": 6,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-n",
+      "lower": "n",
+      "upper": "N",
+      "name": "en",
+      "order": 7,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-c",
+      "lower": "c",
+      "upper": "C",
+      "name": "see",
+      "order": 8,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-k",
+      "lower": "k",
+      "upper": "K",
+      "name": "kay",
+      "order": 9,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-e",
+      "lower": "e",
+      "upper": "E",
+      "name": "ee",
+      "order": 10,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-h",
+      "lower": "h",
+      "upper": "H",
+      "name": "aitch",
+      "order": 11,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-r",
+      "lower": "r",
+      "upper": "R",
+      "name": "ar",
+      "order": 12,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-d",
+      "lower": "d",
+      "upper": "D",
+      "name": "dee",
+      "order": 13,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-o",
+      "lower": "o",
+      "upper": "O",
+      "name": "oh",
+      "order": 14,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-g",
+      "lower": "g",
+      "upper": "G",
+      "name": "gee",
+      "order": 15,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-l",
+      "lower": "l",
+      "upper": "L",
+      "name": "el",
+      "order": 16,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-f",
+      "lower": "f",
+      "upper": "F",
+      "name": "ef",
+      "order": 17,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-b",
+      "lower": "b",
+      "upper": "B",
+      "name": "bee",
+      "order": 18,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-u",
+      "lower": "u",
+      "upper": "U",
+      "name": "you",
+      "order": 19,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-j",
+      "lower": "j",
+      "upper": "J",
+      "name": "jay",
+      "order": 20,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-v",
+      "lower": "v",
+      "upper": "V",
+      "name": "vee",
+      "order": 21,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-w",
+      "lower": "w",
+      "upper": "W",
+      "name": "double-u",
+      "order": 22,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-y",
+      "lower": "y",
+      "upper": "Y",
+      "name": "why",
+      "order": 23,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-z",
+      "lower": "z",
+      "upper": "Z",
+      "name": "zee / zed",
+      "order": 24,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-x",
+      "lower": "x",
+      "upper": "X",
+      "name": "ex",
+      "order": 25,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    },
+    {
+      "id": "letter-q",
+      "lower": "q",
+      "upper": "Q",
+      "name": "cue",
+      "order": 26,
+      "nameAudio": null,
+      "phonemeAudio": null,
+      "phonemeIpa": null,
+      "phonemeStatus": "not-yet-authored"
+    }
+  ],
+  "transition": {
+    "id": "PRE-A1",
+    "title": "الانتقال إلى اللغة · Pre-A1",
+    "description": "بعد إتقان أساسيات القراءة والكتابة الأولية، يبدأ المتعلم استخدام الإنجليزية لفهم عبارات وتعليمات مألوفة والتفاعل المحدود في سياقات يومية شديدة البساطة. هذا جسر كفاءة لغوية مستقل عن محو الأمية، وليس شهادة تلقائية.",
+    "entryRequirements": [
+      "التعرف العشوائي إلى الحروف الكبيرة والصغيرة وأسمائها بدرجة مستقرة.",
+      "التمييز بين أسماء الحروف وأصواتها الشائعة التي دُرست.",
+      "فك كلمات جديدة مناسبة للأنماط الصوتية التي تعلمها.",
+      "قراءة جمل قصيرة مضبوطة وفهم معلومات صريحة منها.",
+      "كتابة كلمات وجمل قصيرة مفهومة.",
+      "اجتياز اختبار مؤجل ونقل المهارات إلى أمثلة جديدة."
+    ],
+    "firstLanguageOutcomes": [
+      "فهم كلمات وعبارات مألوفة جدًا عند نطقها ببطء ووضوح مع دعم بصري وسياقي.",
+      "التعرف إلى معلومات شخصية شديدة البساطة وتعابير روتينية.",
+      "استخدام كلمات وعبارات محفوظة للتفاعل المحدود.",
+      "قراءة عبارات قصيرة مألوفة ونسخ بيانات بسيطة."
+    ],
+    "boundary": "إكمال L0–L3 يثبت أساس محو الأمية فقط؛ لا يمنح Pre-A1 تلقائيًا. يبدأ Pre-A1 بتقييم تشخيصي لمهارات اللغة الأربع."
+  },
+  "transferChecks": [
+    {
+      "id": "L0",
+      "title": "تقييم نقل المهارات · التهيئة",
+      "description": "أسئلة جديدة لقياس فهم اتجاه الكتابة والرموز والتمييز البصري. لا يقيس هذا التقييم الوعي الصوتي.",
+      "modality": "visual",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l0a",
+          "prompt": "أي سلسلة تمثل كلمة مكتوبة لا حرفًا واحدًا؟",
+          "choices": [
+            "r",
+            "moon",
+            "★"
+          ],
+          "answer": "moon"
+        },
+        {
+          "id": "l0b",
+          "prompt": "أي رمز يطابق الرمز المعروض: p",
+          "choices": [
+            "q",
+            "p",
+            "b"
+          ],
+          "answer": "p"
+        },
+        {
+          "id": "l0c",
+          "prompt": "أين يبدأ سطر إنجليزي عادي؟",
+          "choices": [
+            "من اليسار",
+            "من اليمين",
+            "من الوسط"
+          ],
+          "answer": "من اليسار"
+        },
+        {
+          "id": "l0d",
+          "prompt": "أي خيار صورة وليس حرفًا؟",
+          "choices": [
+            "T",
+            "☂️",
+            "g"
+          ],
+          "answer": "☂️"
+        },
+        {
+          "id": "l0e",
+          "prompt": "أي رمز مختلف في السلسلة: n n h n",
+          "choices": [
+            "الأول",
+            "الثاني",
+            "الثالث",
+            "الرابع"
+          ],
+          "answer": "الثالث"
+        },
+        {
+          "id": "l0f",
+          "prompt": "أي خيار يتكون من ثلاثة أحرف؟",
+          "choices": [
+            "A",
+            "bed",
+            "&"
+          ],
+          "answer": "bed"
+        },
+        {
+          "id": "l0g",
+          "prompt": "ما المطابق تمامًا للرمز: R",
+          "choices": [
+            "P",
+            "R",
+            "B"
+          ],
+          "answer": "R"
+        },
+        {
+          "id": "l0h",
+          "prompt": "أي خيار حرف صغير؟",
+          "choices": [
+            "G",
+            "Q",
+            "g"
+          ],
+          "answer": "g"
+        }
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "تقييم نقل المهارات · الأصوات وفك الرموز",
+      "description": "تقييم بصري كتابي لأنماط الحروف والكلمات التي دُرست. لا يقيس الاستماع أو النطق، ولا يعوض الاختبار الصوتي.",
+      "modality": "visual-text-only",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l2a",
+          "prompt": "أي كلمة تبدأ بالحرف c؟",
+          "choices": [
+            "cat",
+            "map",
+            "sun"
+          ],
+          "answer": "cat"
+        },
+        {
+          "id": "l2b",
+          "prompt": "اختر التهجئة التي تنتهي بالنمط ck.",
+          "choices": [
+            "duck",
+            "duch",
+            "dusk"
+          ],
+          "answer": "duck"
+        },
+        {
+          "id": "l2c",
+          "prompt": "أي كلمة تحتوي sh؟",
+          "choices": [
+            "ship",
+            "shop",
+            "sip"
+          ],
+          "answer": "ship"
+        },
+        {
+          "id": "l2d",
+          "prompt": "أي كلمة تبدأ بتجمع consonant blend st؟",
+          "choices": [
+            "stop",
+            "top",
+            "shop"
+          ],
+          "answer": "stop"
+        },
+        {
+          "id": "l2e",
+          "prompt": "أي كلمة تحتوي th؟",
+          "choices": [
+            "thin",
+            "fin",
+            "tin"
+          ],
+          "answer": "thin"
+        },
+        {
+          "id": "l2f",
+          "prompt": "أي كلمة تبدأ بالحرف m؟",
+          "choices": [
+            "map",
+            "cap",
+            "tap"
+          ],
+          "answer": "map"
+        },
+        {
+          "id": "l2g",
+          "prompt": "اختر الكلمة ذات النمط القصير a كما في cat.",
+          "choices": [
+            "bag",
+            "bike",
+            "boat"
+          ],
+          "answer": "bag"
+        },
+        {
+          "id": "l2h",
+          "prompt": "أي تهجئة تمثل كلمة brush؟",
+          "choices": [
+            "brush",
+            "brash",
+            "b rush"
+          ],
+          "answer": "brush"
+        }
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "تقييم نقل المهارات · القراءة والكتابة",
+      "description": "أمثلة جديدة نسبيًا لقياس القراءة والفهم والتهجئة ضمن الأنماط المحدودة التي دُرست. لا يمثل تقييمًا عامًا لمحو الأمية.",
+      "modality": "reading-writing",
+      "passMark": 0.8,
+      "items": [
+        {
+          "id": "l3a",
+          "prompt": "اقرأ: The dog is on a bed. أين الكلب؟",
+          "choices": [
+            "on a bed",
+            "in a bag",
+            "on a mat"
+          ],
+          "answer": "on a bed"
+        },
+        {
+          "id": "l3b",
+          "prompt": "اقرأ: Ben has a red pen. ماذا يملك Ben؟",
+          "choices": [
+            "a red pen",
+            "a big bag",
+            "a cat"
+          ],
+          "answer": "a red pen"
+        },
+        {
+          "id": "l3c",
+          "prompt": "كم كلمة في الجملة: A dog can run.",
+          "choices": [
+            "3",
+            "4",
+            "5"
+          ],
+          "answer": "4"
+        },
+        {
+          "id": "l3d",
+          "prompt": "اختر الجملة المكتوبة بعلامة ترقيم صحيحة.",
+          "choices": [
+            "The dog ran.",
+            "the dog ran",
+            "The dog ran"
+          ],
+          "answer": "The dog ran."
+        },
+        {
+          "id": "l3e",
+          "prompt": "اقرأ: A hen is in a pen. ما الحيوان المذكور؟",
+          "choices": [
+            "hen",
+            "dog",
+            "cat"
+          ],
+          "answer": "hen"
+        },
+        {
+          "id": "l3f",
+          "prompt": "اختر التهجئة الصحيحة للكلمة: bed",
+          "choices": [
+            "bed",
+            "deb",
+            "bad"
+          ],
+          "answer": "bed"
+        },
+        {
+          "id": "l3g",
+          "prompt": "اقرأ: Kim has a big hat. ما صفة القبعة؟",
+          "choices": [
+            "big",
+            "red",
+            "hot"
+          ],
+          "answer": "big"
+        },
+        {
+          "id": "l3h",
+          "prompt": "اختر الجملة التي تبدأ بحرف كبير.",
+          "choices": [
+            "Sam can hop.",
+            "sam can hop.",
+            "SAM CAN HOP"
+          ],
+          "answer": "Sam can hop."
+        }
+      ]
+    }
+  ],
+  "pronunciationPolicy": {
+    "status": "selected-existing-project-source",
+    "selectedVariety": "General American (en-US)",
+    "selectedVoice": "Microsoft Aria",
+    "sourceModule": "assets/js/core/zero-audio.js",
+    "note": "اعتماد مصدر التسجيلات المضمنة الثابتة في المشروع. تغطيته جزئية: أسماء الحروف وكلمات أمثلتها وبعض أصوات الحروف المركبة. فونيمات الحروف المفردة غير مسجلة كأصوات مستقلة، وتظل اختبارات الإتقان الصوتي مقيدة بالتسجيل الفعلي.",
+    "rule": "لا يُستخدم اسم الحرف أو كلمة المثال بديلًا عن تسجيل الفونيم. تظل دروس L2 التي تحتاج صوتًا موسومة audioRequiredForMastery ولا تمنح النصوص وحدها إتقانًا صوتيًا."
+  }
+}

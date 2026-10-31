@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "curriculumId": "english-literacy-ar",
+  "status": "phoneme-audio-generation-pending-human-review",
+  "purpose": "مرجع تحريري أولي للتمييز بين الحرف/التهجئة والفونيم. ليس تسجيلًا صوتيًا ولا اختبار نطق.",
+  "pronunciationVariety": "General American (en-US), Kokoro af_heart",
+  "phonemes": [
+    {
+      "ipa": "/p/",
+      "type": "consonant",
+      "example": "pen",
+      "graphemes": [
+        "p"
+      ],
+      "arabicNote": "انفجاري مهموس؛ لا تخلطه باسم الحرف P.",
+      "audio": "assets/audio/zero/p/phoneme-p.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-p.mp3"
+    },
+    {
+      "ipa": "/b/",
+      "type": "consonant",
+      "example": "bed",
+      "graphemes": [
+        "b"
+      ],
+      "arabicNote": "انفجاري مجهور.",
+      "audio": "assets/audio/zero/p/phoneme-b.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-b.mp3"
+    },
+    {
+      "ipa": "/t/",
+      "type": "consonant",
+      "example": "ten",
+      "graphemes": [
+        "t"
+      ],
+      "arabicNote": "انفجاري مهموس.",
+      "audio": "assets/audio/zero/p/phoneme-t.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-t.mp3"
+    },
+    {
+      "ipa": "/d/",
+      "type": "consonant",
+      "example": "dog",
+      "graphemes": [
+        "d"
+      ],
+      "arabicNote": "انفجاري مجهور.",
+      "audio": "assets/audio/zero/p/phoneme-d.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-d.mp3"
+    },
+    {
+      "ipa": "/k/",
+      "type": "consonant",
+      "example": "cat",
+      "graphemes": [
+        "c",
+        "k",
+        "ck"
+      ],
+      "arabicNote": "قد تمثله تهجئات مختلفة حسب الكلمة.",
+      "audio": "assets/audio/zero/p/phoneme-k.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-k.mp3"
+    },
+    {
+      "ipa": "/ɡ/",
+      "type": "consonant",
+      "example": "go",
+      "graphemes": [
+        "g"
+      ],
+      "arabicNote": "القيمة الصلبة الشائعة للحرف g؛ له قيم أخرى.",
+      "audio": "assets/audio/zero/p/phoneme-g.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-g.mp3"
+    },
+    {
+      "ipa": "/f/",
+      "type": "consonant",
+      "example": "fish",
+      "graphemes": [
+        "f",
+        "ph"
+      ],
+      "arabicNote": "احتكاكي مهموس.",
+      "audio": "assets/audio/zero/p/phoneme-f.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-f.mp3"
+    },
+    {
+      "ipa": "/v/",
+      "type": "consonant",
+      "example": "van",
+      "graphemes": [
+        "v"
+      ],
+      "arabicNote": "احتكاكي مجهور.",
+      "audio": "assets/audio/zero/p/phoneme-v.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-v.mp3"
+    },
+    {
+      "ipa": "/θ/",
+      "type": "consonant",
+      "example": "thin",
+      "graphemes": [
+        "th"
+      ],
+      "arabicNote": "قيمة مهموسة للتهجئة th.",
+      "audio": "assets/audio/zero/p/phoneme-theta.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-theta.mp3"
+    },
+    {
+      "ipa": "/ð/",
+      "type": "consonant",
+      "example": "this",
+      "graphemes": [
+        "th"
+      ],
+      "arabicNote": "قيمة مجهورة أخرى للتهجئة th.",
+      "audio": "assets/audio/zero/p/phoneme-eth.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-eth.mp3"
+    },
+    {
+      "ipa": "/s/",
+      "type": "consonant",
+      "example": "sun",
+      "graphemes": [
+        "s",
+        "c"
+      ],
+      "arabicNote": "القيمة تعتمد على التهجئة والسياق.",
+      "audio": "assets/audio/zero/p/phoneme-s.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-s.mp3"
+    },
+    {
+      "ipa": "/z/",
+      "type": "consonant",
+      "example": "zoo",
+      "graphemes": [
+        "z",
+        "s"
+      ],
+      "arabicNote": "قد تمثلها s في بعض الكلمات.",
+      "audio": "assets/audio/zero/p/phoneme-z.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-z.mp3"
+    },
+    {
+      "ipa": "/ʃ/",
+      "type": "consonant",
+      "example": "ship",
+      "graphemes": [
+        "sh"
+      ],
+      "arabicNote": "صوت مركب التهجئة.",
+      "audio": "assets/audio/zero/p/phoneme-sh.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-sh.mp3"
+    },
+    {
+      "ipa": "/tʃ/",
+      "type": "consonant",
+      "example": "chip",
+      "graphemes": [
+        "ch"
+      ],
+      "arabicNote": "صوت مركب التهجئة.",
+      "audio": "assets/audio/zero/p/phoneme-ch.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-ch.mp3"
+    },
+    {
+      "ipa": "/m/",
+      "type": "consonant",
+      "example": "man",
+      "graphemes": [
+        "m"
+      ],
+      "arabicNote": "أنفي.",
+      "audio": "assets/audio/zero/p/phoneme-m.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-m.mp3"
+    },
+    {
+      "ipa": "/n/",
+      "type": "consonant",
+      "example": "net",
+      "graphemes": [
+        "n"
+      ],
+      "arabicNote": "أنفي.",
+      "audio": "assets/audio/zero/p/phoneme-n.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-n.mp3"
+    },
+    {
+      "ipa": "/ŋ/",
+      "type": "consonant",
+      "example": "sing",
+      "graphemes": [
+        "ng"
+      ],
+      "arabicNote": "يظهر غالبًا في نهاية المقطع.",
+      "audio": "assets/audio/zero/p/phoneme-eng.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-eng.mp3"
+    },
+    {
+      "ipa": "/l/",
+      "type": "consonant",
+      "example": "leg",
+      "graphemes": [
+        "l"
+      ],
+      "arabicNote": "قد يختلف تحقيقه الصوتي بحسب الموقع واللهجة.",
+      "audio": "assets/audio/zero/p/phoneme-l.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-l.mp3"
+    },
+    {
+      "ipa": "/ɹ/",
+      "type": "consonant",
+      "example": "red",
+      "graphemes": [
+        "r"
+      ],
+      "arabicNote": "تحقيقه يختلف بوضوح بين اللهجات.",
+      "audio": "assets/audio/zero/p/phoneme-r.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-r.mp3"
+    },
+    {
+      "ipa": "/h/",
+      "type": "consonant",
+      "example": "hat",
+      "graphemes": [
+        "h"
+      ],
+      "arabicNote": "احتكاكي مهموس.",
+      "audio": "assets/audio/zero/p/phoneme-h.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-h.mp3"
+    },
+    {
+      "ipa": "/w/",
+      "type": "consonant",
+      "example": "wet",
+      "graphemes": [
+        "w"
+      ],
+      "arabicNote": "تقريبي شفوي.",
+      "audio": "assets/audio/zero/p/phoneme-w.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-w.mp3"
+    },
+    {
+      "ipa": "/j/",
+      "type": "consonant",
+      "example": "yes",
+      "graphemes": [
+        "y"
+      ],
+      "arabicNote": "رمز IPA /j/ يمثل بداية yes وليس صوت الجيم العربية.",
+      "audio": "assets/audio/zero/p/phoneme-y.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-y.mp3"
+    },
+    {
+      "ipa": "/dʒ/",
+      "type": "consonant",
+      "example": "jam",
+      "graphemes": [
+        "j",
+        "g",
+        "dge"
+      ],
+      "arabicNote": "صوت affricate مجهور؛ القيمة الشائعة للحرف j.",
+      "audio": "assets/audio/zero/p/phoneme-jh.mp3",
+      "exampleAudio": "assets/audio/zero/n/phoneme-word-jh.mp3"
+    }
+  ],
+  "vowelPolicy": {
+    "status": "not-finalized",
+    "note": "لا تعتمد خريطة نهائية لأصوات الحركات قبل اعتماد اللهجة المستهدفة؛ تختلف أنظمة الحركات والاندماجات بين اللهجات.",
+    "rule": "يُدرّس اسم حرف العلة منفصلًا عن أصواته القصيرة والطويلة والتهجئات المركبة."
+  },
+  "qualityRules": [
+    "اسم الحرف ليس اسم الفونيم ولا بديلًا عن تسجيله.",
+    "الحرف الواحد قد يمثل أكثر من فونيم، والفونيم الواحد قد تمثله أكثر من تهجئة.",
+    "لا تُسجّل مهارة الاستماع أو النطق متقنة اعتمادًا على أسئلة مكتوبة.",
+    "يجب مراجعة الأمثلة والرموز الصوتية بعد اختيار تنوع النطق."
+  ]
+}

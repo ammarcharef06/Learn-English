@@ -42,7 +42,7 @@ export function renderNav() {
         <span><b>English Academy</b><small>${uiText('ui.literal.70104948')} </small></span>
       </div>
       `;
-    if (!isEshSandbox) html += `<a class="zero-nav" href="./zero.html" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
+    if (!isEshSandbox) html += `<a class="zero-nav" href="#/literacy" data-nav data-route="#/literacy" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
         <span class="zero-nav__badge" aria-hidden="true">A0</span>
         <span class="zero-nav__txt">
           <b>${uiText('ui.literal.ef3e7371')} A0</b>
@@ -88,7 +88,7 @@ export { openDrawer, closeDrawer, toggleDrawer, isDrawerOpen } from './topbar.js
 /* خريطة الأقسام: أي رابط يُفعَّل لكل مسار (يدعم الصفحات الفرعية) */
 const SECTION_MAP = {
   '': '#/',
-  lessons: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
+  lessons: '#/lessons', literacy: '#/lessons', level: '#/lessons', unit: '#/lessons', lesson: '#/lessons',
   reference: '#/reference', drills: '#/drills', drill: '#/drills', flashcards: '#/flashcards', reading: '#/reading',
   exams: '#/exams', stats: '#/stats', journey: '#/journey', conversations: '#/conversations',
   notebook: '#/notebook', settings: '#/settings', support: '#/support', about: '#/about',

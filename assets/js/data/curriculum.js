@@ -11,12 +11,14 @@ import {
   C1_STAGED_CURRICULUM,
   C2_STAGED_CURRICULUM,
 } from './curriculum-advanced.js';
-import { READINGS } from './readings.js';
+import { READINGS as ALL_READINGS } from './readings.js';
 import { progress } from '../core/store.js';
 import { attachCurriculumAudio } from './curriculum-audio.js';
 import { loadEshCurriculum } from '../../../curriculum/esh/adapter.js';
 
-export { READINGS };
+// The first public release deliberately stops at A2. Later CEFR material remains in the repository as future curriculum, but is not exposed to learners yet.
+export const READINGS = ALL_READINGS.filter((reading) => ['a1', 'a2'].includes(reading.level));
+export const FUTURE_READINGS = ALL_READINGS.filter((reading) => !['a1', 'a2'].includes(reading.level));
 export {
   ADVANCED_UNIT_SCHEMA,
   B2_STAGED_CURRICULUM,
@@ -32,7 +34,13 @@ export {
   validateLevel,
 } from './curriculum-advanced.js';
 
-export const LEVELS = [LEVEL_A1, LEVEL_A2, LEVEL_B1].map((level) => ({
+export const LEVELS = [LEVEL_A1, LEVEL_A2].map((level) => ({
+  ...level,
+  units: level.units.map(normalizeCurriculumUnit),
+}));
+
+// B1 is retained as prepared future content without entering learner-facing navigation, quizzes, review queues, or progress statistics.
+export const FUTURE_LEVELS = [LEVEL_B1].map((level) => ({
   ...level,
   units: level.units.map(normalizeCurriculumUnit),
 }));
@@ -73,17 +81,7 @@ export function activateStagedLevel(payload) {
   return { level, valid: true, warnings: [] };
 }
 
-const b2Activation = activateStagedLevel(exportStagedLevel(B2_STAGED_CURRICULUM));
-if (!b2Activation.valid) {
-  throw new Error(`تعذر تفعيل منهج B2 المحقق: ${b2Activation.warnings.join(' ')}`);
-}
-
-for (const stagedLevel of [C1_STAGED_CURRICULUM, C2_STAGED_CURRICULUM]) {
-  const activation = activateStagedLevel(exportStagedLevel(stagedLevel));
-  if (!activation.valid) {
-    throw new Error(`تعذر تفعيل منهج ${stagedLevel.id.toUpperCase()} المحقق: ${activation.warnings.join(' ')}`);
-  }
-}
+// B2/C1/C2 remain staged and are activated explicitly in a future release.
 
 export function getLevel(id) { return LEVELS.find((l) => l.id === id) || null; }
 export function getUnit(unitId) { return ALL_UNITS.find((u) => u.id === unitId) || null; }

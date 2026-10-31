@@ -710,10 +710,14 @@ check('روابط الصوت المولّدة تُرفق بالمفردات وا
   audioFixture[0].vocabulary[0].audio_url === './assets/audio/curriculum/word.mp3'
     && audioFixture[0].sentences[0].audio_url === './assets/audio/curriculum/sentence.mp3'
     && audioFixture[0].vocabulary[1].audio_url === './assets/audio/existing.mp3');
-check('المستويات الستة A1–C2 نشطة بعد التحقق والاستيراد', cur.LEVELS.length === 6
-  && ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].every((level) => cur.getLevel(level)));
-check('٤١ وحدة نشطة بعد ترحيل مفردات A0', cur.ALL_UNITS.length === 41);
-check('١٦ مطالعة بعد ترحيل قراءات A0', cur.READINGS.length === 16);
+check('الإصدار الأول يعرض A1 وA2 فقط ويحتفظ بالمستويات المستقبلية خارج المسار النشط', cur.LEVELS.length === 2
+  && ['a1', 'a2'].every((level) => cur.getLevel(level))
+  && !['b1', 'b2', 'c1', 'c2'].some((level) => cur.getLevel(level))
+  && cur.FUTURE_LEVELS.some((level) => level.id === 'b1'));
+check('الوحدات النشطة تخص A1 وA2 فقط', cur.ALL_UNITS.length === 17
+  && cur.ALL_UNITS.every((unit) => ['a1', 'a2'].includes(unit.levelId)));
+check('المطالعات النشطة تخص A1 وA2 فقط', cur.READINGS.length === 9
+  && cur.READINGS.every((reading) => ['a1', 'a2'].includes(reading.level)));
 check('كل وحدة لها مفردات وقواعد وجمل', cur.ALL_UNITS.every((u) => u.vocabulary.length && u.grammar.length && u.sentences.length));
 check('المطالعات موزعة على المستويات', cur.readingsOfLevel('a1').length === 8
   && ['a2', 'b1'].every((l) => cur.readingsOfLevel(l).length === 4));
@@ -745,9 +749,9 @@ check('متلازمات A1/A2 وأفعال A2 المركبة قابلة للمر
     'l1-transfer', 'academic',
     'collocation', 'phrasal-verb'].every((kind) => a1a2ReviewEntries.some((entry) => entry.kind === kind))
   && a1a2ReviewEntries.every((entry) => entry.itemId && entry.en && entry.ar));
-const b1Units = cur.ALL_UNITS.filter((unit) => unit.levelId === 'b1');
-const b1ReviewEntries = qg.curriculumReviewEntries({ levels: ['b1'] });
-check('كل وحدات B1 الست مثرية بالمحاور الخمسة وبمواد صوتية متقدمة', b1Units.length === 6
+const b1Units = cur.FUTURE_LEVELS.find((level) => level.id === 'b1')?.units || [];
+const b1ReviewEntries = b1Units.flatMap((unit) => qg.reviewEntriesForUnit({ ...unit, levelId: 'b1', levelLabel: 'B1 future' }));
+check('منهج B1 المستقبلي محفوظ ومثرى دون تفعيله للمتعلم', b1Units.length === 6
   && b1Units.every((unit) => unit.grammar.length && unit.vocabulary.length
     && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
       && item.contrastPairs?.length && item.connectedSpeech?.length && item.intonation?.length)
@@ -764,7 +768,7 @@ const b2Stage = cur.B2_STAGED_CURRICULUM;
 const b2ReviewEntries = qg.curriculumReviewEntries({ levels: ['b2'] });
 check('B2 اجتاز التحقق والاستيراد وأصبح نشطاً في المنهج',
   b2Stage.units.length === 6 && cur.validateLevel(b2Stage).valid
-    && cur.getLevel('b2')?.status === 'ready' && cur.unitsOfLevel('b2').length === 6
+    && !cur.getLevel('b2') && cur.unitsOfLevel('b2').length === 0
     && b2Stage.units.every((unit) => unit.grammar.length && unit.vocabulary.length
       && unit.phonetics.length >= 2 && unit.arabic_l1_transfers.length >= 2
       && unit.academic_focus.length >= 2 && unit.sentences.length && unit.dialogue.length));
@@ -783,8 +787,8 @@ check('SRS يراجع مفردات B2 النشطة إلى جانب أبعاده�
 const cLevelData = [cur.C1_STAGED_CURRICULUM, cur.C2_STAGED_CURRICULUM];
 check('C1 وC2 اجتازا التحقق والاستيراد وأصبحا نشطين',
   cLevelData.every((level) => level.units.length === 6 && cur.validateLevel(level).valid
-    && cur.getLevel(level.id)?.status === 'ready'
-    && cur.unitsOfLevel(level.id).length === 6
+    && !cur.getLevel(level.id)
+    && cur.unitsOfLevel(level.id).length === 0
     && level.units.every((unit) => unit.grammar.length >= 2 && unit.vocabulary.length >= 8
       && unit.phonetics.length >= 2 && unit.phonetics.every((item) => item.ipa
         && item.accentNote && item.connectedSpeech?.length && item.intonation?.length)

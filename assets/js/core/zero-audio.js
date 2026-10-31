@@ -1,21 +1,27 @@
 ﻿/* ============================================================
-   حزمة أصوات المرحلتين ١ و ٢ — صوت نيرالي واحد موحّد (en-US, Aria)
+   بنك الأصوات الدقيق — Kokoro-82M (af_heart) بصوت أمريكي مفتوح المصدر
    • n/name-*.mp3  اسم كل حرف (٢٦)
    • n/word-*.mp3  كلمة مثال كل حرف + كل حرف مركّب (٣٨)
    • d/*.mp3       الصوت المفرد لكل حرف مركّب (١٢)
    • n/word-*.mp3 كلمات الأمثلة كاملة (٣٨)
-   تعتمد هذه العناصر على التسجيلات المباشرة لتجنّب اختلاف نطق محرّكات المتصفح.
+   تُولّد هذه العناصر محلياً بمحرك Kokoro-82M وتُحفظ كملفات MP3 ثابتة داخل التطبيق.
    ============================================================ */
 import { registerSoundBank } from './speech.js';
 import { AUDIO_MAP } from '../data/zero-audio-map.js';
 
 const N = './assets/audio/zero/n/';
 const D = './assets/audio/zero/d/';
+const P = './assets/audio/zero/p/';
 
 /** أسماء الحروف الستة والعشرين */
 export const LETTER_IDS = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
 /** الحروف المركّبة الاثنا عشر (لكل منها تسجيل مستقل عن كلمة المثال) */
+export const CONSONANT_PHONEME_IDS = [
+  'p', 'b', 't', 'd', 'k', 'g', 'f', 'v', 'theta', 'eth', 's', 'z',
+  'sh', 'ch', 'jh', 'm', 'n', 'eng', 'l', 'r', 'h', 'w', 'y',
+];
+
 export const DIGRAPH_SOUND_IDS = [
   'sh', 'ch', 'th-voiceless', 'th-voiced', 'ph', 'ck', 'ng',
   'oo-long', 'oo-short', 'ee', 'ea', 'ou',
@@ -45,11 +51,12 @@ const DIGRAPH_BY_TEXT = {
 export function soundPack() {
   const names = LETTER_IDS.map((c) => `name:letter:${c}`);
   const sounds = DIGRAPH_SOUND_IDS.map((id) => `sound:${id}`);
+  const phonemes = CONSONANT_PHONEME_IDS.map((id) => `phoneme:${id}`);
   const words = [
     ...LETTER_IDS.map((c) => `word:letter:${c}`),
     ...DIGRAPH_SOUND_IDS.map((id) => `word:${id}`),
   ];
-  return { names, sounds, words, all: [...names, ...sounds, ...words] };
+  return { names, sounds, phonemes, words, all: [...names, ...sounds, ...phonemes, ...words] };
 }
 
 /** المصدر الحقيقي لكل معرّف (تُستخدم في الفحوصات أيضاً) */
@@ -59,6 +66,7 @@ export function resolveSound(key) {
   if (k.startsWith('word:letter:')) return `${N}word-${k.slice(12)}.mp3`;
   if (DIGRAPH_BY_TEXT[k]) return `${D}${DIGRAPH_BY_TEXT[k]}.mp3`;
   if (k.startsWith('sound:')) return `${D}${k.slice(6)}.mp3`;
+  if (k.startsWith('phoneme:')) return `${P}phoneme-${k.slice(8)}.mp3`;
   if (k.startsWith('word:')) return `${N}word-${k.slice(5)}.mp3`;
   return null;
 }
@@ -67,6 +75,7 @@ export function resolveSound(key) {
 export function registerZeroSounds() {
   const bank = {};
   for (const k of soundPack().all) bank[k] = resolveSound(k);
+  for (const id of CONSONANT_PHONEME_IDS) bank[`phoneme:${id}`] = resolveSound(`phoneme:${id}`);
   /* مفاتيح نصّ مباشرة: أي نطق لنفس النص يستخدم التسجيل تلقائياً */
   for (const c of LETTER_IDS) bank[c] = `${N}name-${c}.mp3`;
   for (const [c, w] of Object.entries(LETTER_WORDS)) bank[w] = `${N}word-${c}.mp3`;

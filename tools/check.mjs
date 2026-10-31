@@ -135,7 +135,9 @@ try {
   const { LEVELS, ALL_UNITS, READINGS, curriculumStats } = await import(pathToFileURL(join(ROOT, 'assets/js/data/curriculum.js')).href);
   const stats = curriculumStats();
   ok(`المنهج: ${LEVELS.length} مستويات · ${stats.units} وحدة · ${stats.vocab} كلمة · ${stats.grammar} درس قواعد · ${stats.sentences} جملة`);
-  if (READINGS.length !== 16) bad(`عدد المطالعات ${READINGS.length} بدل 16`);
+  if (LEVELS.length !== 2 || LEVELS.some((level) => !['a1', 'a2'].includes(level.id))) bad('المستويات النشطة يجب أن تكون A1 وA2 فقط');
+  if (ALL_UNITS.some((unit) => !['a1', 'a2'].includes(unit.levelId))) bad('يوجد مستوى مستقبلي ضمن الوحدات النشطة');
+  if (READINGS.length !== 9 || READINGS.some((reading) => !['a1', 'a2'].includes(reading.level))) bad('المطالعات النشطة يجب أن تخص A1 وA2 فقط');
 
   const unitIds = new Set();
   for (const u of ALL_UNITS) {
@@ -356,162 +358,37 @@ try {
   ok(`شارات A0: ${a0.length} شارة (تشمل الاختبار النهائي وشهادة التأسيس)`);
 } catch (e) { bad(`فشل فحص شارات A0: ${e.message}`); }
 
-/* ---------- 11. صفحة «من الصفر» (A0) المستقلة ---------- */
+/* ---------- 11. صفحة محو الأمية الحالية: عقد التشغيل والأصول ---------- */
 try {
-  const need = [
-    'zero.html', 'manifest-zero.webmanifest',
-    'assets/css/main.css',
-    'assets/js/data/zero.js', 'assets/js/data/zero-letters.js', 'assets/js/data/zero-time.js', 'assets/js/data/zero-words.js',
-    'assets/js/core/zeroflow.js', 'assets/js/core/zero-pad.js', 'assets/js/zero-main.js',
-    'assets/js/views/zero.js', 'assets/js/views/zero-shell.js', 'assets/js/views/zero-stage.js',
-    'assets/js/views/zero-exam.js', 'assets/js/views/zero-entry.js',
-    'assets/css/zero.css', 'assets/css/zero-pad.css',
-    'tools/test-zero.mjs',
-  ];
-  for (const p of need) if (!existsSync(join(ROOT, p))) bad(`ملف قسم A0 مفقود: ${p}`);
-
-  /* ---------- صفحة A0 المستقلة: هيكلها الخاص بنفس ستايل الموقع ---------- */
   const zeroHtml = readFileSync(join(ROOT, 'zero.html'), 'utf8');
-  for (const id of ['id="topbar"', 'id="view"', 'id="app"', 'id="toasts"', 'id="modalRoot"']) {
-    if (!zeroHtml.includes(id)) bad(`zero.html ينقصه: ${id}`);
+  const literacyHtml = readFileSync(join(ROOT, 'literacy.html'), 'utf8');
+  const enginePath = 'assets/js/literacy/engine.js';
+  const stylePath = 'assets/css/literacy.css';
+  const dataPath = 'curriculum/literacy/literacy-l0-l1.json';
+  const manifestPath = 'curriculum/literacy/audio-manifest.json';
+  for (const p of [enginePath, stylePath, dataPath, manifestPath]) {
+    if (!existsSync(join(ROOT, p))) bad(`مسار محو الأمية يفتقد الملف: ${p}`);
   }
-  if (!zeroHtml.includes('./assets/js/zero-main.js')) bad('zero.html لا يُحمّل نقطة دخول A0 (zero-main.js)');
-  if (/assets\/js\/app\.js/.test(zeroHtml)) bad('zero.html يُحمّل app.js — يجب أن تكون صفحة مستقلة تماماً');
-  /* يظل A0 مستقلاً عن موجّه الموقع، ويستخدم تنقّله السفلي الخاص به. */
-  for (const chrome of ['assets/js/app.js']) {
-    if (zeroHtml.includes(chrome)) bad(`zero.html يحتوي عنصراً ممنوعاً (${chrome})`);
-  }
-  if (!/class="mobile-nav" id="bottomnav"/.test(zeroHtml)) bad('zero.html بلا تنقّل هاتفي خاص بقسم A0');
-  if (!/class="topbar" id="topbar"/.test(zeroHtml)) bad('zero.html لا يستخدم شريط الموقع نفسه (topbar)');
-  for (const need of ['id="sidebar"', 'id="sidenav"', 'id="scrim"']) {
-    if (!zeroHtml.includes(need)) bad(`zero.html ينقصه ${need} — الدرج المشترك`);
-  }
-  if (!/rel="manifest" href="\.\/manifest-zero\.webmanifest"/.test(zeroHtml)) bad('zero.html بلا بيان تثبيت خاص');
-  if (!zeroHtml.includes('./assets/css/zero.css') || !zeroHtml.includes('./assets/css/zero-pad.css')) bad('zero.html لا يُحمّل أنماط A0');
-  if (!/data-zero="a0"/.test(zeroHtml)) bad('zero.html لا يضبط سمة القسم المستقل');
-
-  /* ---------- نقطة دخول A0: مساراتها وتنقّلها ---------- */
-  const zeroMain = readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8');
-  for (const r of ['/zero', '/zero/pad', '/zero/settings', '/zero/stage/:stageId', '/zero/drill/:stageId', '/zero/exam', '/zero/certificate']) {
-    if (!zeroMain.includes(`route('${r}'`)) bad(`مسار A0 غير مسجّل في zero-main.js: ${r}`);
-  }
-  if (!/isAuthed\(\)/.test(zeroMain)) bad('صفحة A0 لا تحمي نفسها بجلسة الموقع');
-  const zeroShell = readFileSync(join(ROOT, 'assets/js/views/zero-shell.js'), 'utf8');
-  const arCatalog = JSON.parse(readFileSync(join(ROOT, 'assets/js/core/ar.json'), 'utf8'));
-  if (!/renderZeroDrawer/.test(zeroShell) || !/sidenav/.test(zeroShell)) bad('درج A0 غير مربوط بالقائمة الجانبية');
-  if (!/MOBILE_NAV/.test(zeroShell) || !/id="bottomnav"/.test(zeroHtml)) bad('تنقّل A0 السفلي غير مربوط بغلافه');
-  for (const [label, key] of [
-    ['المراحل الخمس', 'ui.literal.6574c53b'],
-    ['الاختبار النهائي', 'ui.literal.cea94354'],
-    ['شهادة التأسيس', 'ui.literal.07e8f3c3'],
-    ['لوح الكتابة', 'ui.literal.cc3d1c0c'],
-    ['إعدادات التأسيس', 'ui.literal.462965d1'],
-    ['المستويات A1–B1', 'ui.literal.112885cf'],
-  ]) {
-    const expectedText = label === 'المستويات A1–B1' ? 'المستويات' : label;
-    if (!zeroShell.includes(key) || arCatalog[key] !== expectedText || (label === 'المستويات A1–B1' && !zeroShell.includes('A1–B1'))) {
-      bad(`درج A0 ينقصه: ${label}`);
-    }
-  }
-  const appSrc = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
-  const topbar = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
-  if (!/topbarHTML/.test(topbar) || !/renderTopbar/.test(topbar)) bad('الشريط العلوي المشترك مفقود');
-  if (!/renderTopbar/.test(appSrc)) bad('صفحة الموقع لا تستخدم الشريط المشترك');
-  if (!/renderTopbar/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('صفحة A0 لا تستخدم الشريط المشترك');
-  if (!/export \{ openDrawer, closeDrawer/.test(readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8'))) bad('دوال الدرج غير موحّدة');
-
-  /* ---------- الموقع الرئيسي: بلا دمج، وخيار واحد فقط للدخول ---------- */
-  const app = readFileSync(join(ROOT, 'assets/js/app.js'), 'utf8');
-  if (/route\('\/zero/.test(app)) bad('app.js ما زال يسجّل مسارات A0 — يجب أن تكون صفحة منفصلة');
-  if (/zero-(stage|exam|shell)\.js/.test(app)) bad('app.js يستورد واجهات A0 — يجب فصلها تماماً');
-
-  const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
-  if (/id="zbar"|id="znav"|id="btnZero"/.test(html)) bad('index.html ما زال يحتوي عناصر واجهة A0');
-  if (/zero-pad\.css/.test(html)) bad('index.html يُحمّل أنماط لوح الكتابة (خاص بصفحة A0)');
-  if (!html.includes('./assets/css/main.css')) bad('نظام تصميم التطبيق غير مربوط في index.html');
-  if (/assets\/css\/(?:redesign|skins\/|zero\.css)/.test(html)) bad('index.html ما زال يحمّل طبقات CSS القديمة أو الخاصة بصفحة A0');
-  if ((html.match(/href="\.\/assets\/css\/[^"]+"/g) || []).length !== 1) bad('index.html يجب أن يستخدم ملف التصميم الموحد فقط');
-
-  const shellSrc = readFileSync(join(ROOT, 'assets/js/views/shell.js'), 'utf8');
-  const zeroLinks = (shellSrc.match(/href="\.\/zero\.html"/g) || []).length;
-  if (zeroLinks !== 1) bad(`عدد روابط الدخول إلى A0 في القائمة الجانبية ${zeroLinks} بدل 1 (المطلوب خيار واحد فقط)`);
-  const dash = readFileSync(join(ROOT, 'assets/js/views/dashboard.js'), 'utf8');
-  if (/zero\.html/.test(dash)) bad('لوحة التحكم فيها خيار دخول ثانٍ إلى A0 — المطلوب خيار واحد');
-  const bottomBlock = shellSrc.slice(shellSrc.indexOf('if (bottom)'));
-  if (/zero\.html/.test(bottomBlock)) bad('الشريط السفلي فيه خيار دخول ثانٍ إلى A0 — المطلوب خيار واحد');
-
-  const man = JSON.parse(readFileSync(join(ROOT, 'manifest-zero.webmanifest'), 'utf8'));
-  if (man.start_url !== './zero.html') bad(`start_url لبيان A0 غير صحيح: ${man.start_url}`);
-  if (!man.name || !man.icons?.length) bad('بيان A0 ناقص الاسم أو الأيقونات');
-  const iconFiles = [
-    ['assets/img/favicon.svg', null],
-    ['assets/img/icon-192.png', 192],
-    ['assets/img/icon-512.png', 512],
-    ['assets/img/icon-maskable-512.png', 512],
-    ['assets/img/apple-touch-icon.png', 180],
-  ];
-  for (const [path, size] of iconFiles) {
-    const full = join(ROOT, path);
-    if (!existsSync(full)) { bad(`ملف شعار مفقود: ${path}`); continue; }
-    if (size) {
-      const png = readFileSync(full);
-      if (png.toString('hex', 0, 8) !== '89504e470d0a1a0a') bad(`صيغة PNG غير سليمة: ${path}`);
-      else if (png.readUInt32BE(16) !== size || png.readUInt32BE(20) !== size) bad(`أبعاد الشعار غير سليمة: ${path}`);
-    }
-  }
-  const topbarBrand = readFileSync(join(ROOT, 'assets/js/views/topbar.js'), 'utf8');
-  const authBrand = readFileSync(join(ROOT, 'assets/js/views/auth.js'), 'utf8');
-  if (!topbarBrand.includes('assets/img/favicon.svg') || !authBrand.includes('assets/img/favicon.svg')) {
-    bad('الشعار الجديد غير موحّد في الشريط العلوي وشاشة الدخول');
-  }
-
+  if (!zeroHtml.includes('./assets/js/literacy/engine.js')) bad('zero.html لا يشغّل محرّك محو الأمية الحالي');
+  if (!zeroHtml.includes('./assets/css/literacy.css')) bad('zero.html لا يحمّل تنسيقات محو الأمية');
+  if (!zeroHtml.includes('id="literacy-app"')) bad('zero.html يفتقد حاوية التطبيق literacy-app');
+  if (!literacyHtml.includes('./zero.html')) bad('literacy.html لا يوجّه إلى صفحة البداية الحالية');
+  if (zeroHtml.includes('./assets/js/zero-main.js')) bad('zero.html يشغّل نقطتي دخول متعارضتين');
+  if (zeroHtml.includes('./assets/js/app.js')) bad('صفحة محو الأمية تشغّل التطبيق العام داخل نقطة دخول مستقلة');
+  const engineSrc = readFileSync(join(ROOT, enginePath), 'utf8');
+  if (!engineSrc.includes('registerZeroSounds') || !engineSrc.includes('bootLiteracy')) bad('محرّك محو الأمية لا يسجل بنك الصوت أو لا يوفّر إقلاعًا قابلًا للاختبار');
+  if (!engineSrc.includes('data-speak')) bad('واجهة الحروف لا تعرض أدوات الاستماع للتسجيلات الموجودة');
+  const literacyData = JSON.parse(readFileSync(join(ROOT, dataPath), 'utf8'));
+  const manifest = JSON.parse(readFileSync(join(ROOT, manifestPath), 'utf8'));
+  if (!Array.isArray(literacyData.stages) || literacyData.stages.length < 4) bad('مراحل محو الأمية غير مكتملة');
+  if (!Array.isArray(literacyData.letters) || literacyData.letters.length !== 26) bad('قائمة الأبجدية يجب أن تحتوي 26 حرفًا');
+  if (manifest.pronunciationVariety?.source?.module !== 'assets/js/core/zero-audio.js') bad('مصدر الصوت في البيان لا يطابق بنك التسجيلات المضمن');
   const swSrc = readFileSync(join(ROOT, 'service-worker.js'), 'utf8');
-  for (const p of ['./zero.html', './assets/js/zero-main.js', './manifest-zero.webmanifest']) {
-    if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن: ${p}`);
+  for (const p of ['./zero.html', './assets/js/literacy/engine.js', './assets/css/literacy.css', './curriculum/literacy/literacy-l0-l1.json', './curriculum/literacy/audio-manifest.json', './assets/js/core/zero-audio.js', './assets/js/data/zero-audio-map.js']) {
+    if (!swSrc.includes(p)) bad(`Service Worker لا يخزّن أصل محو الأمية: ${p}`);
   }
-  // النطق: مدمج في المتصفح + تسجيلات أسماء الحروف والكلمات والأصوات المركّبة المستقلة
-  const zs = await import(pathToFileURL(join(ROOT, 'assets/js/data/zero.js')).href);
-  const AUD2 = await import(pathToFileURL(join(ROOT, 'assets/js/core/zero-audio.js')).href);
-  // حزمة مفاتيح موحّدة: ٢٦ اسم حرف + ٣٨ كلمة مثال + ١٢ صوتاً مركّباً مستقلاً
-  const pack = AUD2.soundPack();
-  if (pack.all.length !== 76) bad(`حزمة الأصوات ${pack.all.length} ملفاً بدل 76`);
-  let packFiles = 0;
-  for (const key of pack.all) {
-    const f = join(ROOT, String(AUD2.resolveSound(key) || '').replace(/^\.\//, ''));
-    if (!existsSync(f)) { bad(`ملف صوت مفقود: ${key}`); continue; }
-    const size = statSync(f).size;
-    if (size < 3000 || size > 40000) bad(`حجم غير معقول (${key}): ${size}`);
-    else packFiles++;
-  }
-  for (const it of zs.zeroItems('letters')) {
-    if (!it.nameId || !it.wordId) bad(`حرف بلا تسجيل: ${it.en}`);
-  }
-  for (const it of zs.zeroItems('digraphs')) {
-    if (!it.sayId || !it.wordId) bad(`حرف مركّب بلا تسجيل: ${it.en}`);
-    const sound = AUD2.resolveSound(`sound:${it.sayId}`);
-    const example = AUD2.resolveSound(`word:${it.wordId}`);
-    if (sound === example) bad(`صوت الحرف المركّب ${it.en} يطابق تسجيل كلمة المثال بدلاً من صوته المستقل`);
-  }
-  const speechSrc2 = readFileSync(join(ROOT, 'assets/js/core/speech.js'), 'utf8');
-  if (!/SpeechSynthesisUtterance/.test(speechSrc2)) bad('محرّك النطق المدمج مفقود');
-  if (/pr\.catch\([^)]*speakBuiltIn/.test(speechSrc2)) bad('تعذّر التسجيل يعود إلى محرّك المتصفح ويغيّر النطق');
-  const stageSrc2 = readFileSync(join(ROOT, 'assets/js/views/zero-stage.js'), 'utf8');
-  if (!/sayDigraph/.test(stageSrc2)) bad('مشغّل المرحلة لا ينطق الحروف المركّبة من التسجيل');
-  if (!/data-act="say"/.test(stageSrc2)) bad('زر النطق مفقود في بطاقة المرحلة');
-  if (!/registerZeroSounds/.test(readFileSync(join(ROOT, 'assets/js/zero-main.js'), 'utf8'))) bad('صفحة A0 لا تُسجّل الحزمة');
-  // خريطة المراحل ٣-٨ (مولّدة آلياً)
-  const MAP = (await import(pathToFileURL(join(ROOT, 'assets/js/data/zero-audio-map.js')).href)).AUDIO_MAP;
-  let mapFiles = 0;
-  for (const [text, src] of Object.entries(MAP)) {
-    const f = join(ROOT, String(src).replace(/^\.\//, ''));
-    if (!existsSync(f)) { bad(`ملف صوت مفقود للنص: ${text}`); continue; }
-    mapFiles++;
-  }
-  if (Object.keys(MAP).length < 250) bad(`خريطة المراحل ٣-٨ صغيرة: ${Object.keys(MAP).length}`);
-  ok(`مفاتيح صوت مسجّلة: ${packFiles}/76 للمرحلتين ١-٢ + ${mapFiles}/${Object.keys(MAP).length} للمراحل ٣-٨`);
-
-  ok('صفحة A0 مستقلة تماماً بنفس ستايل الموقع، وخيار دخول واحد فقط من القائمة الجانبية');
-} catch (e) { bad(`فشل فحص صفحة A0 المستقلة: ${e.message}`); }
+  ok('صفحة محو الأمية: نقطة دخول واحدة، بيانات 26 حرفًا، بنك صوت مسجّل، وأصول التخزين المؤقت');
+} catch (e) { bad(`فشل فحص صفحة محو الأمية: ${e.message}`); }
 
 /* ---------- التقرير ---------- */
 console.log('نتائج الفحص:');
