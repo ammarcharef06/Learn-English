@@ -24,7 +24,9 @@ PHONEMES = {
  "theta":("/θ/","thin"), "eth":("/ð/","this"), "s":("/s/","sun"), "z":("/z/","zoo"),
  "sh":("/ʃ/","ship"), "ch":("/tʃ/","chip"), "jh":("/dʒ/","jam"), "m":("/m/","man"), "n":("/n/","net"),
  "eng":("/ŋ/","sing"), "l":("/l/","leg"), "r":("/ɹ/","red"), "h":("/h/","hat"),
- "w":("/w/","wet"), "y":("/j/","yes")
+ "w":("/w/","wet"), "y":("/j/","yes"),
+ "ash":("/æ/","cat"), "ih":("/ɪ/","sit"), "eh":("/ɛ/","bed"),
+ "uh":("/ʌ/","cup"), "ah":("/ɑ/","hot")
 }
 def jobs():
     result=[]
