@@ -392,10 +392,30 @@
                     "p"
                   ],
                   "answer": "p"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:s",
+                  "choices": [
+                    "/s/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/s/"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:p",
+                  "choices": [
+                    "/p/",
+                    "/b/",
+                    "/s/"
+                  ],
+                  "answer": "/p/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -421,10 +441,30 @@
                     "set"
                   ],
                   "answer": "sit"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ash",
+                  "choices": [
+                    "/æ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/æ/"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ih",
+                  "choices": [
+                    "/ɪ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ɪ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -441,10 +481,20 @@
                     "man"
                   ],
                   "answer": "mat"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:m",
+                  "choices": [
+                    "/m/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/m/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -461,10 +511,20 @@
                     "4"
                   ],
                   "answer": "3"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:sh",
+                  "choices": [
+                    "/ʃ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ʃ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
@@ -487,10 +547,20 @@
                     "/s/ /m/"
                   ],
                   "answer": "/æ/ /m/"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ash",
+                  "choices": [
+                    "/æ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/æ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -507,10 +577,20 @@
                     "mop"
                   ],
                   "answer": "map"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ash",
+                  "choices": [
+                    "/æ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/æ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -527,10 +607,20 @@
                     "pan"
                   ],
                   "answer": "pin"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ih",
+                  "choices": [
+                    "/ɪ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ɪ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -547,10 +637,20 @@
                     "bid"
                   ],
                   "answer": "bed"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:eh",
+                  "choices": [
+                    "/ɛ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ɛ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -567,10 +667,20 @@
                     "son"
                   ],
                   "answer": "sun"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:uh",
+                  "choices": [
+                    "/ʌ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ʌ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -587,10 +697,20 @@
                     "tin"
                   ],
                   "answer": "ten"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:eh",
+                  "choices": [
+                    "/ɛ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ɛ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
@@ -622,10 +742,20 @@
                     "s-u-n",
                     "s, u, n"
                   ]
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:p",
+                  "choices": [
+                    "/p/",
+                    "/b/",
+                    "/s/"
+                  ],
+                  "answer": "/p/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -651,10 +781,20 @@
                     "sh"
                   ],
                   "answer": "f"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:m",
+                  "choices": [
+                    "/m/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/m/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -672,10 +812,20 @@
                   "prompt": "اكتب كلمة sun من الذاكرة.",
                   "input": true,
                   "answer": "sun"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:t",
+                  "choices": [
+                    "/t/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/t/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -701,10 +851,20 @@
                     "sit"
                   ],
                   "answer": "sip"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:p",
+                  "choices": [
+                    "/p/",
+                    "/b/",
+                    "/s/"
+                  ],
+                  "answer": "/p/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
             {
@@ -722,10 +882,20 @@
                   "prompt": "اكتب الكلمة التي تمثلها الأصوات /p/ /ɪ/ /n/.",
                   "input": true,
                   "answer": "pin"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ih",
+                  "choices": [
+                    "/ɪ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ɪ/"
                 }
               ],
               "audioRequiredForMastery": true,
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "pronunciationStatus": "provisional-awaiting-accent-review"
             }
           ]
@@ -766,9 +936,19 @@
                     "map / man"
                   ],
                   "answer": "pat / bat"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:p",
+                  "choices": [
+                    "/p/",
+                    "/b/",
+                    "/s/"
+                  ],
+                  "answer": "/p/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -804,9 +984,19 @@
                     "n / n"
                   ],
                   "answer": "t / d"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:d",
+                  "choices": [
+                    "/d/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/d/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -842,9 +1032,19 @@
                     "vat / van"
                   ],
                   "answer": "fan / van"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:v",
+                  "choices": [
+                    "/v/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/v/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -880,9 +1080,19 @@
                     "zip / zap"
                   ],
                   "answer": "sip / zip"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:z",
+                  "choices": [
+                    "/z/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/z/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -918,9 +1128,19 @@
                     "ch"
                   ],
                   "answer": "th"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:theta",
+                  "choices": [
+                    "/θ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/θ/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             }
@@ -962,9 +1182,19 @@
                     "th"
                   ],
                   "answer": "sh"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:sh",
+                  "choices": [
+                    "/ʃ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ʃ/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -1000,9 +1230,19 @@
                     "موضع التهجئة"
                   ],
                   "answer": "التمييز السمعي بين الصوتين"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:eth",
+                  "choices": [
+                    "/ð/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ð/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -1038,9 +1278,19 @@
                     "dune"
                   ],
                   "answer": "duck"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:eng",
+                  "choices": [
+                    "/ŋ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/ŋ/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -1076,9 +1326,19 @@
                     "ag"
                   ],
                   "answer": "fl"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:s",
+                  "choices": [
+                    "/s/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/s/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             },
@@ -1113,9 +1373,19 @@
                     "نعم، دائمًا"
                   ],
                   "answer": "لا، يلزم اختبار صوتي"
+                },
+                {
+                  "prompt": "استمع إلى الصوت المسجّل، ثم اختر الرمز الصوتي المطابق.",
+                  "audioText": "phoneme:ch",
+                  "choices": [
+                    "/tʃ/",
+                    "/p/",
+                    "/b/"
+                  ],
+                  "answer": "/tʃ/"
                 }
               ],
-              "assessmentModality": "visual-text-only",
+              "assessmentModality": "recorded-phoneme-listening-plus-visual-practice",
               "audioRequiredForMastery": true,
               "pronunciationStatus": "provisional-awaiting-accent-review"
             }
