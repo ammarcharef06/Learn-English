@@ -24,8 +24,6 @@ const CORE = [
   './assets/img/icon-maskable-512.png',
   './assets/img/apple-touch-icon.png',
   './assets/js/app.js',
-  './assets/js/literacy/engine.js',
-  './curriculum/literacy/literacy-l0-l1.json',
   './assets/js/zero-main.js',
   './assets/js/core/utils.js',
   './assets/js/core/store.js',
