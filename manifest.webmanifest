@@ -2,7 +2,7 @@
   "name": "أكاديمية الإنجليزية — Learn English",
   "short_name": "English Academy",
   "id": "learn-english-academy",
-  "description": "أكاديمية عربية لتعلّم الإنجليزية من التأسيس A0 حتى المستوى المتوسط B1، بدروس وتمارين ومحادثات ومراجعة تعمل دون اتصال.",
+  "description": "منصة عربية لتعلّم الإنجليزية من محو الأمية إلى A2، بدروس وتمارين ومحادثات ومراجعة تعمل دون اتصال.",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./index.html#/",
@@ -19,7 +19,7 @@
     { "src": "./assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "التأسيس من الصفر (A0)", "short_name": "التأسيس", "url": "./zero.html#/zero" },
+    { "name": "التأسيس من الصفر (A0)", "short_name": "التأسيس", "url": "./index.html#/literacy" },
     { "name": "تدريب سريع", "short_name": "تدريب", "url": "./index.html#/drills" },
     { "name": "بطاقات الحفظ", "short_name": "بطاقات", "url": "./index.html#/flashcards" },
     { "name": "المطالعات", "short_name": "مطالعة", "url": "./index.html#/reading" }
