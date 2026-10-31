@@ -22,6 +22,9 @@ export const CONSONANT_PHONEME_IDS = [
   'sh', 'ch', 'jh', 'm', 'n', 'eng', 'l', 'r', 'h', 'w', 'y',
 ];
 
+export const VOWEL_PHONEME_IDS = ['ash', 'ih', 'eh', 'uh', 'ah'];
+export const ALL_PHONEME_IDS = [...CONSONANT_PHONEME_IDS, ...VOWEL_PHONEME_IDS];
+
 export const DIGRAPH_SOUND_IDS = [
   'sh', 'ch', 'th-voiceless', 'th-voiced', 'ph', 'ck', 'ng',
   'oo-long', 'oo-short', 'ee', 'ea', 'ou',
@@ -51,7 +54,7 @@ const DIGRAPH_BY_TEXT = {
 export function soundPack() {
   const names = LETTER_IDS.map((c) => `name:letter:${c}`);
   const sounds = DIGRAPH_SOUND_IDS.map((id) => `sound:${id}`);
-  const phonemes = CONSONANT_PHONEME_IDS.map((id) => `phoneme:${id}`);
+  const phonemes = ALL_PHONEME_IDS.map((id) => `phoneme:${id}`);
   const words = [
     ...LETTER_IDS.map((c) => `word:letter:${c}`),
     ...DIGRAPH_SOUND_IDS.map((id) => `word:${id}`),
@@ -75,7 +78,7 @@ export function resolveSound(key) {
 export function registerZeroSounds() {
   const bank = {};
   for (const k of soundPack().all) bank[k] = resolveSound(k);
-  for (const id of CONSONANT_PHONEME_IDS) bank[`phoneme:${id}`] = resolveSound(`phoneme:${id}`);
+  for (const id of ALL_PHONEME_IDS) bank[`phoneme:${id}`] = resolveSound(`phoneme:${id}`);
   /* مفاتيح نصّ مباشرة: أي نطق لنفس النص يستخدم التسجيل تلقائياً */
   for (const c of LETTER_IDS) bank[c] = `${N}name-${c}.mp3`;
   for (const [c, w] of Object.entries(LETTER_WORDS)) bank[w] = `${N}word-${c}.mp3`;
