@@ -27,7 +27,7 @@ for (const lesson of lessons) {
   for (const [index, item] of (lesson.items || []).entries()) {
     if (item.audioText) {
       const key = String(item.audioText).trim().toLowerCase();
-      let asset = AUDIO_MAP[key];
+      let asset = key.startsWith("phoneme:") ? "./assets/audio/zero/p/phoneme-" + key.slice(8) + ".mp3" : AUDIO_MAP[key];
       if (!asset) {
         const initial = coreExampleInitials[key];
         asset = initial ? "./assets/audio/zero/n/word-" + initial + ".mp3" : /^[a-z]$/.test(key) ? "./assets/audio/zero/n/name-" + key + ".mp3" : null;
@@ -48,6 +48,9 @@ const l2 = data.stages.find(stage => stage.id === "L2");
 for (const lesson of l2?.units.flatMap(unit => unit.lessons || []) || []) {
   if (lesson.audioRequiredForMastery !== true) {
     errors.push(`L2 phoneme lesson must remain audio-gated: ${lesson.id}`);
+  }
+  if (!(lesson.items || []).some(item => typeof item.audioText === "string" && item.audioText.startsWith("phoneme:"))) {
+    errors.push(`L2 phoneme lesson requires at least one recorded listening assessment: ${lesson.id}`);
   }
 }
 if (data.pronunciationPolicy?.status !== "selected-existing-project-source") {
@@ -70,12 +73,18 @@ for (const letter of lettersInBank) {
 }
 const digraphIds = ["sh", "ch", "th-voiceless", "th-voiced", "ph", "ck", "ng", "oo-long", "oo-short", "ee", "ea", "ou"];
 const consonantPhonemeIds = ["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","jh","m","n","eng","l","r","h","w","y"];
+const vowelPhonemeIds = ["ash","ih","eh","uh","ah"];
 for (const id of consonantPhonemeIds) {
   for (const asset of [
     `assets/audio/zero/p/phoneme-${id}.mp3`,
     `assets/audio/zero/n/phoneme-word-${id}.mp3`
   ]) {
     if (!existsSync(resolve(root, asset))) errors.push(`Missing consonant phoneme audio asset: ${asset}`);
+  }
+}
+for (const id of vowelPhonemeIds) {
+  for (const asset of [`assets/audio/zero/p/phoneme-${id}.mp3`, `assets/audio/zero/n/phoneme-word-${id}.mp3`]) {
+    if (!existsSync(resolve(root, asset))) errors.push(`Missing short-vowel phoneme audio asset: ${asset}`);
   }
 }
 for (const id of digraphIds) {
