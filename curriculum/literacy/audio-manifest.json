@@ -467,9 +467,11 @@
       "graphemeExamples": 12,
       "consonantPhonemes": 23,
       "consonantExamples": 23,
-      "total": 122
+      "total": 132,
+      "vowelPhonemes": 5,
+      "vowelExamples": 5
     },
-    "note": "Kokoro-82M (Apache-2.0), voice af_heart. Includes 23 consonant IPA recordings and example words. Human listening and accent QA remain required; vowels are intentionally not finalized."
+    "note": "Kokoro-82M (Apache-2.0), voice af_heart. Includes 23 consonant and 5 short-vowel IPA recordings plus example words. Human listening and accent QA remain required."
   },
   "consonantPhonemes": [
     {
