@@ -13,7 +13,7 @@ import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 /* ---------- قائمة المستويات ---------- */
 export function renderLessons(host) {
   const foundation = zeroStats(progress);
-  const foundationNode = isEshSandbox ? '' : `<a class="skill-node skill-node--foundation" href="./zero.html">
+  const foundationNode = isEshSandbox ? '' : `<a class="skill-node skill-node--foundation" href="#/literacy">
     <span class="skill-node__orb">A0</span>
     <span class="skill-node__copy"><b>${esc(t('dash.foundation'))}</b><small>${foundation.percent}% · ${foundation.doneStages}/${ZERO_TOTALS.stages}</small></span>
     <span class="skill-node__state" aria-hidden="true">↗</span>
