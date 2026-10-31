@@ -58,6 +58,7 @@ if (data.pronunciationPolicy?.status !== "selected-existing-project-source") {
 }
 if (!existsSync(audioMapFile)) errors.push("Embedded zero-audio map is missing");
 if (!literacyEngineSource.includes("recordedOnly:true")) errors.push("Literacy activities must request approved recorded audio only");
+if (!literacyEngineSource.includes("data-audio-index") || !literacyEngineSource.includes("onstart:()=>{button.dataset.played=\"true\";}")) errors.push("L2 listening mastery must require an actual recorded playback start");
 if (!speechEngineSource.includes("if (opts.recordedOnly) return false;")) errors.push("Speech engine must not fall back to browser voice in recorded-only mode");
 for (const [text, asset] of Object.entries(AUDIO_MAP || {})) {
   if (typeof asset !== "string" || !asset.startsWith("./assets/audio/zero/") || !existsSync(resolve(root, asset))) {
