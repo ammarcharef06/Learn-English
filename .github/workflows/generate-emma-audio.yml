@@ -60,7 +60,7 @@ jobs:
           ids=["sh","ch","th-voiceless","th-voiced","ph","ck","ng","oo-long","oo-short","ee","ea","ou"]
           expected += [root/"d"/f"{x}.mp3" for x in ids]
           expected += [root/"n"/f"word-{x}.mp3" for x in ids]
-          phonemes=["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","jh","m","n","eng","l","r","h","w","y"]
+          phonemes=["p","b","t","d","k","g","f","v","theta","eth","s","z","sh","ch","jh","m","n","eng","l","r","h","w","y","ash","ih","eh","uh","ah"]
           expected += [root/"p"/f"phoneme-{x}.mp3" for x in phonemes]
           expected += [root/"n"/f"phoneme-word-{x}.mp3" for x in phonemes]
           missing=[str(p) for p in expected if not p.exists() or p.stat().st_size<1024]
@@ -75,7 +75,7 @@ jobs:
           path=Path("curriculum/literacy/audio-manifest.json")
           data=json.loads(path.read_text(encoding="utf-8"))
           data["precisionBank"]["status"]="generated-in-ci-awaiting-human-audio-qa"
-          data["precisionBank"]["verifiedFiles"]=122
+          data["precisionBank"]["verifiedFiles"]=132
           path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
           PY
       - name: Run project checks
