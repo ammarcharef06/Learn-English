@@ -99,7 +99,7 @@ function renderLesson(id){
    : '<div class="lit-choice-row">'+(item.choices||[]).map(c=>'<label class="lit-option"><input type="radio" name="q'+i+'" value="'+esc(c)+'"> '+esc(c)+'</label>').join("")+'</div>';
   return '<fieldset class="lit-question"><legend>'+(i+1)+'. '+esc(item.prompt)+'</legend>'+(item.audioText?'<button type="button" class="lit-audio-button" data-speak="'+esc(item.audioText)+'">🔊 استمع إلى التسجيل</button>':'')+control+'</fieldset>';
  }).join("");
- panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(lesson.audioRequiredForMastery?'<div class="lit-info">هذا تدريب بصري وكتابي على التهجئة فقط. لا يختبر التمييز السمعي أو نطق الصوت، ولن يُسجّل إتقان المهارة الصوتية قبل إضافة تسجيلات واختبار استماع.</div>':'')+(questions||'<div class="lit-info">هذا الدرس غير مفعّل بعد لعدم توفر مادته الأساسية (مثل التسجيل الصوتي أو نشاط التوجيه). لا يمكن احتسابه إتقانًا، وسيظل ظاهرًا بوضوح على أنه قيد الإعداد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
+ panel.innerHTML='<p class="eyebrow">'+lesson.id+'</p><h2>'+esc(lesson.title)+'</h2><p>'+esc(lesson.objective)+'</p>'+(lesson.audioRequiredForMastery?'<div class="lit-info">هذا الدرس يجمع التدريب البصري مع تقييم استماع مسجّل. استمع إلى كل مقطع صوتي قبل إرسال الإجابات.</div>':'')+(questions||'<div class="lit-info">هذا الدرس غير مفعّل بعد لعدم توفر مادته الأساسية (مثل التسجيل الصوتي أو نشاط التوجيه). لا يمكن احتسابه إتقانًا، وسيظل ظاهرًا بوضوح على أنه قيد الإعداد.</div>')+'<button id="check-lesson" class="lit-primary" '+(lesson.items.length?"":"disabled")+'>تحقق من الإجابات</button><div id="lesson-feedback" role="status"></div>';
  $("#check-lesson").onclick=()=>{
   let correct=0,answered=0;
   lesson.items.forEach((item,i)=>{
@@ -109,9 +109,10 @@ function renderLesson(id){
    if(value){answered++;const accepted=[item.answer,...(item.accepted||[])].map(x=>String(x).trim().replace(/\s+/g," "));if(accepted.includes(value.replace(/\s+/g," ")))correct++;}
   });
   if(answered!==lesson.items.length){$("#lesson-feedback").textContent="أكمل جميع الإجابات أولًا.";return}
+  if(lesson.audioRequiredForMastery){const audioItems=lesson.items.map((item,index)=>item.audioText?index:-1).filter(index=>index>=0);const buttons=[...panel.querySelectorAll("[data-audio-index]")];const unplayed=audioItems.filter(index=>buttons.find(button=>Number(button.dataset.audioIndex)===index)?.dataset.played!=="true");if(!audioItems.length||unplayed.length){$("#lesson-feedback").textContent="استمع إلى جميع التسجيلات المعتمدة حتى يبدأ تشغيلها قبل تصحيح هذا التقييم.";return}}
   const old=state(id),score=lesson.items.length?correct/lesson.items.length:0,today=localDate();
   const qualifying=[...new Set([...(old.qualifyingDates||[]),...(score>=.9?[today]:[])])];
-  progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||(!lesson.audioRequiredForMastery&&qualifying.length>=2),visualPracticeComplete:lesson.audioRequiredForMastery&&qualifying.length>=2,lastScore:score,lastAttempt:new Date().toISOString()};
+  progress.lessons||={};progress.lessons[id]={...old,attempts:(old.attempts||0)+1,best:Math.max(old.best||0,score),qualifyingDates:qualifying,mastered:old.mastered||qualifying.length>=2,visualPracticeComplete:false,lastScore:score,lastAttempt:new Date().toISOString()};
   save();render();renderLesson(id);
   $("#lesson-feedback").textContent="نتيجتك: "+correct+" من "+lesson.items.length+". "+(progress.lessons[id].mastered?"أُثبت الإتقان عبر يومين مختلفين.":"يلزم تحقيق 90% على الأقل في يومين مختلفين.");
  };
@@ -152,7 +153,7 @@ export async function bootLiteracy(host = $("#literacy-app")) {
  host.addEventListener("click", event => {
   const button=event.target.closest("[data-speak]");
   if(button && host.contains(button)) {
-   const played=speak(button.dataset.speak,{recordedOnly:true});
+   const played=speak(button.dataset.speak,{recordedOnly:true,onstart:()=>{button.dataset.played="true";}});
    const notice=$("#notice",host);
    if(notice) notice.textContent=played?"":"هذا التسجيل غير متوفر في بنك الصوت المعتمد؛ لم نشغّل صوتًا بديلًا.";
   }
