@@ -77,7 +77,7 @@ globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} 
    1) سلامة البيانات
    ============================================================ */
 const Z = await load('assets/js/data/zero.js');
-const { resolveSound, registerZeroSounds } = await load('assets/js/core/zero-audio.js');
+const { resolveSound, registerZeroSounds, VOWEL_PHONEME_IDS } = await load('assets/js/core/zero-audio.js');
 const { hasRecordedSound } = await load('assets/js/core/speech.js');
 const {
   LETTERS, DIGRAPHS, NUMBERS, ORDINALS, DAYS, MONTHS, SEASONS, TIME_WORDS, PRONOUNS, TO_BE,
@@ -812,6 +812,11 @@ describe('صفحة A0 المستقلة وربطها بالموقع', () => {
     for (const id of consonants) {
       eq(resolveSound(`phoneme:${id}`), `./assets/audio/zero/p/phoneme-${id}.mp3`, `phoneme asset ${id}`);
       assert(hasRecordedSound(`phoneme:${id}`), `phoneme ${id} must be registered for playback`);
+    }
+    for (const id of ['ash', 'ih', 'eh', 'uh', 'ah']) {
+      assert(VOWEL_PHONEME_IDS.includes(id), `short vowel ${id} must be registered in the sound bank`);
+      eq(resolveSound(`phoneme:${id}`), `./assets/audio/zero/p/phoneme-${id}.mp3`, `vowel phoneme asset ${id}`);
+      assert(hasRecordedSound(`phoneme:${id}`), `vowel phoneme ${id} must be registered for playback`);
     }
     const directSounds = {
       th: 'th-voiceless', ng: 'ng', oo: 'oo-long', ee: 'ee', ea: 'ea',
