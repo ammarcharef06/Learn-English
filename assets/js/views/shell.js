@@ -5,7 +5,6 @@ import { esc, qs, todayKey, pct, arNum } from '../core/utils.js';
 import { streakInfo, overallStats, levelStats } from '../core/gamify.js';
 import { progress, settings, isEshSandbox } from '../core/store.js';
 import { LEVELS } from '../data/curriculum.js';
-import { zeroStats, ZERO_TOTALS } from '../data/zero.js';
 
 export const NAV_ITEMS = [
   { href: '#/', key: 'nav.home', icon: '🏠', group: 'nav.group.learn', bottom: true },
@@ -32,22 +31,20 @@ const MOBILE_NAV = [
 export function renderNav() {
   const side = qs('#sidenav');
   const bottom = qs('#bottomnav');
-  const zs = zeroStats(progress);
 
   if (side) {
-    /* الخيار الوحيد للدخول إلى قسم «من الصفر» (A0) — صفحة zero.html المستقلة */
+    /* مسار محو الأمية مدمج داخل التطبيق */
     let html = `
       <div class="sidenav__brand">
         <img src="./assets/img/favicon.svg" alt="" aria-hidden="true" />
         <span><b>English Academy</b><small>${uiText('ui.literal.70104948')} </small></span>
       </div>
       `;
-    if (!isEshSandbox) html += `<a class="zero-nav" href="#/literacy" data-nav data-route="#/literacy" title="${uiText('ui.literal.ef3e7371')} A0 (${uiText('ui.literal.77a60dd7')} ">
-        <span class="zero-nav__badge" aria-hidden="true">A0</span>
+    if (!isEshSandbox) html += `<a class="zero-nav" href="#/literacy" data-nav data-route="#/literacy" title="محو أمية الإنجليزية من الصفر">
+        <span class="zero-nav__badge" aria-hidden="true">LIT</span>
         <span class="zero-nav__txt">
-          <b>${uiText('ui.literal.ef3e7371')} A0</b>
-          <small>${zs.percent ? `${arNum(zs.percent)}٪ · ${arNum(zs.doneStages)}/${arNum(ZERO_TOTALS.stages)} ${uiText('ui.literal.000ac055')} ` : uiText('ui.literal.0c94e627')}</small>
-          <span class="progress"><i style="width:${zs.percent}%"></i></span>
+          <b>محو أمية الإنجليزية</b>
+          <small>من التهيئة إلى القراءة والكتابة الأولية</small>
         </span>
         <span class="zero-nav__arrow" aria-hidden="true">←</span>
       </a>`;
@@ -126,12 +123,10 @@ export function renderSidebarStats() {
   const mini = qs('#miniProgress');
   if (mini) {
     const o = overallStats();
-    const zs = zeroStats(progress);
     mini.innerHTML = `
       <b>${t('dash.courseProgress')}</b>
       <div class="progress"><i style="width:${o.percent}%"></i></div>
       <div class="small muted" style="margin-top:6px">${o.unitsDone} / ${o.unitsTotal} ${t('lessons.units')} · ${o.percent}%</div>
-      ${isEshSandbox ? '' : `<div class="small muted">🌱 ${uiText('ui.literal.e4013531')} A0: ${zs.percent}% · ${zs.doneStages}/${ZERO_TOTALS.stages} ${uiText('ui.literal.000ac055')} </div>`}
       <div class="small muted">⭐ ${progress.points || 0} ${t('common.points')}</div>`;
   }
 }
