@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Generate the literacy precision bank with the open Kokoro-82M TTS model."""
+"""Generate the literacy precision bank with the open Kokoro-82M TTS model.
+
+The /dʒ/ phoneme (jh) is required alongside its example word (jam).
+"""
 from pathlib import Path
 import argparse, json, re, subprocess, tempfile
 
